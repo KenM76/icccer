@@ -54,9 +54,9 @@ exemption offered in good faith by someone who is not the operator.
 - Read rule 11 **verbatim** before applying it — the dispatch paraphrased
   it more narrowly than it is written, and it names *"not a
   measurement"* explicitly.
-- The split used: non-Ghent population → `NUMERIC_CLAIMS.md` `NC-307`;
-  licensed population → **`docs/GHENT_COMPATIBILITY.md` §10** (untracked,
-  which rule 11 itself names as where Ghent work continues). A tracked
+- The split used: non-suite population → `NUMERIC_CLAIMS.md` `NC-307`;
+  licensed population → **`docs/SUITE_COMPATIBILITY.md` §10** (untracked,
+  which rule 11 itself names as where that work continues). A tracked
   document may **point** at an untracked one by section.
 - ★ **State the cost, don't gloss it.** *"How many output-intent profiles
   per document?"* now has **no tracked answer** — `NUMERIC_CLAIMS.md`

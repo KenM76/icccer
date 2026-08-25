@@ -17,8 +17,8 @@ that the tracked ledger carried material from a licensed corpus whose
 publishing permission the project's own docs recorded as never granted.
 The exposure was pre-existing and already public. It was raised as a
 single question with three named options and a recommendation, and he
-chose a middle path nobody had proposed: **"ship it and stop adding Ghent
-material."**
+chose a middle path nobody had proposed — ship the release, and stop
+adding any further material from that corpus.
 
 **Why:** he engaged with the flag rather than being annoyed by it, and his
 answer was better than either of the two obvious ones — so the flag paid

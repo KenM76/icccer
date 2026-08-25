@@ -25,11 +25,16 @@ replaced by which, rather than wondering whether an entry was reworded.
 
 ORDERING IS THE WHOLE CORRECTNESS ARGUMENT
 ==========================================
-Substitutions are applied **longest-pattern-first**. `Ghent PDF Output Suite
-5.0` must be consumed before `Ghent Output Suite`, which must be consumed
-before bare `Ghent`, or the bare rule fires first and leaves
+Substitutions are applied **longest-pattern-first**. `<NAME> PDF Output Suite
+5.0` must be consumed before `<NAME> Output Suite`, which must be consumed
+before bare `<NAME>`, or the bare rule fires first and leaves
 `the print-conformance suite PDF Output Suite 5.0` behind. The table below is
 in deliberate order and MUST NOT be sorted.
+
+★ `<NAME>` stands in for the term itself, which this file must not contain --
+the first draft of this docstring spelled it out in the worked example and
+the CI gate caught it. A file that performs the scrub is exactly as bound by
+the rule as any other.
 
 WHAT IT REFUSES TO DO
 =====================

@@ -79,9 +79,42 @@ EXEMPT: list[str] = []
 
 
 def tracked_files():
-    out = subprocess.run(["git", "ls-files", "-z"],
-                         capture_output=True, check=True).stdout
-    return [r.decode("utf-8") for r in out.split(b"\x00") if r]
+    """Every file that IS or WOULD BE committed — tracked plus untracked.
+
+    ★★ `--others --exclude-standard` is the whole point of this function and
+    was added after the omission cost a red CI run on 2026-08-25.
+
+    A bare `git ls-files` lists only files already in the index. Run locally
+    BEFORE staging, that silently excludes exactly the files a session has
+    just written — which on that day were three: this repository's own scrub
+    script, whose docstring spelled the term out in a worked example, and two
+    agent-memory notes written minutes earlier. The gate reported OK. Then
+    `git add -A` made all three tracked, and CI — which checks out a tree
+    where everything is tracked — failed on all three.
+
+    ⇒ **A gate whose input set is "what is already committed" cannot see the
+    commit you are about to make.** Locally it answers a question about the
+    past; on CI it answers one about the present, and the two disagree
+    precisely on the new work. Including untracked-but-not-ignored files makes
+    the local answer and the CI answer the same question.
+
+    `--exclude-standard` keeps `.gitignore` honoured, so build output and the
+    untracked local reference document are still skipped — they are not going
+    to be committed and are not in scope.
+    """
+    out = subprocess.run(
+        ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
+        capture_output=True, check=True).stdout
+    # `--cached --others` can list the same path twice; dedupe, keep order.
+    seen, files = set(), []
+    for r in out.split(b"\x00"):
+        if not r:
+            continue
+        rel = r.decode("utf-8")
+        if rel not in seen:
+            seen.add(rel)
+            files.append(rel)
+    return files
 
 
 def main() -> int:
