@@ -48,3 +48,35 @@ tools/difftest/vendor/
 # docs/NEXT_SESSION.md for the outstanding decision on that.
 # ------------------------------------------------------------------------
 docs/GHENT_COMPATIBILITY.md
+
+# Compiler object files from throwaway C/C++ probes (e.g. the dE94/CMC
+# reference probe whose object file was committed as dechk.obj in aef7566
+# and removed later). Nothing here should ever carry a compiled object.
+*.obj
+*.o
+
+# ★ Python bytecode, added 2026-08-25 in the SAME commit that removed
+# dechk.obj — because that commit's first attempt introduced
+# tools/patch-compare/__pycache__/patch_compare.cpython-311.pyc, produced
+# by importing the module to debug it. A rule against committed build
+# artifacts that names only the languages you thought of is not a rule.
+__pycache__/
+*.pyc
+
+# ------------------------------------------------------------------------
+# CASE FILES for tools/patch-compare/ are NOT gitignored here, because they
+# are not supposed to be inside this repository AT ALL.
+#
+# Operator decision, 2026-08-25. The first version of that tool
+# (tools/ghent/shading_cell.py, deleted the same day) inlined a licensed test
+# suite's shading dictionary, indirect-object numbers, endpoint colours and
+# the identity of the press profile it embeds — the same entanglement that
+# untracked docs/GHENT_COMPATIBILITY.md on 2026-08-18. The decision was to
+# SPLIT it: a generic public tool that contains no numbers, plus a case file
+# holding the licensed specifics.
+#
+# ★ The case file lives OUTSIDE the working tree, not in a gitignored path
+# inside it — a gitignored path is one `git add -f` away from the thing the
+# decision was made to prevent. The GWG010 case is at
+# D:/Dev/temp/iccce-gwg/gwg010_shading.case.json on the operator's machine.
+# ------------------------------------------------------------------------
