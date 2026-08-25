@@ -4137,10 +4137,10 @@ same owed instrument §19 named and it is still owed.
 
 ---
 
-## 22. ★★★ Pass G — the Ghent v5.0 population sample
+## 22. ★★★ Pass G — the print-conformance suite population sample
 
 **Built 2026-08-17 by `icc-conformance`.** Code: `src/passg.rs`. Instrument:
-`src/bin/ghent_probe.rs`. Graded bounds and their derivations:
+`src/bin/suite_probe.rs`. Graded bounds and their derivations:
 `docs/TOLERANCES.md` **§3.7**, which is the authoritative record — this section
 is the operational one: how to run it, what it needs, and what it refuses.
 
@@ -4149,7 +4149,7 @@ is the operational one: how to run it, what it needs, and what it refuses.
 Every profile this suite had graded against before it was **synthetic**
 (`tools/gen-profiles`), **OS-shipped** (the Windows colour directory) or
 **standards-body-issued** (FOGRA51). Pass G grades against **20 ICC profiles
-extracted from the Ghent PDF Output Suite 5.0** — written by Adobe InDesign
+extracted from the print-conformance suite** — written by Adobe InDesign
 CS6, imposed by Callas pdfToolbox, and embedded 121 times across 98 production
 PDF/X files. It is the first time this project has measured itself against what
 a real document producer actually embeds.
@@ -4161,11 +4161,11 @@ count is unchanged at 119, so Pass G added none — and `blind=0`.
 
 ### 22.2 ★★ Licensing — the rule that binds anyone editing this
 
-The Ghent suite's own licence **forbids commercial use and redistribution
+The suite's own licence **forbids commercial use and redistribution
 without written permission**, and the profiles inside carry Adobe's, ECI's and
 X-Rite's separate licences. Therefore:
 
-- **No file from `ghent-v50\` may be committed to this repository.**
+- **No file from `suite-v50\` may be committed to this repository.**
 - **No value read out of one may be copied into this repository** — not a
   colorant, not a white point, not a CLUT sample, not a ΔE. Every number in
   Pass G's records is **formatted at run time** from the file on the operator's
@@ -4185,7 +4185,7 @@ set ICCCE_PRIVATE_FIXTURES=D:\Dev\iccce-private-fixtures
 cargo build --release -p iccce-cli          # from the repo root
 cd tools/difftest
 cargo run --release                          # the whole suite, Pass G included
-cargo run --release --bin ghent_probe        # the INSTRUMENT: prints, grades nothing
+cargo run --release --bin suite_probe        # the INSTRUMENT: prints, grades nothing
 ```
 
 **Without the corpus every Pass G row SKIPs with a reason.** That is the
@@ -4193,7 +4193,7 @@ permanent state in CI, by design. ★ A green CI line for these rows says they
 **did not run** — it is not evidence that they passed. `§5.6`'s rule applies as
 everywhere: run the gate bare and read `$?`; never through `grep` or `tail`.
 
-**`ghent_probe` is an instrument, not a gate.** It prints numbers, grades
+**`suite_probe` is an instrument, not a gate.** It prints numbers, grades
 nothing and never fails. It exists so that a tolerance can be *derived* from
 measured structure before it is written into `passg.rs` — so that no number in
 the graded suite was chosen by watching a comparison go green. If you are
@@ -4204,10 +4204,10 @@ in the `why`; §3.7.2 and §3.7.3 record what happens when that order is reverse
 
 | § | subject | needs | rows |
 |---|---|---|---|
-| **A** | the **v4 vendor `mAB `** path — X-Rite's `GWG_ICC_v4_testprofile.icc`, `mAB ` 7×7×7×7 with 4096-entry A curves | corpus, oracle, shipped binary | 18 |
+| **A** | the **v4 vendor `mAB `** path — X-Rite's `PCS_ICC_v4_testprofile.icc`, `mAB ` 7×7×7×7 with 4096-entry A curves | corpus, oracle, shipped binary | 18 |
 | **B** | the **population sweep** — 5 pairs × 4 intents × ±BPC, in the `B2A` direction | corpus, oracle, shipped binary | 46 |
 | **C** | **`eciRGB v2` in its v2.4 and v4.2 encodings** — one vendor, one declared space | corpus, shipped binary (+ oracle for one row) | 3 |
-| **D** | the two **GWG trap profiles** | corpus (+ oracle for one row) | 5 |
+| **D** | the two **the suite's publisher trap profiles** | corpus (+ oracle for one row) | 5 |
 
 They are independent: a failure to build one does not silence the others.
 
@@ -4527,10 +4527,10 @@ one day (2026-08-17).
 
 ★★ **The denominator matters and is stated in the row itself, because a second
 census exists that reads like a rival claim.** Across **both** private corpora —
-this one (40 accepted) plus `ghent-v50` (20, Pass G, §22) — the sweep gives
+this one (40 accepted) plus `suite-v50` (20, Pass G, §22) — the sweep gives
 **`CMYK 33, RGB 25, GRAY 1, 7CLR 1 = 60`** (`NUMERIC_CLAIMS.md` **NC-220**).
 **They reconcile exactly**: `23+16+1 = 40` here, `10+9+1 = 20` there, and **the
-single `GRAY` profile is in `ghent-v50`, not here.** No contradiction — two
+single `GRAY` profile is in `suite-v50`, not here.** No contradiction — two
 populations. **A coverage number quoted without its corpus is not a coverage
 number**, so `passh/E/coverage/population-breakdown` now names its own
 denominator and points at the other one.
@@ -4799,7 +4799,7 @@ colorant of a CMYK separation. Nothing here depends on a Pass J existing.
 implementing K-only / black preservation separately; this module is the
 apparatus that will measure it, **written first, so that its numbers were
 chosen before anybody knew which numbers would be convenient.** The capability
-being anticipated is what the Ghent Output Suite's *Four different Grays* patch demands.
+being anticipated is what the print-conformance suite's *Four different Grays* patch demands.
 
 **★★★ ICC.1 is SILENT and the negative is CLOSED.** `icc-spec-librarian`
 searched ICC.1:2022 *and* ICC.1:2001-04 whole-document, two engines each, for
@@ -4828,7 +4828,7 @@ must be stated before `E2`'s number means anything.
 
 > **ΔE is blind to the defect black preservation exists to fix.**
 
-`ISO Coated v2 300% (ECI)` — the profile the Ghent suite embeds as the
+`ISO Coated v2 300% (ECI)` — the profile the print-conformance suite embeds as the
 `DestOutputProfile` of every ICC-CMS patch — converting `(0,0,0,K)` into
 **itself** at media-relative, 41 points:
 
@@ -4861,7 +4861,7 @@ cargo run --release --bin passk_probe
 
 Six blocks: the full 41-point baseline ramp; the same ramp at all four ICC
 intents; what a K-preserving answer looks like; the transition across one CLUT
-cell; the GWG two-leg comparison for two gray sources; the intent sweep over
+cell; the suite's publisher two-leg comparison for two gray sources; the intent sweep over
 six real CMYK destinations. **A `Record` carries one number and the ramp is the
 finding**, which is why the probe exists at all — but nothing in it is a claim
 that lives only there: every block is reduced into a graded or reported row.
@@ -4982,10 +4982,10 @@ only CMYK → CMYK and the non-CMYK-native device. ★ **PDF, not ICC, also name
 the harm**: §8.6.5.7 NOTE 2 — a 4 → 3 → 4 conversion *"results in a loss of
 fidelity in the black component"*.
 
-★ **A commissioning premise failed too.** *"GWG 23.0 (Four different Grays)"* is
-not a GWG requirement id — GWG 2022 uses `Dxxx`/`Rxxx`, the equivalence is
+★ **A commissioning premise failed too.** *"PCS 23.0 (Four different Grays)"* is
+not a the suite's publisher requirement id — PCS2022 uses `Dxxx`/`Rxxx`, the equivalence is
 `D0013 "Black Colour"` (a *definition* consumed by the overprint requirements),
-and the `n.m` form is **Ghent PDF Output Suite patch** numbering. Every mention
+and the `n.m` form is **the print-conformance suite patch** numbering. Every mention
 now names the artefact.
 
 **§C is kept and every row is REPORTED**, because iccce still owns the
@@ -5059,7 +5059,7 @@ Not the tolerance, not the code — **the fixture**. `v2-cmyk-mft2-lab.icc`'s
 and a non-preserving one return the *same numbers* on its K ramp. Two candidate
 answers that coincide are `ZERO-SEPARATION`, and no bound anybody could write
 would separate them. Every graded black-preservation row therefore had to run
-on the licensed Ghent corpus and skip in CI.
+on the licensed suite corpus and skip in CI.
 
 #### 25.12.2 The new recipe, and why the construction IS the evidence
 
@@ -5150,7 +5150,7 @@ afterwards (`gen-profiles verify` re-run to `41 identical` each time).
 inform — it turns the headline row GREEN and gives the transition-width row a
 number that looks like a working feature.** The suite would have reported
 `fail=1` instead of `fail=2`, and the one remaining failure would have been the
-Ghent row that **skips in CI**. On a corpus-free runner the whole thing would
+suite row that **skips in CI**. On a corpus-free runner the whole thing would
 have gone green with black preservation still unimplemented.
 
 That is a stronger result than the design argued for. §F was built because a
@@ -5198,7 +5198,7 @@ misreading belongs to a row that *decodes* the PCS; these two do not.
 
 #### 25.12.6 ★ What §F does NOT do — four things, and none of them is optional to state
 
-1. **It does not repoint `E1`.** The Ghent row stays exactly as it was: red,
+1. **It does not repoint `E1`.** The suite row stays exactly as it was: red,
    skipping in CI, measuring **real ink** at `0.705 320`. §F adds reach; it
    does not launder the red into green.
 2. **It does not delete `E6`.** That row's `ZERO-SEPARATION` verdict is the
@@ -5323,7 +5323,7 @@ have produced a row that looked discriminating and was not.
 ★★ **`E9` grades only at the oracle's own CLUT nodes**, and the reason is a
 measurement: off those nodes lcms2 interpolates its own 17-node table rather
 than evaluating its construction, and the residual grows `120x`–`351x` (to
-`1.089 5e-2` on the `GWG_GenericCMYK` pair). A row graded over the whole ramp
+`1.089 5e-2` on the `PCS_GenericCMYK` pair). A row graded over the whole ramp
 would be grading lcms2's choice of grid density. Same shape as `E5`'s `32x`
 control, in a different channel.
 
@@ -5430,7 +5430,7 @@ before `a05476c` it would have been a **disclosure**; now it would be a
 #### 25.13.6 Coverage of this grading, stated
 
 - **one source profile** for §E, **one intent** (media-relative), **one
-  policy**, **two destinations** (itself; `GWG_GenericCMYK` for `E9` alone);
+  policy**, **two destinations** (itself; `PCS_GenericCMYK` for `E9` alone);
 - the ten-destination sweep of §25.13.1 was run **by hand** as a check on the
   handover and is **not a row** — it has no oracle leg;
 - **no `--bpc` anywhere**; a chain carrying both flags is untested at any layer;
@@ -5444,7 +5444,7 @@ before `a05476c` it would have been a **disclosure**; now it would be a
   `ΔE2000` the preserved answer sits from the colorimetric one on a cross-press
   pair, which is the number a caller weighing the policy would want;
   ★★★ **DISCHARGED 2026-08-19 by §26 below** — `3.681203 ΔE2000` max,
-  `1.580674` mean, on `ISO Coated v2 300% (ECI) → GWG_GenericCMYK` at
+  `1.580674` mean, on `ISO Coated v2 300% (ECI) → PCS_GenericCMYK` at
   media-relative. The bullet is left as written, with the discharge dated
   beside it, because the coverage statement was true of the grading it
   describes; **`§25.13.6`'s other bullets are NOT affected by it.**
@@ -5472,7 +5472,7 @@ condition:
 > direction and its intent.*
 
 §G measures it. **`3.681203 ΔE2000` max, `1.580674` mean, at `K = 1.00`, over
-101 qualifying points**, on **`ISO Coated v2 300% (ECI)` → `GWG_GenericCMYK`**,
+101 qualifying points**, on **`ISO Coated v2 300% (ECI)` → `PCS_GenericCMYK`**,
 **media-relative**, `--preserve-black k-only-equal-lightness`. Reproduce with
 either of:
 
@@ -5527,12 +5527,12 @@ quoting it as the policy's price.
 ### 26.4 ★★ The population, which is stronger than the headline
 
 `G16` runs the same measurement over **all thirty ordered pairs** of the six
-real CMYK members of the Ghent corpus and grades a universal statement:
+real CMYK members of the suite corpus and grades a universal statement:
 
 > **Of 30 ordered pairs, 11 are ENTITLED to price this policy, and 0 of them
 > find it imperceptible.** Among the entitled the cost runs **`2.023698`**
-> (`Coated FOGRA27 → GWG_ICC_v4_testprofile`) to **`3.686985`**
-> (`Coated FOGRA39 → GWG_GenericCMYK`).
+> (`Coated FOGRA27 → PCS_ICC_v4_testprofile`) to **`3.686985`**
+> (`Coated FOGRA39 → PCS_GenericCMYK`).
 
 Without the entitlement filter the same count is **9**, which is the row's
 separation and the measure of what the three gates are worth. ★ `G1` grades a

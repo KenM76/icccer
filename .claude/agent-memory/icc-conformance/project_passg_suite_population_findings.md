@@ -1,12 +1,12 @@
 ---
-name: project-passg-ghent-population-findings
-description: Pass G graded iccce against 20 REAL producer-embedded profiles (Ghent v5.0) — the first vendor-authored v4 mAB; three findings a synthetic corpus could not produce (a non-identity B curve that broke a tolerance derivation, vendor-specific intent-tag aliasing, Adobe's shipped sRGB/AdobeRGB having wtpt=D65 with D50 colorants); and the eciRGB v2/v4 pair is NOT the version isolator it looks like.
+name: project-passg-suite-population-findings
+description: Pass G graded iccce against 20 REAL producer-embedded profiles (the print-conformance suite) — the first vendor-authored v4 mAB; three findings a synthetic corpus could not produce (a non-identity B curve that broke a tolerance derivation, vendor-specific intent-tag aliasing, Adobe's shipped sRGB/AdobeRGB having wtpt=D65 with D50 colorants); and the eciRGB v2/v4 pair is NOT the version isolator it looks like.
 metadata:
   type: project
 ---
 
 **Built 2026-08-17 at tip `e21154c`.** `tools/difftest/src/passg.rs` (72 rows),
-instrument `src/bin/ghent_probe.rs`, bounds `docs/TOLERANCES.md` **§3.7**,
+instrument `src/bin/suite_probe.rs`, bounds `docs/TOLERANCES.md` **§3.7**,
 operational notes `tools/difftest/README.md` **§22**. Suite went
 `pass=157` → **`pass=229 fail=0 skip=3 error=0`**. **Pass G contributed ZERO
 `unstated` separations** — every row states one; `blind=0`.
@@ -26,9 +26,9 @@ everywhere else including CI permanently**.
      **broke a tolerance derivation** (see below).
   2. **Intent-tag aliasing differs BY VENDOR**: X-Rite aliases `A2B1≡A2B2`
      (media-relative/saturation), both ECI profiles alias `A2B0≡A2B2`
-     (perceptual/saturation), the GWG CMYK trap also aliases `B2A0≡B2A2`.
+     (perceptual/saturation), the suite's publisher CMYK trap also aliases `B2A0≡B2A2`.
      **An engine or suite that hard-codes one pairing is wrong on the others.**
-  3. Ghent's **`sRGB IEC61966-2.1` and `Adobe RGB (1998)` encode `wtpt` = D65
+  3. the suite's **`sRGB IEC61966-2.1` and `Adobe RGB (1998)` encode `wtpt` = D65
      while their colorants sum to D50, with no `chad`** — the M5 shape, now
      shown to be the **population norm**, not a one-off system profile.
      ICC.1:2001-04 A.3.1.1 makes that a **defect of authorship**, so the

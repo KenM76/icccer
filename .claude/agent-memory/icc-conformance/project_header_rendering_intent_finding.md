@@ -11,9 +11,9 @@ Built the synthetic pair `v2-rgb-header-intent-perceptual.icc` /
 `crates/iccce-cli/tests/header_rendering_intent_not_consumed.rs` and
 `docs/TOLERANCES.md` §3.11.
 
-**Why:** the operator measured the behaviour on two licensed Ghent profiles
+**Why:** the operator measured the behaviour on two licensed suite profiles
 and could not put any number from them into git
-(`docs/GHENT_COMPATIBILITY.md` §2.3), so the finding had to be reproduced from
+(`docs/SUITE_COMPATIBILITY.md` §2.3), so the finding had to be reproduced from
 scratch on bytes this project owns.
 
 **How to apply:** four things below are durable and none is derivable from the

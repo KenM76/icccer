@@ -70,7 +70,7 @@
 //!   ISO Coated v2 300% -> itself             6.1e-5    (same press)
 //!   ISO Coated v2 300% -> Coated FOGRA39     1.165e-3
 //!   ISO Coated v2 300% -> Coated FOGRA27     1.4296e-2
-//!   ISO Coated v2 300% -> GWG_GenericCMYK    4.8899e-2 (cross press)
+//!   ISO Coated v2 300% -> PCS_GenericCMYK    4.8899e-2 (cross press)
 //! ```
 //!
 //! ★ **Read that table before assuming the choice is academic.** On a

@@ -1765,9 +1765,9 @@ fn section_e(v: &[FileVerdict], out: &mut Vec<Record>) {
                  claim of GRAY/Lab/XYZ coverage FROM THIS CORPUS is false. \
                  ★★ THE DENOMINATOR IS NAMED BECAUSE A SECOND CENSUS EXISTS AND LOOKS LIKE A \
                  RIVAL CLAIM. Across BOTH private corpora - color-org (40 accepted) plus \
-                 ghent-v50 (20, Pass G) - the engineer's own sweep gives CMYK 33, RGB 25, GRAY 1, \
+                 suite-v50 (20, Pass G) - the engineer's own sweep gives CMYK 33, RGB 25, GRAY 1, \
                  7CLR 1 = 60 (NUMERIC_CLAIMS.md NC-220). That RECONCILES with this row exactly: \
-                 23+16+1 = 40 here, 10+9+1 = 20 there. The single GRAY profile is in ghent-v50, \
+                 23+16+1 = 40 here, 10+9+1 = 20 there. The single GRAY profile is in suite-v50, \
                  NOT here. ■ There is therefore no contradiction between the two counts, only two \
                  different populations - and a coverage number quoted without its corpus is not a \
                  coverage number. iccce DOES have GRAY evidence; Pass H is not where it lives"

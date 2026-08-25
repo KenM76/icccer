@@ -39,7 +39,7 @@ which ones would be convenient.
 - ★★ **The shortcut that works on exactly one vendor.** *"Use the saturation
   intent instead of building black preservation"* is true of **2 of 6** real
   CMYK destinations — both ECI's `ISO Coated v2` variants (`0.036`/`0.039`) —
-  and false of FOGRA39/27, GWG_GenericCMYK and X-Rite (`0.51`–`0.78`), three of
+  and false of FOGRA39/27, PCS_GenericCMYK and X-Rite (`0.51`–`0.78`), three of
   which alias `B2A0 ≡ B2A2`. **Measuring on ISO Coated v2 alone would have
   concluded the feature was unnecessary.** Where it works it costs up to
   **`6.4151 ΔE2000`**.

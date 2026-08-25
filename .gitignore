@@ -26,9 +26,9 @@ target/
 tools/difftest/vendor/
 
 # ------------------------------------------------------------------------
-# docs/GHENT_COMPATIBILITY.md — LOCAL ONLY, never committed.
+# docs/SUITE_COMPATIBILITY.md — LOCAL ONLY, never committed.
 #
-# Operator decision, 2026-08-18. The file is the Ghent PDF Output Suite
+# Operator decision, 2026-08-18. The file is the print-conformance suite
 # workstream in full: which patches are this project's, what the suite's
 # readmes say (quoted), where its profiles were extracted to, and what was
 # measured against them. That is detailed analysis of, and quotation from, a
@@ -38,7 +38,7 @@ tools/difftest/vendor/
 # entanglement at all, rather than relying on a fair-quotation argument.
 #
 # ★ It is still the reference and it still exists — on this machine, at
-# docs/GHENT_COMPATIBILITY.md. Tracked documents cite it by section and
+# docs/SUITE_COMPATIBILITY.md. Tracked documents cite it by section and
 # those citations remain correct for anyone working locally. A reader who
 # has only the public repository cannot follow them, and that is the
 # accepted cost of the decision, not an oversight.
@@ -47,7 +47,7 @@ tools/difftest/vendor/
 # from future commits; it does NOT remove it from history. See
 # docs/NEXT_SESSION.md for the outstanding decision on that.
 # ------------------------------------------------------------------------
-docs/GHENT_COMPATIBILITY.md
+docs/SUITE_COMPATIBILITY.md
 
 # Compiler object files from throwaway C/C++ probes (e.g. the dE94/CMC
 # reference probe whose object file was committed as dechk.obj in aef7566
@@ -68,15 +68,15 @@ __pycache__/
 # are not supposed to be inside this repository AT ALL.
 #
 # Operator decision, 2026-08-25. The first version of that tool
-# (tools/ghent/shading_cell.py, deleted the same day) inlined a licensed test
+# (tools/suite/shading_cell.py, deleted the same day) inlined a licensed test
 # suite's shading dictionary, indirect-object numbers, endpoint colours and
 # the identity of the press profile it embeds — the same entanglement that
-# untracked docs/GHENT_COMPATIBILITY.md on 2026-08-18. The decision was to
+# untracked docs/SUITE_COMPATIBILITY.md on 2026-08-18. The decision was to
 # SPLIT it: a generic public tool that contains no numbers, plus a case file
 # holding the licensed specifics.
 #
 # ★ The case file lives OUTSIDE the working tree, not in a gitignored path
 # inside it — a gitignored path is one `git add -f` away from the thing the
-# decision was made to prevent. The GWG010 case is at
-# D:/Dev/temp/iccce-gwg/gwg010_shading.case.json on the operator's machine.
+# decision was made to prevent. The PCS010 case is at
+# D:/Dev/temp/iccce-suite/pcs1_010_shading.case.json on the operator's machine.
 # ------------------------------------------------------------------------

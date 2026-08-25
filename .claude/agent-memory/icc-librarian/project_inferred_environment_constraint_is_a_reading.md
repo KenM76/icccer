@@ -95,7 +95,7 @@ probe is both the most natural first move against an unfamiliar library
 and the call least entitled to speak for it.
 
 **★★★ A SECOND failure mode, broader than the Symbol-glyph one.** The
-first use read two facts off a page — GWG 23.0's four panel values and
+first use read two facts off a page — PCS 23.0's four panel values and
 its declared intent — that are **set in a FIGURE**. `pdftotext -layout`
 returns the prose and omits them. ⇒ **for figure-borne content, engine
 agreement is not correlated, it is VACUOUS: all three return nothing and
@@ -103,7 +103,7 @@ their shared silence reads as ABSENCE OF THE FACT.** The glyph mode
 **corrupts a value you can see**; this one **hides that a value exists**,
 and no amount of cross-engine comparison can surface it. §7.21's owed
 sweep widens to *"glyph-sensitive **or possibly set in a figure**"*.
-`GHENT_COMPATIBILITY.md` §9 gained a fourth provenance class,
+`SUITE_COMPATIBILITY.md` §9 gained a fourth provenance class,
 **`[QUOTED-FROM-RASTER]`**, because `[QUOTED]` was defined by naming
 `pdftotext -layout`.
 

@@ -215,9 +215,9 @@ the decision itself.
 
 A colour-managed document very often **declares** its destination. A
 PDF/X file's `/OutputIntents` names a print condition and embeds the
-destination profile; every ICC-CMS patch in the Ghent suite embeds `ISO
+destination profile; every ICC-CMS patch in the print-conformance suite embeds `ISO
 Coated v2 300% (ECI)` exactly this way
-(`docs/GHENT_COMPATIBILITY.md` §3.4). If a caller hands iccce a document
+(`docs/SUITE_COMPATIBILITY.md` §3.4). If a caller hands iccce a document
 whose declared destination **failed to parse**, or **was not looked
 for**, or **was found and then dropped**, and iccce quietly substitutes
 sRGB, the result is:
@@ -230,7 +230,7 @@ sRGB, the result is:
 
 That is rule 1's exact subject — *a wrong colour looks exactly like a
 right one* — and it would be caused by the fallback rather than caught by
-it. GWG 22.1, the Output Intent Change Indicator, exists in the Ghent
+it. PCS 22.1, the Output Intent Change Indicator, exists in the suite
 suite **specifically to detect this failure in real workflows**.
 
 **So the contract is:**
@@ -412,7 +412,7 @@ Consequences, binding:
   (`4.6×10⁻⁵` XYZ) difference from ICC's published colorants**, registered
   as **NA-011**.
 
-★ And note the trap already recorded at §4.3 below: the Ghent corpus's
+★ And note the trap already recorded at §4.3 below: the suite corpus's
 `sRGB IEC61966-2.1` files — and the canonical HP one — encode `wtpt` =
 **D65** with **no `chad`**, which ICC.1 A.3.1.1 makes a defect. **The
 most-deployed sRGB profile in the world does not comply.** It is a fine
@@ -436,10 +436,10 @@ for what a constructed profile's white point should be.
 That gap does not close, and it is why this remains a construction from
 constants rather than a check against a published example.
 
-★ **Step 4 has a trap worth naming now.** The Ghent corpus's `sRGB
+★ **Step 4 has a trap worth naming now.** The suite corpus's `sRGB
 IEC61966-2.1` files are **defectively authored**: they encode `wtpt` =
 D65 while their colorants sum to D50 with **no `chad`**, which ICC.1
-Annex A.3.1.1 makes a defect (`GHENT_COMPATIBILITY.md` §4.5b). They are
+Annex A.3.1.1 makes a defect (`SUITE_COMPATIBILITY.md` §4.5b). They are
 therefore a fine test that iccce *parses what real files contain*, and a
 **bad** reference for what the constructed profile's white point should
 be. Do not let the two uses blur.
@@ -505,4 +505,4 @@ be. Do not let the two uses blur.
 | `pdfce`'s destination question, its three gates, and its item 3 and 4 | `open/request_iccbased_colour_spaces.md`, quoted |
 | the corpus's single-source warning on sRGB | `ICC_Spec/iec/iec__s__srgb.md` frontmatter, read 2026-08-17 |
 | the oracle-agreement defect class | `NEXT_SESSION.md` §5.2 |
-| Ghent's sRGB files' authoring defect | `GHENT_COMPATIBILITY.md` §4.5b, from the Pass G run |
+| the suite's sRGB files' authoring defect | `SUITE_COMPATIBILITY.md` §4.5b, from the Pass G run |

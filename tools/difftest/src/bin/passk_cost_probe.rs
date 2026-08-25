@@ -14,7 +14,7 @@
 //!    maximum hides that; a mean hides it worse.
 //! 2. **How much of the number is the PAIR rather than the POLICY.** The same
 //!    measurement over the thirty ordered pairs the six real CMYK members of
-//!    the Ghent corpus admit spans more than twenty-fold, and the smallest
+//!    the suite corpus admit spans more than twenty-fold, and the smallest
 //!    entries are the pairs that describe **one press twice**. Printing the
 //!    whole matrix is what makes "3.68 on a named real pair" a statement a
 //!    reader can check rather than a number they must take — and it is what
@@ -34,7 +34,7 @@
 //!
 //! Requires the pinned `transicc` (`$ICCCE_TRANSICC` or the vendored build)
 //! and the shipped `iccce` binary (`$ICCCE_BIN` or `target/release/iccce`).
-//! The **licensed** Ghent v5.0 corpus (`$ICCCE_PRIVATE_FIXTURES`) is needed
+//! The **licensed** the print-conformance suite corpus (`$ICCCE_PRIVATE_FIXTURES`) is needed
 //! for blocks 1 and 2 only; blocks 3 and 4 run from committed fixtures and are
 //! printed even when the corpus is absent, which is the normal case off the
 //! operator's machine and the permanent case in CI.
@@ -60,7 +60,7 @@ use iccce_difftest::passk::{
 };
 use iccce_difftest::{Iccce, Intent, Oracle};
 
-/// The six real CMYK members of the Ghent corpus, by short name and by the
+/// The six real CMYK members of the suite corpus, by short name and by the
 /// first 16 hex digits of their SHA-256 — a pointer to a licensed artifact,
 /// never any part of its content.
 const CORPUS: [(&str, &str); 6] = [
@@ -68,7 +68,7 @@ const CORPUS: [(&str, &str); 6] = [
     ("ISOc350", "128dc02f7246cc38.icc"),
     ("FOGRA39", "da2b9b593e27cba2.icc"),
     ("FOGRA27", "fb710c05e3fb5a96.icc"),
-    ("GWGgen", "5bad92a6f018e726.icc"),
+    ("PCSgen", "5bad92a6f018e726.icc"),
     ("XRiteV4", "b5988983b6b3b7d4.icc"),
 ];
 
@@ -201,7 +201,7 @@ fn run() -> Result<(), String> {
         block1_and_2(&oracle, &iccce, &dir)?;
     } else {
         println!(
-            "=== 1 & 2. SKIPPED — the Ghent v5.0 corpus is not at {} ===",
+            "=== 1 & 2. SKIPPED — the print-conformance suite corpus is not at {} ===",
             dir.display()
         );
         println!("    It is licensed and cannot be committed, so absence is the normal case.");
@@ -367,7 +367,7 @@ fn block1_and_2(oracle: &Oracle, iccce: &Iccce, dir: &Path) -> Result<(), String
         "      perceptibility anchor — the smallest is twice it. The policy is never invisible"
     );
     println!("      where it is doing anything.");
-    println!("    ★ §G grades ISOc300 -> GWGgen for continuity with §A-§E, which are all built on");
+    println!("    ★ §G grades ISOc300 -> PCSgen for continuity with §A-§E, which are all built on");
     println!(
         "      ISO Coated v2 300% (ECI). It is not quite the largest entitled pair; the largest is"
     );
@@ -387,7 +387,7 @@ fn block1_and_2(oracle: &Oracle, iccce: &Iccce, dir: &Path) -> Result<(), String
     let src = dir.join("c6b4b62f07262437.icc");
     let dst = dir.join("5bad92a6f018e726.icc");
     let leg = measure(oracle, iccce, &src, &dst)?;
-    println!("    ISO Coated v2 300% (ECI) -> GWG_GenericCMYK, media-relative");
+    println!("    ISO Coated v2 300% (ECI) -> PCS_GenericCMYK, media-relative");
     println!();
     println!(
         "    K_in   |  colorimetric C M Y K                    | preserved K' |   TAC   |  cost \

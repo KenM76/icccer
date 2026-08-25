@@ -85,7 +85,7 @@ Its two CLUT models are **affine with no cross terms**, and its `B2A0` is
 on purpose — those properties are what make every expectation taken from it
 exact for *any* conformant interpolation scheme rather than only for the one a
 particular consumer uses. That also means it is **less like a real press than
-any profile in the Ghent corpus**, and a number measured on it is evidence
+any profile in the suite corpus**, and a number measured on it is evidence
 about the *predicate*, never about ink. `tools/gen-profiles/src/recipes.rs`
 carries the full derivation; `docs/TOLERANCES.md` §3.10.11 carries the
 tolerances that rest on it.

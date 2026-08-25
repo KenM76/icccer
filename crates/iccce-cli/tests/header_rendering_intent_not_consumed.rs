@@ -113,7 +113,7 @@
 //! ## Why the fixture is synthetic
 //!
 //! The behaviour was first observed on two profiles embedded in a licensed
-//! third-party corpus. `docs/GHENT_COMPATIBILITY.md` §2.3 is absolute: no
+//! third-party corpus. `docs/SUITE_COMPATIBILITY.md` §2.3 is absolute: no
 //! value may be copied out of that directory into this repository — not into
 //! a test, not into a doc, not into a comment. **Nothing here is derived
 //! from those files.** The pair below is authored byte by byte by

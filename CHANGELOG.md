@@ -237,7 +237,7 @@ as a release note.
   *requirement*, and the literal is **not optional** — a path dependency
   with no version builds locally and makes the crate unpublishable.
 
-- **`docs/GHENT_COMPATIBILITY.md` is no longer tracked**, and
+- **`docs/SUITE_COMPATIBILITY.md` is no longer tracked**, and
   `tools/patch-compare/` replaces a predecessor that was deleted the same
   day it was written. Operator decisions of 2026-08-18 and 2026-08-25:
   detailed analysis of, and quotation from, a **licensed** third-party

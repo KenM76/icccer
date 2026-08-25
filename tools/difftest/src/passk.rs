@@ -45,7 +45,7 @@
 //!    no feature, when a K-only build is re-separated into a real CMYK
 //!    destination. This is the number nobody had.
 //! 2. **§B–§C measure the two predicates the requirement is usually stated
-//!    in** — the Ghent Output Suite's *Four different Grays* patch — as quantities, on both
+//!    in** — the print-conformance suite's *Four different Grays* patch — as quantities, on both
 //!    sides of a boundary this project does not own.
 //! 3. **§D–§E build the discriminating probes**, one of which was **RED on
 //!    purpose** until the feature existed, and is now the row that says the
@@ -68,7 +68,7 @@
 //!
 //! | | |
 //! |---|---|
-//! | the cost, `ISO Coated v2 300% (ECI)` → `GWG_GenericCMYK`, media-relative | `G1`/`G2`, licensed |
+//! | the cost, `ISO Coated v2 300% (ECI)` → `PCS_GenericCMYK`, media-relative | `G1`/`G2`, licensed |
 //! | the same over **every** ordered pair of the six real CMYK members | `G16`, licensed |
 //! | the same on a **committed** pair, against a **closed form** | `G11`–`G15`, CI |
 //! | why the pair §F already had **cannot** carry a ΔE row | `G9`/`G10`, CI |
@@ -141,8 +141,8 @@
 //! | `ISO Coated v2 (ECI)` | `0.773954` | `0.776090` | **`0.038759`** |
 //! | `Coated FOGRA39` | `0.726101` | `0.730096` | `0.730096` |
 //! | `Coated FOGRA27` | `0.756552` | `0.759334` | `0.759334` |
-//! | `GWG_GenericCMYK` | `0.791232` | `0.783291` | `0.783291` |
-//! | `GWG_ICC_v4_testprofile` (X-Rite) | `0.501787` | `0.531900` | `0.506564` |
+//! | `PCS_GenericCMYK` | `0.791232` | `0.783291` | `0.783291` |
+//! | `PCS_ICC_v4_testprofile` (X-Rite) | `0.501787` | `0.531900` | `0.506564` |
 //!
 //! Three of the six alias `B2A0 ≡ B2A2`, so their "saturation" answer *is*
 //! their perceptual answer — Pass G's vendor-specific intent-aliasing finding,
@@ -299,7 +299,7 @@
 //!    a 4096-entry curve from the *source's* K-only lightness ramp against the
 //!    *destination's*, so `K_out = K_in` only when the two presses' black inks
 //!    agree. Across this corpus the difference reaches **`4.889 9×10⁻²`**
-//!    (`ISO Coated v2 300%` → `GWG_GenericCMYK`). That number is `D4`'s
+//!    (`ISO Coated v2 300%` → `PCS_GenericCMYK`). That number is `D4`'s
 //!    **named candidate separation**: *"K is copied through unchanged"* is the
 //!    plausible-but-wrong implementation, and it sits `4.89×10⁻²` away in the
 //!    row's own units. On the *same-profile* pair it sits `6.1×10⁻⁵` away —
@@ -369,12 +369,12 @@
 //!   of why §A's baseline matters, and it is in the wrong standard for this
 //!   project to cite as a requirement on itself.
 //!
-//! ★ **A premise this pass was commissioned with also failed.** *"GWG 23.0
-//! (Four different Grays)"* is **not a GWG requirement id**: GWG 2022 uses
+//! ★ **A premise this pass was commissioned with also failed.** *"PCS 23.0
+//! (Four different Grays)"* is **not a the suite's publisher requirement id**: PCS2022 uses
 //! `Dxxx`/`Rxxx`, and the four-way equivalence exists as **`D0013 "Black
 //! Colour"`** — a *definition consumed by the overprint requirements*, not a
-//! rendering requirement. The `n.m` form matches the **Ghent PDF Output Suite
-//! patch** numbering. Every occurrence in this module now says *"the Ghent
+//! rendering requirement. The `n.m` form matches the **the print-conformance suite
+//! patch** numbering. Every occurrence in this module now says *"the suite
 //! Output Suite's Four-different-Grays patch"*, which is what the artefact is.
 //!
 //! **§C is kept, and its rows are REPORTED rather than graded**, for two
@@ -396,7 +396,7 @@
 //!
 //! The result is the sharpest thing in the module:
 //!
-//! > On the Ghent corpus's own press-gray profile the two legs land
+//! > On the suite corpus's own press-gray profile the two legs land
 //! > **`0.716 386` apart in device space** and **`0.7516 ΔE2000` apart in
 //! > colour.** They look the same and they are made of completely different
 //! > ink.
@@ -531,7 +531,7 @@ pub fn corpus_dir() -> PathBuf {
     std::env::var_os("ICCCE_PRIVATE_FIXTURES")
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from(r"D:\Dev\iccce-private-fixtures"))
-        .join("ghent-v50")
+        .join("suite-v50")
 }
 
 /// The committed synthetic corpus, resolved relative to this crate's manifest.
@@ -540,14 +540,14 @@ pub fn synthetic_dir() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../../fixtures/synthetic")
 }
 
-/// Ghent corpus members used here, named by the first 16 hex digits of their
+/// suite corpus members used here, named by the first 16 hex digits of their
 /// SHA-256 — a *pointer* to a licensed artifact, never any part of its content.
 /// The `desc` strings in the comments are the profiles' own descriptions,
 /// reproduced for identification only; they are not colour values.
 mod file {
     /// ★ **The subject of §A.** `ISO Coated v2 300% (ECI)`, v2.4 `prtr` CMYK,
     /// `mft2` `A2B*` at grid **16**, `mft2` `B2A*` at grid **33**. This is the
-    /// profile the Ghent suite embeds as the `DestOutputProfile` of its
+    /// profile the print-conformance suite embeds as the `DestOutputProfile` of its
     /// ICC-CMS patches.
     ///
     /// ★ A second corpus file (`cb5df02f9b9cea7e.icc`) carries the same `desc`
@@ -570,9 +570,9 @@ mod file {
     pub const FOGRA39: &str = "da2b9b593e27cba2.icc";
     /// `Coated FOGRA27 (ISO 12647-2:2004)`, v2.1 `prtr` CMYK.
     pub const FOGRA27: &str = "fb710c05e3fb5a96.icc";
-    /// `GWG_GenericCMYK`, v2.0 `prtr` CMYK.
+    /// `PCS_GenericCMYK`, v2.0 `prtr` CMYK.
     pub const GENERIC_CMYK: &str = "5bad92a6f018e726.icc";
-    /// `GWG_ICC_v4_testprofile.icc` — X-Rite, ICC v4.2, `mAB `/`mBA `.
+    /// `PCS_ICC_v4_testprofile.icc` — X-Rite, ICC v4.2, `mAB `/`mBA `.
     pub const XRITE_V4: &str = "b5988983b6b3b7d4.icc";
     /// ★ `Schwarze Druckfarbe - ISO Coated v2 (ECI)` — v2.1 `prtr` **GRAY**,
     /// four tags, 256-entry `kTRC`. Literally *"black printing ink"*: the tone
@@ -1324,7 +1324,7 @@ pub fn need_corpus(name: &str) -> Result<PathBuf, Unavailable> {
         Ok(p)
     } else {
         Err(Unavailable::Skip(format!(
-            "ghent-v50 corpus member {name} not present at {} — set $ICCCE_PRIVATE_FIXTURES. \
+            "suite-v50 corpus member {name} not present at {} — set $ICCCE_PRIVATE_FIXTURES. \
              It is licensed and cannot be committed, so absence is the normal case and is \
              PERMANENT in CI by design",
             corpus_dir().display()
@@ -1490,8 +1490,8 @@ const SWEEP: [(&str, &str); 6] = [
     ("ISO Coated v2 (ECI)", file::ISOCOATED350),
     ("Coated FOGRA39", file::FOGRA39),
     ("Coated FOGRA27", file::FOGRA27),
-    ("GWG_GenericCMYK", file::GENERIC_CMYK),
-    ("GWG_ICC_v4_testprofile (X-Rite)", file::XRITE_V4),
+    ("PCS_GenericCMYK", file::GENERIC_CMYK),
+    ("PCS_ICC_v4_testprofile (X-Rite)", file::XRITE_V4),
 ];
 
 fn analyse_sweep(oracle: &Oracle, iccce: &Iccce) -> Result<Vec<SweepRow>, Unavailable> {
@@ -1548,7 +1548,7 @@ fn analyse_sweep(oracle: &Oracle, iccce: &Iccce) -> Result<Vec<SweepRow>, Unavai
 pub const NEARLY_K_ONLY: f64 = 5e-2;
 
 // ===========================================================================
-// §C — the GWG "four different grays" predicate, both legs
+// §C — the suite's publisher "four different grays" predicate, both legs
 // ===========================================================================
 
 /// One gray source's ICC leg measured against ISO 32000-1 §10.3.3's device
@@ -1563,7 +1563,7 @@ pub struct GrayLeg {
     pub colorimetric_distance: f64,
     /// The same ΔE at the ramp midpoint `g = 0.5`.
     ///
-    /// ★ This was documented as "GWG's own patch value" until
+    /// ★ This was documented as "the suite publisher's own patch value" until
     /// 2026-08-18. **It is not.** Patch 23.0's panels are `DeviceGray`
     /// **25 %** and `DeviceCMYK` **0/0/0/75** — read from the patch's
     /// own content stream (`.25 g`, `0 0 0 .75 k`) and from its readme,
@@ -1657,7 +1657,7 @@ const KTONE_PAIRS: [(&str, &str, &str); 4] = [
         file::FOGRA27,
     ),
     (
-        "ISO Coated v2 300% -> GWG_GenericCMYK",
+        "ISO Coated v2 300% -> PCS_GenericCMYK",
         file::ISOCOATED300,
         file::GENERIC_CMYK,
     ),
@@ -2003,7 +2003,7 @@ fn analyse_feature_gate(oracle: &Oracle, iccce: &Iccce) -> Result<FeatureGate, U
 
     // §E9 — the CROSS-PRESS arm. On a same-press pair the two candidate K
     // answers (equal lightness, copy through) coincide to 6.1e-5, so the
-    // section's own destination cannot tell them apart. GWG_GenericCMYK can.
+    // section's own destination cannot tell them apart. PCS_GenericCMYK can.
     let xp = need_corpus(file::GENERIC_CMYK)?;
     let xp_mine = preserved(&dst, &xp, &rows)?;
     let xp_theirs = k
@@ -2075,7 +2075,7 @@ fn analyse_feature_gate(oracle: &Oracle, iccce: &Iccce) -> Result<FeatureGate, U
             .zip(&ramp)
             .map(|(o, r)| (o[3] - r[3]).abs())
             .fold(0.0_f64, f64::max),
-        xp_dst: "GWG_GenericCMYK",
+        xp_dst: "PCS_GenericCMYK",
         xp_k_at_nodes,
         xp_copy_rival_at_nodes,
         xp_sensitivity,
@@ -2737,7 +2737,7 @@ const ALL_ROWS: [(&str, Kind, Metric, Tolerance); 36] = {
 
 const SRC_BASELINE: &str = "Pass K §A — BOTH SIDES MEASURED IN THIS RUN. iccce's numbers come \
     from running the shipped `iccce transform` binary; lcms2's from the pinned transicc \
-    (21c582a). Fixture: ISO Coated v2 300% (ECI), Ghent v5.0 corpus, licensed and uncommittable";
+    (21c582a). Fixture: ISO Coated v2 300% (ECI), the print-conformance suite corpus, licensed and uncommittable";
 
 fn baseline_records(x: &Baseline) -> Vec<Record> {
     let mut out = Vec::new();
@@ -2921,7 +2921,7 @@ fn baseline_records(x: &Baseline) -> Vec<Record> {
 }
 
 const SRC_SWEEP: &str = "Pass K §B — iccce (shipped binary) into six REAL CMYK destinations from \
-    the Ghent v5.0 corpus, licensed and uncommittable. The population is named in the module \
+    the print-conformance suite corpus, licensed and uncommittable. The population is named in the module \
     header; no synthetic profile can join it, because a synthetic B2A this project authored \
     would be K-only by construction";
 
@@ -3011,7 +3011,7 @@ fn sweep_records(rows: &[SweepRow]) -> Vec<Record> {
 const SRC_GRAY: &str = "Pass K §C — LEG I is iccce's: a gray ICC profile through the PCS into \
     ISO Coated v2 300% (ECI), measured by running the shipped binary. LEG P is ISO 32000-1 \
     §10.3.3's DEVICE-SPACE rule (c=m=y=0, k=1-gray), computed here as arithmetic with no ICC \
-    machinery in it, because that is what it is. ★ Whether the GWG requirement is discharged on \
+    machinery in it, because that is what it is. ★ Whether the suite's publisher requirement is discharged on \
     Leg P (in which case it is the PDF consumer's and not this project's) is OPEN and is being \
     settled by a separate icc-spec-librarian dispatch; §C measures both legs so that the answer \
     changes which row is quoted, not which numbers exist";
@@ -3037,7 +3037,7 @@ fn gray_records(rows: &[GrayLeg]) -> Vec<Record> {
         .with_separation(Separation::none(
             "considered: the two legs ARE the two candidates, and this row's observation is the \
              distance between them rather than a reading that could have gone another way. Which \
-             leg the GWG requirement is discharged on is an OPEN boundary question and a \
+             leg the suite's publisher requirement is discharged on is an OPEN boundary question and a \
              coverage statement (§3.10.8), not a separation",
         )));
         out.push(Record::graded(
@@ -3049,7 +3049,7 @@ fn gray_records(rows: &[GrayLeg]) -> Vec<Record> {
             SRC_GRAY,
             format!(
                 "Source {}. max dE2000 between the two legs, both rendered through the \
-                 destination's own A2B1: {:.6}; at the ramp midpoint g = 0.5, {:.6} (★ NOT a                  GWG patch value — patch 23.0's gray panel is 25 %, its CMYK panel 0/0/0/75;                  the earlier attribution here was false and the number is unaffected). Read \
+                 destination's own A2B1: {:.6}; at the ramp midpoint g = 0.5, {:.6} (★ NOT a                  the suite's publisher patch value — patch 23.0's gray panel is 25 %, its CMYK panel 0/0/0/75;                  the earlier attribution here was false and the number is unaffected). Read \
                  this beside the device row for the same source: same colour, different ink, or \
                  different colour, depending ENTIRELY on which gray profile is in the loop",
                 r.name, r.colorimetric_distance, r.at_half
@@ -3578,7 +3578,7 @@ fn gate_records(x: &FeatureGate) -> Vec<Record> {
             x.xp_k_at_nodes,
             k_source(
                 "the CROSS-PRESS arm, added 2026-08-18: ISO Coated v2 300% (ECI) -> \
-                 GWG_GenericCMYK, the pair on which the two published definitions of 'preserve \
+                 PCS_GenericCMYK, the pair on which the two published definitions of 'preserve \
                  the black' are furthest apart in this corpus",
             ),
             format!(
@@ -4632,7 +4632,7 @@ fn separating_run_records(f: &Separating, x: &SeparatingRun) -> Vec<Record> {
                  RUNS IN CI. Observed max chromatic ink {:.6} on the 41-point K-only ramp \
                  against a required 0, through the COMMITTED fixture, which needs no licence and \
                  is byte-verified by gen-profiles. It read 0.420705 before the feature existed \
-                 and the tolerance has not moved: it was and is exactly 0. ★ The Ghent row is \
+                 and the tolerance has not moved: it was and is exactly 0. ★ The suite row is \
                  NOT repointed here and its figure is printed on ITS OWN row and deliberately \
                  not restated: §F adds reach, it does not launder anything. ★★ This row's \
                  separation is taken from the FIXTURE'S OWN TABLE ({:.6}, row \
@@ -4864,10 +4864,10 @@ fn separating_run_records(f: &Separating, x: &SeparatingRun) -> Vec<Record> {
 //
 // ★★ THE PAIR, AND WHY THIS ONE.
 //
-// `ISO Coated v2 300% (ECI)` → `GWG_GenericCMYK`, media-relative, over the
+// `ISO Coated v2 300% (ECI)` → `PCS_GenericCMYK`, media-relative, over the
 // **qualifying set** — `C = M = Y = 0`, `K = j/100`, `j = 0..=100`, the only
 // inputs `KPreserve::apply` acts on at all. It is the largest cost of the
-// **thirty ordered pairs** the six real CMYK members of the Ghent corpus admit
+// **thirty ordered pairs** the six real CMYK members of the suite corpus admit
 // (`passk_cost_probe` prints the whole matrix); the smallest cross-press pair
 // is an order below it and the same-press pairs are two. Reporting the largest
 // is deliberate: **a caller weighing an opt-in policy needs its worst case on
@@ -4971,7 +4971,7 @@ pub struct CostLeg {
 /// The three licensed legs §G measures.
 #[derive(Debug, Clone)]
 pub struct Cost {
-    /// `ISO Coated v2 300% (ECI)` → `GWG_GenericCMYK` — the headline.
+    /// `ISO Coated v2 300% (ECI)` → `PCS_GenericCMYK` — the headline.
     pub cross: CostLeg,
     /// The same pair **reversed**, so that "the direction is part of the
     /// claim" is a measurement and not an assertion.
@@ -5175,21 +5175,21 @@ fn analyse_cost_leg(
 /// §G's licensed legs.
 fn analyse_cost(oracle: &Oracle, iccce: &Iccce) -> Result<Cost, Unavailable> {
     let iso300 = need_corpus(file::ISOCOATED300)?;
-    let gwg = need_corpus(file::GENERIC_CMYK)?;
+    let suite_pub = need_corpus(file::GENERIC_CMYK)?;
     let iso350 = need_corpus(file::ISOCOATED350)?;
     Ok(Cost {
         cross: analyse_cost_leg(
             oracle,
             iccce,
-            "ISO Coated v2 300% (ECI) -> GWG_GenericCMYK [two different presses]",
+            "ISO Coated v2 300% (ECI) -> PCS_GenericCMYK [two different presses]",
             &iso300,
-            &gwg,
+            &suite_pub,
         )?,
         reversed: analyse_cost_leg(
             oracle,
             iccce,
-            "GWG_GenericCMYK -> ISO Coated v2 300% (ECI) [the same pair, reversed]",
-            &gwg,
+            "PCS_GenericCMYK -> ISO Coated v2 300% (ECI) [the same pair, reversed]",
+            &suite_pub,
             &iso300,
         )?,
         same_press: analyse_cost_leg(
@@ -5380,7 +5380,7 @@ const SRC_COST: &str = "Pass K §G — the SHIPPED iccce binary run twice on the
     differing only in --preserve-black k-only-equal-lightness, both answers carried into Lab \
     through the DESTINATION's own A2B1 by the pinned lcms2 acting as a RULER. Self-comparison: \
     iccce's preserved answer against iccce's own colorimetric answer, which is the only class \
-    the question admits (ICC_Spec A51 is a closed negative). Ghent v5.0, licensed, skips in CI";
+    the question admits (ICC_Spec A51 is a closed negative). the print-conformance suite, licensed, skips in CI";
 
 const SRC_COST_SYN: &str = "Pass K §G — the same measurement on two COMMITTED synthetic CMYK \
     fixtures, so that the reason the headline needs a licence is a number in CI rather than a \
@@ -5760,8 +5760,8 @@ const POPULATION: [(&str, &str); 6] = [
     ("ISO Coated v2 (ECI)", file::ISOCOATED350),
     ("Coated FOGRA39", file::FOGRA39),
     ("Coated FOGRA27", file::FOGRA27),
-    ("GWG_GenericCMYK", file::GENERIC_CMYK),
-    ("GWG_ICC_v4_testprofile (X-Rite)", file::XRITE_V4),
+    ("PCS_GenericCMYK", file::GENERIC_CMYK),
+    ("PCS_ICC_v4_testprofile (X-Rite)", file::XRITE_V4),
 ];
 
 /// What `G16` measured over every ordered pair.
@@ -5872,7 +5872,7 @@ fn cost_population_records(p: &CostPopulation, cross: &CostLeg) -> Vec<Record> {
                 p.imperceptible_entitled as f64
             },
             "Pass K §G — the same self-comparison as G1, run over EVERY ordered pair \
-             of the six real CMYK members of the Ghent v5.0 corpus. Licensed; skips in CI",
+             of the six real CMYK members of the print-conformance suite corpus. Licensed; skips in CI",
             format!(
                 "★★★ THE POPULATION CLAIM, and it is the one that makes G1's single pair \
                  checkable. Of {} ordered pairs, {} are ENTITLED to price this policy (the \
@@ -6377,7 +6377,7 @@ pub fn note(b: &Bundle) -> String {
     if let Some(g) = &b.gray {
         if let Some(a) = g.first() {
             parts.push(format!(
-                "GWG legs: {:.6} apart in device, {:.4} dE2000 apart in colour on the press's \
+                "the suite's publisher legs: {:.6} apart in device, {:.4} dE2000 apart in colour on the press's \
                  own gray; {:.4} dE2000 on an ordinary gamma-2.2 gray",
                 a.device_distance,
                 a.colorimetric_distance,

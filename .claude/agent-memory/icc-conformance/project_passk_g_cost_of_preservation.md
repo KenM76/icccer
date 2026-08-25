@@ -14,7 +14,7 @@ Suite `pass=353 fail=0 skip=9 error=0`; fmt/clippy/test all green.
 
 **The number NA-012 was owed:** `3.681203 ΔE2000` max, `1.580674` mean, at
 `K = 1.00`, over 101 qualifying points, `ISO Coated v2 300% (ECI) →
-GWG_GenericCMYK`, **media-relative**, `k-only-equal-lightness`. Class:
+PCS_GenericCMYK`, **media-relative**, `k-only-equal-lightness`. Class:
 **self-comparison** (iccce preserved vs iccce colorimetric), which is the
 ceiling — `ICC_Spec` A51 is a closed negative.
 

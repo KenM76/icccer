@@ -44,7 +44,7 @@ watermarked *"copying and networking prohibited"*. Short quotation with a
 clause citation is normal technical-reference practice and is what belongs
 in a doc comment; **the file must never be redistributed and no bulk
 transcription may enter an MIT repository.** Same posture as
-[[project-ghent-compatibility]]'s corpus.
+[[project-suite-compatibility]]'s corpus.
 
 Related: [[reference-request-channel-polling]],
 [[feedback-compatibility-not-compliance]].

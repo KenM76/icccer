@@ -327,7 +327,7 @@ ink. On this corpus's existing CMYK fixture `v2-cmyk-mft2-lab`, that predicate
 black-preserving consumer and a non-preserving one return *the same numbers*.
 The two candidate answers are one number — `ZERO-SEPARATION` in the harness's
 own vocabulary — and no tolerance can rescue it. The consequence was that every
-graded black-preservation row had to run on the **licensed Ghent corpus** and
+graded black-preservation row had to run on the **licensed suite corpus** and
 skipped in CI, permanently, including the one row that is red on purpose.
 
 #### The construction, and why each choice is load-bearing
@@ -359,7 +359,7 @@ one more place the DL-005 misreading could hide.
 
 #### ★★ What it costs, stated as prominently as what it buys
 
-**This profile is less like a press than anything in the Ghent corpus, and the
+**This profile is less like a press than anything in the suite corpus, and the
 properties that make it an instrument are exactly the properties that make it
 unrealistic.** Real ink is not affine; a real `B2A` has no dead band; a real
 separation's `K` is not a straight line in `L*`. A number measured on this

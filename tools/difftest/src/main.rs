@@ -416,12 +416,12 @@ fn main() {
         report.push_record(r);
     }
 
-    // Pass G — the Ghent v5.0 population sample. The first differential
+    // Pass G — the print-conformance suite population sample. The first differential
     // grading in this suite whose inputs are profiles a **real document
-    // producer** embeds: 20 profiles extracted from the Ghent PDF Output Suite
+    // producer** embeds: 20 profiles extracted from the print-conformance suite
     // 5.0, written by Adobe InDesign CS6 and imposed by Callas pdfToolbox.
     //
-    // ★ Its corpus is **licensed and cannot be committed** (the Ghent suite's
+    // ★ Its corpus is **licensed and cannot be committed** (the print-conformance suite's
     // own licence forbids redistribution; the profiles carry Adobe's, ECI's and
     // X-Rite's separate licences). It resolves the corpus through
     // `$ICCCE_PRIVATE_FIXTURES` and **skips every row with a reason** when it is

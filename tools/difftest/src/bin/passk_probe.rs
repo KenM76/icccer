@@ -22,7 +22,7 @@
 //!
 //! * the pinned `transicc` (`$ICCCE_TRANSICC` or the vendored build), and
 //! * the shipped `iccce` binary (`$ICCCE_BIN` or `target/release/iccce`), and
-//! * the **licensed** Ghent v5.0 corpus via `$ICCCE_PRIVATE_FIXTURES`.
+//! * the **licensed** the print-conformance suite corpus via `$ICCCE_PRIVATE_FIXTURES`.
 //!
 //! Absent any of them it says which one and exits `1`. It never falls back to
 //! a substitute fixture: a ramp printed from a different profile would look
@@ -42,7 +42,7 @@
 //! 4. **The transition**, walking cyan across one cell of lcms2's 17-node
 //!    black-preserving CLUT. This is the block that shows preservation is an
 //!    *edge* of a table and not a rule about neutrality.
-//! 5. **The GWG two-leg comparison**, in device units and in ΔE2000, for two
+//! 5. **The the suite's publisher two-leg comparison**, in device units and in ΔE2000, for two
 //!    gray sources — the favourable one and the unfavourable one.
 //! 6. **The intent sweep** over six real CMYK destinations.
 
@@ -80,7 +80,7 @@ fn run() -> Result<(), String> {
     let dir = corpus_dir();
     if !dir.is_dir() {
         return Err(format!(
-            "the Ghent v5.0 corpus is not at {} — set $ICCCE_PRIVATE_FIXTURES. It is licensed \
+            "the print-conformance suite corpus is not at {} — set $ICCCE_PRIVATE_FIXTURES. It is licensed \
              and cannot be committed, so absence is the normal case",
             dir.display()
         ));
@@ -101,7 +101,7 @@ fn run() -> Result<(), String> {
             ""
         }
     );
-    println!("  fixture: ISO Coated v2 300% (ECI), Ghent v5.0 (licensed, uncommittable)");
+    println!("  fixture: ISO Coated v2 300% (ECI), the print-conformance suite (licensed, uncommittable)");
     println!();
 
     let ramp = k_ramp();
@@ -239,7 +239,7 @@ fn run() -> Result<(), String> {
             "fb710c05e3fb5a96.icc",
         ),
         (
-            "-> GWG_GenericCMYK",
+            "-> PCS_GenericCMYK",
             "c6b4b62f07262437.icc",
             "5bad92a6f018e726.icc",
         ),
@@ -329,8 +329,8 @@ fn run() -> Result<(), String> {
     );
     println!();
 
-    // ---- block 5: the GWG two-leg comparison ----------------------------
-    println!("=== 5. GWG 'four different grays' — BOTH LEGS ===");
+    // ---- block 5: the suite's publisher two-leg comparison ----------------------------
+    println!("=== 5. the suite's publisher 'four different grays' — BOTH LEGS ===");
     println!(
         "    LEG P = ISO 32000-1 §10.3.3 device rule (c=m=y=0, k=1-gray) — the PDF \
          consumer's, not ours"
@@ -400,8 +400,8 @@ fn run() -> Result<(), String> {
         ("ISO Coated v2 (ECI)", "128dc02f7246cc38.icc"),
         ("Coated FOGRA39", "da2b9b593e27cba2.icc"),
         ("Coated FOGRA27", "fb710c05e3fb5a96.icc"),
-        ("GWG_GenericCMYK", "5bad92a6f018e726.icc"),
-        ("GWG_ICC_v4_testprofile (X-Rite)", "b5988983b6b3b7d4.icc"),
+        ("PCS_GenericCMYK", "5bad92a6f018e726.icc"),
+        ("PCS_ICC_v4_testprofile (X-Rite)", "b5988983b6b3b7d4.icc"),
     ] {
         let p = dir.join(f);
         if !p.is_file() {

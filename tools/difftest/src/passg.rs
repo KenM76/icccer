@@ -1,10 +1,10 @@
-//! # Pass G — the Ghent v5.0 population sample, graded
+//! # Pass G — the print-conformance suite population sample, graded
 //!
 //! Every profile iccce had been differentially tested against before this pass
 //! was **synthetic** (`tools/gen-profiles`), **OS-shipped** (the Windows colour
 //! directory) or **standards-body-issued** (FOGRA51). None of them is what a
 //! real document producer embeds. This pass grades iccce against the pinned
-//! lcms2 oracle over **profiles extracted from the Ghent PDF Output Suite
+//! lcms2 oracle over **profiles extracted from the print-conformance suite
 //! 5.0** — a graphic-arts PDF/X test corpus written by Adobe InDesign CS6 and
 //! imposed by Callas pdfToolbox, in which 20 distinct ICC profiles appear
 //! across 121 embeddings in 98 production PDFs.
@@ -19,11 +19,11 @@
 //!
 //! ## ★★★ Licensing — read before touching anything in this module
 //!
-//! The Ghent suite's own licence **forbids commercial use and redistribution
+//! The suite's own licence **forbids commercial use and redistribution
 //! without written permission**, and the profiles inside carry Adobe's, ECI's
 //! and X-Rite's separate licences. Therefore, and without exception:
 //!
-//! - **No file from `ghent-v50\` may be committed to this repository.**
+//! - **No file from `suite-v50\` may be committed to this repository.**
 //! - **No value read out of one may be copied into this repository** — not a
 //!   colorant, not a white point, not a CLUT sample, not a ΔE. Every number
 //!   this module reports is *computed at run time from the file on the
@@ -46,10 +46,10 @@
 //!
 //! | § | subject | needs |
 //! |---|---|---|
-//! | **A** | the **v4 vendor `mAB `/`mBA ` path** — X-Rite's `GWG_ICC_v4_testprofile.icc`, a real 4-channel v4.2 output profile with a 7×7×7×7 `mAB ` and a 17³ `mBA ` | corpus + oracle |
+//! | **A** | the **v4 vendor `mAB `/`mBA ` path** — X-Rite's `PCS_ICC_v4_testprofile.icc`, a real 4-channel v4.2 output profile with a 7×7×7×7 `mAB ` and a 17³ `mBA ` | corpus + oracle |
 //! | **B** | the **population sweep** — five profile pairs, four intents, ±BPC, in the `B2A` direction where lcms2 forces trilinear | corpus + oracle + shipped binary |
 //! | **C** | **`eciRGB v2` in its v2.4 and v4.2 encodings**, same vendor, same declared colour space | corpus + shipped binary |
-//! | **D** | the **two GWG trap profiles**, whose correct answer is known *without* measurement because the swap is the profile's declared content | corpus (+ oracle for the cross-check arm only) |
+//! | **D** | the **two the suite's publisher trap profiles**, whose correct answer is known *without* measurement because the swap is the profile's declared content | corpus (+ oracle for the cross-check arm only) |
 //!
 //! §A was the reason for the dispatch. **Every v4 LUT profile iccce had been
 //! graded against until now came from `tools/gen-profiles` — that is, from
@@ -128,7 +128,7 @@ pub fn corpus_dir() -> PathBuf {
     std::env::var_os("ICCCE_PRIVATE_FIXTURES")
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from(r"D:\Dev\iccce-private-fixtures"))
-        .join("ghent-v50")
+        .join("suite-v50")
 }
 
 /// The corpus members this pass uses, named by the first 16 hex digits of their
@@ -154,14 +154,14 @@ mod file {
     /// `Coated FOGRA39 (ISO 12647-2:2004)`, v2.1 `prtr` CMYK, `mft2` A2B
     /// (grid 11), **`mft1`** B2A (33³, 8-bit).
     pub const FOGRA39: &str = "da2b9b593e27cba2.icc";
-    /// ★ `GWG_ICC_v4_testprofile.icc` — **X-Rite, ICC v4.2.0**, `prtr` CMYK,
+    /// ★ `PCS_ICC_v4_testprofile.icc` — **X-Rite, ICC v4.2.0**, `prtr` CMYK,
     /// `mAB ` A2B0/1/2 at 7×7×7×7 and `mBA ` B2A0/1/2 at 17³, plus `gamt` and
     /// four `gbd` tags. The subject of §A.
     pub const XRITE_V4: &str = "b5988983b6b3b7d4.icc";
     /// `Schwarze Druckfarbe - ISO Coated v2 (ECI)`, v2.1 `prtr` **GRAY**,
     /// four tags, 256-entry `kTRC`.
     pub const GRAY: &str = "5dae7984654a2c9f.icc";
-    /// ★ `RGB mntr mtx X (Switch red green)` — a GWG discriminator. Matrix/TRC,
+    /// ★ `RGB mntr mtx X (Switch red green)` — a the suite's publisher discriminator. Matrix/TRC,
     /// v2.2, γ from a single-value `curv`; its `rXYZ` holds a **green** primary.
     pub const TRAP_RGB: &str = "13b44969a980dcd1.icc";
     /// A second file with the same `desc` as [`TRAP_RGB`] and a different
@@ -198,7 +198,7 @@ mod tag {
 ///
 /// It cannot be a constant, for the reason `DEVICE_B2A`'s history records: the
 /// envelope is a property of *which table is loaded*, and a table this pass
-/// never sees (a different Ghent profile, a re-issued X-Rite one) would
+/// never sees (a different suite profile, a re-issued X-Rite one) would
 /// silently inherit a bound derived from another. [`XriteArm::method_envelope`]
 /// evaluates the profile's own CLUT under **both** published geometries —
 /// iccce's n-linear and lcms2's `Eval4Inputs` hybrid (linear along the leading
@@ -857,7 +857,7 @@ pub fn analyse_xrite(oracle: &Oracle, iccce: &Iccce) -> Result<Section, Unavaila
     let path = dir.join(file::XRITE_V4);
     let bytes = std::fs::read(&path).map_err(|e| {
         Unavailable::Skip(format!(
-            "ghent-v50 corpus not present ({}): set $ICCCE_PRIVATE_FIXTURES. \
+            "suite-v50 corpus not present ({}): set $ICCCE_PRIVATE_FIXTURES. \
              It is licensed and cannot be committed, so absence is the normal case",
             e
         ))
@@ -1094,8 +1094,8 @@ pub fn analyse_xrite(oracle: &Oracle, iccce: &Iccce) -> Result<Section, Unavaila
     }
 
     let structure = format!(
-        "X-Rite GWG_ICC_v4_testprofile v{:08X} {} {}->{} | mAB A2B* 4->3 grid 7^4, mBA B2A* 3->4 \
-         grid 17^3 | {} CMYK points x {} arms + 16 corners | end-to-end -> Ghent sRGB",
+        "X-Rite PCS_ICC_v4_testprofile v{:08X} {} {}->{} | mAB A2B* 4->3 grid 7^4, mBA B2A* 3->4 \
+         grid 17^3 | {} CMYK points x {} arms + 16 corners | end-to-end -> suite sRGB",
         profile.header.version.raw,
         profile.header.device_class,
         profile.header.color_space,
@@ -1416,7 +1416,7 @@ pub fn xrite_records(s: &Section) -> Vec<Record> {
             "both sides computed in this run: the shipped iccce binary and transicc -c0, each in \
              its own process",
             format!(
-                "341 CMYK points -> Ghent sRGB, mean {:.6e}; propagated method envelope for the \
+                "341 CMYK points -> suite sRGB, mean {:.6e}; propagated method envelope for the \
                  tag this intent selects is {:.6e} device{}",
                 mean,
                 env,
@@ -1495,7 +1495,7 @@ pub fn analyse_sweep(oracle: &Oracle, iccce: &Iccce) -> Result<Sweep, Unavailabl
     let dir = corpus_dir();
     if !dir.is_dir() {
         return Err(Unavailable::Skip(format!(
-            "ghent-v50 corpus not present at {}: set $ICCCE_PRIVATE_FIXTURES. It is licensed and \
+            "suite-v50 corpus not present at {}: set $ICCCE_PRIVATE_FIXTURES. It is licensed and \
              cannot be committed, so absence is the normal case and a green run here is evidence \
              that nothing ran",
             dir.display()
@@ -1889,7 +1889,7 @@ pub fn sweep_records(s: &Sweep) -> Vec<Record> {
              cmsDetectDestinationBlackPoint, both run in process on this profile",
             format!(
                 "ISO estimator L* {iso_l:.6} vs lcms2 L* {lcms2_l:.6}. This is the mechanism \
-                 behind every --bpc row above. What the Ghent corpus adds to Pass 5b/5c is that \
+                 behind every --bpc row above. What the suite corpus adds to Pass 5b/5c is that \
                  the divergence is NOT an artefact of synthetic or OS-shipped fixtures: it \
                  reproduces on real vendor print profiles. ICC.1 has no normative BPC text \
                  (A27/A42), so neither estimator can be called wrong from the standard"
@@ -1930,7 +1930,7 @@ pub fn analyse_eci(oracle: &Oracle, iccce: &Iccce) -> Result<EciArm, Unavailable
     let dir = corpus_dir();
     if !dir.is_dir() {
         return Err(Unavailable::Skip(
-            "ghent-v50 corpus not present: set $ICCCE_PRIVATE_FIXTURES".into(),
+            "suite-v50 corpus not present: set $ICCCE_PRIVATE_FIXTURES".into(),
         ));
     }
     let v2 = dir.join(file::ECIRGB_V2);
@@ -2100,7 +2100,7 @@ pub fn eci_records(e: &EciArm) -> Vec<Record> {
 // §D — the trap profiles
 // ===========================================================================
 
-/// The GWG discriminators. **The rare case where the correct answer is known
+/// The the suite's publisher discriminators. **The rare case where the correct answer is known
 /// without measurement**: the swap is the profile's own declared content, so
 /// "red in, green out" is checkable against the profile's tags rather than
 /// against an oracle.
@@ -2134,7 +2134,7 @@ pub struct TrapArm {
     pub duplicate_delta: f64,
     /// Whether the two files' colour-bearing tags are byte-identical.
     pub duplicate_tags_identical: bool,
-    /// max |Δ| device, iccce vs lcms2, through the RGB trap into Ghent sRGB.
+    /// max |Δ| device, iccce vs lcms2, through the RGB trap into suite sRGB.
     pub cross_check: f64,
     /// The CMYK trap's `B2A0` vs `B2A2` raw-byte difference — a second vendor
     /// aliasing, and a second null that must be identified before collection.
@@ -2149,7 +2149,7 @@ pub fn analyse_traps(oracle: &Oracle, iccce: &Iccce) -> Result<TrapArm, Unavaila
     let dir = corpus_dir();
     let p1 = dir.join(file::TRAP_RGB);
     let b1 = std::fs::read(&p1)
-        .map_err(|e| Unavailable::Skip(format!("ghent-v50 corpus not present ({e})")))?;
+        .map_err(|e| Unavailable::Skip(format!("suite-v50 corpus not present ({e})")))?;
     let prof = Profile::parse(&b1).map_err(|e| Unavailable::Error(e.to_string()))?;
     let model = MatrixTrc::from_profile(&prof)
         .map_err(|e| Unavailable::Error(format!("trap profile is not matrix/TRC: {e}")))?;
@@ -2254,7 +2254,7 @@ pub fn trap_records(t: &TrapArm) -> Vec<Record> {
             "an engine that IGNORES the declared source profile and reads the colorants in \
              conventional order (or passes device values through as if the source were the \
              destination): full red in gives the gXYZ answer instead of the rXYZ one. This is the \
-             failure the GWG suite designed these files to expose, and the one its test page \
+             failure the suite's publisher suite designed these files to expose, and the one its test page \
              renders as a visible red X",
             t.primary_separation_xyz,
             // ★ Supplied, not derived, and stated in the ROW'S OWN METRIC so the
@@ -2324,9 +2324,9 @@ pub fn trap_records(t: &TrapArm) -> Vec<Record> {
             SWEEP_DEVICE,
             t.cross_check,
             "both sides computed in this run: the shipped iccce binary and transicc -c0",
-            "the trap through Ghent's sRGB, media-relative. The derived rows above establish that \
+            "the trap through the suite's sRGB, media-relative. The derived rows above establish that \
              iccce honours the swap; this one establishes that lcms2 honours the SAME swap, so \
-             the two engines would render the GWG test page identically",
+             the two engines would render the suite's publisher test page identically",
         )
         .with_separation(Separation::none(
             "the swap rival is carried by the two DERIVED rows above, which state it in the PCS \

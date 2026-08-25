@@ -10,7 +10,7 @@ about a commit range, and the range is the one thing the dispatch cannot
 establish by describing it. Check it before writing a public changelog.**
 
 **Why:** on 2026-08-25 the `0.2.0` dispatch listed nine content items and
-one of them — *"the Ghent corpus measured (Pass G), with §3.30.5's bound
+one of them — *"the suite corpus measured (Pass G), with §3.30.5's bound
 stated plainly"* — **had shipped in `0.1.0`**. Commit `4bf291a`
 *"conformance: Pass G and Pass H — real-world profiles, graded"* sits at
 `.git/logs/HEAD` line **79**; the four `0.1.0` release commits are at

@@ -4,7 +4,7 @@
 //! its Probe profiles do** (`Probe2 Profile Readme June 1, 2007`, shipped inside
 //! `Probev2.zip`). This binary is the exploratory instrument the tolerances in
 //! [`iccce_difftest::passh`] were derived from, and it stays in the tree for the
-//! same reason `ghent_probe` does: **a tolerance derived from a measurement
+//! same reason `suite_probe` does: **a tolerance derived from a measurement
 //! nobody can re-take is a tolerance nobody can check.**
 //!
 //! It prints; it grades nothing. Run it with the private corpus present:

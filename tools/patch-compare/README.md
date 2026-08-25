@@ -21,7 +21,7 @@ lives in a case file supplied on the command line.
 
 That is a licensing decision, not a style one.
 
-`docs/GHENT_COMPATIBILITY.md` was untracked by operator decision on
+`docs/SUITE_COMPATIBILITY.md` was untracked by operator decision on
 **2026-08-18**: detailed analysis of, and quotation from, a licensed
 third-party test suite does not belong in an MIT repository, because that
 suite's licence carries an affirmative-notice requirement and a "commercial
@@ -29,7 +29,7 @@ context" restriction. The decision was to *avoid creating the entanglement at
 all* rather than to rely on a fair-quotation argument.
 
 On **2026-08-25** a first version of this tool
-(`tools/ghent/shading_cell.py`) was written to answer a question from `pdfce`,
+(`tools/suite/shading_cell.py`) was written to answer a question from `pdfce`,
 and to do its job it inlined a licensed patch file's shading dictionary, its
 indirect-object numbers, its endpoint colour values and the identity of the
 press profile it embeds. It inherited exactly the same problem. The operator's
@@ -285,7 +285,7 @@ error or a case file that fails the schema.
 |---|---|
 | `tools/difftest` | does iccce agree with **lcms2**, numerically, to a stated tolerance? |
 | `tools/gen-profiles` | synthetic fixtures with **known** contents |
-| `tools/ghent/extract_icc.py` | what profiles do **real producers** actually embed? |
+| `tools/suite/extract_icc.py` | what profiles do **real producers** actually embed? |
 | **`tools/patch-compare`** | does iccce agree with **another renderer's picture**, on colours a document actually paints? |
 
 `difftest` is the strong instrument and this is the weak one — but it reaches

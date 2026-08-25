@@ -11,11 +11,11 @@ case file holding every licensed value — and the case file lives OUTSIDE
 the repository, not in a gitignored path inside it.**
 
 **Why:** operator decision, **2026-08-25**, in his own terms — *"split it
-into a public generic tool plus local file."* `tools/ghent/shading_cell.py`
+into a public generic tool plus local file."* `tools/suite/shading_cell.py`
 had inlined a licensed suite's shading dictionary, indirect-object
 numbers, endpoint colours and the embedded press profile's identity as
 **constants**, which is the same entanglement that untracked
-`docs/GHENT_COMPATIBILITY.md` on **2026-08-18**. ★ **The placement clause
+`docs/SUITE_COMPATIBILITY.md` on **2026-08-18**. ★ **The placement clause
 is the load-bearing half: a gitignored path is one `git add -f` away from
 the thing the decision was made to prevent.** An ignore rule protects
 against inattention, not against a deliberate act, a tooling default, or

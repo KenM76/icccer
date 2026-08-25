@@ -11,7 +11,7 @@
 - [Pass K §G — what preservation COSTS](project_passk_g_cost_of_preservation.md) — 3.681203 dE00 retires NA-012; a device separation can be large while the two answers are METAMERS; the injection says which rows are load-bearing.
 - [Pass K — black preservation, measured before the feature](project_passk_black_preservation_baseline.md) — ΔE is BLIND to it (0.705 ink at 0.136 ΔE00); the saturation shortcut works on 2 of 6 vendors; a rival CORPUS is not a rival candidate.
 - [Pass K §F — the fixture that SEPARATES](project_passk_f_separating_fixture.md) — a ZERO-SEPARATION fixture doesn't just fail to inform, it turns the red row GREEN; a symmetric misreading cancels, so it can't be a rival.
-- [ICC.1 is SILENT on black preservation](project_passk_icc1_is_silent_on_black.md) — closed negative (A51); ICC's only black tag disclaims itself; the gray→CMYK rule is ISO 32000-1 §10.3.3 and is pdfce's; "GWG 23.0" is not a GWG id.
+- [ICC.1 is SILENT on black preservation](project_passk_icc1_is_silent_on_black.md) — closed negative (A51); ICC's only black tag disclaims itself; the gray→CMYK rule is ISO 32000-1 §10.3.3 and is pdfce's; "PCS 23.0" is not a the suite's publisher id.
 
 - [Pass I — ICC's published chad](project_passi_published_chad_findings.md) — the commissioned bound would have failed at 7.4x; a one-sided ground-truth row is not a gate; clippy's fix can BE the defect.
 
@@ -21,7 +21,7 @@
 - [Stale claim strings in emitted records](project_stale_claim_strings_in_emitted_records.md) — three typed numerals went false within a day; interpolate, never type. "Derived for" vs "graded at" hid a second error.
 - [Throughput is not a claim; break-even is](project_throughput_is_not_a_claim_breakeven_is.md) — speedup withdrawn (12.4–32x on one box); break-even ≈1.3e6 px AT GRID 33, and it must always carry the grid.
 - [Pass G tolerance lessons](project_passg_tolerance_lessons.md) — a tolerance may need to be a FUNCTION of the fixture; a gate for one direction is not a gate in the other; BLIND exposed a bound its own `why` could not support.
-- [Pass G — the Ghent population sample](project_passg_ghent_population_findings.md) — the first REAL vendor v4 mAB (179x/243x collapse); vendor-specific intent aliasing; Adobe ships wtpt=D65 with D50 colorants; the v2/v4 pair isolates nothing.
+- [Pass G — the suite population sample](project_passg_suite_population_findings.md) — the first REAL vendor v4 mAB (179x/243x collapse); vendor-specific intent aliasing; Adobe ships wtpt=D65 with D50 colorants; the v2/v4 pair isolates nothing.
 - [Pass H — acceptance and refusal](project_passh_acceptance_and_refusal.md) — the first ground-truth rows, and the published claim is FALSE of the file it names; the 7-channel abort (now fixed); a conformant 33 L* split under 8.10.2.
 - [A fixed defect can BLIND its own row](project_a_fixed_defect_can_blind_its_own_row.md) — the fix made the red row unable to see the defect return; no number moved, nobody edited it; ask "which layer is in the loop" of the FIX.
 

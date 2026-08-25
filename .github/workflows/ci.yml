@@ -50,6 +50,38 @@ jobs:
       - name: Test workspace
         run: cargo test --workspace
 
+  # ===================================================================
+  # The suite name — an OPERATOR RULING, gated so it cannot regress
+  #
+  # Ruling 2026-08-25: the licensed print-conformance suite's name and its
+  # publisher's acronym must not appear in this public repository. The
+  # one-off scrub is `tools/suite/scrub.py`; this job is what keeps it
+  # true, because the rule otherwise survives only as long as everyone
+  # writing a SESSION_LOG entry remembers it — and those terms are the
+  # natural words for the thing.
+  #
+  # ★ It checks FILE NAMES as well as contents. A path is published in
+  # every directory listing and the web view, so it survives a
+  # contents-only scrub completely; five paths here carried the name
+  # before the scrub, including a whole directory.
+  #
+  # ★★ The gate's needles are base64 in its source, and a violating file
+  # NAME is masked before printing. Both for the same reason: a public
+  # CI log would otherwise publish, on every failure, the exact term the
+  # gate exists to suppress. The masking bug was caught by the gate's own
+  # injection test rather than by review.
+  #
+  # No Rust toolchain needed — it is `git ls-files` plus a regex, so it
+  # is the cheapest job here and gives its verdict in seconds.
+  # ===================================================================
+  suite-name:
+    name: suite name absent (contents + file names)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: The forbidden terms must not appear
+        run: python3 tools/check-suite-name-absent.py
+
   lint:
     name: fmt + clippy
     runs-on: ubuntu-latest
@@ -336,7 +368,7 @@ jobs:
       # `crates/` has no black-preservation code. The row is RED BY
       # DESIGN — see `docs/TOLERANCES.md` §3.10.11 and
       # `tools/difftest/README.md` §25.12 — and it is red here on
-      # purpose: its Ghent twin (`E1`) has been red since Pass K was
+      # purpose: its suite twin (`E1`) has been red since Pass K was
       # written and NOTHING OUTSIDE ONE MACHINE COULD SEE IT.
       #
       # ★ THE REMEDY IS THE FEATURE, NOT THE NUMBER. Do not add an
@@ -420,7 +452,7 @@ jobs:
       #
       # §F grades `k-only-in-implies-k-only-out` on a COMMITTED,
       # unlicensed fixture (`v2-cmyk-chromatic-neutral.icc`), so unlike
-      # its Ghent twin it RUNS HERE — and it is RED BY DESIGN until
+      # its suite twin it RUNS HERE — and it is RED BY DESIGN until
       # black preservation exists in `crates/`. The suite therefore
       # exits 1 on this runner, permanently, on purpose.
       #

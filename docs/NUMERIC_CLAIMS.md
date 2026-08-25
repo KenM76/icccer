@@ -133,6 +133,26 @@ right"* and *"this has not changed."* Ordered strongest to weakest as
 > does not render PDFs. ★ **The class exists so both statements can be
 > made in the same row without either contaminating the other.**
 
+| **producer-corpus-census** *(class added 2026-08-25 — see §3.39)* | A **count of what PRODUCERS WROTE** into a population of third-party files: how many documents carry a given key, how many distinct references to a thing one document holds, which values appear and how often. Obtained by decompressing and pattern-matching, **without parsing the files through their own structural machinery** and without rendering anything. Here, additionally: **the census was run by another project on its own corpora, and this project ran nothing.** | ★★★ **It bounds a DESIGN PARAMETER and nothing else.** It answers *"how many of these will a real caller hand us?"* — which is exactly the question a cache size, a buffer allocation or a worst-case combinatorial estimate needs, and which no amount of specification reading can answer, because the standard states what is **permitted** and a corpus states what is **written**. ★★★ **What it cannot support, and the mislabelling is the obvious one: it says NOTHING about whether any consumer HONOURS what was written.** A key present in 51 of 51 files is a fact about 51 authors and no fact about any reader. It is **not** correctness evidence of any kind and no ΔE, no tolerance and no conformance verdict may rest on it. ★★ **Distinct from `apparatus-census`**, which counts what **our own harness** emitted (tests passed, records graded) — this counts **artifacts nobody here made**, so it inherits a whole extra failure mode: **an unstated corpus filter**. A census over files somebody selected is a census of the selection. ★ **The counting unit is part of the claim**: counting distinct **object references** is a *lower* bound on distinct profiles (two objects can hold byte-identical bytes) and an *upper* bound on cache entries (if the cache keys by object id). **Both bounds travel with the number or neither does.** It sits beside `apparatus-census` at the bottom of this table, and **above** it only in the narrow sense that it measures something outside this project's own tooling. |
+
+> **★★ Why this was not folded into `apparatus-census`, tested against
+> that alternative first (2026-08-25).** The fold is tempting — both are
+> integers with no colour in them — and it fails on the thing
+> `apparatus-census` was created to protect: **that class's whole point is
+> that *"every census row is required to carry the command"***, because a
+> bare integer is *"ambiguous from birth"* about which runner emitted it
+> (`DL-031`). ★★★ **A producer census has a second ambiguity that the
+> command cannot resolve: WHICH FILES.** Two runs of the identical script
+> over two corpora return numbers that differ by orders of magnitude and
+> **both are correct** — which is precisely what happened here, and why
+> `pdfce` named its two populations rather than pooling them. **The class
+> exists so that a corpus name is as mandatory as a command name.**
+>
+> ★ **And a second reason the fold would have been actively harmful:**
+> folding it in would have put a count of *somebody else's files* under a
+> class whose definition says *"a census measures the harness"* — making
+> the row look like a statement about tooling this project controls.
+
 **A row without a class is not finished**, exactly as in
 `TOLERANCES.md` §1.
 
@@ -4676,11 +4696,11 @@ would exist even if the bug never had.**
 - **NC-181's observation is not on file**, and the `FIXTURE` row is
   therefore recorded with a tolerance and no measurement.
 
-### 3.30 ★★★ The Ghent PDF Output Suite 5.0 — **the first corpus this project has measured that was authored by neither this project, an operating system, nor a standards body.** Two new evidence classes, and **not one accuracy claim**
+### 3.30 ★★★ The print-conformance suite — **the first corpus this project has measured that was authored by neither this project, an operating system, nor a standards body.** Two new evidence classes, and **not one accuracy claim**
 
 **Filed 2026-08-17** at the **second** filing of that date (**twentieth
 overall**), from a dispatch by `icc-engineer`. Companion prose:
-**`docs/GHENT_COMPATIBILITY.md`**, created the same session, which holds
+**`docs/SUITE_COMPATIBILITY.md`**, created the same session, which holds
 the reasoning, the licence analysis, the boundary split against `pdfce`
 and a per-statement provenance table. **This section holds the rows.**
 
@@ -4715,7 +4735,7 @@ was written**. Until it does:
   **`fixture-declared-categorical`** or **`self-consistency`**.
 
 ★★ **The corpus's actual novelty is not any number in it.** It is that
-the profiles were authored by **Adobe, ECI, Heidelberg, X-Rite and GWG**,
+the profiles were authored by **Adobe, ECI, Heidelberg, X-Rite and the suite's publisher**,
 which is the first time a shared-misreading risk between fixture and
 implementation has been **structurally absent** rather than merely
 argued about. That is **DL-036's principle** — *a real vendor profile
@@ -4725,7 +4745,7 @@ corpus instead of as one file.
 #### 3.30.1 The rows
 
 **Runner, named per DL-031, for every row in this section:**
-`tools/ghent/extract_icc.py` (a Python script, new this session, in this
+`tools/suite/extract_icc.py` (a Python script, new this session, in this
 repository) for **NC-192**; the **`--release` binary of
 `crates/iccce-cli`** — subcommand `inspect` for **NC-193**, subcommand
 `transform` for **NC-194 … NC-199** — for everything else. **No
@@ -4734,18 +4754,18 @@ none of them is a cross-check.
 
 | Claim | What was measured | Class | Tolerance | Result | Corroboration available without a shell |
 |---|---|---|---|---|---|
-| **★ NC-192** | Extraction over the suite: PDFs scanned → embeddings found → distinct profiles after SHA-256 deduplication | **apparatus-census** | none — a census has no bound | **98 PDFs → 121 embeddings → 20 distinct profiles** | ★ **Partially corroborated:** `D:\Dev\iccce-private-fixtures\ghent-v50\` holds **exactly 20 `.icc` files** plus `manifest.json` *(verified — enumerated)*, and `tools/ghent/extract_icc.py` exists *(verified — enumerated)*. **A count of files is not a check of their bytes and not a check of their distinctness** — the SHA-256 dedup is the engineer's and was not re-run. **98 and 121 are carried outright** |
-| **★★ NC-193** | `iccce inspect` over all 20 extracted profiles | **acceptance** | none — see below | **20/20 exit 0, `malformations: 0` in every case**, including a 1.36 MB X-Rite **ICC v4.2.0** CMYK profile whose full 18-tag table decodes (`mAB` A2B0/1/2 at 7×7×7×7, `mBA` B2A0/1/2 at 17×17×17, `gamt`, four `gbd`, `view`, a `dict`-typed `meta`) | **carried.** ★ The **negative-capability** statement that gives this row what force it has is `GHENT_COMPATIBILITY.md` §4.2's: the extractor **deliberately does not filter** truncated or size-inconsistent candidates, so the parser was given the chance to report a malformation *(verified — read; the script's behaviour itself was NOT read line by line by this librarian)* |
-| **★★★ NC-194** | `RGB mntr mtx X (Switch red green)` → `sRGB IEC61966-2.1`, media-relative. GWG's discriminator for patch **GWG 13.0** | **fixture-declared-categorical** | **categorical** — the assertion is *which colour*, not *how close* | `1 0 0` → **`0.000000 0.991915 0.000000`** (green) · `0 1 0` → **`1.000000 0.000000 0.000000`** (red) · `0 0 1` → `0.000000 0.224217 1.000000`. **The declared swap is honoured** | **carried.** Corroborating structural note, also carried: the profile's red primary carries the largest `Y` and its green primary the largest `X` — the matrix columns are literally exchanged — and the three `X` values still sum to ≈0.9642 |
+| **★ NC-192** | Extraction over the suite: PDFs scanned → embeddings found → distinct profiles after SHA-256 deduplication | **apparatus-census** | none — a census has no bound | **98 PDFs → 121 embeddings → 20 distinct profiles** | ★ **Partially corroborated:** `D:\Dev\iccce-private-fixtures\suite-v50\` holds **exactly 20 `.icc` files** plus `manifest.json` *(verified — enumerated)*, and `tools/suite/extract_icc.py` exists *(verified — enumerated)*. **A count of files is not a check of their bytes and not a check of their distinctness** — the SHA-256 dedup is the engineer's and was not re-run. **98 and 121 are carried outright** |
+| **★★ NC-193** | `iccce inspect` over all 20 extracted profiles | **acceptance** | none — see below | **20/20 exit 0, `malformations: 0` in every case**, including a 1.36 MB X-Rite **ICC v4.2.0** CMYK profile whose full 18-tag table decodes (`mAB` A2B0/1/2 at 7×7×7×7, `mBA` B2A0/1/2 at 17×17×17, `gamt`, four `gbd`, `view`, a `dict`-typed `meta`) | **carried.** ★ The **negative-capability** statement that gives this row what force it has is `SUITE_COMPATIBILITY.md` §4.2's: the extractor **deliberately does not filter** truncated or size-inconsistent candidates, so the parser was given the chance to report a malformation *(verified — read; the script's behaviour itself was NOT read line by line by this librarian)* |
+| **★★★ NC-194** | `RGB mntr mtx X (Switch red green)` → `sRGB IEC61966-2.1`, media-relative. the suite publisher's discriminator for patch **PCS 13.0** | **fixture-declared-categorical** | **categorical** — the assertion is *which colour*, not *how close* | `1 0 0` → **`0.000000 0.991915 0.000000`** (green) · `0 1 0` → **`1.000000 0.000000 0.000000`** (red) · `0 0 1` → `0.000000 0.224217 1.000000`. **The declared swap is honoured** | **carried.** Corroborating structural note, also carried: the profile's red primary carries the largest `Y` and its green primary the largest `X` — the matrix columns are literally exchanged — and the three `X` values still sum to ≈0.9642 |
 | **★★★ NC-195** | `CMYK prtr lut X (Switch magenta cyan)` (v2.2.0, `mft2`, grid 16) → sRGB, media-relative, **against a control**: the genuine `ISO Coated v2 300% (ECI)` embedded in the same patch | **fixture-declared-categorical** | **categorical** | **trap:** `1 0 0 0` → `1.000000 0.000000 0.484125` (magenta) · `0 1 0 0` → `0.000000 0.566646 0.865191` (cyan). **control:** the same two inputs → `0.000000 0.628503 0.892175` (cyan) · `0.900907 0.047617 0.501718` (magenta). **C and M exchange; the control does not** | **carried.** ★★ **This is the strongest row in §3.30 and the control is the reason** — see §3.30.3 |
 | **★ NC-196** | The **unswapped** channels of the same pair — yellow `0 0 1 0` and paper `0 0 0 0` — through trap and control | **self-consistency** (both arms are iccce; two different fixtures) | **none declared in advance**, and that is a real weakness of the row | **paper: identical to six decimal places** (`0.999910 1.000000 0.999878` both). **Yellow: NOT identical** — `1.000000 0.929322 0.000000` (trap) vs `1.000000 0.931777 0.000000` (control), i.e. **an absolute difference of `2.455×10⁻³` in the G channel**, zero in R and B | ★★ **DERIVED here by subtraction from the two carried triples, and it CORRECTS the dispatch** — see §3.30.4. The dispatch said yellow and paper were *"unchanged … to 3 decimal places"*; at three decimal places yellow reads **0.929 vs 0.932** |
 | **★★ NC-197** | `eciRGB v2` **as ICC v2.4.0** vs **the same space as ICC v4.2.0, from the same vendor**, both → `ISO Coated v2 (ECI)`, media-relative, **no BPC**, over a 13×13×13 uniform RGB grid | **self-consistency** | **none declared in advance** — this was an exploratory comparison, not a gate | **max absolute difference `0.000113`, in DESTINATION DEVICE COORDINATES (0..1), over 2,197 points.** Worst point: v2 `[0.431796, 0.871526, 0.994334, 0.907564]` vs v4 `[0.431800, 0.871413, 0.994341, 0.907562]` | **carried.** ★ **Internally consistent:** the four per-channel differences at the worst point are `4×10⁻⁶`, `1.13×10⁻⁴`, `7×10⁻⁶`, `2×10⁻⁶`, whose maximum **is** the stated `0.000113` *(derived here — the only arithmetic check this filing could make on it)* |
-| **NC-198** | `GWG_ICC_v4_testprofile.icc` (X-Rite, CMYK `prtr`, v4.2.0) → sRGB at **perceptual** intent, through the `mAB` A2B0 pipeline | **acceptance** | none | Builds and evaluates. `0 0 0 0` → `0.999910 1.000000 0.999878` · `0 0 0 1` → `0.103214 0.101364 0.096422` · `0.2 0.3 0.4 0.1` → `0.747153 0.643538 0.549868` | **carried.** ★ **Nothing here is compared to anything.** The values are recorded so a later differential has something to diff against, **not** because they look right |
+| **NC-198** | `PCS_ICC_v4_testprofile.icc` (X-Rite, CMYK `prtr`, v4.2.0) → sRGB at **perceptual** intent, through the `mAB` A2B0 pipeline | **acceptance** | none | Builds and evaluates. `0 0 0 0` → `0.999910 1.000000 0.999878` · `0 0 0 1` → `0.103214 0.101364 0.096422` · `0.2 0.3 0.4 0.1` → `0.747153 0.643538 0.549868` | **carried.** ★ **Nothing here is compared to anything.** The values are recorded so a later differential has something to diff against, **not** because they look right |
 | **NC-199** | The 4-tag `kTRC`-only Gray printer profile ("Schwarze Druckfarbe — ISO Coated v2 (ECI)", GRAY→XYZ) → ISO Coated v2, media-relative | **acceptance** | none | Builds and evaluates, exit 0; monotone in the expected direction (`1` → `0.000000 0.000011 0.000005 0.000000`, paper; `0` → heavy four-colour black) | **carried.** ★ *"Monotone in the expected direction"* is **plausibility, which this project does not accept as evidence** (rule 1) — it is recorded as a description of the output, not as a check |
 
 #### 3.30.2 ★★★ Why NC-194 and NC-195 are worth more than their size, and the exact sentence they license
 
-GWG built these two profiles to be **wrong on purpose**, in a way whose
+the suite's publisher built these two profiles to be **wrong on purpose**, in a way whose
 correct handling is a fact about the file rather than a fact about
 colour. So the expected answer requires **no oracle, no instrument, no
 published dataset and no clause transcription** — the four things every
@@ -4801,7 +4821,7 @@ of-magnitude comparison and NOT a like-for-like one)*.
 **Paper is exact:** `0.999910 1.000000 0.999878` on both sides, all six
 decimals.
 
-`GHENT_COMPATIBILITY.md` §4.3 states the same thing as *"Y and paper
+`SUITE_COMPATIBILITY.md` §4.3 states the same thing as *"Y and paper
 white do not move measurably between the two profiles"*, which is also
 too strong for `2.455×10⁻³` — **`icc-engineer` owns that file and the
 correction is owed there, not made here.**
@@ -4817,9 +4837,9 @@ correction is owed there, not made here.**
 > the observed difference is LARGER than the dispatch claimed, so the
 > error was in the flattering direction.**
 
-#### 3.30.5 ★★★ Ghent can never supply a numeric expectation — a bound on every future row in this family
+#### 3.30.5 ★★★ suite can never supply a numeric expectation — a bound on every future row in this family
 
-`GHENT_COMPATIBILITY.md` §2.1 quotes `ReadMeFirst.pdf`:
+`SUITE_COMPATIBILITY.md` §2.1 quotes `ReadMeFirst.pdf`:
 
 > *"For some patches a faint X may appear due to rounding of values or
 > different color management engines beeing used. This is not a failure
@@ -4828,21 +4848,21 @@ correction is owed there, not made here.**
 
 with the assessment made *"at a viewing distance of 0.5 m / 20 inches"*.
 **[QUOTED — from `pdftotext -layout` extraction by `icc-engineer`; this
-librarian read the quotation in `GHENT_COMPATIBILITY.md` and has not
+librarian read the quotation in `SUITE_COMPATIBILITY.md` and has not
 seen the PDF.]**
 
 **The suite therefore states no tolerance, no reference measurement and
 no expected colour value anywhere.** Under project rule 3 — *expected
 values come from the literature* — that settles it:
 
-1. **No number measured on a Ghent file becomes ground truth by being
+1. **No number measured on a suite file becomes ground truth by being
    measured there.** It inherits the class of the apparatus that produced
    it, which is what every row in §3.30.1 does.
 2. **A categorical expectation is still available**, which is why
    NC-194/NC-195 exist and are the section's strongest rows.
 
 ★★ **And the suite contradicts itself precisely on this project's
-topic.** GWG 13.0 signals *"the defined rendering intent 'Perceptual' was
+topic.** PCS 13.0 signals *"the defined rendering intent 'Perceptual' was
 not respected"* with a **faint green X** — the symbol `ReadMeFirst.pdf`
 has already ruled is **not** a failure. **So intent handling is untested
 by the suite's own pass criterion**, and any iccce claim about intent
@@ -4858,14 +4878,14 @@ re-derived by `icc-engineer` and not re-derivable by this librarian**:
   Saturation **×18, and the only Saturation in the suite**; **16.7 /
   17.2 / 18.4 / 20.5 / 20.6** RelativeColorimetric; **22.1** carries
   **both** Perceptual and RelativeColorimetric in one file.
-- **GWG 16.1 and 16.7 declare `OutputConditionIdentifier (FOGRA27)`
+- **PCS 16.1 and 16.7 declare `OutputConditionIdentifier (FOGRA27)`
   while embedding `ISO Coated v2 300% (ECI)`.**
-- **GWG 22.1 carries a PDF `/Lab` space with
+- **PCS 22.1 carries a PDF `/Lab` space with
   `/WhitePoint [0.964203 1.0 0.824905]`.**
 
 ★ **The `FOGRA27` mismatch is the one most likely to be passed onward as
 fact**, because it is the kind of finding a consumer would act on.
-`GHENT_COMPATIBILITY.md` §6 already lists re-derivation as owed. **It
+`SUITE_COMPATIBILITY.md` §6 already lists re-derivation as owed. **It
 must be re-read here before it is told to `pdfce`.**
 
 #### 3.30.7 ★★★ A defect in this session's own outbound request — the census ask cites two line numbers that do not carry the constant it audits
@@ -4925,7 +4945,7 @@ tip, before this filing's own edits shifted the line numbers)*:
 - **Not accuracy, in any row, on any profile.** No comparison to lcms2,
   to a published value, or to anything outside iccce, exists for this
   corpus at this tip.
-- **Not that iccce "passes the Ghent suite".** ★★ **Nothing was
+- **Not that iccce "passes the print-conformance suite".** ★★ **Nothing was
   rendered.** The suite's pass criterion is a rendered page judged by a
   human eye at 0.5 m, and this project renders nothing. Twenty profiles
   were extracted from PDFs and driven directly; **no patch was
@@ -4952,7 +4972,7 @@ tip, before this filing's own edits shifted the line numbers)*:
   Callas pdfToolbox 9. **That is the census request's whole premise**
   (§3.30.7).
 - **Not one word in public.** ★★★ **No public artifact of this project
-  may say "Ghent" without GWG's written permission** — §7.16's operator
+  may say "suite" without the suite publisher's written permission** — §7.16's operator
   item 1, and the global claim-bearing-copy rule.
 
 #### 3.30.9 Coverage of §3.30, stated because a number without it is not a claim
@@ -4963,15 +4983,15 @@ tip, before this filing's own edits shifted the line numbers)*:
 - **Every figure is `icc-engineer`'s.** This librarian ran nothing and
   corroborated only what could be read: the fixture directory's
   **20 `.icc` files**, the extractor's existence,
-  `GHENT_COMPATIBILITY.md`'s nine sections, the three request-channel
+  `SUITE_COMPATIBILITY.md`'s nine sections, the three request-channel
   files, the private-fixtures `README.md` terms subsection, and the
   `recommended_grid_points` symbol.
 - **Two intents appear in the whole section** — media-relative
   everywhere except NC-198, which is perceptual. **Saturation and
   ICC-absolute are untouched on this corpus**, and the suite's only
-  Saturation declaration (GWG 16.1, `[REPORTED]`) has not been exercised.
+  Saturation declaration (PCS 16.1, `[REPORTED]`) has not been exercised.
 - **The B2A direction is untouched.** Every row is a source profile into
-  a destination; nothing here exercises a Ghent profile as a
+  a destination; nothing here exercises a suite profile as a
   *destination* except implicitly as `ISO Coated v2 (ECI)` in NC-197,
   whose B2A behaviour is **the very thing NC-197 declines to convert its
   number through**.
@@ -4994,7 +5014,7 @@ standing convention (§3.25.3, §3.29.1).
 
 **1. NC-196's sibling claim — the correction LANDED, and it landed in the
 file that owns it.** §7.16 newly-owed 4 is **DISCHARGED** *(verified —
-`GHENT_COMPATIBILITY.md` §4.3 read at the tip, 2026-08-17)*. That section
+`SUITE_COMPATIBILITY.md` §4.3 read at the tip, 2026-08-17)*. That section
 now states, in `icc-engineer`'s own words: **paper white identical to six
 decimals**; **yellow not** — R and B match exactly, **G differs by
 `2.455×10⁻³`** (`0.929322` vs `0.931777`) — and it explicitly retracts the
@@ -5021,7 +5041,7 @@ yellow at all."*
 instrument.** The dispatch that produced §3.30 described the v2/v4 pair as
 *"an instrument this project has not had"*. `icc-conformance` established
 on 2026-08-17 that it is not one, for **two independent reasons**, and
-`icc-engineer` filed the retraction in `GHENT_COMPATIBILITY.md` §4.5
+`icc-engineer` filed the retraction in `SUITE_COMPATIBILITY.md` §4.5
 *(verified — read)*:
 
 | | |
@@ -5041,7 +5061,7 @@ them. Both are `SelfConsistency` on every emitted line (§3.31, NC-214).
 > points against a *different destination* and a different grid**; the
 > harness's is **`1.01×10⁻⁴`**. **The two runs have NOT been reconciled**
 > *(`icc-engineer`, [CARRIED — stated in the dispatch and in
-> `GHENT_COMPATIBILITY.md` §4.5])*. **§5.2's rule is that an unexplained
+> `SUITE_COMPATIBILITY.md` §4.5])*. **§5.2's rule is that an unexplained
 > *small* difference is unexplained, not agreement — and it applies
 > between two of one agent's own runs exactly as it applies to an
 > oracle.** Nothing here entitles anyone to write *"≈1×10⁻⁴"* and move on.
@@ -5057,14 +5077,14 @@ that only has to unpick a sentence is cheap.**
 
 ---
 
-### 3.31 ★★★ Pass G — the Ghent corpus MEASURED against lcms2. §3.30.0's *"there is no accuracy claim here"* is DISCHARGED; the v4 `mAB ` gap closes on a vendor's file; and the strongest rows in the section need no oracle at all
+### 3.31 ★★★ Pass G — the suite corpus MEASURED against lcms2. §3.30.0's *"there is no accuracy claim here"* is DISCHARGED; the v4 `mAB ` gap closes on a vendor's file; and the strongest rows in the section need no oracle at all
 
 **Filed 2026-08-17**, from a dispatch by `icc-engineer` carrying
 `icc-conformance`'s work. ★ **Which filing this is depends on the
 population counted — §7.17 states both integers rather than choosing
 one.** **Code:** `tools/difftest/src/passg.rs` *(verified — exists)*.
 **The instrument that derived the tolerances:**
-`tools/difftest/src/bin/ghent_probe.rs` *(verified — exists)*, **which
+`tools/difftest/src/bin/suite_probe.rs` *(verified — exists)*, **which
 grades nothing and cannot fail**, deliberately, so that no bound below was
 chosen by watching a comparison go green.
 
@@ -5072,7 +5092,7 @@ chosen by watching a comparison go green.
 pin `21c582a` (lcms2 2.19.1), one machine, one day.** Companion
 derivations: **`TOLERANCES.md` §3.7 (with §3.7.0 … §3.7.7), §4's two Pass G
 rows and §6.6**; apparatus prose: **`tools/difftest/README.md` §22**;
-narrative: **`docs/GHENT_COMPATIBILITY.md` §4.3–§4.5c** — *that file is
+narrative: **`docs/SUITE_COMPATIBILITY.md` §4.3–§4.5c** — *that file is
 `icc-engineer`'s and this ledger does not edit it.*
 
 > ★ **This librarian ran nothing.** Every figure below is
@@ -5080,7 +5100,7 @@ narrative: **`docs/GHENT_COMPATIBILITY.md` §4.3–§4.5c** — *that file is
 > **carried**. What was verified without a shell: the two source files
 > exist; `TOLERANCES.md` §3.7 and §4 were **read in full** and every
 > number below is transcribed from them rather than from the dispatch
-> where the two could be compared; `GHENT_COMPATIBILITY.md` §4.3 and §4.5
+> where the two could be compared; `SUITE_COMPATIBILITY.md` §4.3 and §4.5
 > were read; the separation aggregate was checked for internal
 > consistency by arithmetic (§3.31.8).
 >
@@ -5090,7 +5110,7 @@ narrative: **`docs/GHENT_COMPATIBILITY.md` §4.3–§4.5c** — *that file is
 > justified that; **this filing adds none, and that is the healthier
 > state.**
 
-#### 3.31.0 The one thing to read before any row: **there are now two Ghent sections and they claim different things**
+#### 3.31.0 The one thing to read before any row: **there are now two suite sections and they claim different things**
 
 **§3.30 is `apparatus-census` / `acceptance` / `fixture-declared-categorical`
 / `self-consistency` and contains NO accuracy claim. §3.31 contains this
@@ -5112,11 +5132,11 @@ be quoted as closing that.
 **Runner, named per DL-031, for every row:** `cargo run --release` in
 `tools/difftest` (the conformance runner), records emitted by
 `tools/difftest/src/passg.rs`. The tolerances were derived by
-`tools/difftest/src/bin/ghent_probe.rs`, **a separate binary that grades
+`tools/difftest/src/bin/suite_probe.rs`, **a separate binary that grades
 nothing**. Every row **SKIPs with a reason** when
 `$ICCCE_PRIVATE_FIXTURES` is absent, which is the permanent state in CI.
 
-**§A — X-Rite `GWG_ICC_v4_testprofile.icc` (ICC v4.2.0, `prtr` CMYK →
+**§A — X-Rite `PCS_ICC_v4_testprofile.icc` (ICC v4.2.0, `prtr` CMYK →
 `Lab `, `mAB ` `A2B0/1/2` at 7×7×7×7 with 4096-entry A curves)**
 
 | Claim | What was compared | Class | Tolerance | Result |
@@ -5147,11 +5167,11 @@ nothing**. Every row **SKIPs with a reason** when
 
 | Claim | What was compared | Class | Tolerance | Result |
 |---|---|---|---|---|
-| **★★★ NC-213** | For each profile: is the **colorant sum** nearer the **normative PCS white** or nearer the **profile's own encoded `wtpt`**? | **derived-expectation** | **two DIFFERENT bounds for two different claims** (§3.31.5): a **classification** bound = *half the distance to the profile's own rival candidate* where `wtpt` and colorant sum disagree; the **`COLORANTS_SUM = 2×10⁻⁴` `s15Fixed16` encoding floor** where they agree | Ghent's `sRGB IEC61966-2.1` sums to the PCS white to **1.885×10⁻⁴** and Adobe RGB to **5.396×10⁻⁶**, with `wtpt` **0.264 15** away and **no `chad` tag**. Control `eciRGB v2`: `wtpt` and colorant sum agree to **1.526×10⁻⁵**, one lsb |
+| **★★★ NC-213** | For each profile: is the **colorant sum** nearer the **normative PCS white** or nearer the **profile's own encoded `wtpt`**? | **derived-expectation** | **two DIFFERENT bounds for two different claims** (§3.31.5): a **classification** bound = *half the distance to the profile's own rival candidate* where `wtpt` and colorant sum disagree; the **`COLORANTS_SUM = 2×10⁻⁴` `s15Fixed16` encoding floor** where they agree | the suite's `sRGB IEC61966-2.1` sums to the PCS white to **1.885×10⁻⁴** and Adobe RGB to **5.396×10⁻⁶**, with `wtpt` **0.264 15** away and **no `chad` tag**. Control `eciRGB v2`: `wtpt` and colorant sum agree to **1.526×10⁻⁵**, one lsb |
 | **★ NC-214** | `eciRGB v2` **v2.4.0 vs v4.2.0**, same vendor, → `ISO Coated v2 (ECI)`, device coordinates, 213 points | **self-consistency** — ★ the weakest class Pass G produces, and **both arms are iccce** | **`SWEEP_DEVICE = 4×10⁻³`, reused deliberately** — a *different* tolerance for this comparison would be a number chosen for this comparison | **1.01×10⁻⁴**. Companion arm with **lcms2 on both sides: 2.29×10⁻⁴** — a statement about **the two files**. ★★ **See §3.30.10: this pair is a NEGATIVE result and is not an instrument** |
 | **★★★ NC-215** | `RGB mntr mtx X (Switch red green)` at device `(1,0,0)`: PCS `XYZ` against **the profile's own `rXYZ` tag**, per ICC.1:2022 6.3.4 / Annex F.3 (a `curv`'s last entry maps to 1.0, so the expected answer **IS** the tag) | **derived-expectation** — ★ **no oracle, no instrument, no published dataset, no clause transcription of a *value*** | **`SWAP_EXACT = 1×10⁻⁶`** — ~1/15 of the `s15Fixed16` lsb, **tighter than the encoding on purpose**, legitimate only because both sides decode the same stored integers | **0.0** on both rows. **Separation 0.472 229 = 472 229× the tolerance**, and it is **SUPPLIED, not derived** (DL-038) |
 | **NC-216** | The corpus's **two files with the same `desc` and different SHA-256s** | self-consistency | **0.0** | **0.0**, with the colour-bearing tags verified **byte-identical in the same run** |
-| **NC-217** | The GWG CMYK trap's **`B2A0 ≡ B2A2`** aliasing | derived-expectation | **0.0** — an integer comparison on file bytes | **0.0**. ★ **The third distinct aliasing pattern in one corpus** (§3.31.6) |
+| **NC-217** | The the suite's publisher CMYK trap's **`B2A0 ≡ B2A2`** aliasing | derived-expectation | **0.0** — an integer comparison on file bytes | **0.0**. ★ **The third distinct aliasing pattern in one corpus** (§3.31.6) |
 | **★★ NC-218** | The whole conformance suite with Pass G registered | **apparatus-census** | none — a census has no bound | **`pass=229 fail=0 skip=3 error=0`, exit 0** (baseline **`pass=157`**). Separation aggregate: `unstated=119 no-named-alternative=58 incommensurate=3 ungraded=8 zero-separation=2 blind=0 **discriminating=42** sep-broken=0`. **Corpus-absent: `pass=157 skip=7`, exit 0** |
 
 #### 3.31.2 ★★★ The agreement claim lives in ONE row, and the structural gate explicitly CANNOT make it
@@ -5171,7 +5191,7 @@ here because it is the single most restatable thing in the section.
   off by construction**, not modelled away.
 
 > ★★★ **The sentence that must never be written:** *"iccce agrees with
-> lcms2 on the Ghent v4 profile."* Unqualified, it merges a gate that
+> lcms2 on the suite v4 profile."* Unqualified, it merges a gate that
 > cannot claim agreement with a row that can, and inherits the tighter
 > row's authority for the wider row's coverage. **The supportable
 > sentence:** *"on X-Rite's v4 `mAB ` profile the raw iccce-vs-lcms2
@@ -5243,7 +5263,7 @@ it fired on:
    reason**, and is the section's **negative control** (DL-039).
 2. **★★★ Invisible until the first was fixed.** The **`2×10⁻⁴`
    encoding-floor justification did not hold for the profiles it was
-   gating.** Ghent's sRGB colorants sum to the PCS white only to
+   gating.** the suite's sRGB colorants sum to the PCS white only to
    **`1.885×10⁻⁴`** — **≈12 `s15Fixed16` lsb** — because the *published*
    sRGB primaries do not sum to D50 to the encoding lsb. **The row had
    been PASSING, inside a bound its own `why` could not support.**
@@ -5270,7 +5290,7 @@ authorship.**
 
 #### 3.31.5 ★★★ NC-213 — the authoring finding, and rule 7 running against us for the second time
 
-Ghent's `sRGB IEC61966-2.1` and `Adobe RGB (1998)` — **the copies Adobe
+the suite's `sRGB IEC61966-2.1` and `Adobe RGB (1998)` — **the copies Adobe
 InDesign CS6 actually embedded, 121 times across 98 production PDF/X
 files** — have **PCS data that is D50-adapted**, a **`wtpt` that is not**,
 and **no `chad` tag**. `ICC.1:2001-04` Annex A.3.1.1, quoted verbatim in
@@ -5336,7 +5356,7 @@ about would be circular.**
 
 ★ **Intent-tag aliasing is a VENDOR choice and this corpus holds three
 different ones** — X-Rite aliases `A2B1 ≡ A2B2` (NC-205), both ECI
-profiles alias `A2B0 ≡ A2B2`, and the GWG CMYK trap aliases
+profiles alias `A2B0 ≡ A2B2`, and the suite's publisher CMYK trap aliases
 `B2A0 ≡ B2A2` (NC-217). **An engine — or a test suite — that hard-coded
 one pairing would be wrong on the others.** ★ No `A2B2` arm was given its
 own row: a saturation arm on the X-Rite profile would reproduce the
@@ -5366,7 +5386,7 @@ discovered afterwards.
 
 #### 3.31.8 Coverage of §3.31, stated because a number without it is not a claim
 
-- **Three vendors** (Adobe, ECI, X-Rite) and **one workgroup** (GWG);
+- **Three vendors** (Adobe, ECI, X-Rite) and **one workgroup** (the suite's publisher);
   **11 of the corpus's 20 profiles touched, 9 NOT**; **one destination
   CMYK profile for four of the five sweep pairs**; **one machine**
   (Windows 11 / MSVC, release), **one oracle pin** (`21c582a`), **one
@@ -5424,11 +5444,11 @@ discovered afterwards.
   graded refusal (NC-212); **one** census (NC-218). **None is ground
   truth** *(the arithmetic is this librarian's — 6+6+3+2+1+1 = 19,
   NC-200 … NC-218)*.
-- **Not that "iccce passes the Ghent suite".** ★★ **Nothing was
+- **Not that "iccce passes the print-conformance suite".** ★★ **Nothing was
   rendered.** The suite's pass criterion is a rendered page judged by a
-  human eye at 0.5 m (DL-047); **no Ghent patch has been processed as a
-  PDF by anything here.** And **no public artifact may say "Ghent"
-  without GWG's written permission** — §7.16's operator item 1, unchanged.
+  human eye at 0.5 m (DL-047); **no suite patch has been processed as a
+  PDF by anything here.** And **no public artifact may say "suite"
+  without the suite publisher's written permission** — §7.16's operator item 1, unchanged.
 - **Not that the interpolation cost is a range.** NC-203's two envelopes
   and Pass 4's `1.5741` are **three tables of two files**, not a
   population (see §4, NA-006's 2026-08-17 note).
@@ -5528,15 +5548,15 @@ rows and two of them are not the conformance suite:**
 |---|---|---|
 | **`cargo test --workspace`** at the repo root | the workspace unit/integration suite | NC-221, NC-222, NC-224, NC-227, NC-228, NC-229 |
 | **`iccce inspect`** (the CLI, `crates/iccce-cli`), invoked per file over a corpus directory, exit code read per file | a behavioural sweep, **not a graded suite** | NC-219, NC-220, NC-223 |
-| **ad-hoc analysis scripts** (`tools/ghent/icc_terms.py`; Python exact-rational arithmetic) | ★ **grades nothing**, in the shape of `ghent_probe.rs` | NC-225, NC-226 |
+| **ad-hoc analysis scripts** (`tools/suite/icc_terms.py`; Python exact-rational arithmetic) | ★ **grades nothing**, in the shape of `suite_probe.rs` | NC-225, NC-226 |
 
 **§A — the two corpora, measured as populations**
 
 | Claim | What was compared | Class | Tolerance | Result |
 |---|---|---|---|---|
 | **★★ NC-219** | Every one of the **50 `.icc` files** in `D:\Dev\iccce-private-fixtures\color-org\`: does `iccce inspect` parse it, and if it refuses, does it **refuse by name**? | **behavioural, graded** — the quantity is *"did the engine parse cleanly or refuse by name"*, not a residual (the shape of NC-103/NC-104 and NC-212) | **0.0 exact** — no file may parse-with-repair and no refusal may be unnamed | **40 parsed, exit 0, `malformations: 0`; 10 REFUSED BY NAME, exit 1, iccMAX `0x05000000`.** 50/50 accounted for. Every refusal message names iccMAX **and the version** |
-| **★ NC-220** | Header data-colour-space signature → component count, over **all 60 profiles of both private corpora** (`color-org` 40 parsed + `ghent-v50` 20) | **behavioural, graded** | **0.0 exact** — zero unrecognised signatures, zero PCS-field violations | **CMYK 33, RGB 25, GRAY 1, 7CLR 1 = 60.** ★ **Zero unrecognised, zero PCS-field violations** |
-| **★★ NC-223** | How many profiles disclose **A4c / NA-007** — a `wtpt` inconsistent with the colorant sum, unexplained by a `chad` — across the same 60 | **behavioural, graded**, and ★ **its precision was hand-audited** | **0.0 exact** on the disclosure firing; **no bound on the rate**, which is a population property and not a claim about iccce | **6 of 60** — `color-org` **2 of 40** (`D50_XYZ.icc`, `D55_XYZ.icc`), `ghent-v50` **4 of 20**. ★★ **All six examined by hand are TRUE positives; zero false positives found** |
+| **★ NC-220** | Header data-colour-space signature → component count, over **all 60 profiles of both private corpora** (`color-org` 40 parsed + `suite-v50` 20) | **behavioural, graded** | **0.0 exact** — zero unrecognised signatures, zero PCS-field violations | **CMYK 33, RGB 25, GRAY 1, 7CLR 1 = 60.** ★ **Zero unrecognised, zero PCS-field violations** |
+| **★★ NC-223** | How many profiles disclose **A4c / NA-007** — a `wtpt` inconsistent with the colorant sum, unexplained by a `chad` — across the same 60 | **behavioural, graded**, and ★ **its precision was hand-audited** | **0.0 exact** on the disclosure firing; **no bound on the rate**, which is a population property and not a claim about iccce | **6 of 60** — `color-org` **2 of 40** (`D50_XYZ.icc`, `D55_XYZ.icc`), `suite-v50` **4 of 20**. ★★ **All six examined by hand are TRUE positives; zero false positives found** |
 
 **§B — the constructed sRGB destination**
 
@@ -5630,7 +5650,7 @@ one file, with *"NO document publishes them"*. ICC's own **`sRGB2014.icc`
 (2015)** is the obvious candidate for an independent, better-authored
 second specimen: it has the ICC.1 A.3.1.1-compliant `wtpt` (D50) and the
 `chad` the HP file lacks — **exactly the two properties NC-213 found
-missing in the Ghent-embedded copies.**
+missing in the suite-embedded copies.**
 
 | tag | HP 1998 | ICC 2015 | |
 |---|---|---|---|
@@ -5883,13 +5903,13 @@ impls), so the **clause-level reason survives** the boxing *(verified —
 ★★ **The `README.md` terms subsection for
 `D:\Dev\iccce-private-fixtures\color-org\` was written BEFORE the files
 were moved in**, discharging that folder's own rule 3 *(carried from the
-dispatch)*. **The lapse recorded against `ghent-v50/` earlier the same
+dispatch)*. **The lapse recorded against `suite-v50/` earlier the same
 day was not repeated.** ★ Recorded because a rule that works leaves no
 trace unless someone writes one — and §7's tables train readers to look
 only at what failed.
 
 **The terms finding itself is not trivial.** Reading every `cprt` tag
-(`tools/ghent/icc_terms.py`, MIT, this project's own — decodes `text` /
+(`tools/suite/icc_terms.py`, MIT, this project's own — decodes `text` /
 `desc` / `mluc`) gives **23 distinct copyright strings across 46 files,
 in six different licensing postures**: from bare assertion with no grant,
 through IDEAlliance's *"may be used, embedded, exchanged, included in
@@ -5970,7 +5990,7 @@ purely additive to the public surface.
 
 #### 3.32.15 Coverage of §3.32, stated because a number without it is not a claim
 
-- **Corpora:** `color-org` **50 files** (40 parsed), `ghent-v50` **20**,
+- **Corpora:** `color-org` **50 files** (40 parsed), `suite-v50` **20**,
   plus the **Windows system HP sRGB** and ICC's **`sRGB2014.icc`**.
   **Two vendors' sRGB files, one lineage** (NC-225).
 - **The constructed destination is measured against ONE reference file,
@@ -6636,7 +6656,7 @@ harness's `kind` string; where the two differ it is said so.
 | **NC-259** | **★★ §F3 — the SEPARATION IS ITSELF GRADED**, against a floor declared in advance | shortfall **`0.000000e0`**; separation **`4.207049e-1`** against floor **`4.0e-2`** | `0` exactly | derived-expectation | **GRADED**, `DISCRIMINATING` |
 | **NC-260** | §F4 + §F7 — the **chromatic-gray round trip** against the derived table, and **the third reading**: the same quantity against lcms2 | `4.965520e-7`; `1.400000e-5` | `1.5259021896696422e-5` (`1 × 2⁻¹⁶`); `3.0518043793392844e-5` (`2 × 2⁻¹⁶`) | derived-expectation; **cross-check-against-another-implementation** | **GRADED** both, `DISCRIMINATING`; sep `4.843550e-1` |
 | **NC-261** | §F5 — the **CI twin** of NC-250's predicate, on the committed fixture, **read as raw bytes by the harness's own `mft2` decoder rather than through `iccce-profile`** | **`0.000000e0`** (was `4.207050e-1`) | **`0` exactly** | derived-expectation | **GRADED**, `DISCRIMINATING`, sep `4.207049e-1` |
-| **NC-262** | ★ **The ten-destination sweep** — max chromatic ink over 41 ramp points × 3 chromatic channels, on **all ten CMYK profiles in the Ghent v5.0 corpus**, enumerated **by header** (`header.colorspace: 'CMYK'`, all `prtr`), through the shipped release binary | **`0.000000`** on all ten, at an observation floor of **`5e-7`** | none — **not a difftest row** | ★★ **self-comparison, no oracle leg** | **UNGRADED and ungradable in this form.** ★ **Eight of the ten destinations are covered by no graded row at all** |
+| **NC-262** | ★ **The ten-destination sweep** — max chromatic ink over 41 ramp points × 3 chromatic channels, on **all ten CMYK profiles in the print-conformance suite corpus**, enumerated **by header** (`header.colorspace: 'CMYK'`, all `prtr`), through the shipped release binary | **`0.000000`** on all ten, at an observation floor of **`5e-7`** | none — **not a difftest row** | ★★ **self-comparison, no oracle leg** | **UNGRADED and ungradable in this form.** ★ **Eight of the ten destinations are covered by no graded row at all** |
 | **NC-263** | ★ **The K re-mapping on the same sweep** — `K_out` at `K_in = 0.5` and `K_in = 1.0`. This is the quantity that distinguishes `EqualLightness` from the *copy-K-through* rival | `K@0.5`: `0.500000` ×4, `0.501704`, `0.502608`, `0.505783`, `0.500381`, `0.461018`, **`0.366689`**; `K@1.0`: `1.000000` ×9 and **`0.881462`** | none — not a difftest row | as NC-262 | UNGRADED. ★★ **The graded form of this claim is NC-257 and nothing else** |
 | **NC-264** | **★★ The compiled path composes with preservation — AS OF `a05476c`.** max `\|compiled − reference\|` within one cell of the K axis, and the same far from it (control), at grid 17 and grid 33 | near-axis **`6.234231e-7` → `3.330669e-16`**; control **`3.710322e-4` → `6.289234e-8`** | ★ **none — the test asserts two strict inequalities and contains no constant** | **self-comparison** — both arms are iccce (compiled path vs reference chain) | **GRADED by convergence, not by a bound.** A `crates` test, **not** a difftest row |
 | **NC-265** | **★★★ HISTORY — the pre-fix compiled-path defect.** Superseded by NC-264 | near-axis **`0.617121`** (grid 17) → **`0.617148`** (grid 33) — a **rise**; control `1.138e-3` → `5.34e-4`; near-axis **`1156×`** the control at grid 33 | — | **dated observation, 2026-08-18 (pre-`a05476c`)** | ★★★ **NOT A CURRENT MEASUREMENT.** See §3.34.4 |
@@ -6825,7 +6845,7 @@ than a general caution.
 **1. ★★ Eight of the ten destinations are graded by nothing.** NC-262 and
 NC-263 sweep ten real CMYK profiles; only two of them appear in a graded
 row — `c6b4b62f…` (`ISO Coated v2 300% (ECI)`, NC-250) and `5bad92a6…`
-(`GWG_GenericCMYK`, NC-257). The other **eight are self-comparison only**.
+(`PCS_GenericCMYK`, NC-257). The other **eight are self-comparison only**.
 ★ A `[VERIFIED]` tag on the sweep certifies that it was **run on
 2026-08-18** and certifies **nothing about its evidence class** — DL-053's
 lesson, applied here before anyone else has to apply it.
@@ -6938,7 +6958,7 @@ collaterally retracted.
   commit.
 - **One intent for §E** (media-relative), **one source profile**
   (`ISO Coated v2 300% (ECI)`), **two destinations** (itself, and
-  `GWG_GenericCMYK` for NC-257 alone).
+  `PCS_GenericCMYK` for NC-257 alone).
 - **Six destinations for §B**, **ten for NC-262/NC-263**, **four for
   NC-249** — and none of those three populations is the same population.
 - **36 of Pass K's 44 rows require the licensed corpus** and SKIP without
@@ -7346,7 +7366,7 @@ k-only-equal-lightness` was passed**, each carried into Lab through the
 
 | id | what was compared | observed | tolerance | class | graded? |
 |---|---|---|---|---|---|
-| **NC-269** | **★★★ THE PERCEPTUAL COST OF THE POLICY.** iccce's preserved answer against **iccce's own colorimetric answer** for the same input, on `ISO Coated v2 300% (ECI)` → `GWG_GenericCMYK` (Ghent v5.0, licensed, out of tree), media-relative, no BPC, over the 101-point qualifying set | **`3.681203` ΔE2000 max**, at `K = 1.00`; **`1.580674` mean**. Distribution: min **`0.007250`** (white), median ≈ **`1.61`**, p90 ≈ **`2.33`** | ★ **`REPORTED` — infinite, by design.** No requirement bounds what an **opt-in** policy may cost; a bound here would be this project inventing a limit for a construction the standard does not describe. **Consequence: this row can never go red** — see NC-279 and **DL-066** | **self-comparison** (`Kind::SelfConsistency`) — the ceiling `ICC_Spec` A51 admits. **`[REPORTED]`**; this librarian ran nothing | **NOT GRADED.** Its protection is `G12` (NC-277) and `G8` (NC-272) failing beside it under injection — **not** the row itself |
+| **NC-269** | **★★★ THE PERCEPTUAL COST OF THE POLICY.** iccce's preserved answer against **iccce's own colorimetric answer** for the same input, on `ISO Coated v2 300% (ECI)` → `PCS_GenericCMYK` (the print-conformance suite, licensed, out of tree), media-relative, no BPC, over the 101-point qualifying set | **`3.681203` ΔE2000 max**, at `K = 1.00`; **`1.580674` mean**. Distribution: min **`0.007250`** (white), median ≈ **`1.61`**, p90 ≈ **`2.33`** | ★ **`REPORTED` — infinite, by design.** No requirement bounds what an **opt-in** policy may cost; a bound here would be this project inventing a limit for a construction the standard does not describe. **Consequence: this row can never go red** — see NC-279 and **DL-066** | **self-comparison** (`Kind::SelfConsistency`) — the ceiling `ICC_Spec` A51 admits. **`[REPORTED]`**; this librarian ran nothing | **NOT GRADED.** Its protection is `G12` (NC-277) and `G8` (NC-272) failing beside it under injection — **not** the row itself |
 
 ★ **Why `K = 1.00` is the maximum and it is not an artefact.** The
 qualifying input at `K = 1.00` is the one the destination separates most
@@ -7361,7 +7381,7 @@ and quoting only the max overstates what a K-ramp costs on average.
 
 | id | what was compared | observed | tolerance | class | graded? |
 |---|---|---|---|---|---|
-| **NC-270** | **★★ The identical measurement with source and destination exchanged** — `GWG_GenericCMYK` → `ISO Coated v2 300% (ECI)`, same intent, same probe set, same ruler | **`2.432964` ΔE2000 max** — **`1.51×` smaller** than the forward direction | `REPORTED` | **self-comparison**. **`[REPORTED]`** | **NOT GRADED** — and it is the row that makes the headline interpretable |
+| **NC-270** | **★★ The identical measurement with source and destination exchanged** — `PCS_GenericCMYK` → `ISO Coated v2 300% (ECI)`, same intent, same probe set, same ruler | **`2.432964` ΔE2000 max** — **`1.51×` smaller** than the forward direction | `REPORTED` | **self-comparison**. **`[REPORTED]`** | **NOT GRADED** — and it is the row that makes the headline interpretable |
 
 ★★★ **The finding: the cost is a property of the DESTINATION's black, not
 of the pair.** Two presses, one policy, one intent — and the price
@@ -7374,7 +7394,7 @@ separation strategy. **The source contributes only the `L*` being
 matched.**
 
 ★★ **Consequence for anyone quoting NC-269.** *"ISO Coated v2 300% and
-GWG_GenericCMYK are `3.68` apart under preservation"* is **wrong** — it
+PCS_GenericCMYK are `3.68` apart under preservation"* is **wrong** — it
 names a pair and the number belongs to an ordered pair. This is DL-021's
 rule (*say which direction*) arriving in a new place, and it is why both
 directions are in the ledger rather than one.
@@ -7430,7 +7450,7 @@ easy to conflate and are different comparisons:**
 
 | id | what was compared | observed | tolerance | class | graded? |
 |---|---|---|---|---|---|
-| **NC-273** | **★★★ The same self-comparison over ALL 30 ordered pairs** of the six real CMYK members of the Ghent v5.0 corpus, with the three entitlement gates of NC-271 applied **per pair**, grading the universal claim *"no pair entitled to price this policy finds it imperceptible"* | **Of 30 ordered pairs, 11 are ENTITLED and `0` of them find the policy imperceptible.** Among the entitled the cost runs **`2.023698`** (`Coated FOGRA27` → `GWG_ICC_v4_testprofile`) to **`3.686985`** (`Coated FOGRA39` → `GWG_GenericCMYK`). ★★ **Without the entitlement filter, `9` of the 30 would have read as imperceptible** | **`0` counterexamples exactly.** ★ A universal claim is refuted by one instance, so the only bound it admits is zero; **there is no instrument error in a count**, and the per-pair threshold is `TOLERANCES.md` §2's `1.0` anchor rather than a number chosen here *(★ VERIFIED — `NO_IMPERCEPTIBLE_ENTITLED_PAIR`'s `why`)* | **self-comparison**, count metric. **`[REPORTED]`** | **GRADED at `0`** |
+| **NC-273** | **★★★ The same self-comparison over ALL 30 ordered pairs** of the six real CMYK members of the print-conformance suite corpus, with the three entitlement gates of NC-271 applied **per pair**, grading the universal claim *"no pair entitled to price this policy finds it imperceptible"* | **Of 30 ordered pairs, 11 are ENTITLED and `0` of them find the policy imperceptible.** Among the entitled the cost runs **`2.023698`** (`Coated FOGRA27` → `PCS_ICC_v4_testprofile`) to **`3.686985`** (`Coated FOGRA39` → `PCS_GenericCMYK`). ★★ **Without the entitlement filter, `9` of the 30 would have read as imperceptible** | **`0` counterexamples exactly.** ★ A universal claim is refuted by one instance, so the only bound it admits is zero; **there is no instrument error in a count**, and the per-pair threshold is `TOLERANCES.md` §2's `1.0` anchor rather than a number chosen here *(★ VERIFIED — `NO_IMPERCEPTIBLE_ENTITLED_PAIR`'s `why`)* | **self-comparison**, count metric. **`[REPORTED]`** | **GRADED at `0`** |
 
 ★★★ **The `9` is the number that justifies the whole apparatus, and it
 belongs in the ledger rather than in a README.** Nine of thirty pairs —
@@ -8101,13 +8121,13 @@ nothing and has no shell.**
 
 ---
 
-### 3.38 NC-301 … NC-305 — **the GWG010 shading-cell measurement. `pdfce`'s `Pass 122.7` hand-off, answered by measurement rather than deferred — and the answer is a NORMATIVE CLAMP, not a better-fitted table**
+### 3.38 NC-301 … NC-305 — **the PCS010 shading-cell measurement. `pdfce`'s `Pass 122.7` hand-off, answered by measurement rather than deferred — and the answer is a NORMATIVE CLAMP, not a better-fitted table**
 
 *(Measured 2026-08-25 by `icc-engineer`; filed the same day by
 `icc-librarian`. The decision-log entries are `ARCHITECTURE.md`
 **DL-069** — the structural finding — and **DL-070** — the prohibition on
 computing a ΔE against any row of the new evidence class. The narrative
-half is `docs/GHENT_COMPATIBILITY.md` §4.7.)*
+half is `docs/SUITE_COMPATIBILITY.md` §4.7.)*
 
 #### 3.38.0 The occasion, and why it produced rows here rather than a channel reply
 
@@ -8116,7 +8136,7 @@ half is `docs/GHENT_COMPATIBILITY.md` §4.7.)*
 librarian read that file in the channel at the moment of filing; the
 summary below is not the dispatch's account of it)*. Its content: `pdfce`'s
 three interim `DeviceCMYK`→sRGB lookup tables all miss Acrobat's rendering
-of one Ghent patch, and **miss it in opposite directions**. Its own table,
+of one suite patch, and **miss it in opposite directions**. Its own table,
 which is **`pdfce`'s measurement and not iccce's**:
 
 | `pdfce` `cmyk_intent` | blue median | green median |
@@ -8142,14 +8162,14 @@ the Acrobat reference PNG** over the same cell.
 
 ★★★ **THE APPARATUS WAS REPLACED LATER THE SAME DAY, for a licensing
 reason, and both halves of that sentence belong in the row.** The rows
-below were **measured** by `tools/ghent/shading_cell.py`, which
+below were **measured** by `tools/suite/shading_cell.py`, which
 **no longer exists**; they are **cited** against its replacement. Written
 out, because a quiet substitution here would be the worst kind:
 
 | | |
 |---|---|
-| **what measured `NC-301` … `NC-305`** | `tools/ghent/shading_cell.py`, run as `python tools/ghent/shading_cell.py --plateau --cell`. ★ **VERIFIED at the original filing** — read in full, its constants, modes, sampling geometry and quantiser all transcribed into this section. **DELETED 2026-08-25** *(verified — `tools/ghent/` now holds `extract_icc.py` and `icc_terms.py` and nothing else)* |
-| **what a reader must run today** | `python tools/patch-compare/patch_compare.py --case D:/Dev/temp/iccce-gwg/gwg010_shading.case.json` |
+| **what measured `NC-301` … `NC-305`** | `tools/suite/shading_cell.py`, run as `python tools/suite/shading_cell.py --plateau --cell`. ★ **VERIFIED at the original filing** — read in full, its constants, modes, sampling geometry and quantiser all transcribed into this section. **DELETED 2026-08-25** *(verified — `tools/suite/` now holds `extract_icc.py` and `icc_terms.py` and nothing else)* |
+| **what a reader must run today** | `python tools/patch-compare/patch_compare.py --case D:/Dev/temp/iccce-suite/pcs1_010_shading.case.json` |
 | **patch ids, for citing one row** | **`plateau`** (the constant, `NC-301`) · **`plateau-opm1`** (`NC-306`, §3.38.9) · **`whole-cell`** (the ramp, `NC-303`) — ★ **VERIFIED**: those three `id` strings are what the case file carries |
 | **why** | The old harness **inlined a licensed suite's shading dictionary, indirect-object numbers, endpoint colours and the identity of the press profile it embeds.** Operator decision, 2026-08-25: split it. `ARCHITECTURE.md` **DL-071** |
 
@@ -8390,7 +8410,7 @@ the file's geometry** until somebody reads the content stream.
 
 #### 3.38.5 NC-304 — **the file carries its own output intent, and it is a big real-world producer profile**
 
-`1_GWG010_CMYK_OP_x3.pdf` (Ghent PDF Output Suite 5.0, dated **2005-12-08**
+`PCS1_010` (the print-conformance suite, dated **2005-12-08**
 in the file) is **PDF/X-3** and carries `/OutputIntents` →
 `/DestOutputProfile`.
 
@@ -8417,7 +8437,7 @@ a fabricated tag signature in the ledger.** The gap is filed, not filled;
 ★ **Why the profile is worth a row at all.** It is a **real-world producer
 profile** — a Heidelberg press profile embedded by the mainstream
 graphic-arts toolchain — not synthetic, not OS-shipped, and not authored
-by anybody here. **That population is precisely what `tools/ghent/` exists
+by anybody here. **That population is precisely what `tools/suite/` exists
 to sample**, and it is the population `open/request_profile_population_census.md`
 asks `pdfce` about.
 
@@ -8438,9 +8458,9 @@ distinguishable by it*, **because of the very tag-sharing that makes the
 observation interesting.** What *would* have been informative is a
 divergence, and there was none — which is worth recording and is all that
 is recorded. **A profile whose `A2B0` and `A2B2` differ is what would
-grade intent selection**, and finding one is already the Ghent
+grade intent selection**, and finding one is already the suite
 workstream's *"Next"* item 3 (grade intent selection against ICC.1, never
-against Ghent — DL-047).
+against suite — DL-047).
 
 #### 3.38.7 ★★★ Why none of this can become a committed test — recorded so it is not proposed again
 
@@ -8449,9 +8469,9 @@ evidence it is a good one: the answer is unusually well-pinned. **It
 cannot be one in this repository, and the obstruction is licensing, not
 engineering.** Four separate encumbrances, any one of which is sufficient:
 
-1. **The Ghent PDF Output Suite is licensed and non-redistributable**
-   (`GHENT_COMPATIBILITY.md` §2.2), and **any public mention of Ghent
-   needs GWG's written permission** (§8 item 1).
+1. **The print-conformance suite is licensed and non-redistributable**
+   (`SUITE_COMPATIBILITY.md` §2.2), and **any public mention of suite
+   needs the suite publisher's written permission** (§8 item 1).
 2. **The embedded output-intent profile is Heidelberg's** and travels
    inside the patch — extracting it does not make it ours.
 3. **The Acrobat reference is a capture of a commercial product.**
@@ -8600,6 +8620,164 @@ as `DL-012`, where a predicted divergence had to be measured before it
 counted, and turned out absent).
 - **Licensing:** nothing was fetched, published, pushed or tagged by this
   filing, and **nothing here authorises any of those** (rule 9).
+
+---
+
+### 3.39 **`NC-307`** — the consumer's INTENT CENSUS over its own fixture corpus. **The ledger's first `producer-corpus-census` row, its first row measured entirely by another project, and the row that retires an eager cache design before it was built**
+
+**Filed 2026-08-25** by `icc-librarian`, from `pdfce`'s reply of the same
+date in the request channel. **Tip at filing: `b5d0ccb`** *(★ **VERIFIED**
+— `.git/refs/heads/master` reads
+`b5d0ccb7f482b23ec159e34f5d1b2c6e544079cf`, a plain text file, read at
+this filing)*. **No code in this repository changed and no other row
+moves.**
+
+#### 3.39.0 ★★★ Read this before the row: THIS PROJECT MEASURED NOTHING
+
+Every number below was produced by **`pdfce`**, by **`pdfce`'s tools**,
+over **`pdfce`'s corpora**, on **`pdfce`'s machine**. This librarian has
+**not run their scripts, not seen a transcript, and not enumerated a
+single file.** The row is `[REPORTED]` in the strongest sense the word has
+in this ledger.
+
+★★ **What makes it worth a row anyway, and the argument has to be made
+rather than assumed:** the alternative was not a better number, it was
+**a guess**. This project's own `ARCHITECTURE.md` carried a cache costing
+built on *"a full `4 × 2` cache"* — an assumption about caller behaviour
+that **nobody here could ever have measured**, because this project has
+no corpus of real PDFs and by `ARCHITECTURE.md` §4 must never learn what
+a PDF is. ★ **A design parameter that can only come from the consumer is
+one the consumer has to be asked for**, and `CLAUDE.md` rule 10 exists to
+make that asking normal. **The weakness of the evidence class is the
+honest price of getting the parameter at all.**
+
+#### 3.39.1 The row
+
+| | |
+|---|---|
+| **`NC-307`** | **Rendering-intent multiplicity per document, `pdfce`'s `fixtures/` corpus** |
+| **what was compared** | Nothing was *compared*. **Counted**: for each document, how many **distinct rendering-intent names** it contains |
+| **population** | **4 239 files**; **350 deep-scanned** (streams inflated); a separate **raw byte-scan** over all 4 239 |
+| **result — deep pass, naming ANY intent** | **5 of 350** |
+| **result — deep pass, naming MORE THAN ONE intent** | ★★★ **0 of 350** |
+| **result — raw byte-scan, more than one** | **6 of 4 239** — and ★ **all six are conformance probes whose stated purpose is to name all four intents in one file**, i.e. **the six are the instrument, not the population** |
+| **tolerance** | **None, and none is possible.** A count has no tolerance; there is nothing for it to be within |
+| **evidence class** | **`producer-corpus-census`** *(new at this filing — §1)* |
+| **measured by** | **`pdfce`**, 2026-08-25 · `tools/intent-census/` (`ri_census.py`, `icc_census.py`) in **their** repository |
+| **measured by this project** | ★★★ **NO. Nothing was run, rendered, inflated or enumerated here.** |
+| **commit** | ★ **None on either side.** This filing is at `b5d0ccb` in this repository; **no `pdfce` commit hash was carried by the reply and none is asserted** |
+| **date** | 2026-08-25 |
+
+#### 3.39.2 ★★ The method's limits, stated by the measurer and carried verbatim because a census is worth what its method is worth
+
+1. ★★★ **It cannot attribute an intent to a page.** No page tree is
+   built. It answers **"does this document name more than one intent?"** —
+   the **cache-sizing** question — and **not** *"does this page switch
+   intent mid-stream?"*, which needs a real content-stream walk. **The
+   measurer's own standing not-done list said no corpus measurement of
+   mid-page switching had been taken, and after this census it still says
+   exactly that.**
+2. **A byte-grep for `/RI` measures zero and is believed.** On the other
+   population the raw pass found **0** files where the deep pass found
+   **12**, because every instance sits inside a Flate-compressed object or
+   content stream. ★ **Inflate first, or measure zero and trust it.**
+   *(This is a general hazard and is escalated as such — §7.29 item 5.)*
+3. **The counting unit is object references** where profiles are counted,
+   which is a **lower** bound on distinct profiles when two objects hold
+   byte-identical bytes and an **upper** bound on cache entries when a
+   cache keys by object id. **Neither bound is the number on its own.**
+4. ★ **No corpus filter is stated in either direction.** Whether the 350
+   deep-scanned files were selected, sampled or simply the first 350 is
+   **not recorded in the reply and is not asserted here.** Per `DL-053`,
+   **a count taken from a sample is not a count of the population**, and
+   the deep-pass denominator here is **350**, not 4 239.
+
+#### 3.39.3 ★★★ The second population, and why its numbers are NOT in this document
+
+`pdfce` censused **two** corpora and named them separately *"precisely
+because they disagree by two orders of magnitude, and the disagreement is
+a property of the corpora, not noise."* The second is a **licensed
+print-production suite**, and its census returned the same qualitative
+answer more strongly: **at most two intents in any file, and exactly one
+output-intent profile in every file.**
+
+★★★ **Those numbers are not reproduced here, and the omission is
+deliberate and is required.** `CLAUDE.md` **rule 11** (operator decision,
+2026-08-25) reads: *"Nothing suite-derived may be ADDED to a tracked file
+from now on. **Not a measurement**, not a patch identifier, not a file
+name … and not the suite's name in a newly-written passage."*
+**`NUMERIC_CLAIMS.md` is tracked and has been public throughout.** A
+census over that suite's files is a measurement over it, however cleanly
+the identifiers are stripped, and **whose hand held the instrument does
+not change what was measured.**
+
+> ★★ **The dispatch that requested this filing asked for both populations
+> as ledger rows**, on the reading that the numbers are *"pdfce's own
+> census of their own corpus copy."* **That reading was declined.** Rule 11
+> is written about the **material**, not about the **measurer**, and a
+> librarian does not narrow an operator's rule by finding a party it does
+> not name. ★ **Recording the refusal is what this role owes; the operator
+> may of course decide otherwise** — and §7.28 item 6 already carries the
+> converse question, about the licensed material this ledger accepted
+> *before* the rule existed.
+
+**Where the second population's numbers live:**
+`docs/SUITE_COMPATIBILITY.md` **§10** — untracked, and named by rule 11
+itself as where that work continues. **A tracked document may point at an
+untracked one by section; a pointer is not a quotation.**
+
+★ **What this costs, stated rather than glossed:** the second
+population is the one that answers *"how many output-intent profiles per
+document?"*, and **that question therefore has no tracked answer.** A
+future reader of this ledger alone will find the intent-multiplicity
+answer and not the profile-count answer, and **§7.29 item 2 records that
+gap as a gap rather than letting silence imply the measurement was never
+taken.**
+
+#### 3.39.4 ★★★ What this row DECIDES — an eager cache design, retired before it was built
+
+`ARCHITECTURE.md` `DL-059` §2 costed **a full `4 intents × 2 BPC` cache at
+`~13` s of build and `~290` MiB resident**, both **derived by linear
+scaling from four measured builds, not measured as an aggregate**, and
+recorded honestly as *"a real cost and a very different sentence from
+'workable'."*
+
+> ★★★ **`NC-307` says the thing that was costed should never be built.**
+> **Zero of 350 files named more than one intent.** An eager `4 × 2` build
+> is waste **in 100 % of the files measured**. Multiplying **observed**
+> maxima rather than theoretical ones gives **12–24 combinations as a
+> worst observed case and 1–2 in a typical file** — the consumer's own
+> arithmetic, over both populations.
+
+★★ **The `13` s / `290` MiB figure is NOT retracted and is NOT wrong.** It
+remains the correct cost of an eager full cache, at its stated derivation
+strength. **What changed is that nobody should pay it.** A dated addendum
+now sits against that item in `ARCHITECTURE.md` `DL-059` §2, which is
+where a future session designing the API will actually be standing.
+
+★ **And the limit that must travel with the decision:** §3.39.2 item 1
+means this row constrains **a cache**, not **§11.7.5.3**. *A document that
+names one intent constrains how many transforms to hold; it says nothing
+about whether a per-paint API is required* — that requirement comes from
+the standard, not from the corpus, and is untouched.
+
+#### 3.39.5 ★★ What `NC-307` does NOT claim
+
+- **Not that any consumer honours the intents counted.** ★★★ The census
+  counts **what producers wrote**. `pdfce` itself, the measurer, **honours
+  none of them** — `/RI` is an explicit no-op there and `/ExtGState /RI`
+  is never read at all. **The single clearest demonstration that a
+  producer census is not a consumer fact is that the project which took
+  the census is a counter-example to it.**
+- **Not that four intents are rare in the world.** It is one project's two
+  corpora, one of which is largely conformance probes.
+- **Not a statement about `iccce` at all.** No iccce code was executed. It
+  is a fact about **files**.
+- **Not a tolerance, not a gate, and not comparable to any other row in
+  this document.** `TOLERANCES.md` is untouched by this filing and
+  correctly so — **there is no bound to justify.**
+- **Not a `pdfce` commit anchor.** No hash was carried and none is
+  invented.
 
 ---
 
@@ -8919,7 +9097,7 @@ approximation entered the tree, not the day a transform uses it.)*
 > not author, and the two measurements are of DIFFERENT TABLES and must
 > not be averaged, ranged or otherwise combined.**
 >
-> **1. The measurement.** X-Rite's `GWG_ICC_v4_testprofile.icc`, ICC
+> **1. The measurement.** X-Rite's `PCS_ICC_v4_testprofile.icc`, ICC
 > **v4.2.0**, `mAB ` `A2B0`/`A2B1` at 7×7×7×7. The method envelope
 > computed **from that tag's own CLUT bytes under the two published
 > geometries, with no lcms2 output in it**: **0.948 160** (`A2B0`) and
@@ -9413,7 +9591,7 @@ constants** — including **ICC's own reference CMM**.)*
 | **The approximation** | `--preserve-black k-only-equal-lightness` / `Chain::with_black_preservation(KMapping::EqualLightness)` **deliberately returns something other than the colorimetric conversion** for any input with `C = M = Y = 0` exactly. The colorimetric answer for a K-only input on a cross-press pair is a full four-ink separation; the preserved answer is `(0, 0, 0, K′)` with `K′` chosen to match lightness. ★ **This is not an error term or a rounding cost — it is a different answer on purpose**, and the caller opts into it by name. |
 | **Why it is a rule-4 entry at all** | ★★★ **ICC.1 mandates nothing here — it contains no black-preservation construct in either edition checked** (`ICC_Spec` register entry **A51**, a *closed negative*; structural reason: the PCS is three components, so every device→device transform is 4→3→4 and **K has no carrier**). A silence is not permission to depart silently: rule 4 says every departure from exact colorimetry is **named and measured**, and §4 is the only artifact that can answer *"what does iccce approximate?"* |
 | **Whose construction it is** | ★★ **lcms2's** — *equal lightness*, the definition little-cms implements as intent 11. ★★★ **That makes it a construction this project also uses as its ORACLE**, so agreement with lcms2 on it (NC-245, NC-257) is **expected by design and is not independent evidence that the definition is right.** The second published definition (**`KMapping::Ratio`**, Cholewo) is **unimplemented and a standing refusal**; the two disagree by up to **`4.889900e-2`** in `K` on the furthest cross-press pair measured (NC-249). ★ That disagreement is why the CLI ships **no default** — a default would be iccce choosing one definition and reporting it under a name that means both. |
-| **Cost — ★★★ MEASURED 2026-08-19 (`3c93b62`), and it carries its pair, its direction and its intent** | **`3.681203` ΔE2000 max, `1.580674` mean**, over the 101-point qualifying set, on **`ISO Coated v2 300% (ECI)` → `GWG_GenericCMYK`** (Ghent v5.0, licensed, out of tree), **media-relative**, **no `--bpc`**, policy `k-only-equal-lightness`. **NC-269**, §3.36. ★★ **Evidence class `self-comparison`, which is the CEILING this subject admits and not a shortcoming** — A51 is a closed negative, so no published value for what preservation *should* return can exist. ★★★ **Three qualifications travel with the number, always:** (a) **direction** — the same pair **reversed** costs `2.432964` (**NC-270**), so the price is a property of the **destination's** black, not of the pair; (b) **population** — over all 30 ordered pairs, **11 are entitled** to price the policy and **0 of them find it imperceptible**, cost `2.023698` … `3.686985` (**NC-273**), and **9 of 30 would have read as imperceptible without the entitlement gates**; (c) ★ **what a consumer actually sees is the BOUNDARY STEP, `3.712251` — larger than the cost itself** (**NC-275**). |
+| **Cost — ★★★ MEASURED 2026-08-19 (`3c93b62`), and it carries its pair, its direction and its intent** | **`3.681203` ΔE2000 max, `1.580674` mean**, over the 101-point qualifying set, on **`ISO Coated v2 300% (ECI)` → `PCS_GenericCMYK`** (the print-conformance suite, licensed, out of tree), **media-relative**, **no `--bpc`**, policy `k-only-equal-lightness`. **NC-269**, §3.36. ★★ **Evidence class `self-comparison`, which is the CEILING this subject admits and not a shortcoming** — A51 is a closed negative, so no published value for what preservation *should* return can exist. ★★★ **Three qualifications travel with the number, always:** (a) **direction** — the same pair **reversed** costs `2.432964` (**NC-270**), so the price is a property of the **destination's** black, not of the pair; (b) **population** — over all 30 ordered pairs, **11 are entitled** to price the policy and **0 of them find it imperceptible**, cost `2.023698` … `3.686985` (**NC-273**), and **9 of 30 would have read as imperceptible without the entitlement gates**; (c) ★ **what a consumer actually sees is the BOUNDARY STEP, `3.712251` — larger than the cost itself** (**NC-275**). |
 | **★★ The original cost field, preserved because it was accurate on its date** | *(as filed 2026-08-18)* — *"**UNMEASURED, and stated so rather than bounded.** Nobody has measured the ΔE2000 between the preserved answer and the colorimetric one on a cross-press pair. Every Pass K row is in **device units** (§3.34.6). ★★ **The number a caller weighing this policy actually wants is exactly the one that does not exist**, and no row in §3.34 is a substitute for it."* ★★★ **The entry's own *"Revisit if"* clause (a) said this field would change and the entry would stay. It did, and it has.** The posture is vindicated: **an entry with `UNMEASURED` in it is findable and generates an obligation**, and this is the obligation being discharged **one day later** — against NA-011, whose lateness meant the same obligation generated nothing for weeks. |
 | **What must NOT be quoted as its cost** | ★★★ **NC-249's `4.889900e-2`** is *lcms2's* re-mapping magnitude and belongs to the oracle, not to this approximation (§3.34.3). ★★ **NC-263's `0.366689` / `0.881462`** are `K_out` values from a **self-comparison sweep with no oracle leg** — they show the re-mapping is non-identity, which is what distinguishes this policy from *copy-K-through*, and they are **not a cost**. ★ **NC-244's `1.360900e-1` ΔE2000** is the distance between the colorimetric and K-only builds on the **same-profile** pair, i.e. **the case where the policy is nearly a no-op** — it is a *lower* bound at best and must never be quoted as the policy's price. ★★★ ***(added 2026-08-19, and it upgrades this clause from a reading to a measurement.)*** That regime is now **graded**: **NC-272** runs `ISO Coated v2 (ECI)` → `ISO Coated v2 300% (ECI)` — **two files whose `A2B1` tags are byte-identical** — at **`0.159500`**, **`23.1×` below the real cost and below the perceptibility anchor**. ★ **NC-272 does NOT supersede or substitute NC-244**: one is a same-*profile* pair and the other a same-*press* pair of two files, they are `2.3e-2` apart, and both belong to the cheap regime. **Quoting either as "the cost of black preservation" understates it by more than an order of magnitude — now measured, not asserted.** |
 | **What IS established, so the entry is not read as weaker than it is** | The policy **does what it says** on inputs that qualify (NC-250, NC-261, at exactly `0`), **does not touch inputs that do not** (NC-255, at exactly `0` over 192 and 50 probes), **is the identity where algebra says it must be** (NC-256 — and the oracle is not), and **implements the definition it names** at the oracle's own CLUT nodes (NC-257). ★ **All of that is about fidelity to the named construction, none of it about the construction being right.** |
@@ -9666,10 +9844,10 @@ are the rows to re-run or retire.
 | **★★★ `G12` or `G8` being deleted, made `REPORTED`, or having its fixture pair changed** *(added 2026-08-19, §3.36)* | **NC-269 — the headline itself, and NOTHING WOULD TURN RED.** `G1` carries `REPORTED` by design (no requirement bounds an opt-in policy's cost), so **the number NA-012 carries can never fail**; its entire protection is `G12` failing at **62×** and `G8` at **4.0×** under injection (**NC-279**). ★★ **A row that cannot fail is defended only by its siblings**, and the siblings are not marked as load-bearing anywhere in the source. **DL-066.** |
 | **★★★ A fixture whose black ink is SPECTRALLY NEUTRAL being used to price this policy** *(added 2026-08-19, §3.36)* | **Any future cost row, and NO GATE IN THIS PROJECT WOULD NOTICE.** On such a model the preserved answer at matched lightness is a **metamer** of the four-ink separation — colorimetrically identical however much ink separates them — so the fixture clears every **device-unit** separation gate (`0.420705` of ink on `v2-cmyk-chromatic-neutral`) and reports a cost of **zero** for a reason unrelated to the policy (**NC-278**). ★★★ **This is not a bound problem and no tolerance can express it**; the remedy was a fixture (`v2-cmyk-warm-black`), not a number. **DL-065.** |
 | **★★ `fixtures/synthetic/v2-cmyk-warm-black.icc`'s bytes, or recipe `v2-cmyk-warm-black`'s FOUR constants** *(added 2026-08-19, §3.36)* | **NC-276 and NC-277 — and NC-277 fails at the DERIVATION, not at the tolerance.** `warm_black_expected_cost` hard-codes `0.70` darkness, `a* = 2K`, `b* = 6K` and `ρ = 65280/65535`; **change any of them in the recipe and the closed form silently prices a profile that no longer exists.** ★ `K′ = k` is exact **only** while both recipes share the `0.70`, so **editing the SIBLING's darkness coefficient breaks a row that names neither file's darkness in its identifier.** `gen-profiles verify` is the only detector for edited bytes and **nothing runs it automatically**; nothing at all detects a changed *recipe* that is regenerated consistently. |
-| **★ The Ghent v5.0 corpus's membership, or `$ICCCE_PRIVATE_FIXTURES` pointing elsewhere** *(added 2026-08-19, §3.36)* | **NC-269 … NC-275 and NC-279's `G8` half — nine of §G's sixteen rows.** They **skip** rather than fail, and a skipping suite is green. ★★ **NC-273's whole content is a statement about a 6-member population**: adding or removing one member changes 30 pairs to 42 or 20 and **re-bases the `11 entitled` and the `9 without the filter` at once**, while the row's identifier and bound stay identical. **Re-run, not re-read.** |
+| **★ The print-conformance suite corpus's membership, or `$ICCCE_PRIVATE_FIXTURES` pointing elsewhere** *(added 2026-08-19, §3.36)* | **NC-269 … NC-275 and NC-279's `G8` half — nine of §G's sixteen rows.** They **skip** rather than fail, and a skipping suite is green. ★★ **NC-273's whole content is a statement about a 6-member population**: adding or removing one member changes 30 pairs to 42 or 20 and **re-bases the `11 entitled` and the `9 without the filter` at once**, while the row's identifier and bound stay identical. **Re-run, not re-read.** |
 | **★★★ The `[0,1]` clamp's POSITION relative to the inverse TRC — ICC.1's Annex F.8–F.16 as `MatrixTrc::pcs_to_device` implements it** *(added 2026-08-25, §3.38)* | **NC-301, NC-302, NC-303 — and `ARCHITECTURE.md` DL-069's entire argument.** ★★ **This is the sharpest dependency in the ledger, because moving the clamp after the inverse TRC would leave every number in §3.38 LOOKING untouched** while the mechanism they demonstrate had ceased to exist. The `0.000000` values *are* the clamp; nothing else in those rows would move visibly. ★ **The committed detector is `out_of_gamut_clamps_before_inverse_trc`, not any row here.** |
 | **★ The Windows colour directory — `sRGB Color Space Profile.icm`, `CoatedFOGRA27.icc`, `CoatedFOGRA39.icc`, `USWebCoatedSWOP.icc`** *(added 2026-08-25, §3.38)* | **NC-301 … NC-303, all of them.** Category (c) system profiles: **not ours, not committed, absent on any other machine**, and the destination's **1 024-entry** curve is part of every converted value. ★ Unlike a difftest row these do not even *skip* — **nobody re-runs them at all** unless a human invokes the harness. |
-| **★ The Ghent patch `1_GWG010_CMYK_OP_x3.pdf`, or the Acrobat capture at `D:\Dev\temp\acro-refs\`** *(added 2026-08-25, §3.38)* | **NC-301, NC-303, NC-304, NC-305.** A **re-capture** — different Acrobat build, different monitor profile, different render scale, different inset — **changes the reference without changing anything about iccce**, and the row would read as a drift in the transform. ★★ `pdfce` and this session already sampled the same cell's green at **156** and **159**; that is the mechanism, at the scale where it is harmless. |
+| **★ The suite patch `PCS1_010`, or the Acrobat capture at `D:\Dev\temp\acro-refs\`** *(added 2026-08-25, §3.38)* | **NC-301, NC-303, NC-304, NC-305.** A **re-capture** — different Acrobat build, different monitor profile, different render scale, different inset — **changes the reference without changing anything about iccce**, and the row would read as a drift in the transform. ★★ `pdfce` and this session already sampled the same cell's green at **156** and **159**; that is the mechanism, at the scale where it is harmless. |
 | **★★ `TOLERANCES.md` §2's `1.0` perceptibility anchor (DL-004 revisited)** *(added 2026-08-19, §3.36)* | **NC-271b, NC-271c, NC-272 and NC-273 — FOUR rows, and the anchor is used in THREE different directions.** As a **lower** bound on a pair's separation (`G4`), as an **upper** bound on an error (`G5`), and as the **threshold a population is counted against** (`G16`, via `G8`'s constant). ★★★ **Moving the anchor moves an entitlement criterion, a soundness criterion and a count simultaneously and in opposite senses** — a *larger* anchor entitles fewer pairs while making more of them "imperceptible". This is the first place in the ledger where one number is load-bearing in both directions at once. |
 
 ---
@@ -10645,7 +10823,7 @@ false.**
    engineering question and no agent may answer it** (rule 9). **Item 1
    is blocked on it.**
 
-### 7.16 Status of §7 … §7.15, re-checked 2026-08-17 at the **Ghent compatibility** filing
+### 7.16 Status of §7 … §7.15, re-checked 2026-08-17 at the **suite compatibility** filing
 
 No list above is edited. **This is the twentieth filing overall and the
 second of 2026-08-17** *(derived — §7.15 records itself as the
@@ -10658,7 +10836,7 @@ status pass has not been same-day.
 none of these items anticipated, and it discharges nothing.** That is
 worth saying at the top, because a new corpus *feels* like progress
 against a list dominated by *"still owed, no measurement"*. **It is not
-progress against any of them.** The Ghent corpus supplies no ground
+progress against any of them.** The suite corpus supplies no ground
 truth (§3.30.5 — the suite states no expected value anywhere), no
 cross-check (the differential had not reported), and no separation
 fields. **DL-042 binds this pass as it binds every pass from §7.15
@@ -10668,7 +10846,7 @@ its status restated.
 | Item | Status now |
 |---|---|
 | **★★★ §7.15 newly-owed 1 — build the Annex D.6.3 fixture** | **Still owed, unchanged, and still blocked on the same operator decision** (§7.15 newly-owed 6). ★ **Nothing in §3.30 touches it**, and the temptation to feel otherwise is the reason it is listed first: a corpus of twenty real profiles is **not** a published dataset. **NC-001 remains this project's only `published-ground-truth` row** |
-| **★★ §7.15 newly-owed 6 / the operator decision on published numbers in an MIT repository** | **★★ MATERIALLY ENLARGED, and this is the change most likely to be missed.** It was *"one question, not three"* — ICC's Annex D values, CIE's CC BY-SA tables, ECI's `cprt`. ★ **It is now one question over FOUR corpora**: `D:\Dev\iccce-private-fixtures\` gained **`ghent-v50/`** *(verified — the directory holds 20 `.icc` files and `manifest.json`; its terms subsection is in that folder's `README.md`, read)*. **Ghent's terms are the most restrictive of the four** — a **no-commercial-use** clause, no redistribution without written permission, and an **affirmative obligation to reproduce GWG's notice** in any substantial copy — **plus** the separate and individually-unassessed licences of the profiles inside (Adobe, ECI, Heidelberg, X-Rite). ★★ **The answer "yes, published numbers may live in the repository" would NOT extend to this corpus**, and if the two get answered as one question that distinction is what gets lost |
+| **★★ §7.15 newly-owed 6 / the operator decision on published numbers in an MIT repository** | **★★ MATERIALLY ENLARGED, and this is the change most likely to be missed.** It was *"one question, not three"* — ICC's Annex D values, CIE's CC BY-SA tables, ECI's `cprt`. ★ **It is now one question over FOUR corpora**: `D:\Dev\iccce-private-fixtures\` gained **`suite-v50/`** *(verified — the directory holds 20 `.icc` files and `manifest.json`; its terms subsection is in that folder's `README.md`, read)*. **the suite's terms are the most restrictive of the four** — a **no-commercial-use** clause, no redistribution without written permission, and an **affirmative obligation to reproduce the suite publisher's notice** in any substantial copy — **plus** the separate and individually-unassessed licences of the profiles inside (Adobe, ECI, Heidelberg, X-Rite). ★★ **The answer "yes, published numbers may live in the repository" would NOT extend to this corpus**, and if the two get answered as one question that distinction is what gets lost |
 | §7.15 newly-owed 4 — **separations for 119 rows** | **Still owed, and the denominator moved without anybody grading anything.** ★ **§3.30 adds eight rows that state no separation in any emitted field**, so the ratio is worse than §7.15 recorded it. **This filing deliberately does NOT restate `41 of 160`** — the §3.30 rows have **no `tools/difftest` record at all**, so whether they belong in that denominator is an open question about the population, not an arithmetic one (DL-031) |
 | §7.15 newly-owed 3 — **the `.github/workflows/ci.yml` prose count (43 vs 47)** | **Still owed, untouched, second filing.** ★ **A second `.github/` debt now sits beside it**, from the nineteenth filing: **`wasm32-unknown-unknown` is not gated in this project's CI while a named consumer's CI gates it** (DL-044). Both are owed to whoever owns `.github/`; **neither is this librarian's to edit** |
 | §7.15 newly-owed 5 — **retro-audit of `Separation::against` users** | **Still owed, untouched** |
@@ -10678,7 +10856,7 @@ its status restated.
 | §7.11 newly-owed 3 — **the A41 constant's error, measured** | **Still owed, FIFTH filing. ★★ DL-042 was due to be applied here at "the next pass" per §7.15, and it was NOT applied — this pass did not re-read the reason either.** Recorded as a miss rather than carried silently |
 | §7.11 newly-owed 4 / §7.1 item 6 — **CI evidence and a Linux run** | **Unchanged as evidence. ★ TWENTY filings, no CI run observed by anyone here.** A workflow file is a configuration, not a run |
 | §7.10 item 6 / §7.8 item 1 — **the PCSLAB gray fixture** | **Still owed. ★ NA-008's PCSLAB gray arm remains the oldest UNMEASURED entry in §4.** ★★ **And §3.30 makes the absence louder rather than smaller**: NC-199 shows a real vendor's 4-tag `kTRC`-only Gray profile now exists in a fixture directory and **evaluates**, but it is an `acceptance` row — **a gray profile that runs is not a gray comparison** |
-| §7.10 item 7 / **the DL-014 citation audit** | **★ Still owed, FOURTEENTH filing**, and it acquires a **new surface this filing**: `GHENT_COMPATIBILITY.md` §2.3 and §3.30.5 both reason about **which `A2Bx`/`B2Ax` table a rendering intent selects**, which is an ICC.1 claim; **no clause number is cited for it in either place** *(verified — read)*. That is the safe state, and the audit should confirm it stays that way |
+| §7.10 item 7 / **the DL-014 citation audit** | **★ Still owed, FOURTEENTH filing**, and it acquires a **new surface this filing**: `SUITE_COMPATIBILITY.md` §2.3 and §3.30.5 both reason about **which `A2Bx`/`B2Ax` table a rendering intent selects**, which is an ICC.1 claim; **no clause number is cited for it in either place** *(verified — read)*. That is the safe state, and the audit should confirm it stays that way |
 | §7.10 item 1 — **`dechk.obj` in the public repository** | **Carried, `unverified-this-filing`.** The repository root was not enumerated |
 | §7.10 item 2 / §7.11 — **pushes without a recorded go-ahead** | **Carried, `unverified-this-filing`. ★ Nothing this filing went near a remote.** ★★ **And the working tree is NOT clean**: `docs/ARCHITECTURE.md`, `docs/NEXT_SESSION.md`, `docs/SESSION_LOG.md` and `CLAUDE.md` were **already modified and uncommitted** at tip `e21154c` before this filing began *(**carried from the dispatch — `git diff --stat`, which this librarian cannot run**)*, and this filing modifies three of those four further. **Rule 9 and DL-024 unchanged** |
 | §7.10 item 5 — **`cargo fmt --check` in `tools/difftest`** | **Carried, `unverified-this-filing`** |
@@ -10686,7 +10864,7 @@ its status restated.
 
 **Newly owed as of this filing:**
 
-1. **★★★ The lcms2 differential over the Ghent corpus.** Dispatched to
+1. **★★★ The lcms2 differential over the suite corpus.** Dispatched to
    `icc-conformance` on 2026-08-17 and **not reported when this filing
    was written**. ★ **Until it lands, §3.30 contains no
    `implementation-cross-check` row and no accuracy claim of any kind**,
@@ -10706,7 +10884,7 @@ its status restated.
    **§3.27** and **`crates/iccce-cmm/src/compiled.rs:77`**. ★ **The file
    is outbound, is in no git repository, and is `icc-engineer`'s** —
    this ledger recorded the correct citations rather than editing it.
-4. **★★ Correct `GHENT_COMPATIBILITY.md` §4.3's *"Y and paper white do
+4. **★★ Correct `SUITE_COMPATIBILITY.md` §4.3's *"Y and paper white do
    not move measurably"*** (§3.30.4). Paper is exact to six decimals;
    **yellow differs by `2.455×10⁻³`** in the G channel. ★ **The file is
    `icc-engineer`'s. NC-196 carries the corrected figure regardless**, so
@@ -10719,21 +10897,21 @@ its status restated.
    `pass=…` covers a **subset** of its own rows. ★ **The second is
    probably correct and is currently true but unstated**, which is the
    worse of the two failure modes.
-6. **★★ De-duplicate `GHENT_COMPATIBILITY.md` §6's table** — the row
-   *"K-only preservation (GWG 23.0)"* **appears twice, identically**
+6. **★★ De-duplicate `SUITE_COMPATIBILITY.md` §6's table** — the row
+   *"K-only preservation (PCS 23.0)"* **appears twice, identically**
    *(verified — read)*. Cosmetic, and listed only because a table row
    that appears twice is a table somebody will later count.
 
 **★★★ Owed to the OPERATOR — three decisions, and no agent may take any
 of them:**
 
-1. **★★★ No public artifact of this project may say "Ghent" without
-   GWG's written permission.** Certification is sold to print service
-   providers by individual GWG member companies; *"solution vendors,
+1. **★★★ No public artifact of this project may say "suite" without
+   the suite publisher's written permission.** Certification is sold to print service
+   providers by individual the suite's publisher member companies; *"solution vendors,
    developers or system integrators"* are directed to a **separate
-   programme reachable only by contacting GWG** *([QUOTED] from the
-   certification release, via `GHENT_COMPATIBILITY.md` §7 — this
-   librarian has not seen the PDF)*. ★ **So *"passes the Ghent suite"*
+   programme reachable only by contacting the suite's publisher** *([QUOTED] from the
+   certification release, via `SUITE_COMPATIBILITY.md` §7 — this
+   librarian has not seen the PDF)*. ★ **So *"passes the print-conformance suite"*
    is not available as `README.md` or crates.io copy today**, and it is
    a **claim-bearing-copy** matter under the global rule, not a style
    choice. **Nothing has been published** *(carried — no agent here has
@@ -10748,13 +10926,13 @@ of them:**
    correct conversion makes the X vanish into its surround and the
    judgement becomes *sample the region, compare to its neighbours* —
    **no press, no proof, no instrument, no human at 0.5 m.** The ask is
-   filed at `open/request_ghent_render_harness.md` *(verified —
+   filed at `open/request_suite_render_harness.md` *(verified —
    exists)*; **the answer, when it comes, does not live there.**
 
 > ★ **There is no "blocked-on-operator section" in `ROADMAP.md` for
 > these to go in** *(verified — grepped; no such heading exists in any
 > document)*. The dispatch asked for one by name. They are filed **here**
-> and mirrored into `ROADMAP.md`'s new Ghent workstream block, and the
+> and mirrored into `ROADMAP.md`'s new suite workstream block, and the
 > absence is recorded rather than papered over by inventing a section
 > and implying it was always there.
 
@@ -10789,10 +10967,10 @@ to skim it.
 
 | Item | Status now |
 |---|---|
-| **★★★ §7.16 newly-owed 1 — the lcms2 differential over the Ghent corpus** | **★★ DISCHARGED, AND THE PRE-REGISTERED CHECK PAID OFF.** §7.16 wrote: *"the first thing to check when it does land is whether it ran over the same 20 profiles — a differential over a different member set is a different claim (DL-031)."* **It did not.** Pass G touches **11 of the 20**, and **9 are untouched** *(carried from `TOLERANCES.md` §3.7.7, read)*. **§3.31 is therefore a claim about 11 profiles and §3.30 a claim about 20**, and the two counts are now written down side by side instead of one silently standing in for the other. ★★ **NC-198's class does NOT move, and the reason is narrower than it looks.** The X-Rite profile **is** among the 11, and NC-207 grades that very pair **at perceptual**. But the two measure **different quantities**: NC-198 records **three specific input→output triples with nothing compared to them**; NC-207 grades a **maximum device difference over a probe set**. A max being bounded does not certify any individual triple. ★ **Whether NC-198 should therefore be superseded by NC-207 is an OPEN question this filing does not settle** — it is listed so it is not settled by drift |
+| **★★★ §7.16 newly-owed 1 — the lcms2 differential over the suite corpus** | **★★ DISCHARGED, AND THE PRE-REGISTERED CHECK PAID OFF.** §7.16 wrote: *"the first thing to check when it does land is whether it ran over the same 20 profiles — a differential over a different member set is a different claim (DL-031)."* **It did not.** Pass G touches **11 of the 20**, and **9 are untouched** *(carried from `TOLERANCES.md` §3.7.7, read)*. **§3.31 is therefore a claim about 11 profiles and §3.30 a claim about 20**, and the two counts are now written down side by side instead of one silently standing in for the other. ★★ **NC-198's class does NOT move, and the reason is narrower than it looks.** The X-Rite profile **is** among the 11, and NC-207 grades that very pair **at perceptual**. But the two measure **different quantities**: NC-198 records **three specific input→output triples with nothing compared to them**; NC-207 grades a **maximum device difference over a probe set**. A max being bounded does not certify any individual triple. ★ **Whether NC-198 should therefore be superseded by NC-207 is an OPEN question this filing does not settle** — it is listed so it is not settled by drift |
 | **★★ §7.16 newly-owed 3 — correct the two line citations in `open/request_profile_population_census.md`** | **DISCHARGED by `icc-engineer`** *(verified — the file was read at the tip 2026-08-17: it now cites `NUMERIC_CLAIMS.md` **§3.19 / NC-145** and **§3.27** plus `compiled.rs:77` / `main.rs:421`, and keeps the wrong citations visible under *"★ Citation corrected the same day"* rather than deleting them)*. ★★ **And that file records the error as UPSTREAM** — *"the line numbers were carried from `docs/NEXT_SESSION.md`, which still contains them"*. **That upstream half is discharged too, this filing** (§5.8 of `NEXT_SESSION.md`, and **DL-048**) |
-| **★★ §7.16 newly-owed 4 — correct `GHENT_COMPATIBILITY.md` §4.3** | **DISCHARGED by `icc-engineer`** *(verified — §4.3 read)*. See **§3.30.10** item 1: paper exact to six decimals, **yellow's G differs by `2.455×10⁻³`**, and the file adds the **~250×** framing that makes the residual readable |
-| **§7.16 newly-owed 6 — de-duplicate `GHENT_COMPATIBILITY.md` §6's table** | **DISCHARGED** *(verified — grepped; *"K-only preservation (GWG 23.0)"* now appears **once** in §6)*. Cosmetic, and closed |
+| **★★ §7.16 newly-owed 4 — correct `SUITE_COMPATIBILITY.md` §4.3** | **DISCHARGED by `icc-engineer`** *(verified — §4.3 read)*. See **§3.30.10** item 1: paper exact to six decimals, **yellow's G differs by `2.455×10⁻³`**, and the file adds the **~250×** framing that makes the residual readable |
+| **§7.16 newly-owed 6 — de-duplicate `SUITE_COMPATIBILITY.md` §6's table** | **DISCHARGED** *(verified — grepped; *"K-only preservation (PCS 23.0)"* now appears **once** in §6)*. Cosmetic, and closed |
 | **★★ §7.16 newly-owed 5 — do §3.30's rows belong in the conformance aggregate?** | **★ ANSWERED BY FACT, in the direction §7.16 predicted.** Pass G's rows **do** have `tools/difftest` records and **are** in `pass=229`; **§3.30's eight rows still are not** and have **no emitted separation**. So the state is now permanent and explicit rather than *"currently true but unstated"*: **`pass=…` covers a SUBSET of this ledger's rows.** ★ The decision itself — whether §3.30's eight should be brought into the harness — **remains open**, and it is bounded by the same private-fixtures constraint (CI will never have them) |
 | **★★ §7.16 newly-owed 2 — re-derive the six `[REPORTED]` byte-scan leads** | **Still owed, untouched, second filing.** ★ **Pass G did not touch them**, and the `FOGRA27` / `ISO Coated v2 300% (ECI)` output-intent mismatch **is still the one a consumer would act on**. Nothing may be told to `pdfce` as fact until it is re-read |
 | **★★★ §7.15 newly-owed 1 — the Annex D.6.3 fixture / the operator decision on published numbers** | **Still owed, unchanged, and this filing must not be read as touching it.** **NC-001 remains this project's only `published-ground-truth` row** — §3.31.0 says so before any row. ★ **Pass G makes the gap structurally UNCLOSEABLE on this corpus** (DL-041/DL-047), which is not the same as making it smaller |
@@ -10806,7 +10984,7 @@ to skim it.
 | **§7.10 item 7 / the DL-014 citation audit** | **★ Still owed, FIFTEENTH filing.** ★★ **New surface, and this one is a real ICC.1 citation rather than an absence:** §3.31 cites **`ICC.1:2022` 6.3.4 / Annex F.3** (NC-215's expectation) and **`ICC.1:2001-04` Annex A.3.1.1** verbatim (NC-213), both sourced through `icc-conformance` and `icc-spec-librarian`. ★ **The `ICC.1:2001-04` quotation carries its own hazard and it is written into §3.31.5: that edition has NO defined verbal-form hierarchy, so its *"should"* must not be cited as an ISO-directives *should*** |
 | **§7.10 item 6 / §7.8 item 1 — the PCSLAB gray fixture** | **Still owed. ★ NA-008's PCSLAB gray arm remains the oldest UNMEASURED entry in §4** — ★★ **and it is now MORE conspicuous, not less**: Pass G's sweep includes a `Gray→ISO Coated v2` pair graded against lcms2 at `4×10⁻³` (NC-208, NC-209), so a **gray source** is now differentially tested while **gray as a PCSLAB destination arm** still is not |
 | **§7.10 item 1 — `dechk.obj` in the public repository** | **Carried, `unverified-this-filing`.** The repository root was not enumerated |
-| **§7.10 item 2 / §7.11 — pushes without a recorded go-ahead** | **Carried, `unverified-this-filing`. ★ Nothing this filing went near a remote.** ★ **This filing modifies `NUMERIC_CLAIMS.md`, `ARCHITECTURE.md`, `ROADMAP.md`, `SESSION_LOG.md` and `NEXT_SESSION.md`**; `tools/`, `TOLERANCES.md`, `GHENT_COMPATIBILITY.md` and every file under `crates/` are **untouched by it**. Rule 9 and DL-024 unchanged |
+| **§7.10 item 2 / §7.11 — pushes without a recorded go-ahead** | **Carried, `unverified-this-filing`. ★ Nothing this filing went near a remote.** ★ **This filing modifies `NUMERIC_CLAIMS.md`, `ARCHITECTURE.md`, `ROADMAP.md`, `SESSION_LOG.md` and `NEXT_SESSION.md`**; `tools/`, `TOLERANCES.md`, `SUITE_COMPATIBILITY.md` and every file under `crates/` are **untouched by it**. Rule 9 and DL-024 unchanged |
 | **§7.10 item 5 — `cargo fmt --check` in `tools/difftest`** | **Carried, `unverified-this-filing`** |
 | **§7.1 item 4 — a ground-truth row for chromatic adaptation** | **Still owed, unchanged.** ★ **NC-213 is about chromatic adaptation and is NOT this row**: it grades a **third party's authoring** against a clause, not iccce's adaptation against a published value |
 
@@ -10837,7 +11015,7 @@ to skim it.
    `icc-engineer`'s call, not `icc-conformance`'s and not this
    librarian's. ★ **Leaving it undecided is a position**, and today it is
    iccce's shipped behaviour.
-5. **★ The 9 untouched Ghent profiles and the `mBA ` (B2A) direction of
+5. **★ The 9 untouched suite profiles and the `mBA ` (B2A) direction of
    the X-Rite v4 profile.** `B2A0`'s tabulated **4096-entry B curve is a
    shape nothing in this suite evaluates** — that is a *capability* gap,
    not merely a coverage one, and it is the more interesting half.
@@ -10849,13 +11027,13 @@ to skim it.
 
 **★★★ Owed to the OPERATOR — unchanged, three decisions, and no agent may
 take any of them.** §7.16's list stands verbatim: **(1)** no public
-artifact may say *"Ghent"* without GWG's written permission — so *"passes
-the Ghent suite"* is **still not available** as `README.md`, release-note
+artifact may say *"suite"* without the suite publisher's written permission — so *"passes
+the print-conformance suite"* is **still not available** as `README.md`, release-note
 or crates.io copy, and **§3.31 does not change that by adding numbers**;
 **(2)** whether to pursue the developer Compliancy programme; **(3)**
 whether to scope the joint render-and-compare harness with `pdfce`. ★ **The
 fourth, enlarged item — may published numbers live in an MIT repository,
-now over FOUR corpora — is also unchanged**, and Ghent's terms remain the
+now over FOUR corpora — is also unchanged**, and the suite's terms remain the
 most restrictive of the four.
 
 ---
@@ -10886,7 +11064,7 @@ dated observation at `e21154c` and nothing here re-measures it.
 | Item | Status now |
 |---|---|
 | **★★★ §7.17 newly-owed 4 — does iccce follow lcms2 and substitute D50 for a mis-authored `wtpt`?** | **★★★ DISCHARGED, by decision. The answer is NO** — iccce uses `wtpt` as stored and **discloses** (A4c / NA-007). ★★ **Verified in the RUNNING THING** (`iccce inspect` prints the note), which is DL-046 applied to our own behaviour; the code existed and **the decision was what was missing**. §3.32.7. ★★★ **Note the wording: NC-213 the ROW is untouched and was never "pending"** — a measured row cannot be settled, and calling it settled would tell a future reader its measurement had been in doubt |
-| **★ §7.17 newly-owed 5 — the 9 untouched Ghent profiles and the `mBA ` direction** | **Untouched by this filing.** ★ But §3.32's NC-220 sweeps **all 20** `ghent-v50` profiles for the header-signature property, so *"9 profiles this project has never read"* is no longer accurate — **it is 9 profiles never put through a DIFFERENTIAL**, which is the claim §7.17 actually made. Stated so the two are not merged |
+| **★ §7.17 newly-owed 5 — the 9 untouched suite profiles and the `mBA ` direction** | **Untouched by this filing.** ★ But §3.32's NC-220 sweeps **all 20** `suite-v50` profiles for the header-signature property, so *"9 profiles this project has never read"* is no longer accurate — **it is 9 profiles never put through a DIFFERENTIAL**, which is the claim §7.17 actually made. Stated so the two are not merged |
 | **★★ §7.17 newly-owed 1 — §B has no attribution row** | **Still owed, untouched.** Owed to `icc-conformance` |
 | **★★ §7.17 newly-owed 2 — reconcile the two runs behind NC-214** | **Still owed, untouched, second filing** |
 | **★★ §7.17 newly-owed 3 / §7.14 newly-owed 4 — `ungraded=8` vs 12, and what `skip` counts** | **Still owed, untouched. FIFTH filing for the `skip` enumeration.** ★ **And this filing makes it worse rather than better**: §3.32's rows are produced by `cargo test --workspace` and the CLI, so **the ledger now has rows in three different runners** and `pass=…` covers fewer of its own rows than before, not more |
@@ -10944,7 +11122,7 @@ dated observation at `e21154c` and nothing here re-measures it.
    place it is defined**, which is the shape a class gets quietly promoted
    to a stronger one. Owed to this librarian, next filing.
 
-**★★★ Owed to the OPERATOR — §7.17's three Ghent decisions stand
+**★★★ Owed to the OPERATOR — §7.17's three suite decisions stand
 verbatim and no agent may take any of them.** ★★ **The fourth, standing
 item is ENLARGED AGAIN: *may published numbers live in an MIT
 repository?* now spans FIVE private corpora.** The fifth is
@@ -10953,7 +11131,7 @@ copyright strings across 46 files in six licensing postures**, from bare
 assertion with no grant to explicit permission to **sell** (§3.32.12).
 ★★★ **The restrictive reading applies to the whole folder, and the fact
 that TEN files carry a grant that would survive redistribution is
-recorded as a FACT that NO AGENT MAY ACT ON.** ★ **A "yes" on Ghent, or
+recorded as a FACT that NO AGENT MAY ACT ON.** ★ **A "yes" on suite, or
 on any of the other three, does not extend to this one, and a "yes" on
 this one would have to be file-by-file rather than folder-wide** — which
 is the distinction most likely to be lost if they are answered together.
@@ -11041,7 +11219,7 @@ working in `ICC_Spec/`, and two of this filing's items are owed there.
    has tripled since it was opened.
 
 **★★★ Owed to the OPERATOR — unchanged, verbatim, and NOT re-opened by
-anything in this filing.** §7.17's three Ghent decisions stand, and the
+anything in this filing.** §7.17's three suite decisions stand, and the
 fourth standing item — *may published numbers live in an MIT
 repository?* — **now has a sixth artifact in scope**: ICC's
 `srgb_icc_specification_of_srgb_2015.pdf`, which is **held in
@@ -11057,7 +11235,7 @@ this, and this one is a document rather than a corpus of files.**
 
 ---
 
-### 7.20 Status of §7 … §7.19, re-checked 2026-08-17 at the **Ghent boundary reclassification** filing
+### 7.20 Status of §7 … §7.19, re-checked 2026-08-17 at the **suite boundary reclassification** filing
 
 **★★★ NO ROW IS ADDED, CHANGED OR INVALIDATED BY THIS FILING.** The next
 free identifiers are **NC-243** and **NA-012**, exactly as they were.
@@ -11074,16 +11252,16 @@ the numbering is not read as a lost filing.
 
 #### What changed, and why it is a count rather than a claim
 
-**`docs/GHENT_COMPATIBILITY.md` §3.1 classified GWG 23.0 "Four different
+**`docs/SUITE_COMPATIBILITY.md` §3.1 classified PCS 23.0 "Four different
 Grays" as Tier A — "genuinely a CMM's problem". It is not.** It is
 device-space channel routing, the same boundary class as overprint, and
 it is `pdfce`'s. **`ARCHITECTURE.md` §5 — DL-059** holds the decision;
-**`GHENT_COMPATIBILITY.md` §3.5** holds the clause evidence. Consequences
+**`SUITE_COMPATIBILITY.md` §3.5** holds the clause evidence. Consequences
 that land in §7's register:
 
 | figure | was | is | class |
 |---|---|---|---|
-| Ghent patches, total | *"~48"* | **51** (`1-CMYK` **27**, `2-SPOT` **8**, `3-ICC-CMS` **16**) | a **count**, verified by enumeration on disk |
+| suite patches, total | *"~48"* | **51** (`1-CMYK` **27**, `2-SPOT` **8**, `3-ICC-CMS` **16**) | a **count**, verified by enumeration on disk |
 | `1-CMYK` + `2-SPOT` | *"32 patches"* | **35** | same |
 | patches touching colour conversion | 16 | **16 — unchanged and correct** | same |
 | **patches genuinely ours** | **six** | ★ **five** | an **ownership call**, not a measurement |
@@ -11097,7 +11275,7 @@ it can be overturned by argument rather than discovered as an absence**
 
 ★ **One corroboration is worth keeping.** The same enumeration returns
 **98 PDFs** across the whole tree, and **§3.30's independently obtained
-*"98 PDFs scanned"*** — produced by `tools/ghent/extract_icc.py` walking
+*"98 PDFs scanned"*** — produced by `tools/suite/extract_icc.py` walking
 the tree, not by counting files — **agrees exactly**. Two instruments,
 one number. That figure is **not** re-opened by this filing.
 
@@ -11120,7 +11298,7 @@ was not, and the sentence gave no way to tell them apart.
    read `.git/refs/heads/master` and `.git/logs/HEAD`; it has **no
    shell** and this is a statement about two files' contents, not about
    `git status`)*. **No number, row or claim from Pass K appears in this
-   filing or in `GHENT_COMPATIBILITY.md`.**
+   filing or in `SUITE_COMPATIBILITY.md`.**
 2. **★★ `passk.rs` cites `TOLERANCES.md` §3.10.8, which does not exist.**
    `TOLERANCES.md` §3 runs **3.1 … 3.9.8**; there is no §3.10 *(verified
    — grepped)*. A forward reference from in-flight code into a document
@@ -11143,7 +11321,7 @@ was not, and the sentence gave no way to tell them apart.
    and one of six was wrong. **The remaining five are "not yet checked",
    not "checked and confirmed"**, and §3.1 now says so. **Owed to
    `icc-engineer`.**
-5. **★ Register the GWG-2022 finding in `ICC_Spec`.** *"There is no GWG
+5. **★ Register the suite's publisher-2022 finding in `ICC_Spec`.** *"There is no the suite's publisher
    requirement 23.0; `n.m` is Output Suite **patch** numbering; the
    nearest construct is `D0013 "Black Colour"`, a definition consumed by
    the overprint requirements R0009–R0015"* currently lives only in
@@ -11151,9 +11329,9 @@ was not, and the sentence gave no way to tell them apart.
    distinguishes patch-documentation authority from specification
    authority belongs in the standards corpus**, not only in a
    compatibility document. **Owed to `icc-spec-librarian`.**
-6. **★★ A sweep was requested for the phrasing *"GWG 23.0 demands…"*, and
+6. **★★ A sweep was requested for the phrasing *"PCS 23.0 demands…"*, and
    THE PHRASE DOES NOT EXIST** in this repository *(verified — the whole
-   tree grepped for `GWG ?23`, `GWG230`, `Four.different.Gray`)*. What
+   tree grepped for `the suite's publisher ?23`, `PCS230`, `Four.different.Gray`)*. What
    exists is §3.1's **column heading** — *"the capability it demands of a
    CMM"* — applied to all six rows. **No filing was made against it**,
    and the non-existence is recorded rather than the absence being
@@ -11173,14 +11351,14 @@ was not, and the sentence gave no way to tell them apart.
   independent of everything above.**
 - ★★ **CMYK→CMYK black preservation remains genuinely this project's**,
   is unimplemented, and is still being built. **It is simply not what
-  GWG 23.0 tests.** **No scope is cut by this filing**, and reading one
+  PCS 23.0 tests.** **No scope is cut by this filing**, and reading one
   into it would be the over-reach DL-059 §"What this entry does NOT
   touch" exists to prevent.
 - **§3.30's and §3.31's rows, populations and coverage statements** — 20
   profiles and 11 profiles respectively — are **entirely unmoved**.
 - **The three operator decisions of §7.16 and the fourth standing item**
   are **not re-opened**. More clarity about *whose* a patch is does not
-  make *"passes the Ghent suite"* available; that is a permission
+  make *"passes the print-conformance suite"* available; that is a permission
   question, not an evidence one.
 
 ---
@@ -11349,7 +11527,7 @@ probe failing is evidence about an attribute, not about a library —
 
 #### 2. ★★ A fact in another document was wrong, and this ledger holds none of it
 
-`GHENT_COMPATIBILITY.md` §3.1's superseded GWG 23.0 row states
+`SUITE_COMPATIBILITY.md` §3.1's superseded PCS 23.0 row states
 *"DeviceGray 50 % and DeviceCMYK 0/0/0/50"*. **The readme's four panels
 are 25 % · 0/0/0/75 · 75 · 75**, and **`1 − 0.25 = 0.75`** is
 ISO 32000's own `k = 1.0 − gray` evaluated — so **the artwork is a third
@@ -11362,7 +11540,7 @@ prose.
 > here **only** because §7 tracks corrections to facts this project has
 > published, and because item 3 below is owed as a consequence.
 
-Filed at: `GHENT_COMPATIBILITY.md` §3.1 (extended supersession), §3.5
+Filed at: `SUITE_COMPATIBILITY.md` §3.1 (extended supersession), §3.5
 (dated addition), §3.4 (the incomplete intents table), §9 (a fourth
 provenance class, `[QUOTED-FROM-RASTER]`); decision **`ARCHITECTURE.md`
 §5, DL-061**.
@@ -11372,7 +11550,7 @@ provenance class, `[QUOTED-FROM-RASTER]`); decision **`ARCHITECTURE.md`
 1. **★★★ Two false statements in `tools/difftest/src/passk.rs`, one of
    which LEAVES THE REPOSITORY.** *(Verified — both lines read in the
    working tree at the tip.)*
-   - **`passk.rs:1342` and `:2446`** call `g = 0.5` ***"GWG's own patch
+   - **`passk.rs:1342` and `:2446`** call `g = 0.5` ***"the suite publisher's own patch
      value"***, and **`:2446` prints it into the Pass K report**. The
      patch's gray panel is **25 %**. **The ΔE is measured correctly;
      only its justification is false**, so **nothing recomputes and no
@@ -11383,12 +11561,12 @@ provenance class, `[QUOTED-FROM-RASTER]`); decision **`ARCHITECTURE.md`
      as its warrant.**
    - **Owed to `icc-engineer`** (the module's author's session). ★ This
      librarian does not edit code and has not.
-2. **★★ The GWG 23.0 patch PDF's CONTENT STREAM is owed a read.**
+2. **★★ The PCS 23.0 patch PDF's CONTENT STREAM is owed a read.**
    Everything above is **the README's declaration**. Whether the artwork
    paints those values is **unverified**, and this corpus **deliberately
-   ships two corrupted trap profiles** (`GHENT_COMPATIBILITY.md` §4.3),
+   ships two corrupted trap profiles** (`SUITE_COMPATIBILITY.md` §4.3),
    so *documentation matches artwork* is not free here. The file
-   is `…\3-ICC-CMS\Patches\GWG230_Four_different Grays_x1a.pdf`; **it
+   is `…\3-ICC-CMS\Patches\PCS230`; **it
    needs a content-stream read, not a raster.** ★ Owed **not because the
    answer is doubted** but because the claim's *class* would change.
    **Owed to whoever holds a shell.**
@@ -11409,13 +11587,13 @@ provenance class, `[QUOTED-FROM-RASTER]`); decision **`ARCHITECTURE.md`
 
 - **DL-059 is corroborated, not reopened.** The ownership call was right;
   the panel values argue *for* it.
-- **`GHENT_COMPATIBILITY.md` §3.3's `50 %` figures.** They belong to
-  **GWG 3.0** and are correct there. ★ They are also the most likely
+- **`SUITE_COMPATIBILITY.md` §3.3's `50 %` figures.** They belong to
+  **PCS 3.0** and are correct there. ★ They are also the most likely
   origin of the wrong pair — *a reading, labelled as one* in DL-061 —
   and sweeping them up would be an over-correction.
 - **Every Pass K number.** `TOLERANCES.md` §3.10 stands, and **neither
   `passk.rs` defect appears anywhere in `docs/`** *(verified — grepped
-  for `g = 0.5`, `patch value`, `GWG's own`, `50 %`, `midpoint` and
+  for `g = 0.5`, `patch value`, `the suite publisher's own`, `50 %`, `midpoint` and
   `at_half`)*.
 - **Sourcing permissions.** DL-002 and DL-007 are untouched. **A route
   for READING a file already held is not a route for OBTAINING one**,
@@ -11523,10 +11701,10 @@ document is in when it is next read.
 |---|---|---|
 | `passk.rs:227` cites **PDF 32000-1 §8.6.4.4** for the `DeviceGray → DeviceCMYK` device rule; the rule is **§10.3.3** | §7.20 newly-owed 1 | **DISCHARGED.** *(Verified — grepped `passk.rs` at the tip: **`8.6.4.4` does not occur anywhere in the file**; `§10.3.3` occurs at `:324`, `:438`, `:815`, `:911`, `:916`, `:1385`, `:1402`, `:1425`, `:2699`.)* |
 | `passk.rs` cites `TOLERANCES.md` **§3.10.8, which did not exist** | §7.20 newly-owed 2 | **DISCHARGED.** *(Verified — `TOLERANCES.md:3163` is `#### 3.10.8 ★★★ The boundary, SETTLED by the librarian`.)* ★ The forward reference was legitimate *until it landed*; it landed with a destination. |
-| **Two false statements in `passk.rs`, one of which LEAVES THE REPOSITORY** — `g = 0.5` called *"GWG's own patch value"*, printed into the Pass K report; and the patch's fourth panel called an `ICCBased` gray | §7.22 newly-owed 1 | **DISCHARGED, and repaired in the stronger form.** *(Verified — `:1397` now reads *"This was documented as 'GWG's own patch value' until…"*, and the **emitted report string at `:2738`** now says *"★ NOT a GWG patch value — patch 23.0's gray panel is 25 %, its CMYK panel 0/0/0/75; the earlier attribution here was false and the number is unaffected"*. **`ICCBased` no longer occurs in the file.**)* ★★ **The correction was carried in the emitted string rather than deleted** — the shape of the error survives, which is DL-061 applied to itself. |
+| **Two false statements in `passk.rs`, one of which LEAVES THE REPOSITORY** — `g = 0.5` called *"the suite publisher's own patch value"*, printed into the Pass K report; and the patch's fourth panel called an `ICCBased` gray | §7.22 newly-owed 1 | **DISCHARGED, and repaired in the stronger form.** *(Verified — `:1397` now reads *"This was documented as 'the suite publisher's own patch value' until…"*, and the **emitted report string at `:2738`** now says *"★ NOT a the suite's publisher patch value — patch 23.0's gray panel is 25 %, its CMYK panel 0/0/0/75; the earlier attribution here was false and the number is unaffected"*. **`ICCBased` no longer occurs in the file.**)* ★★ **The correction was carried in the emitted string rather than deleted** — the shape of the error survives, which is DL-061 applied to itself. |
 
 ★ **Not discharged and not touched by this filing:** §7.22's owed items 2
-(the GWG 23.0 patch PDF's **content stream** is owed a read) and 3 (the
+(the PCS 23.0 patch PDF's **content stream** is owed a read) and 3 (the
 multi-engine-agreement sweep must widen to *"glyph-sensitive **or possibly
 set in a figure**"*). **NC-230's condition (b)** — §7.21's owed item 1 —
 **remains unblocked and still UNDONE.**
@@ -11673,7 +11851,7 @@ set in a figure**"*). **NC-230's condition (b)** — §7.21's owed item 1 —
   `icc__ref__black_preservation.md` — the closed negative this section
   rests on is **untouched and was not re-derived here**; it is carried
   from §7.20 *(where it is recorded as verified exhaustively)*.
-- **DL-059 / DL-061 and `GHENT_COMPATIBILITY.md`.** The `passk.rs`
+- **DL-059 / DL-061 and `SUITE_COMPATIBILITY.md`.** The `passk.rs`
   repairs in item 3 above **corroborate** DL-061; no ownership call moves,
   and **no Pass K number depended on the false attribution** — the ΔE was
   always measured correctly and only its justification was wrong.
@@ -11796,7 +11974,7 @@ row count equals the number of departures.
 
 **The done-when was:** *NA-012's cost field carries a measured ΔE2000 with
 its pair, its direction and its intent.* **Met verbatim** — pair
-`ISO Coated v2 300% (ECI)` → `GWG_GenericCMYK`, direction stated **and
+`ISO Coated v2 300% (ECI)` → `PCS_GenericCMYK`, direction stated **and
 its reverse measured**, intent media-relative, no `--bpc`. **NC-269**,
 and NA-012's cost field is rewritten with the original preserved beside
 it.
@@ -12051,7 +12229,7 @@ from documents that **disagree**, and the document that would adjudicate
 - **That anything was pushed, tagged, published or reserved.** ★★ The refs finding is a reading of a local file; **this filing fetched nothing, published nothing and authorises nothing** (rule 9).
 - **That `A57` is closed, that lcms2 is right, or that sRGB is C⁰.** ★★★ **lcms2 implements C⁰** is the whole of §A's verdict; **rule 7 cuts both ways** and an implementation is not the standard.
 
-### 7.27 Status re-checked 2026-08-25 at the **GWG010 shading-cell** filing. **The first filing this project has made against a WORKING TREE WITH NO COMMIT BEHIND IT — and the first whose only comparison partner is a photograph**
+### 7.27 Status re-checked 2026-08-25 at the **PCS010 shading-cell** filing. **The first filing this project has made against a WORKING TREE WITH NO COMMIT BEHIND IT — and the first whose only comparison partner is a photograph**
 
 **★★ FIVE ROWS ARE ADDED: `NC-301` … `NC-305`, in the new §3.38.** The
 next free identifiers are now **`NC-306`** and **`NA-013`**. Two
@@ -12060,7 +12238,7 @@ free is **`DL-071`**.
 
 #### 1. ★★ NEWLY OWED — the harness's own documentation names a function that does not exist, and states a rounding rule its code does not implement
 
-Both are in `tools/ghent/shading_cell.py`, and **both were found by
+Both are in `tools/suite/shading_cell.py`, and **both were found by
 reading the source against the crate rather than by reading the
 dispatch**:
 
@@ -12082,7 +12260,7 @@ never fires, and is filed anyway because **a stated method the code does
 not implement is a claim like any other**, and the docstring is what the
 next session will trust.
 
-**Owed to `icc-engineer`** — `tools/ghent/shading_cell.py` is not this
+**Owed to `icc-engineer`** — `tools/suite/shading_cell.py` is not this
 role's file and **was not edited.** *Done when: the two docstrings name
 `MatrixTrc::pcs_to_device` and describe `np.round`'s actual tie rule (or
 the code is changed to match the docstring).*
@@ -12101,7 +12279,7 @@ the code is changed to match the docstring).*
 no evidence this role holds, and **it was not guessed** — a fabricated tag
 signature in a census is `DL-067`'s failure mode at a smaller scale.
 **Owed to `icc-engineer`.** *Done when: `iccce inspect`'s tag table for
-that profile is pasted into `GHENT_COMPATIBILITY.md` §4.7 in full, which
+that profile is pasted into `SUITE_COMPATIBILITY.md` §4.7 in full, which
 costs one command and closes it permanently.*
 
 #### 3. ★★★ NEWLY OWED — **the 2026-08-21 session has no `SESSION_LOG` entry**, and this filing is not the place it gets one
@@ -12119,7 +12297,7 @@ repointing, and leak guards taken to `1e-12`.)*
 was not filed — §7.26 opened with exactly that observation about Pass L.
 ★★★ **This filing does NOT write that entry**, and the reason is the rule
 rather than reluctance: **the dispatch that reached this role carried
-evidence for the GWG010 measurement and for nothing else.** Filing a
+evidence for the PCS010 measurement and for nothing else.** Filing a
 session from `NEXT_SESSION.md`'s own account would be filing a document's
 claims as measurements — **the exact substitution `§0` exists to
 prevent.** **Owed to `icc-engineer`:** a dispatch carrying that session's
@@ -12163,7 +12341,7 @@ and unobtained**, as at every filing since §7.11.
 
 #### 7. ★★★ What this filing does NOT claim about the repository
 
-- **That `tools/ghent/shading_cell.py` is committed.** ★★ The dispatch says it is; **the reflog has no 2026-08-25 entry and both refs read `842d3b8`**, whose subject is a 2026-08-21 memory commit. **What is VERIFIED is that the file exists in the working tree and reads as described right now.** No row carries a commit hash, because there is none to carry. → ★★★ **It never was committed, and it never will be: the file was DELETED later the same day** (`DL-071`, §7.28). ★ **The bullet is left as written because it was true on its date** — and it is the one place in this ledger where *"there is no commit hash to carry"* turned out to be permanent rather than temporary.
+- **That `tools/suite/shading_cell.py` is committed.** ★★ The dispatch says it is; **the reflog has no 2026-08-25 entry and both refs read `842d3b8`**, whose subject is a 2026-08-21 memory commit. **What is VERIFIED is that the file exists in the working tree and reads as described right now.** No row carries a commit hash, because there is none to carry. → ★★★ **It never was committed, and it never will be: the file was DELETED later the same day** (`DL-071`, §7.28). ★ **The bullet is left as written because it was true on its date** — and it is the one place in this ledger where *"there is no commit hash to carry"* turned out to be permanent rather than temporary.
 - **That the working tree is otherwise clean, or that these are the only changes.** A `git status` is a shell operation and **this role has none.**
 - **That any 8-bit count above was produced by the run described.** ★★ Every number in §3.38's tables is **`[REPORTED]` by one runner on one machine on one day**. What this role verified is the **apparatus** — the constants, the sweep's member set, the sampling geometry, the quantiser, and the existence and location of the clamp the finding turns on.
 - **That Acrobat used any particular source profile.** ★★★ Stated as an **open confound** at §3.38.2 and repeated here because it is the single most quotable over-claim available in this material.
@@ -12194,17 +12372,17 @@ file."*** Filed as **`ARCHITECTURE.md` DL-071**.
 > `git add -f` away from the entanglement the decision was made to
 > prevent.**
 
-*(★ **VERIFIED** — `.gitignore`'s former `tools/ghent/shading_cell.py`
+*(★ **VERIFIED** — `.gitignore`'s former `tools/suite/shading_cell.py`
 entry is gone, replaced by a comment block that states this reasoning and
 names the case file's location; the case file is at
-`D:/Dev/temp/iccce-gwg/gwg010_shading.case.json`, outside the working
+`D:/Dev/temp/iccce-suite/pcs1_010_shading.case.json`, outside the working
 tree, and was read at this filing.)*
 
 #### 2. ★★ The citation sweep: 13 pointers, all repointed — and the exact wording of *"zero"* matters
 
 **Thirteen** `shading_cell` citations existed across the tracked and local
 documents *(★ **VERIFIED** by search, and the count needed a correction
-of method — see item 3)*: `GHENT_COMPATIBILITY.md` **4**,
+of method — see item 3)*: `SUITE_COMPATIBILITY.md` **4**,
 `NUMERIC_CLAIMS.md` **5**, `SESSION_LOG.md` **2**, `ROADMAP.md` **2**.
 
 ★★★ **What is claimed afterwards, stated precisely: ZERO of them is a
@@ -12219,7 +12397,7 @@ to a destination that never held the thing.
 #### 3. ★★★ NEWLY LEARNED, and it is a hazard to THIS ROLE'S CORE FUNCTION: a gitignore-respecting search silently under-counts this project's citations
 
 The first sweep run here returned **9** hits, not 13. The four missing
-ones are all in **`docs/GHENT_COMPATIBILITY.md`** — which is
+ones are all in **`docs/SUITE_COMPATIBILITY.md`** — which is
 **gitignored** (operator decision 2026-08-18) — and the search tool
 **honours `.gitignore` when it walks a directory** while searching a file
 named explicitly. ★ A shell `grep -rn "..." docs/*.md` expands the glob
@@ -12231,7 +12409,7 @@ citations"* is a sentence this role writes often, and one of this
 project's most citation-dense documents is **invisible to the default
 sweep**. **The failure mode is a clean sweep that missed a whole file.**
 ★ **Standing method note, applicable to every future sweep:**
-`docs/GHENT_COMPATIBILITY.md` **must be searched by name**, in addition to
+`docs/SUITE_COMPATIBILITY.md` **must be searched by name**, in addition to
 any directory sweep, and a sweep that does not name it is incomplete. The
 count in item 2 is stated only because both were done.
 
@@ -12252,7 +12430,7 @@ it was **checked, not assumed**:
 The case file enumerates **twelve** tag signatures for the embedded
 output-intent profile, and the twelfth — absent from every previous
 enumeration — is there *(★ **VERIFIED** as a reading of the case file;
-the **full inventory is written into `GHENT_COMPATIBILITY.md` §4.7.3**,
+the **full inventory is written into `SUITE_COMPATIBILITY.md` §4.7.3**,
 which is the untracked document, because that is where the licensed
 detail belongs and is where the owed item said it should land)*.
 
@@ -12292,7 +12470,7 @@ the OPM 1 cell's pixel box went into the **untracked** narrative and the
 colour §3.38.2 already published. **Owed to the operator:** a decision on
 §3.38's existing text, of which the available shapes are (a) accept it as
 within fair quotation, (b) move the structural detail into
-`GHENT_COMPATIBILITY.md` and leave pointers, or (c) treat the ledger as
+`SUITE_COMPATIBILITY.md` and leave pointers, or (c) treat the ledger as
 already entangled and revisit `DL-071`'s scope. ★ **Recording the
 question is what this role owes; answering it is not.**
 
@@ -12313,6 +12491,155 @@ question is what this role owes; answering it is not.**
 - **That the case file's contents are correct.** ★ It was read as a **document**; **its structural claims about the PDF are `icc-engineer`'s**, and neither the PDF nor the extracted profile was opened here — both are outside the repository and binary.
 - **That anything was pushed, tagged, published or reserved.** ★ Reading two ref files asserts nothing about a remote. **This filing fetched nothing, published nothing and authorises nothing** (rule 9).
 - **That the request channel was polled.** ★ This role was again instructed **not** to arm a monitor. **No file in the channel was read at this filing at all**, and no statement is made about its contents.
+
+---
+
+### 7.29 Status re-checked 2026-08-25, at the **consumer-requirements** filing. **The first filing whose content is entirely REQUIREMENTS FROM SOMEBODY ELSE — one ledger row that this project did not measure, one design conflict with our own shipped code, and a rule of this project's own applied AGAINST the dispatch that requested the filing**
+
+**★ ONE ROW IS ADDED: `NC-307`, in the new §3.39.** The next free
+identifiers are now **`NC-308`** and **`NA-013`** *(still unconsumed —
+declined for the fourth time; nothing here is an approximation)*. **One
+decision-log entry is filed: `DL-072`**; the next free is **`DL-073`**.
+**`TOLERANCES.md` is untouched — no tolerance, no gate, nothing to
+justify.** **One new evidence class: `producer-corpus-census`** (§1).
+
+#### 1. ★★★ What this filing IS, because it is a shape this ledger has not had before
+
+`pdfce` answered seven questions this project asked, in full, on
+2026-08-25. **Four of the answers are constraints on the shape of an API
+this project has not designed yet**, and one of them **contradicts code
+that has already shipped**. Nothing was measured here; nothing was run;
+no colour value moved.
+
+★★ **The durable half is filed OUT of the channel and INTO `docs/`**, as
+`CLAUDE.md` rule 10 requires — *"the channel folder is in NO git
+repository, deliberately … nothing may exist only there."* Placement, and
+the reasoning is that **a requirement must be filed where the person who
+will violate it is standing**:
+
+| what | where | why there |
+|---|---|---|
+| the four API requirements | **`ARCHITECTURE.md` §4.1** | §4 is *"How `pdfce` consumes it"* — the section a future session opens when designing the bridge-facing surface |
+| the unknown-intent conflict | **`ARCHITECTURE.md` `DL-072`** | it is a collision between two defensible positions, which is what the decision log is for |
+| the eager-cache consequence | **`ARCHITECTURE.md` `DL-059` §2**, dated addendum | ★ filed **at the costing item itself**, not in a new place, so it cannot be read without it |
+| the `wasm32` gate's blind spot | **`ARCHITECTURE.md` §3.1** + **new invariant 7** | our own documentation advertises that we gate `wasm32`; the correction belongs beside the advertisement |
+| the census | **`NUMERIC_CLAIMS.md` §3.39** (`NC-307`) | it is a number, and every number this project states goes in the ledger |
+
+#### 2. ★★★ NEWLY OWED — a measurement with NO TRACKED ANSWER, recorded as a gap so silence does not imply it was never taken
+
+`pdfce` censused **two** populations. §3.39.3 records why only one is in
+this document: **`CLAUDE.md` rule 11 forbids adding a suite-derived
+measurement to a tracked file, and this file is tracked and public.**
+
+★★★ **The consequence is a real hole and it is stated as one.** The
+question *"how many distinct output-intent profiles does one document
+carry?"* — the one that decides whether a destination transform is built
+once per document or per page — **was measured, and its answer exists in
+no tracked file.** It lives in `docs/SUITE_COMPATIBILITY.md` §10, which
+is untracked, local to one machine, and unbacked.
+
+★★ **That is not a new problem and it is already before the operator**:
+`NEXT_SESSION.md`'s 2026-08-21 block records that two channel exchanges
+**cannot be closed at all** for exactly this reason — the channel contract
+requires a durable home *in git, backed up*, and the suite's durable home is
+neither. **This filing adds a third instance rather than resolving it**,
+and resolving it is an operator decision, not a librarian's.
+
+#### 3. ★★ A RULE OF THIS PROJECT WAS APPLIED AGAINST THE DISPATCH THAT REQUESTED THE FILING
+
+The dispatch asked, in terms, for **both** populations as ledger rows,
+with patch identifiers and file names stripped. **That was declined**, and
+the reasoning is §3.39.3's: **rule 11 is written about the material, not
+about the measurer**, and *"pdfce measured their own copy"* is a party
+distinction the rule does not draw.
+
+★ **Recorded here rather than only in the reply, because the failure mode
+it guards is specific and cheap to repeat:** a rule with a clear subject
+gets narrowed by a plausible-sounding exemption offered in good faith by
+someone who is not the operator. **`DL-038`/`DL-040`'s clause applies —
+exemptions are declared, never acquired.** ★ **The dispatch was right
+about everything else in the same item**, including the instruction that
+identifiers must not reach a tracked file, which is the instruction that
+made the conflict visible in the first place.
+
+#### 4. ★★ `DL-072` is a conflict this ledger cannot adjudicate, and the entry says so
+
+**iccce's CLI refuses an unknown intent name with exit `2`, deliberately,
+with a doc comment giving rule 1 as the reason** *(★ **VERIFIED** in live
+source at this filing — `crates/iccce-cli/src/main.rs`)*. **The consumer
+requires a library API to substitute and disclose instead of refusing**,
+citing a normative obligation in ISO 32000-2 §8.6.5.8 *(★ `[REPORTED]` by
+`pdfce` — **NOT re-derived here**, and owed a re-derivation before
+anything is built on it; this project has been caught by an attractive
+wrong clause number twice already, `DL-057`)*.
+
+★★★ **What `DL-072` decides is only that neither may be changed by citing
+the other**, and it names `IntentProvenance` as a **candidate** after
+checking that the two existing disclosure mechanisms do not generalise
+*(★ **VERIFIED** — `DestinationProvenance` is a payload-free two-variant
+enum; `SpecDeviation` carries `declined: Vec<Signature>` and is about
+**iccce** declining a capability, which is the opposite shape; and
+`IntentProvenance` **does not exist anywhere in the repository today**)*.
+
+#### 5. ★★ NEWLY OWED — two hazards that generalise beyond colour, and one measurement of our own gate
+
+1. **★★★ Measure whether `cargo build` for `wasm32` differs from
+   `cargo check` for a thread spawn.** `pdfce` measured **`check`**; our CI
+   job runs **`build`** *(★ **VERIFIED** — read at this filing)*. §3.1
+   therefore states the honest form — *"not known to catch it, with
+   positive evidence from a sibling about the adjacent command"* — and
+   **not** *"measured not to catch it."* ★ **The distinction is the
+   difference between a measured blind spot and an assumed one**, and it
+   costs one command to close.
+2. **★ Amend `.github/workflows/ci.yml`'s own comment block.** That block
+   enumerates carefully what the job does and does not prove and **the
+   threading hole is not among them**. `icc-engineer`'s file, not this
+   role's; **the durable statement is already in `ARCHITECTURE.md` §3.1
+   and invariant 7**, so nothing is lost if the comment is never amended —
+   but a reader forms the wrong belief at the comment, not at the
+   architecture document.
+3. **★ Escalate both hazards to the cross-project RAGs.** *"A wasm32
+   compile gate cannot catch a threading regression"* and *"a byte-grep
+   over PDFs measures zero and is believed — inflate first"* are both
+   general. `D:\dev\rag\rust\` and `C:\personal_rag\pdf\` are the
+   indicated homes. **Not done at this filing** *(this role wrote no file
+   outside `D:\Dev\iccce\docs\`)*, and recorded so it is not lost.
+
+#### 6. ★ Corroboration recorded, and deliberately NOT converted into an action item
+
+`pdfce` checked their own repository against the split this project made
+under `DL-071` and reported that **theirs is worse**: a tool in their
+public MIT repository names a licensed suite many times, names individual
+patches in its own documentation, and quotes one patch's printed caption
+verbatim. **They state it is their problem to fix.**
+
+★★ **Filed here as evidence that `DL-071`'s boundary is REAL and was not
+over-cautious** — a sibling project, independently, hit the same line and
+crossed it further, and **found it only by running the check rather than
+by reasoning about it** *(their own note: they had drafted the opposite
+sentence before running the grep)*. ★ **It creates no obligation on this
+project and is not an owed item here.** ★★★ **And the specifics are not
+reproduced** — the tool's name, the patch identifiers and the caption are
+in the channel file and stay there, under rule 11.
+
+#### 7. ★ Owed items carried forward — status, each with its reason
+
+- **§7.27 item 3 (the 2026-08-21 session has no `SESSION_LOG` entry)** — ★★ **DISCHARGED, indirectly and partially.** That session's two substantive findings *(the `convert_buffer` black-preservation defect and the unlabelled `~14 s` timing)* are recorded in `ARCHITECTURE.md` `DL-059` and `NEXT_SESSION.md`'s 2026-08-21 block. **What is still absent is a `SESSION_LOG` entry for it**, so the log still jumps 2026-08-20 → 2026-08-25. ★ Graded honestly: **the findings are not lost; the session's own record is.** Third consecutive filing at which no evidence for it was carried.
+- **★★ `NC-268`'s two corrections are THIS ROLE'S and are STILL NOT DONE** — the guard floor (`1e-12`) and `1.106780e-1` → `1.1067772e-1`. **Third consecutive filing.** The reason is unchanged and still correct: a correction is a **new row carrying `supersedes: NC-268`**, and a new row needs the **measurement's provenance**, which no dispatch has carried. ★ **A re-based number is not a stale one** — filing it from a summary line would make the correction second-hand.
+- **§7.28 item 6 (the operator decision on §3.38's existing licensed text)** — **STILL OPEN, UNMOVED.** ★ **This filing sharpened it rather than moving it**: rule 11 now exists and governs everything *added*, so the open question is precisely and only about what is *already there*.
+- **§7.26 item 1, §7.26 item 3, §7.24 items 1–2, §7.23 items 4–7** — **NOT CHECKED at this filing.** ★ Recorded as *not checked* rather than *unmoved*, which is the distinction **`DL-062`** exists to preserve.
+- **The standing debt** — **UNMOVED at its fifteenth-plus consecutive filing.** No `published-ground-truth` row for any transform; **`IEC 61966-2-1` remains paywalled and unobtained.** ★ `NC-307` does not move it in either direction: it is not correctness evidence of any kind and was never a candidate.
+
+#### 8. ★★★ What this filing does NOT claim about the repository
+
+- **That anything was committed by it.** ★★ **`.git/refs/heads/master` reads `b5d0ccb7f482b23ec159e34f5d1b2c6e544079cf`** *(★ **VERIFIED** — plain text file, read at this filing)*. **This filing's edits are in no commit.** Per **`DL-068`** a hash is carried rather than a derived count. ★ **`refs/remotes/origin/master` was NOT read at this filing**, so **nothing whatever is asserted about the remote** — not that it matches, not that it differs.
+- **That `v0.2.0` was tagged, released, or that CI is green.** ★★★ The dispatch states all three. **No evidence for any of them was carried and none was independently read here.** A tag ref, if consulted, would be an **annotated tag object and not the tagged commit** — this project has been caught by exactly that before. **This filing asserts none of it**, and no document was edited to say any of it.
+- **That anything in `pdfce`'s repository is at any particular state.** ★ Four of their capability claims were **verified by reading their live source at this filing** and are labelled as such; **everything else from their reply is `[REPORTED]`**, including every number in `NC-307`, the ISO 32000-2 §8.6.5.8 obligation, the `f32` buffer decision, and the `cargo check`/threading finding. **No `pdfce` commit hash was carried and none is invented.**
+- **That this project's `wasm32` job has been measured against a thread spawn.** ★★★ It has not. §3.1 says so in the text, deliberately, rather than borrowing the sibling's measurement of a different command.
+- **That `TOLERANCES.md`, `README.md` or any source file was read for staleness.** ★ No sweep was run at this filing. `TOLERANCES.md` was not edited and was not checked.
+- **That the licensed population's census is correct, or that `SUITE_COMPATIBILITY.md` §10 now exists.** ★★ §10 is **written by this filing**; its contents are `[REPORTED]` from the reply at exactly the strength of the reply. **Nothing was verified against the corpus, which this role has not opened.**
+- **That anything was pushed, published, tagged or reserved.** ★ **This filing fetched nothing, published nothing and authorises nothing** (rule 9).
+- **That the request channel was polled.** ★ This role was again instructed **not** to arm a monitor, and did not. ★★ **One channel file WAS read** — the reply this filing is about — because it is the primary artifact and the dispatch is a report of it. **No statement is made about the channel's other contents.**
 
 ---
 

@@ -17,7 +17,7 @@ rival reading, so the stated separation (`5.4e-6` against a `2e-4` bound)
 was a **manufactured alternative**. Fixing that exposed the real fault,
 which nothing could see until then: **the `2e-4` `s15Fixed16`
 encoding-floor justification did not hold for the profiles it was
-gating.** Ghent's sRGB colorants sum to the PCS white only to `1.885e-4`
+gating.** the suite's sRGB colorants sum to the PCS white only to `1.885e-4`
 — ≈**12 lsb** — because the *published* sRGB primaries do not sum to D50
 to the encoding lsb. **The row had been PASSING inside a bound its own
 justification could not support**, which is

@@ -27,13 +27,13 @@ reference render. Every device value, every pixel coordinate, every profile
 path, every structural fact about a source file lives in a **case file** that
 is supplied at the command line and is **NOT part of this repository**.
 
-That is not a style preference. `docs/GHENT_COMPATIBILITY.md` was untracked by
+That is not a style preference. `docs/SUITE_COMPATIBILITY.md` was untracked by
 operator decision on 2026-08-18 because detailed analysis of, and quotation
 from, a licensed third-party test suite does not belong in an MIT repository:
 the suite's licence carries an affirmative-notice requirement and a
 "commercial context" restriction, and the decision was to avoid creating that
 entanglement at all rather than to rely on a fair-quotation argument. The first
-version of this tool (`tools/ghent/shading_cell.py`, 2026-08-25) inlined a
+version of this tool (`tools/suite/shading_cell.py`, 2026-08-25) inlined a
 licensed patch file's shading dictionary, its indirect-object numbers, its
 endpoint colours and the identity of the press profile it embeds — and so
 inherited the same problem and had to be untracked too.

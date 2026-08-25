@@ -179,7 +179,7 @@ fn cmyk_source_into_the_constructed_srgb_destination() {
     // The discrimination check above proves only that distinct inputs
     // give distinct outputs. It would still pass if the CLUT's channels
     // were permuted, or if cyan and magenta were swapped — which is
-    // precisely the defect the Ghent suite ships a deliberate trap
+    // precisely the defect the print-conformance suite ships a deliberate trap
     // profile for ("Switch magenta cyan"). These assertions catch that,
     // and they need no oracle at all because they follow from what the
     // inks ARE:

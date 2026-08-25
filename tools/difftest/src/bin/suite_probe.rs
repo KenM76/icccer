@@ -1,4 +1,4 @@
-//! # `ghent_probe` — exploratory measurement over the Ghent v5.0 profile corpus
+//! # `suite_probe` — exploratory measurement over the print-conformance suite profile corpus
 //!
 //! **This binary is an instrument, not a gate.** It prints numbers; it grades
 //! nothing and it never fails. Its job is to let a tolerance be *derived* from
@@ -8,9 +8,9 @@
 //! ## What it needs
 //!
 //! - `$ICCCE_PRIVATE_FIXTURES` (or the default `D:\Dev\iccce-private-fixtures`)
-//!   containing `ghent-v50\`. **Nothing from that directory may be committed to
+//!   containing `suite-v50\`. **Nothing from that directory may be committed to
 //!   this repository and no value may be copied out of it into the repo** —
-//!   the Ghent suite licence forbids redistribution, and the profiles inside
+//!   the print-conformance suite licence forbids redistribution, and the profiles inside
 //!   carry Adobe's / ECI's / X-Rite's separate licences. See `LEGAL.md` §3 and
 //!   `docs/NEXT_SESSION.md` §4.
 //! - the pinned oracle (`ICCCE_TRANSICC` or `vendor/build-msvc/transicc.exe`);
@@ -28,7 +28,7 @@ fn corpus() -> Option<PathBuf> {
     let root = std::env::var_os("ICCCE_PRIVATE_FIXTURES")
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from(r"D:\Dev\iccce-private-fixtures"));
-    let g = root.join("ghent-v50");
+    let g = root.join("suite-v50");
     if g.is_dir() { Some(g) } else { None }
 }
 
@@ -163,7 +163,7 @@ fn end_to_end(
 
 fn main() {
     let Some(g) = corpus() else {
-        println!("ghent-v50 corpus not present: set ICCCE_PRIVATE_FIXTURES");
+        println!("suite-v50 corpus not present: set ICCCE_PRIVATE_FIXTURES");
         return;
     };
     let oracle = match Oracle::locate() {

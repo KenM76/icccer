@@ -49,7 +49,7 @@ the same predicate on two profiles. Separation `4.207 049×10⁻¹`.
   32 767,5; (3) darkness on the **encoded** `L*` fraction, because legacy
   PCSLAB's top node decodes to `L* = 100.390 6` and an `L*`-based model clamps
   **inside the cell the K ramp's white end lands in**. ★ The price: the fixture
-  is *less like a press than anything in Ghent*. Say it as loudly as the gain.
+  is *less like a press than anything in suite*. Say it as loudly as the gain.
 - ★★ **Build the regression guard on inputs the FEATURE cannot legally touch.**
   `F4`/`F7` use 50 **chromatic grays** `(c, 6c/7, 0.984127c, k)` — the family
   for which this `A2B0` gives `a* = b* = 0` exactly. All of `C M Y` strictly
@@ -71,7 +71,7 @@ the same predicate on two profiles. Separation `4.207 049×10⁻¹`.
   dead-band index — the sibling has a 3-node grid and `node(&[li,4,4])` would
   have panicked. A panic is the worst outcome: the suite dies and nobody learns
   which fixture was wrong.
-- ★ **`E1` NOT repointed, `E6` NOT deleted.** The Ghent row stays red and
+- ★ **`E1` NOT repointed, `E6` NOT deleted.** The suite row stays red and
   skipping; `E6`'s `ZERO-SEPARATION` is the measurement that says *why* a second
   fixture had to exist. §F closes the **gradeability** gap, not the
   **population** gap.

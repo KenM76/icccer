@@ -38,7 +38,7 @@ line drift is a property of the *append-heavy ledger*, not of citation.
 **★ A SIXTH failure of a different kind, found 2026-08-17 at the Pass G
 filing: a bare `§4.4` with NO DOCUMENT NAMED.** Nothing in `docs/` has a
 §4.4 carrying the constant it was attached to; the two that exist —
-`LEGAL.md` §4.4 (*"What is not claimed"*) and `GHENT_COMPATIBILITY.md`
+`LEGAL.md` §4.4 (*"What is not claimed"*) and `SUITE_COMPATIBILITY.md`
 §4.4 (*"ICC v4 evaluation on a vendor-authored profile"*) — are **both
 plausible enough to be read as confirmation.** A §-pointer without its
 document is the same disease without even a line number to blame.

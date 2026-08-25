@@ -29,7 +29,7 @@ being misread, and the misreading is the risk it was written to prevent.
 ### The three things worth carrying
 
 **1. A third-party corpus can supply a CATEGORICAL expectation — and it
-is a rare, strong shape.** GWG ships **deliberately corrupted** profiles
+is a rare, strong shape.** the suite's publisher ships **deliberately corrupted** profiles
 (red/green swapped; cyan/magenta swapped) as discriminators. The correct
 answer is a fact about the **file's own declared content**, so there is
 no oracle to share a misreading with and no transcription to get wrong.
@@ -40,11 +40,11 @@ the named rival is what `pdfce` does today (ISO 32000-1 Table 66
 `/Alternate`). ★★★ **What it never licenses: any sentence with a number
 in it.** A CMM wrong by 20 ΔE2000 passes it, provided it swaps.
 
-**2. But that corpus can never supply a NUMBER (DL-047).** The Ghent
+**2. But that corpus can never supply a NUMBER (DL-047).** The suite
 suite states **no tolerance, no reference measurement, no expected
 colour value anywhere**; its criterion is *"a clear X"* at 0.5 m and
 *"A faint X is NOT a failure"*. ★ **It also contradicts itself exactly
-on our topic** — GWG 13.0 flags a rendering-intent failure with a
+on our topic** — PCS 13.0 flags a rendering-intent failure with a
 **faint green X**, the symbol already ruled not-a-failure — so **intent
 handling is untested by its own criterion** and any intent claim must be
 graded against ICC.1's text. Also new: class **`acceptance`** (the code
@@ -63,18 +63,18 @@ should NOT have moved?*
 
 ### How to apply
 
-- **Never let a Ghent-measured number be quoted as ground truth or as a
+- **Never let a suite-measured number be quoted as ground truth or as a
   justified tolerance.** It inherits the class of the apparatus.
 - **Watch for a numeric aside attached to a categorical row** — that is
   how a row acquires a bound nobody derived. One arrived this session
   (*"unchanged to 3 decimal places"* for a difference of `2.455×10⁻³`)
   and was corrected in the flattering direction.
-- ★★★ **No public artifact may say "Ghent" without GWG's WRITTEN
+- ★★★ **No public artifact may say "suite" without the suite publisher's WRITTEN
   permission** — README, release notes, crates.io metadata. Certification
   is sold to print service providers; developers are directed to a
-  separate programme reachable only by contacting GWG. This is a
+  separate programme reachable only by contacting the suite's publisher. This is a
   claim-bearing-copy matter and an **operator** decision.
-- **The `ghent-v50/` fixtures are the fourth private corpus and have the
+- **The `suite-v50/` fixtures are the fourth private corpus and have the
   most restrictive terms** (no commercial use, no redistribution, an
   **affirmative** notice obligation, plus unassessed per-profile
   licences). ★ A *"yes"* to the standing operator question about

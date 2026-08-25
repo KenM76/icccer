@@ -628,7 +628,7 @@ fn v2_cmyk_mft1_lab() -> Vec<u8> {
 //
 // Pass K's row `passk/E/k-only-in-implies-k-only-out` grades exactly that, and
 // it is **deliberately red** until the feature is built. But it is measured on
-// the licensed Ghent corpus, so **it skips in CI, permanently** — the red is
+// the licensed suite corpus, so **it skips in CI, permanently** — the red is
 // visible only on a machine that holds a corpus that cannot be committed.
 //
 // The obvious remedy is to point the row at the committed synthetic CMYK

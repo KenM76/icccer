@@ -39,4 +39,4 @@ because a self-echo fires once per file and is obvious in the moment —
 it is a *future* session, reading the event without the context of having
 written the file, that would misread it.
 
-Related: [[project-ghent-compatibility]].
+Related: [[project-suite-compatibility]].

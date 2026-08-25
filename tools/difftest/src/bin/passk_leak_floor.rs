@@ -77,7 +77,7 @@
 //!
 //! Requires the shipped `iccce` binary (`$ICCCE_BIN` or
 //! `target/release/iccce`) and **nothing else** — the two fixtures it needs
-//! are committed. The licensed Ghent corpus (`$ICCCE_PRIVATE_FIXTURES`) adds
+//! are committed. The licensed suite corpus (`$ICCCE_PRIVATE_FIXTURES`) adds
 //! one more pair, `ISO Coated v2 300% (ECI)`, which is `E7`'s own destination;
 //! absent it, that block says so and the rest still runs.
 //!

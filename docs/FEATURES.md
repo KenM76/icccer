@@ -208,7 +208,7 @@ UNMEASURED", which was true when written and is now false)*:
 
 > **`3.681203` ΔE2000 max, `1.580674` mean** between the preserved and
 > the colorimetric answer, over the 101-point qualifying set, on
-> **`ISO Coated v2 300% (ECI)` → `GWG_GenericCMYK`**, **media-relative**,
+> **`ISO Coated v2 300% (ECI)` → `PCS_GenericCMYK`**, **media-relative**,
 > **no black-point compensation**. `NC-269`, `NUMERIC_CLAIMS.md` §3.36;
 > registered against `NA-012`.
 
@@ -249,6 +249,30 @@ iccce defaults to **media-relative**. ICC.1's only word on a default is
 an **informative NOTE** (9.2.39) and it favours **perceptual**, which is
 lcms2's choice. Neither is required or forbidden — so this is a
 disclosed divergence, not a standard being followed.
+
+### ★★★ An unrecognised intent NAME is refused, not substituted — and that is a **CLI** decision that a library API may not inherit
+
+`iccce transform --intent <name>` accepts exactly `media-relative`,
+`perceptual`, `saturation` and `absolute`. **Anything else exits `2`**,
+and the reason is in the source: *"Refuse an unknown name rather than
+substituting: a substituted intent produces plausible wrong colour."*
+That is **rule 1** — *a wrong colour looks exactly like a right one* —
+applied where the name was typed by a human who can be told.
+
+★★★ **Do not read this as the library's policy, because a PDF consumer
+cannot live with it.** ISO 32000-2 **§8.6.5.8** permits a rendering-intent
+name outside the standard four and **obliges a reader to substitute a
+default** *(`[REPORTED]` by `pdfce`, 2026-08-25 — not re-derived here)*.
+At the library layer a refusal is **a page that will not render**, and the
+standard says it must. **The two surfaces face opposite failure modes and
+the answer for one is not evidence about the other.**
+
+**No decision has been taken and nothing has changed.** The conflict, both
+positions, the layer distinction and a candidate mechanism
+(`IntentProvenance` — disclose the substitution rather than perform it
+silently, the shape `DestinationProvenance` already uses) are filed at
+`ARCHITECTURE.md` **`DL-072`**. ★ **A future commit that makes the CLI and
+the library agree needs two reasons, not one.**
 
 ### The profile header's rendering-intent field is not consumed
 
@@ -340,14 +364,25 @@ wrong.
   nothing for the time**, because the ~1.4 Mpix/s is grid evaluation
   and is per-pixel however the pixel arrived. Deferred to Pass 6 under
   the project's *optimise only after correct* rule.
+  > ★★★ **Upgraded 2026-08-25 from *requested* to *load-bearing*.**
+  > `pdfce` states that its compositor buffer is **`f32` per element**,
+  > **decided 2026-08-21 and not negotiable**, because it is what makes a
+  > full-page CMYK colorant buffer fit at all — they already carry an open
+  > ceiling item where a full-page render above **~375 DPI refuses the
+  > buffer outright**. *(Their decision and their number, `[REPORTED]`;
+  > nothing was measured here.)* ★★ **So this is no longer "a consumer
+  > would prefer narrower floats" — it is a memory ceiling the named
+  > consumer has already hit**, and it is the one capability gap between
+  > the two projects that they call load-bearing rather than tidy.
+  > `ARCHITECTURE.md` §4.1.4.
 - **Profile creation** from measurement data (Pass 10, not sized).
 - **HDR** — BT.2100 PQ/HLG, BT.2020/2100 primaries (Pass 9, blocked on
   standards sourcing).
 - **iccMAX / ICC.2** — identified and refused, not implemented.
-- **Any published claim of Ghent PDF Output Suite compatibility.** The
+- **Any published claim of the print-conformance suite compatibility.** The
   suite is used privately to check behaviour; **publishing a pass/fail
-  claim, a screenshot, or the word "Ghent" in release material needs
-  GWG's written permission** and is an operator decision.
+  claim, a screenshot, or the word "suite" in release material needs
+  the suite publisher's written permission** and is an operator decision.
 - **Any claim of validation against web-platform-tests.** Its 3-Clause
   BSD licence clause 3 independently bars that wording.
 

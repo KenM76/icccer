@@ -165,8 +165,8 @@ pipeline turns on.
 ## ★ One thing that is an OPERATOR question, not a session one
 
 **Two channel exchanges cannot be closed at all**, and `INDEX.md` now says so
-rather than fudging it. The Ghent workstream's durable home is
-`docs/GHENT_COMPATIBILITY.md`, **deliberately untracked** (operator decision
+rather than fudging it. The suite workstream's durable home is
+`docs/SUITE_COMPATIBILITY.md`, **deliberately untracked** (operator decision
 2026-08-18, `5e1e5df`, reasoning in `.gitignore` lines 29–50). The channel's
 contract requires a durable home **in git, backed up**; this one is local-only,
 on one machine, and unbacked. Applied literally and recorded, rather than
@@ -202,7 +202,7 @@ accurate and still the reference — but **its "WHAT TO DO NEXT" items 1,
 | 2. The CLI's `header.intent` line has no test | ★ **DONE** — `crates/iccce-cli/tests/cli_header_intent_line.rs`, commit `19d36e9`. Five tests, and the `& 0xFFFF` masking edit was **applied** to confirm three of them turn red, then reverted. |
 | 3. `Malformation`'s doc comment is falsified | ★ **DONE** — **DL-063**, commit `abdf445`. Three sites carried the false reading, not one; all corrected. |
 | 4. No `published-ground-truth` row for any transform | **UNCHANGED — operator decision.** CHF 210 for IEC 61966-2-1 pp. 16–51 is still the only route. |
-| 5. The perceptual cost of black preservation | ★★★ **DONE — `NA-012` retired.** `3.681203` ΔE2000 max / `1.580674` mean, `ISO Coated v2 300% (ECI)` → `GWG_GenericCMYK`, media-relative. Commit `3c93b62`, Pass K **§G**, `NC-269 … NC-280`. |
+| 5. The perceptual cost of black preservation | ★★★ **DONE — `NA-012` retired.** `3.681203` ΔE2000 max / `1.580674` mean, `ISO Coated v2 300% (ECI)` → `PCS_GenericCMYK`, media-relative. Commit `3c93b62`, Pass K **§G**, `NC-269 … NC-280`. |
 | 6. No difftest row for the compiled path | **UNCHANGED, and now sharper**: every §G row drives the **CLI**, and `iccce bench` still cannot reach `--preserve-black`. |
 | 7. `blind = 11`, Pass I `chad` rows | **UNCHANGED** — still judged intrinsic, still leave alone. |
 
@@ -461,16 +461,16 @@ remain outstanding **with pdfce**: `request_profile_population_census.md`
 and `request_header_tag_channel_disagreement.md`.
 
 ★ **Not yet written, and it should be**: a note correcting pdfce's belief
-that GWG 130 carries *"two deliberately corrupted profiles"*. It carries
+that PCS130 carries *"two deliberately corrupted profiles"*. It carries
 **four**, iccce reports `malformations: 0` on **all** of them, and the
 trap is **semantic, not structural** — the colorants are channel-permuted
 (red↔green in RGB, magenta↔cyan in CMYK), which was confirmed in the
-running transform, not read off a tag table. **GWG 130 is therefore
+running transform, not read off a tag table. **PCS130 is therefore
 undiagnosable by profile validation**, which matters because it means
 pdfce's failure is confirmation it is not applying the embedded
 `ICCBased` profile at all — the right conclusion, for a different reason
 than they recorded. ★ **None of those measured numbers may enter this
-repository** (`GHENT_COMPATIBILITY.md` §2.3); the durable, corpus-free
+repository** (`SUITE_COMPATIBILITY.md` §2.3); the durable, corpus-free
 part is the structural claim.
 
 ---
@@ -533,7 +533,7 @@ is a state, not a backlog to clear on your own initiative.
   green and their separations never moved.
 - **A false capability retracted**: PDF pages *can* be rasterised here
   via `pypdfium2`; only `pdftoppm` is missing. DL-060.
-- **DL-059 / DL-061**: GWG patch 23.0 is PDF device routing, not a CMM
+- **DL-059 / DL-061**: the suite's publisher patch 23.0 is PDF device routing, not a CMM
   problem — we had claimed it. Four independent confirmations.
 - **Licence manifest fixed** — `iccce-measure` had no `clarify` block and
   would have shipped `Copyright (c) <year> <copyright holders>`.
@@ -623,8 +623,8 @@ outstanding **with pdfce**: `request_profile_population_census.md` and
 column* in the first's corpus sweep — say so if they schedule them
 apart).
 
-★ **`reply_ghent_render_harness.md` is the highest-value thing in that
-folder.** pdfce built the harness and measured: **22 of 51 Ghent patches
+★ **`reply_suite_render_harness.md` is the highest-value thing in that
+folder.** pdfce built the harness and measured: **22 of 51 suite patches
 show a trap X, 20 of them pdfce's own features, and zero attributable to
 an iccce defect.** Overprint is 10 of the 22 — the largest bucket by
 nearly two, and the first *evidence* for the boundary note's claimed
@@ -666,22 +666,22 @@ Tip is still **`e21154c`**. Files touched this session:
 
 | file | what |
 |---|---|
-| `docs/GHENT_COMPATIBILITY.md` | **NEW.** The Ghent workstream in full. Mine. |
+| `docs/SUITE_COMPATIBILITY.md` | **NEW.** The suite workstream in full. Mine. |
 | `docs/DEFAULT_DESTINATION.md` | **NEW.** The sRGB-fallback decision. Mine. |
-| `tools/ghent/extract_icc.py` | **NEW.** Profile extractor. Mine. |
-| `tools/difftest/src/passg.rs`, `src/bin/ghent_probe.rs`, `lib.rs`, `main.rs` | **NEW/edited** by `icc-conformance`. Pass G. |
+| `tools/suite/extract_icc.py` | **NEW.** Profile extractor. Mine. |
+| `tools/difftest/src/passg.rs`, `src/bin/suite_probe.rs`, `lib.rs`, `main.rs` | **NEW/edited** by `icc-conformance`. Pass G. |
 | `docs/NUMERIC_CLAIMS.md`, `ARCHITECTURE.md`, `ROADMAP.md`, `SESSION_LOG.md`, `NEXT_SESSION.md`, `TOLERANCES.md`, `tools/difftest/README.md` | filed by `icc-librarian` / `icc-conformance` |
 | `.claude/agent-memory/icc-engineer/*` | 3 new memories + index |
 | `D:\Dev\iccce-private-fixtures\README.md` | 4th corpus's terms |
 
 ## What landed, in one line each
 
-- **Ghent PDF Output Suite 5.0 is now a compatibility target** (operator,
+- **the print-conformance suite is now a compatibility target** (operator,
   2026-08-17): *compatibility, never certification* — certification needs
   a press and is organisationally closed to a library anyway. See
-  `docs/GHENT_COMPATIBILITY.md`.
+  `docs/SUITE_COMPATIBILITY.md`.
 - **20 real-world ICC profiles extracted** from 98 PDFs / 121 embeddings
-  into `D:\Dev\iccce-private-fixtures\ghent-v50\`. **20/20 parse, 0
+  into `D:\Dev\iccce-private-fixtures\suite-v50\`. **20/20 parse, 0
   malformations.** ★ Doubly licence-encumbered; **never commit, never
   copy a value into the repo.**
 - **Pass G** built by `icc-conformance`: suite `pass=157` → **`pass=229
@@ -924,7 +924,7 @@ lcms2 and substitute D50 for a mis-authored `wtpt`? Today it does not;
 **leaving it undecided is a position and it is the shipped behaviour.**
 My provisional answer is **report, don't substitute** (rule 6). It was
 deliberately held pending the sRGB sourcing — **which has now landed, so
-it can be settled.** See `GHENT_COMPATIBILITY.md` §8.1 and §4.5b.
+it can be settled.** See `SUITE_COMPATIBILITY.md` §8.1 and §4.5b.
 
 **4. The `/N` gap, re-scoped — my earlier scoping of it was wrong.**
 `Chain::input_channels()` exists and is public (in
@@ -952,18 +952,18 @@ CMYK print profiles (see above); the `f32`/`u8` evaluation surface
 ## Owed to the operator — do not decide these
 
 1. **Commit / push authorisation.** Nothing committed, nothing pushed.
-2. **No public artifact may say "Ghent"** without GWG's written
+2. **No public artifact may say "suite"** without the suite publisher's written
    permission — certification is sold to print service providers, and
    vendors are directed to a separate programme. Claim-bearing copy.
 3. `color.org/chardata/rgb/srgb.pdf`, and `ICC.1:2010-12` (still the
    highest-value download outstanding).
-4. Whether to scope the joint Ghent render-and-compare harness with
-   `pdfce` (`open/request_ghent_render_harness.md`).
+4. Whether to scope the joint suite render-and-compare harness with
+   `pdfce` (`open/request_suite_render_harness.md`).
 
 ## Channel state — three files owed a reply BY pdfce, one owed BY us
 
-Written by us and open: `note_ghent_output_suite.md`,
-`request_ghent_render_harness.md`,
+Written by us and open: `note_suite_output.md`,
+`request_suite_render_harness.md`,
 `request_profile_population_census.md`,
 `reply_iccbased_colour_spaces.md`. Still owed **by us**: a reply to
 `request_pdf_output_intent_cmyk.md` — answer it as a **conformance**
@@ -1516,7 +1516,7 @@ and therefore appears in one population and not the other.)*
   §-number with no document named.** Nothing in `docs/` has a §4.4
   carrying a recommended-grid constant; the **two** §4.4 sections that do
   exist are `LEGAL.md` §4.4 (*"What is not claimed"*) and
-  `GHENT_COMPATIBILITY.md` §4.4 (*"ICC v4 evaluation on a vendor-authored
+  `SUITE_COMPATIBILITY.md` §4.4 (*"ICC v4 evaluation on a vendor-authored
   profile"*) *(verified — grepped, 2026-08-17)*. **Both destinations are
   plausible enough to be read as confirmation**, which is this section's
   thesis arriving without even a line number to blame. Replaced in §3.0

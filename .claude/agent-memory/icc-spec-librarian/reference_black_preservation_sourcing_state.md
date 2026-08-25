@@ -1,6 +1,6 @@
 ---
 name: black-preservation-sourcing-state
-description: ★ A52 IS ISO 32000-2-ONLY (PDF 1.7 §10.2 answers it the OTHER way with a `shall … only`, so BOTH editions put the gray leg on pdfce's side) and the reserved-colourant-name delta is SCOPE not existence; §2's PDF duplication exception is RETIRED — PDF_Spec now holds clause 10. Cholewo’s K_MIN/K_MAX ARE defined (per-colour, in Cholewo’s own words) and that is exactly what makes his method un-implementable as a policy — plus: black/K-only preservation is NOT in ICC.1 (both held editions, exhaustively searched) — the gray→CMYK rule is normative in ISO 32000 §10.3.3/§10.4.2.3 and belongs to pdfce; lcms2's intents 10–15 are self-labelled non-ICC; no published ΔE exists; and "GWG 23.0" could not be verified as a requirement
+description: ★ A52 IS ISO 32000-2-ONLY (PDF 1.7 §10.2 answers it the OTHER way with a `shall … only`, so BOTH editions put the gray leg on pdfce's side) and the reserved-colourant-name delta is SCOPE not existence; §2's PDF duplication exception is RETIRED — PDF_Spec now holds clause 10. Cholewo’s K_MIN/K_MAX ARE defined (per-colour, in Cholewo’s own words) and that is exactly what makes his method un-implementable as a policy — plus: black/K-only preservation is NOT in ICC.1 (both held editions, exhaustively searched) — the gray→CMYK rule is normative in ISO 32000 §10.3.3/§10.4.2.3 and belongs to pdfce; lcms2's intents 10–15 are self-labelled non-ICC; no published ΔE exists; and "PCS 23.0" could not be verified as a requirement
 metadata:
   type: reference
 ---
@@ -64,7 +64,7 @@ for A31/A47 — no new blocker was created.
 `DeviceGray`→`DeviceCMYK` rule (`c=m=y=0`, **`k = 1.0 − gray`**) is
 `shall`-level **PDF**: ISO 32000-1 **§10.3.3**, ISO 32000-2 **§10.4.2.3**.
 `Separation /Black` and `DeviceN [/Black]` bind to the K colourant by
-**§8.6.6.4**'s `shall`. **So all four GWG "grays" agree inside the PDF
+**§8.6.6.4**'s `shall`. **So all four the suite's publisher "grays" agree inside the PDF
 processor before any conversion — pdfce's job, the same boundary class as
 overprint.** iccce owns only CMYK→CMYK and the non-CMYK-native device.
 **PDF, not ICC, also names the harm** — §8.6.5.7 NOTE 2 (both editions):
@@ -100,16 +100,16 @@ but it measures *ink optimisation*, and the paper disqualifies its own
 digital numbers as self-referential. **Zeng's three SPIE papers are
 UNREAD (paywalled), so "no number exists anywhere" is not claimed.**
 
-**★ Premise check that failed, and it is worth carrying: "GWG 23.0
-(Four different Grays)" is not a GWG requirement.** GWG 2022 IDs are
+**★ Premise check that failed, and it is worth carrying: "PCS 23.0
+(Four different Grays)" is not a the suite's publisher requirement.** PCS2022 IDs are
 `Dxxx`/`Rxxx`; there is no 23.0. The four-way equivalence exists as
 **`D0013 "Black Colour"`** — a *definition consumed by the overprint
 requirements*, not a rendering requirement. The `n.m` form matches the
-**Ghent PDF Output Suite patch** numbering. Settling it needs the Output
+**the print-conformance suite patch** numbering. Settling it needs the Output
 Suite download. *(Lesson shape: an engineer's citation label is a claim
 too — see [[verify-document-identity-from-title-page]].)*
 
-Site postures for `gwg.org`, `library.imaging.org`, `spiedigitallibrary.org`
+Site postures for `the suite publisher's website`, `library.imaging.org`, `spiedigitallibrary.org`
 are now in [[icc-tos-automated-access-blocker]]. **Use
 `api.crossref.org/works/<doi>` for exact citations** — SPIE's own pages
 return empty content to WebFetch.

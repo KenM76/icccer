@@ -1,6 +1,6 @@
 ---
 name: iccce-pass-status
-description: iccce status snapshot to the 2026-08-25 `0.2.0` CHANGELOG filing (Cargo.toml is 0.2.0 and the five inter-crate literals are hoisted into [workspace.dependencies]; PASS G AND PASS H SHIPPED IN 0.1.0, NOT in this release — verify a release range against the reflog, because refs/tags/v0.1.0 is an ANNOTATED TAG OBJECT and is not the tagged commit; "NC-001 is the only published-ground-truth row" was RETIRED at §7.19 and the live sentence is the narrower "no published-ground-truth row for any TRANSFORM"; THIRD_PARTY_LICENSES.md and docs/FEATURES.md §2/§4/§6 went stale on the bump; no ledger row, next free still NC-307/NA-013) (earlier the same day: the APPARATUS-SPLIT filing (both refs STILL 842d3b8, nothing committed; the measuring harness tools/ghent/shading_cell.py is DELETED and replaced by tracked tools/patch-compare/ + a case file OUTSIDE the repo; NC-306 filed in §3.38.9 + §7.28, next free NC-307/NA-013; DL-071 the split pattern, next free DL-072; a gitignore-respecting search UNDER-COUNTS this project's citations 9-of-13 because docs/GHENT_COMPATIBILITY.md is gitignored — search it BY NAME) (earlier the same day: the GWG010 SHADING-CELL filing, 34th SESSION_LOG entry; the harness the dispatch called "committed" was in NO commit; NC-301…NC-305 in §3.38 + §7.27, next free NC-306/NA-013; DL-069 a fitted table cannot reproduce a normative CLAMP — and our own CLUT smooths the same way, the clamp surviving only because it is applied ANALYTICALLY AFTER interpolation; DL-070 forbids any ΔE against a screen capture; new WEAKEST class rendering-cross-check-screen-capture; NOT "Acrobat used FOGRA39"; the 2026-08-21 session still has no SESSION_LOG entry) (earlier: the 2026-08-20 PASS L + profileID filing (33rd SESSION_LOG entry; tip 0a88ad6; the FIRST filing ever made against work COMMITTED AND NEVER FILED — 4 commits, zero doc mentions; lcms2 implements the C0 reading of sRGB but A57 STAYS OPEN; §C is SELF-COMPARISON not a cross-check, so 14/11/2-of-5169 is one class weaker than the dispatch assumed; two of our own doc-comment claims FALSIFIED because a claim in a UNIT is silently scoped to that unit's domain; DL-067 a fabricated value is a FORGED CREDENTIAL, DL-068 DL-062's revisit-if has fired twice so carry ref HASHES not a push count; NC-281…NC-300 in §3.37 + §7.26, next free NC-301/NA-013 — NA-013 declined a THIRD time, on the ground that H.273 governs CICP not ICC profiles) (earlier: the 2026-08-19 PERCEPTUAL-COST filing, 32nd SESSION_LOG entry, tip 3c93b62; NA-012's cost is MEASURED at 3.681203 dE2000 and its UNMEASURED retired; NC-269…NC-280 in the new §3.36 + §7.25, next free NC-281/NA-013 — NA-013 again NOT consumed; DL-065 + DL-066 filed, 66 decision-log entries; suite pass=353 fail=0 skip=9) (earlier: the LEAK-GUARD INJECTION filing, 31st SESSION_LOG entry; DL-064 filed, 64 decision-log entries; NC-267 + NC-268 filed in the new §3.35 + §7.24, next free NC-269/NA-013 — NA-013 deliberately NOT consumed; reflog tip abdf445, two commits past the measured 400179b; the injection DISCHARGED the Pass K debt and found that below 5.0e-2 the WHOLE SUITE is green with a defect compiled in) (earlier: the DISCLOSURE-CHANNEL filing, 30th entry, DL-063, no row moved, tip 400179b) (earlier: the 2026-08-18 STALE-STATUS filing (29th SESSION_LOG entry; DL-062 filed with TWO instances, 62 decision-log entries; NO row moved, next free still NC-267/NA-013; §7.23 item 1 DISCHARGED but its difftest-row debt item 4 STAYS OPEN) (earlier: the PASS K filing, tip 60c32dd, clean; NC-243…NC-266 + NA-012 filed — largest row block ever, and ZERO of them published-ground-truth because A51 makes it impossible; E8/NC-256 is rule 7's strongest form — the ORACLE is wrong by algebra; §D is self-comparison of the ORACLE; the compiled-path defect was already fixed in a05476c so 0.617121 is HISTORY; next free NC-267/NA-013, DL-061 newest, 27 log entries) (earlier: the first-use-of-the-raster filing at tip 1a0509b; Pass K LANDED as 846952f; the raster capability is now VERIFIED not REPORTED; GWG 23.0's row was wrong about its NUMBERS too — 25%/0/0/0/75, which is ISO 32000's formula evaluated; two false statements found in passk.rs PROSE, one printed into the report; next free NC-243/NA-012, DL-061 newest, 27 session-log entries) (ORIGINAL SCOPE COMPLETE — Passes 0–7 DONE; ICC's own sRGB document INVERTED the 12-ULP attribution — it is the FILE's error; NC-230 is the ledger's SECOND published-ground-truth row so "NC-001 is the only one" retires; a shipped crash fixed; crates.io names checked but only 5 of 6 and NOT a reservation; GWG 23.0 reclassified OUT of "ours" so six-genuinely-ours becomes FIVE and the suite is 51 patches not ~48; Pass K exists in the WORKING TREE and in NO commit; PDF page RENDERING turns out to be available via pypdfium2 so NC-230's second reading is unblocked; next free NC-243/NA-012, DL-060 newest, 26 session-log entries; Pass H filed at pass=274)) — what remains is Pass 8 in pdfce, purchased documents, Passes 9–10, standing debts
+description: iccce status snapshot to the 2026-08-25 CONSUMER-REQUIREMENTS filing (35th SESSION_LOG entry; tip b5d0ccb read from refs/heads/master, origin NOT read; pdfce answered seven questions and four answers CONSTRAIN our API — take &[u8] and DO NOT RETAIN, per-call intent, must ACCEPT an unknown intent name, f32 is load-bearing; DL-072 = the CLI's deliberate exit-2 refusal vs ISO 32000-2 §8.6.5.8's obligation to substitute, an open question decided by nobody; NC-307 + new class producer-corpus-census, 0 of 350 documents name >1 intent so the ~13s/290MiB eager 4x2 cache is WASTE — dated addendum at DL-059 §2; the licensed population's numbers went to untracked SUITE_COMPATIBILITY.md §10 because rule 11 is about the MATERIAL not the MEASURER, and the dispatch's request for them as ledger rows was DECLINED; new standing invariant 7 — no thread spawned, because the wasm32 job cannot catch a threading regression; next free NC-308/NA-013/DL-073) (earlier: the `0.2.0` CHANGELOG filing — Cargo.toml is 0.2.0 and the five inter-crate literals are hoisted into [workspace.dependencies]; PASS G AND PASS H SHIPPED IN 0.1.0, NOT in this release — verify a release range against the reflog, because refs/tags/v0.1.0 is an ANNOTATED TAG OBJECT and is not the tagged commit; "NC-001 is the only published-ground-truth row" was RETIRED at §7.19 and the live sentence is the narrower "no published-ground-truth row for any TRANSFORM"; THIRD_PARTY_LICENSES.md and docs/FEATURES.md §2/§4/§6 went stale on the bump; no ledger row, next free still NC-307/NA-013) (earlier the same day: the APPARATUS-SPLIT filing (both refs STILL 842d3b8, nothing committed; the measuring harness tools/suite/shading_cell.py is DELETED and replaced by tracked tools/patch-compare/ + a case file OUTSIDE the repo; NC-306 filed in §3.38.9 + §7.28, next free NC-307/NA-013; DL-071 the split pattern, next free DL-072; a gitignore-respecting search UNDER-COUNTS this project's citations 9-of-13 because docs/SUITE_COMPATIBILITY.md is gitignored — search it BY NAME) (earlier the same day: the PCS010 SHADING-CELL filing, 34th SESSION_LOG entry; the harness the dispatch called "committed" was in NO commit; NC-301…NC-305 in §3.38 + §7.27, next free NC-306/NA-013; DL-069 a fitted table cannot reproduce a normative CLAMP — and our own CLUT smooths the same way, the clamp surviving only because it is applied ANALYTICALLY AFTER interpolation; DL-070 forbids any ΔE against a screen capture; new WEAKEST class rendering-cross-check-screen-capture; NOT "Acrobat used FOGRA39"; the 2026-08-21 session still has no SESSION_LOG entry) (earlier: the 2026-08-20 PASS L + profileID filing (33rd SESSION_LOG entry; tip 0a88ad6; the FIRST filing ever made against work COMMITTED AND NEVER FILED — 4 commits, zero doc mentions; lcms2 implements the C0 reading of sRGB but A57 STAYS OPEN; §C is SELF-COMPARISON not a cross-check, so 14/11/2-of-5169 is one class weaker than the dispatch assumed; two of our own doc-comment claims FALSIFIED because a claim in a UNIT is silently scoped to that unit's domain; DL-067 a fabricated value is a FORGED CREDENTIAL, DL-068 DL-062's revisit-if has fired twice so carry ref HASHES not a push count; NC-281…NC-300 in §3.37 + §7.26, next free NC-301/NA-013 — NA-013 declined a THIRD time, on the ground that H.273 governs CICP not ICC profiles) (earlier: the 2026-08-19 PERCEPTUAL-COST filing, 32nd SESSION_LOG entry, tip 3c93b62; NA-012's cost is MEASURED at 3.681203 dE2000 and its UNMEASURED retired; NC-269…NC-280 in the new §3.36 + §7.25, next free NC-281/NA-013 — NA-013 again NOT consumed; DL-065 + DL-066 filed, 66 decision-log entries; suite pass=353 fail=0 skip=9) (earlier: the LEAK-GUARD INJECTION filing, 31st SESSION_LOG entry; DL-064 filed, 64 decision-log entries; NC-267 + NC-268 filed in the new §3.35 + §7.24, next free NC-269/NA-013 — NA-013 deliberately NOT consumed; reflog tip abdf445, two commits past the measured 400179b; the injection DISCHARGED the Pass K debt and found that below 5.0e-2 the WHOLE SUITE is green with a defect compiled in) (earlier: the DISCLOSURE-CHANNEL filing, 30th entry, DL-063, no row moved, tip 400179b) (earlier: the 2026-08-18 STALE-STATUS filing (29th SESSION_LOG entry; DL-062 filed with TWO instances, 62 decision-log entries; NO row moved, next free still NC-267/NA-013; §7.23 item 1 DISCHARGED but its difftest-row debt item 4 STAYS OPEN) (earlier: the PASS K filing, tip 60c32dd, clean; NC-243…NC-266 + NA-012 filed — largest row block ever, and ZERO of them published-ground-truth because A51 makes it impossible; E8/NC-256 is rule 7's strongest form — the ORACLE is wrong by algebra; §D is self-comparison of the ORACLE; the compiled-path defect was already fixed in a05476c so 0.617121 is HISTORY; next free NC-267/NA-013, DL-061 newest, 27 log entries) (earlier: the first-use-of-the-raster filing at tip 1a0509b; Pass K LANDED as 846952f; the raster capability is now VERIFIED not REPORTED; PCS 23.0's row was wrong about its NUMBERS too — 25%/0/0/0/75, which is ISO 32000's formula evaluated; two false statements found in passk.rs PROSE, one printed into the report; next free NC-243/NA-012, DL-061 newest, 27 session-log entries) (ORIGINAL SCOPE COMPLETE — Passes 0–7 DONE; ICC's own sRGB document INVERTED the 12-ULP attribution — it is the FILE's error; NC-230 is the ledger's SECOND published-ground-truth row so "NC-001 is the only one" retires; a shipped crash fixed; crates.io names checked but only 5 of 6 and NOT a reservation; PCS 23.0 reclassified OUT of "ours" so six-genuinely-ours becomes FIVE and the suite is 51 patches not ~48; Pass K exists in the WORKING TREE and in NO commit; PDF page RENDERING turns out to be available via pypdfium2 so NC-230's second reading is unblocked; next free NC-243/NA-012, DL-060 newest, 26 session-log entries; Pass H filed at pass=274)) — what remains is Pass 8 in pdfce, purchased documents, Passes 9–10, standing debts
 metadata:
   type: project
 ---
@@ -209,11 +209,11 @@ false** (a too-narrow grep: this codebase writes `impl std::fmt::Display
 for` in **all sixteen** impls). `CLAUDE.md` gained **rule 10**.
 
 **★★★ UPDATED 2026-08-17, TWENTIETH FILING (tip `e21154c`, tree already
-dirty in 4 files) — a NEW STANDING WORKSTREAM: Ghent compatibility.**
-See [[iccce-compatibility-not-certification]]. **`docs/GHENT_COMPATIBILITY.md`
+dirty in 4 files) — a NEW STANDING WORKSTREAM: suite compatibility.**
+See [[iccce-compatibility-not-certification]]. **`docs/SUITE_COMPATIBILITY.md`
 is new and is `icc-engineer`'s, not mine.** **98 PDFs → 121 embeddings →
 20 distinct profiles**, now the **fourth** private corpus
-(`ghent-v50/`, the most restrictive terms of the four). ★★★ **NOT ONE
+(`suite-v50/`, the most restrictive terms of the four). ★★★ **NOT ONE
 ACCURACY CLAIM** — the lcms2 differential was dispatched and had not
 reported. **NC-001 is still the only `published-ground-truth` row.**
 
@@ -263,12 +263,12 @@ not a gate"* — **the prose made the claim, not the row.**
 NC-218; next free NC-219. `SESSION_LOG.md` has 21 entries.** DL-049 is
 the new shape: **a disclosure field that GATES NOTHING caught a defect in
 a TOLERANCE'S JUSTIFICATION on a GREEN row** (`BLIND` fired; the `2e-4`
-encoding floor did not hold — Ghent's sRGB colorants sum to the PCS white
+encoding floor did not hold — the suite's sRGB colorants sum to the PCS white
 to ≈12 lsb). ★ The fix **imports no third white point** — reaching for
 D65 would have put the oracle's own single-sourced constant under a
 finding about third-party authorship.
 
-**★★ Rule 7 ran against a THIRD PARTY (NC-213):** Ghent's Adobe-embedded
+**★★ Rule 7 ran against a THIRD PARTY (NC-213):** the suite's Adobe-embedded
 sRGB / Adobe RGB have D50-adapted PCS, an **unadapted `wtpt`**, no
 `chad` — an authorship defect under ICC.1:2001-04 A.3.1.1, settling
 ICC-absolute **in lcms2's favour**. `eciRGB v2` is the control. **No NA
@@ -377,7 +377,7 @@ source at the pin, NOT executed: `impl_crosscheck` BY INSPECTION**, the
 weakest lcms2 statement in the ledger.
 
 **★★ The `color-org/` terms were written BEFORE the files landed** —
-that folder's rule 3 discharged; **the `ghent-v50/` lapse was not
+that folder's rule 3 discharged; **the `suite-v50/` lapse was not
 repeated.** ★ Worth recording because **a rule that works leaves no trace
 unless someone writes one.** **23 distinct `cprt` strings across 46 files
 in SIX licensing postures** (bare assertion → *"included in commercial
@@ -521,13 +521,13 @@ crates.io item and opening a status pass would inflate an integer §7
 itself tracks). **DL-058 filed; 58 decision-log entries.
 `SESSION_LOG.md` has 24 entries.**
 
-**★★★ UPDATED 2026-08-17, THE GHENT BOUNDARY RECLASSIFICATION FILING
+**★★★ UPDATED 2026-08-17, THE SUITE BOUNDARY RECLASSIFICATION FILING
 (twenty-FIFTH `SESSION_LOG` entry, twenty-SIXTH librarian filing). NO
 ROW ADDED, CHANGED OR INVALIDATED — next free still NC-243 / NA-012.**
 See [[iccce-patch-named-for-what-it-looks-at]] (**DL-059**).
 
-**★★★ GWG 23.0 "Four different Grays" LEAVES Tier A — it is `pdfce`'s.**
-`GHENT_COMPATIBILITY.md` §3.1 called it *"K-only preservation … CMM
+**★★★ PCS 23.0 "Four different Grays" LEAVES Tier A — it is `pdfce`'s.**
+`SUITE_COMPATIBILITY.md` §3.1 called it *"K-only preservation … CMM
 policy, engine plumbing."* **It is device-space channel routing, the same
 boundary class as overprint.** All four gray definitions resolve to the
 same single-channel device answer **inside PDF**: **ISO 32000-1 §10.3.3 =
@@ -537,7 +537,7 @@ branch** — the load-bearing clause, still `[REPORTED]`),
 **§8.6.6.4/§8.6.6.5**, **§10.3.1**. ★ **The patch readme names
 `DeviceCMYK` as its reference and says the file was made "without
 performing color conversion"** — it is a **non-conversion test**, exactly
-like GWG 8.2, which §3.3 had classified correctly one table earlier.
+like PCS 8.2, which §3.3 had classified correctly one table earlier.
 
 **★★ Counts corrected: 51 patches (27/8/16), not "~48"; 35 for the first
 two categories, not 32; "SIX genuinely ours" → FIVE.** The *"sixteen
@@ -557,14 +557,14 @@ refuses to assume, measures both legs — but **cites §8.6.4.4, which is
 already carries a standing correction of the identical substitution at
 `color__iccbased.md:15`, so **§8.6.4.4 is an attractor**).
 
-**★★ There is NO GWG requirement "23.0".** GWG 2022 is current (**no
+**★★ There is NO the suite's publisher requirement "23.0".** PCS2022 is current (**no
 2023**); requirements are `Dxxx`/`Rxxx`; `n.m` is **Output Suite *patch***
 numbering. Nearest construct **`D0013 "Black Colour"` is a definition
-consumed by the overprint requirements R0009–R0015** — **GWG files this
+consumed by the overprint requirements R0009–R0015** — **the suite's publisher files this
 under overprint too.** ⇒ the equivalence claim's authority is **patch
-documentation, not the GWG specification**.
+documentation, not the suite's publisher specification**.
 
-**★★ The dispatch's premise FAILED: *"GWG 23.0 demands…"* appears NOWHERE
+**★★ The dispatch's premise FAILED: *"PCS 23.0 demands…"* appears NOWHERE
 in the repository** *(grepped the whole tree)*. What exists is §3.1's
 **column heading** *"the capability it demands of a CMM"*. **No filing
 was made against it** — DL-048 from the other end (a *correction* aimed
@@ -579,7 +579,7 @@ every device→device transform is 4→3→4 and **K has no carrier**.
 **Ledger: NO row. New `NUMERIC_CLAIMS.md` §7.20** (six owed items —
 the `passk.rs` clause, its dangling §3.10.8, re-deriving §10.3.2, the
 *"name the clause and the layer"* sweep over the other five Tier-A rows,
-registering the GWG-2022 finding in `ICC_Spec`, and the closed-by-record
+registering the suite's publisher-2022 finding in `ICC_Spec`, and the closed-by-record
 phrase sweep). **DL-059 filed; 59 decision-log entries. `SESSION_LOG.md`
 has 25 entries.** ★ **§3.1 was NOT rewritten** — dated supersession, same
 as §4.3's and §4.5's withdrawals.
@@ -608,7 +608,7 @@ direction, arriving *after* the decision. **The readme declares; the
 patch PDF has never been opened** — owed.
 
 **★★★ Two false statements found in `passk.rs` PROSE, neither carried by
-the dispatch:** `:1342`/`:2446` call `g = 0.5` *"GWG's own patch value"*
+the dispatch:** `:1342`/`:2446` call `g = 0.5` *"the suite publisher's own patch value"*
 **and print it into the report**; `:291` lists an **`ICCBased`** panel
 the readme does not have. **The ΔE is right; only the justification is
 false** ⇒ nothing recomputes, no test can fail, DL-051's shape.
@@ -616,7 +616,7 @@ false** ⇒ nothing recomputes, no test can fail, DL-051's shape.
 **★★ A SECOND text-extraction failure mode:** both new facts are set in
 a **figure**, so engine agreement is **vacuous, not merely correlated**
 — shared silence reads as *absence of the fact*. §7.21's sweep widens to
-*"glyph-sensitive OR possibly in a figure"*. `GHENT_COMPATIBILITY.md`
+*"glyph-sensitive OR possibly in a figure"*. `SUITE_COMPATIBILITY.md`
 §9 gained a fourth class **`[QUOTED-FROM-RASTER]`**.
 
 **Ledger: NO row. New §7.22** (three owed: the two `passk.rs` prose
@@ -697,9 +697,9 @@ the package flags for E9 (`1577×` obs vs `448.6×` tol).
 **★★ THREE OWED ITEMS DISCHARGED, verified in live source, not taken
 from the dispatch:** `passk.rs`'s **§8.6.4.4** wrong clause (gone; nine
 `§10.3.3`), the dangling **`TOLERANCES.md` §3.10.8** (now exists at
-`:3163`), and **both GWG prose defects** — the *"GWG's own patch value"*
+`:3163`), and **both the suite's publisher prose defects** — the *"the suite publisher's own patch value"*
 attribution is repaired **in the emitted report string itself** (*"★ NOT
-a GWG patch value — patch 23.0's gray panel is 25 %…"*), and `ICCBased`
+a the suite's publisher patch value — patch 23.0's gray panel is 25 %…"*), and `ICCBased`
 no longer occurs in the file. ★ **The correction was carried, not
 deleted.**
 
@@ -854,7 +854,7 @@ DL-065 + DL-066 filed; 66 decision-log entries.** See
 
 **★★★ `NA-012`'s `UNMEASURED` IS RETIRED — the cost field now carries
 `3.681203` ΔE2000 max / `1.580674` mean**, 101 qualifying points, on
-`ISO Coated v2 300% (ECI)` → `GWG_GenericCMYK` (Ghent v5.0, licensed),
+`ISO Coated v2 300% (ECI)` → `PCS_GenericCMYK` (the print-conformance suite, licensed),
 **media-relative, no `--bpc`**. **Evidence class `self-comparison` — the
 CEILING the subject admits** (A51 closed negative ⇒ no published value
 can exist); **lcms2 is a RULER only**. ★ **The entry stayed and only the
@@ -1038,7 +1038,7 @@ tests, difftest **`pass=373 fail=0 skip=9 error=0`** (`353 + 20` closes),
 clippy clean. ★ **Weaker than NC-280's two-runner census.**
 **47 fixtures still** *(VERIFIED by listing)*.
 
-**★★★ UPDATED 2026-08-25, THE GWG010 SHADING-CELL FILING (thirty-FOURTH
+**★★★ UPDATED 2026-08-25, THE PCS010 SHADING-CELL FILING (thirty-FOURTH
 `SESSION_LOG` entry). The FIRST filing ever made against a WORKING TREE
 WITH NO COMMIT BEHIND IT, and the first whose only comparison partner is
 a PHOTOGRAPH.** ★★ **The dispatch said the harness was *"committed"*; it
@@ -1049,7 +1049,7 @@ commit hash, because none exists.**
 
 **The occasion:** `pdfce`'s `open/note_cmyk_to_srgb_injects_blue_into_saturated_orange.md`,
 **informational, "no reply owed"** (`Pass 122.7`) — its three interim
-`DeviceCMYK`→sRGB tables miss Acrobat on one Ghent patch **in OPPOSITE
+`DeviceCMYK`→sRGB tables miss Acrobat on one suite patch **in OPPOSITE
 directions** (`naive` blue 0 / green 143; `calibrated` blue 55 / green
 165; Acrobat 0 / 156). ★ **An informational note is the easiest kind to
 leave unanswered**; the lead answered it by measurement the same day.
@@ -1102,7 +1102,7 @@ who greps it concludes the clamp was removed); `to8()` says
 census says **12 tags and enumerates 11** (not guessed); and ★★★ **the
 2026-08-21 session has NO `SESSION_LOG` entry** — 33 headings, last dated
 2026-08-20, while `NEXT_SESSION.md` carries a 7-commit handoff. **Not
-written here: the dispatch carried evidence for GWG010 and nothing else.**
+written here: the dispatch carried evidence for PCS010 and nothing else.**
 
 **★★★ DL-068's FIRST OBSERVED PAYOFF:** the 2026-08-21 handoff carried
 **ref hashes instead of a push count**, and they went **historical rather
@@ -1113,9 +1113,9 @@ ahead"* would have been silently wrong.
 `NC-306` / `NA-013` (NA-013 not consumed — the clamp is normative
 behaviour, not a new approximation). DL-069 + DL-070 filed; 70
 decision-log entries. `SESSION_LOG.md` has 34 entries.
-`GHENT_COMPATIBILITY.md` gained §4.7; `TOLERANCES.md` untouched — §3.38
+`SUITE_COMPATIBILITY.md` gained §4.7; `TOLERANCES.md` untouched — §3.38
 has NO tolerance and NO gate, and ZERO graded rows.** ★★ **These rows are
-protected by NOTHING** — Ghent + Heidelberg + Acrobat + Microsoft
+protected by NOTHING** — suite + Heidelberg + Acrobat + Microsoft
 encumbrances mean the case **can never be a committed fixture**.
 ★ **Still owed to ME: `NC-268`'s two corrections** (floor `1e-12`;
 `1.106780e-1` → `1.1067772e-1`) — **not done, because a correction row
@@ -1131,11 +1131,11 @@ measurements was DELETED.** See [[iccce-licensed-tool-split-outside-the-tree]]
 (**DL-071**) and [[iccce-gitignored-file-invisible-to-citation-sweep]].
 
 **Operator decision:** *"split it into a public generic tool plus local
-file."* `tools/ghent/shading_cell.py` **DELETED** *(verified —
-`tools/ghent/` now holds `extract_icc.py` + `icc_terms.py` only)*;
+file."* `tools/suite/shading_cell.py` **DELETED** *(verified —
+`tools/suite/` now holds `extract_icc.py` + `icc_terms.py` only)*;
 `tools/patch-compare/patch_compare.py` + `README.md` added, **contain no
 numbers at all**; the case file is at
-`D:/Dev/temp/iccce-gwg/gwg010_shading.case.json`, **OUTSIDE the repo —
+`D:/Dev/temp/iccce-suite/pcs1_010_shading.case.json`, **OUTSIDE the repo —
 not gitignored inside it, because a gitignored path is one `git add -f`
 away from the entanglement.** ★ **`DL-070` is now enforced IN CODE** (no
 ΔE, no flag); `reference.evidence_class` is **mandatory with no
@@ -1144,7 +1144,7 @@ default**.
 **★★★ THE HAZARD TO MY OWN JOB, and it is the most reusable thing here:
 a gitignore-respecting search UNDER-COUNTS this project's citations.**
 The first sweep returned **9** of **13**; the missing four are all in
-**`docs/GHENT_COMPATIBILITY.md`, which is gitignored**. **ALWAYS search
+**`docs/SUITE_COMPATIBILITY.md`, which is gitignored**. **ALWAYS search
 that file BY NAME in addition to any directory sweep** — *"zero remaining
 citations"* is a sentence I write often and the project's most
 citation-dense document is invisible to the default tool.
@@ -1214,7 +1214,7 @@ build** first, and two of the five literals carried a comment saying they
 was insufficient.**
 
 **★★★ THE RELEASE RANGE IS NOT WHAT A DISPATCH SAYS IT IS — VERIFY IT
-AGAINST THE TAG.** The dispatch listed *"the Ghent corpus measured (Pass
+AGAINST THE TAG.** The dispatch listed *"the suite corpus measured (Pass
 G)"* as content of `0.2.0`. **It is not: `4bf291a` *"conformance: Pass G
 and Pass H — real-world profiles, graded"* sits at reflog line 79 and the
 `0.1.0` release commits at lines 89–92, with the range's first commit
@@ -1296,3 +1296,80 @@ Related: [[iccce-licensed-tool-split-outside-the-tree]],
 [[iccce-gate-must-not-reward-deletion]],
 [[iccce-bound-cannot-catch-its-own-magnitude]],
 [[iccce-verification-loop-runs-both-ways]], [[ken-terse-scope-decisions]].
+
+---
+
+**★★★ UPDATED 2026-08-25, THE CONSUMER-REQUIREMENTS FILING (thirty-FIFTH
+`SESSION_LOG` entry). The first filing whose entire content is
+REQUIREMENTS FROM SOMEBODY ELSE. NO code changed, NO tolerance moved,
+`TOLERANCES.md` untouched, and this role measured NOTHING.**
+
+**Tip `b5d0ccb`** *(`.git/refs/heads/master`, read; ★
+**`refs/remotes/origin/master` was NOT read — nothing is asserted about
+the remote**)*. ★★★ **The dispatch asserted `v0.2.0` tagged + released and
+CI green for the first time; NO evidence was carried and none was read.
+No document was edited to say any of it.**
+
+**`pdfce` answered seven questions in full.** Four answers **constrain
+this project's API** (`ARCHITECTURE.md` **§4.1**, new):
+
+1. **Take `&[u8]` and DO NOT RETAIN IT.** Their `decode_stream` already
+   returns a fresh owned `Vec` *(VERIFIED in their source)*, so borrowing
+   pins nothing of theirs — ★ **the hazard runs the other way**: a slice
+   retained inside a compiled transform pins ~1.5 MB for a whole document
+   render. **Never audited whether anything here retains one.**
+2. **Per-CALL intent** (§11.7.5.3). ★ `Chain::new` takes it at
+   construction ⇒ **NOT satisfied**. ★★ They carry **no intent at all**:
+   `b"i" | b"ri" => {}` is an explicit no-op and **`b"RI"` occurs ZERO
+   times under their `crates/`** *(both VERIFIED by me)* — `/ExtGState
+   /RI` is not dropped, it is **never read**.
+3. ★★★ **The API must ACCEPT an unknown intent name and disclose the
+   substitution** — **CONFLICTS with shipped code**. See
+   [[refusal-at-one-layer-is-nonconformance-at-another]] (**DL-072**).
+4. **`f32` is LOAD-BEARING, not tidy** — their compositor buffer is `f32`,
+   decided 2026-08-21, not negotiable; open ceiling above ~375 DPI.
+   `FEATURES.md` §5 upgraded from *requested*.
+
+★★ **CHEAPER than assumed: there is NO ICC parser in `pdfce`.**
+`output_intent_blend_space()` reads **exactly `/N`** (`n >= 4` ⇒
+subtractive) and never inflates the stream; `ICCBased` the same one level
+down *(VERIFIED in their source)*. **No bug-compatibility burden — a fact
+with an expiry date.**
+
+**★★★ `NC-307` + new class `producer-corpus-census`** — see
+[[producer-census-is-not-a-consumer-fact]]. **0 of 350 documents name >1
+intent** ⇒ **an eager `4 × 2` cache is waste in 100 % of files measured**;
+**dated addendum filed AT the costing item** (`DL-059` §2). ★ The `~13` s
+/ `~290` MiB figure is **not retracted** — nobody should *pay* it. ★★ It
+constrains **a cache, not §11.7.5.3** (no page tree built).
+
+**★★★ RULE 11 WAS APPLIED AGAINST THE DISPATCH.** It asked for the
+licensed corpus's census as ledger rows; **declined** — a rule is about
+the **material**, not the **measurer**. Those numbers went to
+**`SUITE_COMPATIBILITY.md` §10 (untracked)**. ★ Cost stated: *"how many
+output-intent profiles per document?"* now has **no tracked answer**
+(§7.29 item 2).
+
+**★★ New standing invariant 7 — no thread spawned to build or evaluate a
+transform**, because our `wasm32` job cannot catch a threading regression
+(`ARCHITECTURE.md` §3.1). See
+[[gate-catches-only-enumerated-failures]]. ★★★ **They measured `cargo
+check`; our job runs `cargo build` — the difference is NOT measured here
+and §3.1 says so.**
+
+★ **`DL-071`'s boundary CORROBORATED by a sibling** (theirs is worse, and
+they found it by running the grep after drafting the opposite sentence).
+**Recorded as corroboration, NOT an action item, and no specifics
+reproduced.**
+
+**Ledger now: `NC-307` filed in the new §3.39; new §7.29. Next free
+`NC-308` / `NA-013` *(declined a fourth time)* / `DL-073`.**
+`SESSION_LOG.md` has **35** entries.
+
+**Newly owed:** measure `build` vs `check` for a thread spawn ·
+**re-derive §8.6.5.8** before building on `DL-072` · amend the CI comment
+block (`icc-engineer`'s file) · escalate both hazards to
+`D:\dev\rag\rust\` + `C:\personal_rag\pdf\` (**not done**) · audit slice
+retention · **`NC-268`'s two corrections — THIRD consecutive filing** ·
+the 2026-08-21 `SESSION_LOG` entry (findings safe in `DL-059` /
+`NEXT_SESSION.md`; the session's own record is not).

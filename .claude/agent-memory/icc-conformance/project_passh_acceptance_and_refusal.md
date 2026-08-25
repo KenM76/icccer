@@ -110,8 +110,8 @@ whether a refusal says why*. **40 accepted / 10 refused**, measured.
   My §E census (`CMYK 23, RGB 16, 7CLR 1 = 40`, **no GRAY**) and the engineer's
   sweep (`CMYK 33, RGB 25, GRAY 1, 7CLR 1 = 60`, NC-220) looked like rival
   claims and are **two denominators**: `color-org` (40 accepted) vs **both**
-  private corpora including `ghent-v50` (20). They reconcile exactly —
-  `23+16+1` and `10+9+1`. **The single GRAY profile is in `ghent-v50`, not
+  private corpora including `suite-v50` (20). They reconcile exactly —
+  `23+16+1` and `10+9+1`. **The single GRAY profile is in `suite-v50`, not
   here.** The §E row now names its own denominator and points at the other.
   *iccce does have GRAY evidence; Pass H is not where it lives.*
 - **★ Coverage the corpus does NOT have, and the population census says so:**
@@ -126,7 +126,7 @@ whether a refusal says why*. **40 accepted / 10 refused**, measured.
   A count row's tolerance is essentially always zero.
 
 Related: [[project-passg-tolerance-lessons]],
-[[project-passg-ghent-population-findings]],
+[[project-passg-suite-population-findings]],
 [[project-lcms2-findings-pass4b-direction-dependence]],
 [[project-prove-the-arm-by-injecting-the-defect]],
 [[project-candidate-separation]],

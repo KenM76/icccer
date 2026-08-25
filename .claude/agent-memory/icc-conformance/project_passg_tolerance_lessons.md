@@ -49,7 +49,7 @@ and colorant sum **agree**, so the "rival reading" was manufactured — there is
 nothing out of step to attribute. Fixing it (→ `NO-NAMED-ALTERNATIVE` with its
 reason, and that row is now the section's **negative control**) exposed the real
 defect: the `2e-4` encoding-floor justification **did not hold for the profiles
-it was actually gating** — Ghent's sRGB colorants sum to the PCS white to
+it was actually gating** — the suite's sRGB colorants sum to the PCS white to
 `1.885e-4`, ≈12 `s15Fixed16` lsb, because the *published* sRGB primaries do not
 sum to D50 to the lsb. **The row had been passing inside a bound its own
 justification could not support.**
@@ -82,7 +82,7 @@ stated separation was `0.472229`.
 graded in XYZ prints `INCOMMENSURATE` and the blindness test is skipped. Compute
 the distance in the metric as well; keep the ΔE in the detail text for a human.
 
-Related: [[project-passg-ghent-population-findings]],
+Related: [[project-passg-suite-population-findings]],
 [[project-candidate-separation]],
 [[project-prove-the-arm-by-injecting-the-defect]],
 [[project-parallel-agent-build-collisions]].

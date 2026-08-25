@@ -34,7 +34,7 @@ between the commit and the push, or asking how to group the commits.**
   to them.
 - ★ **Check for licensed content before pushing to a public repo.** Grep the
   outgoing diff for long verbatim blocks, for the gitignored
-  `docs/GHENT_COMPATIBILITY.md`, and for anything out of `_sources/` or the
+  `docs/SUITE_COMPATIBILITY.md`, and for anything out of `_sources/` or the
   private fixture tree. Cheap, and the cost of recanting a published file is
   not.
 - **Report the push with both ref hashes**, not with a commit count — see

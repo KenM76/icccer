@@ -13,7 +13,7 @@ of this project says the parser reports rather than repairs, which is
 only a virtue if the parser has been pointed at files that were written
 by somebody else's exporter.
 
-The Ghent PDF Output Suite 5.0 is a corpus of PDF/X test patches written
+The print-conformance suite is a corpus of PDF/X test patches written
 by Adobe InDesign CS6 and imposed by Callas pdfToolbox — i.e. by the
 mainstream graphic-arts toolchain. Its ICC-CMS category deliberately
 embeds ICC v2 *and* ICC v4 profiles as image source spaces, plus a PDF/X
@@ -62,7 +62,7 @@ OUTPUT
 
 LICENSING — READ THIS BEFORE MOVING THE OUTPUT
 ==============================================
-The Ghent PDF Output Suite's own licence permits use only for "testing
+The print-conformance suite's own licence permits use only for "testing
 workflow setup" and forbids commercial use or redistribution without
 written permission. The ICC profiles inside the patches carry their own
 separate licences (Adobe's, ECI's, the ICC's). **Neither the patches nor
@@ -74,7 +74,7 @@ requires.
 
 USAGE
 =====
-    python tools/ghent/extract_icc.py <pdf-root> <outdir>
+    python tools/suite/extract_icc.py <pdf-root> <outdir>
 
 Exit codes: 0 profiles found; 1 none found (which is a finding, not a
 success); 2 usage error.

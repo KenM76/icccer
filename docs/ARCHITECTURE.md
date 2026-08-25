@@ -148,6 +148,47 @@ documented, not assumed negligible.
    engine produced on a day it seemed to work. A regression test whose
    expected value came from the code under test only detects change, not
    error.
+7. ★★★ **No thread is spawned to build or evaluate a transform** —
+   *added 2026-08-25, and it is an invariant precisely because THE CI JOB
+   THAT LOOKS LIKE IT ENFORCES THIS DOES NOT.* See §3.1.
+
+### 3.1 ★★★ The `wasm32` CI job CANNOT catch a threading regression — stated here because our own documentation now advertises that we gate `wasm32`
+
+**Learned from `pdfce`, 2026-08-25, who found it the hard way on
+2026-08-21 and volunteered it unprompted.** *(★ `[REPORTED]` — their
+measurement, on their tree; **nothing was run here.**)*
+
+> **`std::thread` and `rayon` both `cargo check` cleanly for
+> `wasm32-unknown-unknown`.** The failure does not land at compile time.
+> It lands **at runtime, in their web fork**, where no gate of ours can
+> see it.
+
+**Why this is ours and not merely theirs.** `.github/workflows/ci.yml`
+carries a job named `wasm32-unknown-unknown (library crates)` whose own
+comment block explains at length *why* it exists — *"this converts the
+observation into a gate … the difference between telling a consumer 'we
+checked once' and 'we check every time'"* — and enumerates carefully what
+it does and does not prove *(★ **VERIFIED** — read at this filing)*. **The
+threading hole is not among the things it enumerates.** A reader of that
+comment would reasonably conclude the job protects the consumer's web
+build. **For a thread spawn, it does not.**
+
+★★ **One difference from `pdfce`'s finding that must not be smoothed
+over, and it is a gap in the evidence rather than a comfort:** their
+measurement was of **`cargo check`**; **our job runs `cargo build`**
+*(★ **VERIFIED** — the step is
+`cargo build --target wasm32-unknown-unknown -p iccce-color -p iccce-profile -p iccce-cmm -p iccce-measure`)*.
+**Whether `build` differs from `check` for this hazard has NOT been
+measured by anybody here**, and the honest statement is therefore *"our
+gate is not known to catch it and there is positive evidence from a
+sibling that the adjacent command does not"* — **not** *"our gate has
+been measured not to catch it."* ★ Measuring it is cheap and is owed.
+
+★ **The remedy is invariant 7, not a better gate.** A gate that can only
+be trusted for the failure modes somebody enumerated is worth less than a
+written prohibition a reviewer can apply by reading a diff. **If
+threading is ever wanted here, it is a decision, and the decision has to
+carry how a consumer's web build will be protected.**
 
 ---
 
@@ -165,6 +206,123 @@ line.
 **Consequence worth stating:** `iccce` must be able to parse a profile
 from a byte slice with no filesystem, because in a PDF it arrives as a
 stream.
+
+---
+
+### 4.1 ★★★ Four API requirements the consumer has now STATED, 2026-08-25 — not inferred by us, and not preferences
+
+**Filed by `icc-librarian` from `pdfce`'s reply of 2026-08-25 in the
+request channel** (`2026-08-25-reply-both-answers-are-nothing-yet-and-here-is-the-population.md`),
+which answered seven questions this project asked. **The channel is in no
+git repository, so this subsection is the durable half; the file is not
+the record.**
+
+★★ **Why these read as requirements rather than as suggestions.**
+`pdfce` is the consumer this project's `README.md` names first
+(**`DL-044`**). Everything below is a statement about what that consumer's
+own code does or must do, **with the file and symbol named on their side
+so it could be checked rather than believed** — and this librarian did
+check the four that are checkable. A design of ours that ignores one of
+these does not merely inconvenience them; it makes the adoption
+impossible or breaking.
+
+#### 4.1.0 The starting position: there is NO ICC parser in `pdfce` to be compatible with
+
+★ **VERIFIED by this librarian by reading `pdfce`'s live source, not
+relayed.** `output_intent_blend_space()` in
+`crates/pdfce-render/src/interpret.rs` walks catalog → `/OutputIntents` →
+the first array entry that yields a `/DestOutputProfile` → resolves it as
+a stream, and reads **exactly one key off the stream's dictionary:
+`/N`**. The predicate is literally `n >= 4` ⇒ subtractive blending space,
+otherwise additive. **The stream body is never fetched and never
+inflated.** `ICCBased` is the same one level down in
+`crates/pdfce-render/src/color.rs` — resolved via `/Alternate` or the
+spec's own `/N`-driven device fallback — and the embedded profile stream
+is not touched there either.
+
+★★ **This is worth recording as a positive fact and not merely as an
+absence.** There is no existing ICC behaviour on the consumer side for
+iccce to be bug-compatible with, no half-built parser whose quirks would
+have to be preserved, and no prior colour answer whose change would be a
+regression for their users. **A clean starting position is a design
+input**, and it expires the moment anybody builds one.
+
+#### 4.1.1 The byte hand-off: take `&[u8]`, and DO NOT RETAIN IT
+
+> **Requirement: `parse_from_bytes(&[u8])`. Not `Vec<u8>`. And the slice
+> must not be retained past the call — parse into an owned representation
+> and let it go.**
+
+★★★ **The reasoning removes a worry this project had recorded and
+replaces it with the opposite one.** `pdfce`'s
+`pdfce_core::filters::decode_stream(&Dict, &[u8]) -> Result<Vec<u8>, FilterError>`
+returns a **fresh owned allocation** *(★ **VERIFIED** — signature read at
+`crates/pdfce-core/src/filters/mod.rs:189`)*. So the buffer iccce would
+borrow **is not their document buffer**, and borrowing pins nothing.
+
+★★ **The real hazard runs the other way, and it is ours.** If iccce
+retains the slice inside a compiled transform, a ~1.5 MB profile must
+stay alive for the life of that transform — which in their design is the
+life of a whole document render. **The lifetime risk is created by
+retention, not by borrowing**, and a design that "just keeps the slice
+because it is cheap" is the one that costs the consumer memory they
+cannot free.
+
+#### 4.1.2 The intent is PER-PAINT, and the API must take it per call
+
+> **Requirement: the intent is an argument to the conversion call, not a
+> property fixed when a transform is built.**
+
+**`ISO 32000-2:2020 §11.7.5.3` puts the intent at the painting
+operation** — already recorded in this log at `DL-059`, sourced by
+`icc-spec-librarian` from primary. What is new is the consumer's own
+statement of the consequence:
+
+> *"If your API takes an intent per call, pdfce can pass a per-document
+> constant into it today and a real graphics-state value later without an
+> API change. If it takes a per-document intent, the later change is a
+> breaking one."*
+
+★★★ **And they carry NO intent at all today, in either of its two homes —
+which makes the requirement forward-looking rather than a description of
+existing behaviour.** *(★ **VERIFIED** by this librarian in their live
+source.)* The content-stream operator is an explicit no-op —
+`interpret.rs:2449`, `b"i" | b"ri" => {}`, commented *"flatness /
+rendering intent: recognized no-ops"*. **`/ExtGState /RI` is worse than
+dropped: it is never read.** `apply_ext_gstate` (`interpret.rs:3358`)
+looks for `/LW`, `/ca`, `/CA`, `/SMask`, `/BM` and friends and **`b"RI"`
+occurs ZERO times anywhere under `crates/`** *(counted)*; their graphics
+state has no field to hold one.
+
+★ **Not a colour decision on their part** — there was no colour-managed
+path to consume an intent, so carrying one would have been state nothing
+read. **The requirement is therefore about the API shape we ship, not
+about anything they can demonstrate today.**
+
+#### 4.1.3 ★★★ The API must ACCEPT AN INTENT NAME IT DOES NOT RECOGNISE
+
+> **Requirement, in the consumer's words: *"your API must accept an intent
+> name it does not recognise and tell us what it substituted — it must not
+> refuse the paint."***
+
+**This CONFLICTS with shipped iccce behaviour and the conflict is filed
+as `DL-072`.** It is not resolved here and must not be resolved by
+citing either side at the other.
+
+#### 4.1.4 The `f32` evaluation surface is LOAD-BEARING, not tidy
+
+`CompiledTransform::convert_buffer` is `&[f64] -> &mut [f64]` *(★
+**VERIFIED** — `crates/iccce-cmm/src/compiled.rs:464`)*. **`pdfce`'s
+compositor buffer is `f32` per element, decided 2026-08-21 and stated as
+not negotiable**, because it is what makes a full-page CMYK colorant
+buffer fit at all — they carry an open ceiling item where a full-page
+render above ~375 DPI refuses the buffer outright. *(★ Their number and
+their decision, `[REPORTED]`; nothing was measured here.)*
+
+★★ **What changes for us: `FEATURES.md` §5 has carried this since
+2026-08-18 as a *requested* gap. It is now a stated blocker on the shape
+of the adoption**, and the reason is a memory ceiling the consumer has
+already hit, not a preference for narrower floats.
 
 ---
 
@@ -4661,7 +4819,7 @@ its first row and the durable answer must be named in this project's
 ### DL-045 — ★★★ **COMPATIBILITY and CERTIFICATION are different things, and this project has been parking work on the second while the first was reachable all along. The posture changes; the EVIDENCE RULES DO NOT**
 
 **Date:** 2026-08-17 · **Occasioned by:** the operator, handing over the
-**Ghent PDF Output Suite 5.0** · **Assessed by:** `icc-engineer` ·
+**the print-conformance suite** · **Assessed by:** `icc-engineer` ·
 **Filed by:** `icc-librarian` (**no shell** — every figure carried,
 every document claim read from source) · **Relates to** project **rule 1**
 (a wrong colour looks like a right one), **rule 3** (expected values come
@@ -4718,20 +4876,20 @@ in was filed under *"needs a press."*
 
 #### ★★★ The one thing this entry must not be read as licensing
 
-**It does not license the word "compatible" in public.** The Ghent
+**It does not license the word "compatible" in public.** The suite
 suite's licence permits use *"for … testing workflow setup"* and
 **nothing else without written permission**; the certification release
 directs developers to a separate programme reachable only by contacting
-GWG. **Any public statement containing the word "Ghent" — `README.md`,
-release notes, crates.io metadata — is a claim requiring GWG's written
+the suite's publisher. **Any public statement containing the word "suite" — `README.md`,
+release notes, crates.io metadata — is a claim requiring the suite publisher's written
 permission first, and is an operator decision** (global claim-bearing-
 copy rule; `NUMERIC_CLAIMS.md` §7.16, operator item 1).
 
 ★ **The internal statement that IS supportable today**, in full:
-*iccce evaluates the colour transforms of the Ghent Level-2 ICC-CMS
+*iccce evaluates the colour transforms of the suite Level-2 ICC-CMS
 patches' embedded profiles without failure, and applies a declared
 source profile rather than falling back to a device alternate; it is not
-Ghent-certified; and Ghent supplies no numeric criterion by which
+suite-certified; and suite supplies no numeric criterion by which
 "without failure" could be tightened into a colorimetric claim.*
 
 #### What this does NOT decide
@@ -4739,7 +4897,7 @@ Ghent-certified; and Ghent supplies no numeric criterion by which
 - **It does not scope a Pass.** `ROADMAP.md` gains a **standing
   workstream** block, not a numbered Pass, and no done-when is asserted.
 - **It does not admit the suite into this repository.** The bytes stay in
-  `D:\Dev\iccce-private-fixtures\ghent-v50\`; the licence's affirmative
+  `D:\Dev\iccce-private-fixtures\suite-v50\`; the licence's affirmative
   notice condition and its no-commercial-use clause would both follow
   them into an MIT tree.
 - **It does not weaken DL-020.** Refusing what the corpus cannot supply
@@ -4748,11 +4906,11 @@ Ghent-certified; and Ghent supplies no numeric criterion by which
   certificate is.**
 - **It does not make anything in §3.30 an accuracy claim.** See DL-047.
 
-**Revisit if:** the operator obtains GWG's written permission (at which
+**Revisit if:** the operator obtains the suite publisher's written permission (at which
 point a public claim becomes possible and the exact wording becomes a
 claim-bearing-copy matter, not a technical one); or a second
 compatibility corpus with different terms arrives, which would argue for
-generalising this entry beyond Ghent; or any future filing is found to
+generalising this entry beyond suite; or any future filing is found to
 have used *"compatibility"* as a reason to relax a tolerance — **that
 would be this entry being misread, and the misreading is the specific
 risk it was written to prevent.**
@@ -4790,7 +4948,7 @@ strong as the breadth of the search that failed to find it)
 
 #### The worked instance
 
-A dispatched agent reported that GWG's `CMYK prtr lut X (Switch magenta
+A dispatched agent reported that the suite publisher's `CMYK prtr lut X (Switch magenta
 cyan)` has its cyan and magenta channels exchanged. That report was
 **true** — and filing it would still have been wrong, because the
 project would have recorded a *property of a file* as though it were a
@@ -4849,14 +5007,14 @@ territory and would need the diagnostic sharpened.
 
 ---
 
-### DL-047 — ★★★ **The Ghent PDF Output Suite CANNOT SUPPLY A NUMERIC EXPECTATION. It supplies a CATEGORICAL one, which is worth more than it sounds — and it CONTRADICTS ITSELF exactly on rendering intent**
+### DL-047 — ★★★ **The print-conformance suite CANNOT SUPPLY A NUMERIC EXPECTATION. It supplies a CATEGORICAL one, which is worth more than it sounds — and it CONTRADICTS ITSELF exactly on rendering intent**
 
 **Date:** 2026-08-17 · **Occasioned by:** reading the suite's own
 `ReadMeFirst.pdf` and per-patch readmes for a pass criterion, and
 finding that none exists · **Assessed by:** `icc-engineer` (`pdftotext
 -layout` extraction) · **Filed by:** `icc-librarian`, which **has not
 seen the PDFs** and carries the quotations from
-`docs/GHENT_COMPATIBILITY.md` §2.1 and §2.3 · **Relates to** project
+`docs/SUITE_COMPATIBILITY.md` §2.1 and §2.3 · **Relates to** project
 **rule 3** (expected values come from the literature), **rule 5**,
 **rule 7** (disagreement with an implementation is a finding, not a
 failure), **DL-021** (say which direction, and which profile class),
@@ -4878,15 +5036,15 @@ gradation can be slightly off"*.
 
 #### The decision
 
-> **No number measured on a Ghent file may be recorded as ground truth,
+> **No number measured on a suite file may be recorded as ground truth,
 > a reference value, or a justified tolerance. The suite states no
 > tolerance, no reference measurement and no expected colour value
 > anywhere; its pass criterion is VISUAL SALIENCE assessed by a human at
 > half a metre. Every figure measured on this corpus inherits the
-> evidence class of the APPARATUS that produced it, and Ghent adds
+> evidence class of the APPARATUS that produced it, and suite adds
 > nothing to that class.**
 >
-> ★★ **The converse is the useful half: Ghent CAN supply a CATEGORICAL
+> ★★ **The converse is the useful half: suite CAN supply a CATEGORICAL
 > expectation**, because the trap profiles' correct handling is a fact
 > about the file's declared content rather than a measurement of
 > anything. That is why `NUMERIC_CLAIMS.md` §1 gains
@@ -4895,16 +5053,16 @@ gradation can be slightly off"*.
 
 #### ★★★ The suite contradicts itself, and precisely on this project's topic
 
-GWG 13.0 — the suite's **only** statement about rendering intent —
+PCS 13.0 — the suite's **only** statement about rendering intent —
 signals *"the defined rendering intent 'Perceptual' was not respected"*
 with a **faint green X**. `ReadMeFirst.pdf` has already ruled that **a
 faint X is not a failure.**
 
 > **Consequence: intent handling is UNTESTED by the suite's own pass
-> criterion.** A workflow can be "Ghent-clean" while ignoring the
+> criterion.** A workflow can be "suite-clean" while ignoring the
 > declared rendering intent entirely. ★★★ **Therefore any iccce claim
 > about intent selection must be graded against ICC.1's own text on
-> which `A2Bx`/`B2Ax` table an intent selects — never against Ghent**,
+> which `A2Bx`/`B2Ax` table an intent selects — never against suite**,
 > which has no criterion to offer.
 
 ★ **This is rule 7's shape with a corpus in the defendant's chair
@@ -4928,7 +5086,7 @@ session from grading a tolerance against it.**
 - **It does not close the intent question.** It states where the
   criterion must come from, and **no such row exists today**.
 
-**Revisit if:** GWG publishes numeric criteria or a reference
+**Revisit if:** the suite's publisher publishes numeric criteria or a reference
 measurement (which would change the first half entirely); or a render-
 and-compare harness lands, at which point the pass criterion becomes
 *this* project's to define and DL-045's warning applies — **defining our
@@ -5011,7 +5169,7 @@ into it decays on the next filing, silently, **everywhere it was copied**.
 > a line number to blame.** §3.0's bare *"§4.4"* pointed at nothing that
 > carries the constant; the **two** §4.4 sections that exist in `docs/`
 > are `LEGAL.md` §4.4 (*"What is not claimed"*) and
-> `GHENT_COMPATIBILITY.md` §4.4 (*"ICC v4 evaluation on a
+> `SUITE_COMPATIBILITY.md` §4.4 (*"ICC v4 evaluation on a
 > vendor-authored profile"*) — **both plausible enough to be read as
 > confirmation.**
 >
@@ -5065,7 +5223,7 @@ defect **no gate could**, because of *where* it looks:
    negative control.
 2. **★★★ The invisible fault, which only surfaced once the first was
    fixed.** The `2×10⁻⁴` **encoding-floor justification did not hold for
-   the profiles it was gating**: Ghent's sRGB colorants sum to the PCS
+   the profiles it was gating**: the suite's sRGB colorants sum to the PCS
    white only to `1.885×10⁻⁴` — **≈12 `s15Fixed16` lsb** — because the
    *published* sRGB primaries do not sum to D50 to the encoding lsb.
    **The row had been PASSING, inside a bound its own `why` could not
@@ -5890,7 +6048,7 @@ and ISO 32000-2 clause retrieval, cross-verified with two extraction
 engines) and `icc-engineer` (the patch's own readme, `pdftotext -layout`)
 · **Filed by:** `icc-librarian`, **with every clause number re-settled
 from `D:\Dev\Rag-Specialized\PDF_Spec\` rather than from the dispatch** ·
-**Relates to** **DL-045/046/047** (the Ghent posture, the promotion rule,
+**Relates to** **DL-045/046/047** (the suite posture, the promotion rule,
 and the no-numeric-expectation bound), **DL-057** (a refusal that names
 the *wrong* clause is worse than a vague one), **DL-053** (a count from
 the wrong population), and **`CLAUDE.md` rule 10 point 3**, which named
@@ -5899,7 +6057,7 @@ mis-filed and was right.
 
 #### What was wrong
 
-`docs/GHENT_COMPATIBILITY.md` §3.1 listed **GWG 23.0 "Four different
+`docs/SUITE_COMPATIBILITY.md` §3.1 listed **PCS 23.0 "Four different
 Grays"** in **Tier A — "genuinely a CMM's problem"**, glossed as *"K-only
 preservation … the classic black-preservation trap, and the one where a
 CMM that routes everything through the PCS fails visibly. CMM policy,
@@ -6031,6 +6189,46 @@ lazy-population variant nor a re-parameterisable transform has been
 designed, costed or scoped.** Recorded as an **open API question**, not a
 plan, and it is not yet a roadmap item.
 
+##### ★★★ DATED ADDENDUM, 2026-08-25 — the EAGER build is now measured to be waste, and the open question narrows to ONE of its two branches
+
+**Added by `icc-librarian` at the consumer-requirements filing. The
+paragraphs above are left exactly as written** — they were right about
+the cost and right to refuse to choose a design. What has arrived is the
+**population data that decides between the two undesigned variants**, and
+it came from the consumer rather than from a measurement here.
+
+`pdfce` censused two corpora of real PDFs on 2026-08-25 for how many
+rendering intents a single document names. **In the population whose
+numbers this project is free to record — their own `fixtures/` corpus,
+4 239 files with 350 deep-scanned — *zero* of the 350 name more than one
+intent** (`NUMERIC_CLAIMS.md` **`NC-307`**, §3.39). A second, licensed
+population agrees and is corroborating rather than load-bearing; **its
+numbers are not reproduced in any tracked file** under `CLAUDE.md` rule
+11, and live in `docs/SUITE_COMPATIBILITY.md` §10.
+
+★★★ **The consequence, stated as the consumer stated it: an eager
+`4 intents × 2 BPC` build would be waste in 100 % of the files measured.**
+Multiplying **observed** maxima rather than theoretical ones gives
+**12–24 combinations as a worst observed case and 1–2 in a typical file**.
+**Build lazily on the combinations that appear and the `13` s / `290` MiB
+above is never spent.**
+
+★★ **What this does NOT do, and the distinction is the whole value of the
+addendum.** It does **not** make the `13` s / `290` MiB figure wrong —
+that figure is still the correct cost *of the thing it costed*, an eager
+full cache, and it is still **derived by linear scaling, not measured as
+an aggregate**. What moved is that **nobody should build the thing it
+costed.** The open API question above therefore narrows from *"which of
+two undesigned variants?"* to **"design the lazy-population variant"** —
+and it is still not a roadmap item and still nobody's assignment.
+
+★ **The census's own limit, which must travel with it:** the scan never
+builds a page tree, so it answers *"does this document name more than one
+intent?"* — the cache-sizing question — and **not** *"does this page
+switch intent mid-stream?"*, which is the question a per-paint API
+actually faces. **A document that names one intent constrains a cache; it
+does not constrain §11.7.5.3.**
+
 ### ★★★ A 10× performance claim that was wrong because it never named its build profile
 
 `recommended_grid_points`'s comment said a 4-D grid at 33 was
@@ -6118,7 +6316,7 @@ That is an access blocker, not an existence claim.
 
 **Part 2 — the patch's own readme, and it does not claim what §3.1 said
 it claimed.** Extracted by `icc-engineer` from
-`…\3-ICC-CMS\ReadMes\GWG230_Four_different Grays_README.pdf`:
+`…\3-ICC-CMS\ReadMes\PCS230's README`:
 
 - *"PDF offers 4 color spaces for black or gray objects **that only
   render in the Black color channel**."*
@@ -6135,12 +6333,12 @@ conversion*, and **`DeviceCMYK` is the reference against which the other
 three are judged**. A patch that names an unconverted channel as its own
 reference is testing that the other three routes also stayed unconverted.
 **It is a non-conversion test**, which is precisely what §3.3 had already
-correctly identified GWG 8.2 as being — and then failed to recognise one
+correctly identified PCS 8.2 as being — and then failed to recognise one
 table above.
 
 #### The decision
 
-> **GWG 23.0 leaves Tier A. It is not Tier B either — Tier B is *"a
+> **PCS 23.0 leaves Tier A. It is not Tier B either — Tier B is *"a
 > conversion is in the path, the failure is the engine's"*, and here
 > there is no conversion in the path at all. It joins the class §3.3
 > already describes: not this project's, while living in `3-ICC-CMS`.**
@@ -6167,13 +6365,13 @@ reason this entry exists:
   business, and **the debt looks like diligence**. It can be carried for
   ever without a single number moving — DL-055's shape, in the scope
   register rather than the guard register.
-- ★ And it is **worse than idle**. A CMM that "solves" GWG 23.0 would be
+- ★ And it is **worse than idle**. A CMM that "solves" PCS 23.0 would be
   building an ICC path for a leg the standard routes around ICC entirely.
   That is not a missing feature; it is a **feature that would be wrong to
   ship**, and it would look correct, because its output is a gray that
   matches.
 
-> ★★★ **The rule, and it generalises past Ghent:** **a test patch is
+> ★★★ **The rule, and it generalises past suite:** **a test patch is
 > named for what it LOOKS at, not for the layer that PRODUCES it.** *Four
 > different Grays* has "gray" in the title, four colour spaces on the
 > page, and a colour as its pass criterion — and contains no colour
@@ -6192,23 +6390,23 @@ standard?"* is cheap, mechanical, and was never asked of §3.1's rows.
 
 #### ★★ The second finding, which is separate and about ATTRIBUTION STRENGTH
 
-`icc-spec-librarian` retrieved the **GWG 2022 specification** — the
-current one; **there is no GWG 2023** — and reports:
+`icc-spec-librarian` retrieved the **PCS2022 specification** — the
+current one; **there is no PCS2023** — and reports:
 
 - its requirement identifiers are **`Dxxx` / `Rxxx`**, and **there is no
   "23.0"**;
 - the nearest construct is **`D0013 "Black Colour"`**, which *is* the
   four-way equivalence — but it is a **definition consumed by the
   overprint requirements R0009–R0015**, not a requirement that a CMM
-  render the four identically. ★ **Even GWG's own document files this
+  render the four identically. ★ **Even the suite publisher's own document files this
   under overprint.**
-- GWG's actual handling of `DeviceGray` is **`R0011`: ban it** for small
+- the suite publisher's actual handling of `DeviceGray` is **`R0011`: ban it** for small
   black text, *because overprint will not always be honoured for it*.
 
-⇒ **`n.m` is Output Suite *patch* numbering, not GWG requirement
+⇒ **`n.m` is Output Suite *patch* numbering, not the suite's publisher requirement
 numbering.** The equivalence claim is real — Part 2 confirms the patch
 says *"shall show the same visual result"* — but its authority is **patch
-documentation, not the GWG specification**, and those are two different
+documentation, not the suite's publisher specification**, and those are two different
 strengths exactly as ground truth, cross-check and self-comparison are.
 
 > **A `shall` in a test patch's readme is the patch author's `shall`. It
@@ -6216,12 +6414,12 @@ strengths exactly as ground truth, cross-check and self-comparison are.
 
 #### ★★ A premise check on the DISPATCH itself, which failed — and the correction it prevented
 
-The dispatch asked for a sweep of the phrasing ***"GWG 23.0 demands…"***,
+The dispatch asked for a sweep of the phrasing ***"PCS 23.0 demands…"***,
 described as something *"this project has written repeatedly"*.
 
 > **It appears nowhere in this repository** *(verified — grepped the
-> whole tree for `GWG ?23`, `GWG230`, `Four.different.Gray` and for
-> `demands`; every hit is enumerated in `GHENT_COMPATIBILITY.md` §3.5)*.
+> whole tree for `the suite's publisher ?23`, `PCS230`, `Four.different.Gray` and for
+> `demands`; every hit is enumerated in `SUITE_COMPATIBILITY.md` §3.5)*.
 
 What exists is §3.1's **column heading** — *"the capability it demands of
 a CMM"* — which applies to all six rows and is almost certainly what was
@@ -6297,7 +6495,7 @@ not be merged into "§10.3.3 is contested".
    and `icc__ref__black_preservation.md`.
 2. **CMYK→CMYK black preservation remains genuinely this project's**, is
    still unimplemented, and is still being built. **It is simply not what
-   GWG 23.0 tests.** Losing that distinction would convert a boundary
+   PCS 23.0 tests.** Losing that distinction would convert a boundary
    correction into a scope cut, and this entry makes no scope cut.
 3. **No numeric claim moves.** No ΔE, no tolerance, no measured error.
    **`NUMERIC_CLAIMS.md` gains no row** — a librarian judgement, recorded
@@ -6314,7 +6512,7 @@ not be merged into "§10.3.3 is contested".
 **Revisit if:** a consumer establishes that a real workflow *does* route
 one of the four gray definitions through a CMM (which would mean a
 producer or reader is departing from §10.3.3, itself worth recording);
-the GWG 2022 specification is superseded by an edition that promotes
+the PCS2022 specification is superseded by an edition that promotes
 `D0013` from a definition to a CMM requirement; **the wrong-clause
 correction in `passk.rs` lands**, at which point this entry's third
 finding is discharged rather than owed; or ICC.1 acquires a
@@ -6360,11 +6558,11 @@ working tree read at the tip; Pass K landed as `846952f`, reflog)*.
 
 What replaced it is **not** arithmetic and is recorded under **DL-061**
 rather than here, because it is a different rule: the module's doc
-comment and its **emitted report string** call `g = 0.5` *"GWG's own
+comment and its **emitted report string** call `g = 0.5` *"the suite publisher's own
 patch value"* — **the patch's value is 25 %** — and its module doc names
 the four panels as including an **`ICCBased` gray**, which the readme
 does not list. **Two false statements about the same artefact, both in
-prose, neither reachable by a test.** Detail: `GHENT_COMPATIBILITY.md`
+prose, neither reachable by a test.** Detail: `SUITE_COMPATIBILITY.md`
 §3.5, "DISCHARGED, and one NEW defect found in its place".
 
 ---
@@ -6566,7 +6764,7 @@ it"* — is DISCHARGED.**
 | the Read tool reads the PNG | **VERIFIED** — displayed, and **two facts were read off it that no text engine returns** |
 
 ★ **What the promotion does NOT cover, so it is not rounded up.** The
-dispatch named the call with an **elided path**; the file was the GWG 23.0
+dispatch named the call with an **elided path**; the file was the PCS 23.0
 README, inferred from the two findings being attributed to that page.
 The recipe in this entry uses **`scale=3.2`**; the verified run used
 **`scale=2`**. **Neither the scale nor the 0-based index is now a
@@ -6619,7 +6817,7 @@ anywhere** remains `icc-spec-librarian`'s, in its own corpus: Cholewo
 2000 Eq. (1), RECONSTRUCTION → VERIFIED, `≤` glyphs recovered. **This is
 the first use inside THIS repository, the first by a shell-holding agent
 of this project, and the first whose product is a correction to this
-project's own documents** (`GHENT_COMPATIBILITY.md` §3.1's numbers,
+project's own documents** (`SUITE_COMPATIBILITY.md` §3.1's numbers,
 §3.4's incompleteness). It is the better *demonstration* — the corpus
 case recovers glyphs the engines mangle, this one recovers content the
 engines never mention — and it is **not** the earlier one. **Neither
@@ -6627,13 +6825,13 @@ displaces the other, and the first-use record is not rewritten.**
 
 ---
 
-### DL-061 — ★★★ **a number labelled with its supposed source is harder to check than a bare one, because the label answers the question a reader would otherwise ask. "GWG's own patch value" was printed into a report for a value the patch does not contain — and the artefact that could have contradicted it keeps its numbers in a FIGURE, where no text tool can reach them**
+### DL-061 — ★★★ **a number labelled with its supposed source is harder to check than a bare one, because the label answers the question a reader would otherwise ask. "the suite publisher's own patch value" was printed into a report for a value the patch does not contain — and the artefact that could have contradicted it keeps its numbers in a FIGURE, where no text tool can reach them**
 
 **Date:** 2026-08-18 · **Occasioned by:** `icc-engineer`'s reading of the
-GWG 23.0 README from a rasterised page, which showed that
-`GHENT_COMPATIBILITY.md` §3.1's superseded row also had **the wrong
+PCS 23.0 README from a rasterised page, which showed that
+`SUITE_COMPATIBILITY.md` §3.1's superseded row also had **the wrong
 numbers**, and that the same wrong figure is **emitted by landed code**
-with an attribution to GWG · **Filed by:** `icc-librarian`, **with every
+with an attribution to the suite's publisher · **Filed by:** `icc-librarian`, **with every
 statement below re-read in the live source** · **Extends** **DL-059**
 (which the panel values corroborate) and **DL-060** (whose route made
 them readable) · **Relates to** **DL-049** (a defect in a *tolerance's
@@ -6657,14 +6855,14 @@ tested — the best-documented constant caught by no injection),
    **`1 − 0.25 = 0.75`** is ISO 32000's own rule evaluated (DL-059's
    dated addition).
 2. **`tools/difftest/src/passk.rs:1342`** documents its `at_half` field
-   as *"the same ΔE at `g = 0.5` — **GWG's own patch value**"*, and
-   **`passk.rs:2446` prints** *"at GWG's own g = 0.5 patch value,
+   as *"the same ΔE at `g = 0.5` — **the suite publisher's own patch value**"*, and
+   **`passk.rs:2446` prints** *"at the suite publisher's own g = 0.5 patch value,
    {:.6}"* into the Pass K report *(verified — both lines read)*. **The
    ΔE is measured correctly.** `g = 0.5` is a fine sample of the ramp.
    **Only the reason given for choosing it is false.**
 3. **The same module's doc, `passk.rs:291`, lists the patch's panels as
    including an *`ICCBased` gray*.** The readme lists **`DeviceN`**, and
-   `GHENT_COMPATIBILITY.md` §3.1 and §3.5 both say `DeviceN [/Black]`
+   `SUITE_COMPATIBILITY.md` §3.1 and §3.5 both say `DeviceN [/Black]`
    *(verified — all three read)*. **Three descriptions of one four-panel
    page, and they do not agree.**
 
@@ -6685,14 +6883,14 @@ tested — the best-documented constant caught by no injection),
 - **The value was right.** Nothing recomputes, no ΔE moves, no tolerance
   changes. **A change ledger has nothing to record** — DL-055's shape,
   arriving in a doc comment.
-- **The label is what made it credible.** *"GWG's own patch value"* is
+- **The label is what made it credible.** *"the suite publisher's own patch value"* is
   precisely the sentence that stops a reader looking it up. **DL-057
   said a wrong clause is worse than a vague one because the citation
   makes the argument persuasive; this is the same mechanism applied to
   a number instead of a rule.** *"the ΔE at g = 0.5"* would have been
   weaker prose and a stronger claim.
 - **It reached emitted output.** A consumer reading the Pass K report is
-  told the figure is GWG's. DL-031's finding — **a bare count in emitted
+  told the figure is the suite publisher's. DL-031's finding — **a bare count in emitted
   text can never be corrected after the fact** — applies to an
   attribution just as it does to a count.
 - **No test can fail on it.** DL-051 established that documentation is
@@ -6702,8 +6900,8 @@ tested — the best-documented constant caught by no injection),
 
 #### ★★ How the wrong pair most plausibly arrived — a reading, labelled as one
 
-**§3.3 of `GHENT_COMPATIBILITY.md`, one table after the wrong row,
-describes GWG 3.0 as comparing *"50 % K, 50 % Gray and 50 % spot
+**§3.3 of `SUITE_COMPATIBILITY.md`, one table after the wrong row,
+describes PCS 3.0 as comparing *"50 % K, 50 % Gray and 50 % spot
 black"* and warns it *"reads like a gray-equivalence test"** *(verified
 — read)*. The figure written into 23.0's row is the figure belonging to
 **the patch the same document flags as the deceptive lookalike**.
@@ -6724,7 +6922,7 @@ black"* and warns it *"reads like a gray-equivalence test"** *(verified
    rests on the **README**. *"The readme declares"* is the sentence;
    *"the patch paints"* is not established, and on a corpus that ships
    two deliberately corrupted profiles it must not be assumed.
-3. **`GHENT_COMPATIBILITY.md` §9 gains a fourth provenance class**,
+3. **`SUITE_COMPATIBILITY.md` §9 gains a fourth provenance class**,
    `[QUOTED-FROM-RASTER]`, because the existing `[QUOTED]` is defined by
    naming `pdftotext -layout` — a definition that could not carry the
    new readings.
@@ -6745,10 +6943,10 @@ black"* and warns it *"reads like a gray-equivalence test"** *(verified
    entry** (**§7.22**).
 3. **No Pass K number is in doubt.** §3.10's rows in `TOLERANCES.md`
    stand; **neither defect appears anywhere in `docs/`** *(verified —
-   grepped for `g = 0.5`, `patch value`, `GWG's own`, `50 %`, `midpoint`
+   grepped for `g = 0.5`, `patch value`, `the suite publisher's own`, `50 %`, `midpoint`
    and `at_half`)*, so the correction is confined to one source file.
-4. **`GHENT_COMPATIBILITY.md` §3.3's own `50 %` figures are untouched.**
-   They belong to **GWG 3.0** and are correct there. ★ Sweeping them up
+4. **`SUITE_COMPATIBILITY.md` §3.3's own `50 %` figures are untouched.**
+   They belong to **PCS 3.0** and are correct there. ★ Sweeping them up
    would be the over-correction this project has now twice recorded.
 
 **Revisit if:** the patch's content stream is read and **disagrees with
@@ -7955,11 +8153,11 @@ defensible again.
 **Date:** 2026-08-25 · **Occasioned by:** `pdfce`'s channel note
 `open/note_cmyk_to_srgb_injects_blue_into_saturated_orange.md` (2026-08-25,
 informational, *"no reply owed"*), reporting that its three interim
-`DeviceCMYK`→sRGB lookup tables all miss Acrobat's rendering of one Ghent
+`DeviceCMYK`→sRGB lookup tables all miss Acrobat's rendering of one suite
 patch **in opposite directions** · **Measured by** `icc-engineer`;
 **drafted and filed by** `icc-librarian` · **The evidence is
 `NUMERIC_CLAIMS.md` §3.38 — `NC-301` (the plateau) and `NC-302` (the
-clamp sweep)**; the narrative is `GHENT_COMPATIBILITY.md` §4.7 · **No code
+clamp sweep)**; the narrative is `SUITE_COMPATIBILITY.md` §4.7 · **No code
 changes. This entry decides what may be CLAIMED and what shape of remedy
 is available, not what the engine does.**
 
@@ -8165,7 +8363,7 @@ make a ΔE arguable; **or** a comparison is wanted at a point that is
 **demonstrably inside the destination gamut on every channel**, which
 kills reason 2 but **not reason 1**, and therefore still does not license
 the number; **or** a genuinely colorimetric reference for this corpus
-appears — a measured print, or Ghent's own reference PDF rendered through
+appears — a measured print, or the suite's own reference PDF rendered through
 a pinned pipeline — at which point the screen capture stops being the
 best available evidence and the question is moot.
 
@@ -8174,7 +8372,7 @@ best available evidence and the question is moot.
 ### DL-071 — ★★★ **a tool that must QUOTE LICENSED MATERIAL to do its job is SPLIT into a generic engine and a private data file, and the data file lives OUTSIDE the repository rather than in a gitignored path inside it. Second instance in eight days of the same boundary, which is what makes it a pattern; and the log had NO ENTRY for the first, which is why this one is not a duplicate**
 
 **Date:** 2026-08-25 (later the same day as `DL-069` / `DL-070`) ·
-**Occasioned by:** `tools/ghent/shading_cell.py` — written that morning to
+**Occasioned by:** `tools/suite/shading_cell.py` — written that morning to
 answer `pdfce`'s question, and found to have inlined a licensed test
 suite's specifics as constants · **Decided by the operator**, whose terms
 were *"split it into a public generic tool plus local file"* ·
@@ -8186,13 +8384,13 @@ were *"split it into a public generic tool plus local file"* ·
 
 The dispatch that requested it asked the right question: **is this already
 covered by the 2026-08-18 decision that untracked
-`docs/GHENT_COMPATIBILITY.md`?** It is not, and the reason is worth
+`docs/SUITE_COMPATIBILITY.md`?** It is not, and the reason is worth
 stating explicitly rather than by omission:
 
 1. ★★★ **The 2026-08-18 decision IS NOT IN THIS LOG.** *(**VERIFIED** —
    searched `ARCHITECTURE.md` for it; the decision lives in
    `.gitignore`'s comment block, in `NEXT_SESSION.md`, and in
-   `GHENT_COMPATIBILITY.md` §2.2 — **all three of which are either
+   `SUITE_COMPATIBILITY.md` §2.2 — **all three of which are either
    untracked or not the decision log**, and one of which is invisible to
    a default repository search.) A pattern whose only record is a comment
    in a `.gitignore` is one refactor away from being lost.
@@ -8278,10 +8476,138 @@ rather than by a reader's memory.
    reversal of this decision and needs a new one.
 
 **Revisit if:** the suite's licensor grants written permission for the
-specifics (which `GHENT_COMPATIBILITY.md` §8 item 1 already records as
-required for any public mention of Ghent), **or** a case file's absence
+specifics (which `SUITE_COMPATIBILITY.md` §8 item 1 already records as
+required for any public mention of suite), **or** a case file's absence
 from version control is observed to have cost a measurement — a number in
 the ledger that cannot be reproduced because the case file drifted or was
 lost, which is cost 2 above **firing** rather than being anticipated —
 at which point the question is not *"track it"* but *"where does an
 unversioned but backed-up artifact live?"*
+
+---
+
+### DL-072 — ★★★ **a SHIPPED, DELIBERATELY-CHOSEN REFUSAL collides with a NORMATIVE OBLIGATION IN ANOTHER STANDARD, and the two are at DIFFERENT LAYERS. Both are defensible where they stand, so the decision recorded here is that NEITHER MAY BE CHANGED BY CITING THE OTHER — and the design is deferred, named, and given a candidate that was checked for existing before it was proposed**
+
+**Date:** 2026-08-25 · **Occasioned by:** `pdfce`'s reply of 2026-08-25
+in the request channel, answering seven questions and stating one
+requirement this project's shipped code does not meet ·
+**Filed by** `icc-librarian` · **Decided by:** nobody yet, and **that is
+the entry's content** · **Rows affected:** none. **No code changes, no
+number moves, no tolerance moves.**
+
+#### The collision, both halves stated in their own terms
+
+**Half 1 — what iccce ships today, and it is deliberate.** *(★
+**VERIFIED** in live source at this filing —
+`crates/iccce-cli/src/main.rs`, the `--intent` arm.)* An intent name
+outside `media-relative` / `perceptual` / `saturation` / `absolute` is
+**refused with exit `2`**, and the code carries its reason as a comment:
+
+> *"Refuse an unknown name rather than substituting: a substituted intent
+> produces plausible wrong colour."*
+
+★ That is **rule 1 of this project** applied exactly as written — *a wrong
+colour looks exactly like a right one* — and it is the correct behaviour
+for the surface it is on.
+
+**Half 2 — what the named consumer requires, and it is normative
+somewhere else.** *(★ `[REPORTED]` by `pdfce`, 2026-08-25 — **NOT
+re-derived here**, and it is owed a re-derivation from
+`PDF_Spec\_sources\` before anything is built on it.)* **ISO 32000-2
+§8.6.5.8** permits a rendering-intent name outside the standard four and
+**obliges a reader to substitute a default**. `/Custom` is such a name and
+`pdfce` names a real instance of it in a public conformance corpus. Their
+requirement:
+
+> *"Your API must accept an intent name it does not recognise and tell us
+> what it substituted — it must not refuse the paint."*
+
+#### ★★★ Why this is a decision-log entry and not a bug report
+
+Because **each half is right where it stands, and the thing that makes
+them compatible is a LAYER DISTINCTION that this project has never
+written down.**
+
+| layer | who typed the name | what a refusal costs | what a substitution costs |
+|---|---|---|---|
+| **`iccce transform` CLI** | a human, at a prompt, once | one error message and a retry | ★ **plausible wrong colour with nobody told** — the machine has no channel back to the person |
+| **library API consumed by a PDF reader** | a *document*, parsed at scale, unattended | ★★★ **a page that will not render** — and the standard says the reader must render it | nothing, **provided the substitution is disclosed to the caller** |
+
+★★ **The refusal is not merely inconvenient at the library layer — it is
+NON-CONFORMANT to the standard that governs the caller.** And the
+substitution is not merely convenient at the CLI layer — it is the exact
+failure rule 1 exists to prevent. **They are not the same question and
+the answer to one is not evidence about the other.**
+
+#### The decision that IS taken here
+
+> ★★★ **Neither behaviour may be changed by citing the other.** The CLI's
+> refusal is not evidence that a library API may refuse; a library API's
+> obligation to substitute is not licence to make the CLI substitute.
+> **Any future change to either surface must state which layer it is
+> changing and why that layer's trade-off moved** — and if it changes both,
+> it needs two reasons, not one.
+
+★ **This is a real constraint and not a placeholder**, because the cheap
+wrong move is available right now and looks like tidying: making the two
+surfaces "consistent" in either direction, in one commit, with one
+justification. **That commit would silently trade a conformance defect for
+a colour defect, or the reverse, and its diff would read as a
+simplification.**
+
+#### The design, DEFERRED — with the candidate named and checked
+
+The shape this project has **already invented for exactly this situation**
+is disclosure-instead-of-silence, and it exists twice:
+**`DestinationProvenance`** (a two-variant enum, `DL-050`, because an
+`Option::None` cannot distinguish *"there was none"* from *"I failed to
+get one"*) and **`SpecDeviation`** (a struct naming clause, side, declined
+tags, what was taken instead, and why declining is permitted).
+
+★★ **Both were read before a third mechanism was proposed, and neither
+generalises to this** *(★ **VERIFIED** — `crates/iccce-cmm/src/transform.rs`,
+read at this filing)*:
+
+- **`DestinationProvenance`** is about *which profile* was used and has
+  two variants with no payload. An unrecognised intent **name** has
+  nowhere to live in it.
+- **`SpecDeviation`** is about **iccce declining a capability it does not
+  have** — `clause`, `declined: Vec<Signature>`, `permitted_because`. A
+  substituted intent is the opposite shape: **iccce is not declining
+  anything; the CALLER handed it something it could not name**, and the
+  payload needed is a string, not a tag signature.
+
+**Candidate, and it is a candidate and not a decision: `IntentProvenance`
+— the requested name, the intent actually used, and the fact that a
+substitution occurred.** *(★ **VERIFIED that no such type exists today** —
+`IntentProvenance` returns zero matches anywhere in the repository.)*
+Such a type would satisfy §8.6.5.8 **and** rule 6 — *the parser reports,
+it does not repair* — **in the same object**, which is why it is worth
+proposing rather than choosing between the two obligations.
+
+★ **What is deliberately NOT decided:** whether the substituted default is
+media-relative (iccce's own default), the intent the PDF standard names
+for the surrounding operation, or a caller-supplied fallback. **That is a
+colour decision and belongs to `icc-engineer` with the operator, not to a
+librarian filing a conflict.**
+
+#### What this entry does NOT do
+
+1. **It does not say iccce is wrong.** Half 1 ships and stays until
+   somebody decides otherwise on the record.
+2. **It does not re-derive §8.6.5.8.** The clause is `[REPORTED]` by the
+   consumer, and this project has been burned by an attractive wrong
+   clause number before (`DL-057`, twice). **Re-derive before building.**
+3. **It does not create a roadmap item.** The API-shape work it belongs
+   to is already recorded as an open question under `DL-059` and is still
+   not scoped.
+4. **It does not touch the CLI.** No edit was made to
+   `crates/iccce-cli/src/main.rs` at this filing.
+
+**Revisit when:** the `IntentProvenance`-or-equivalent design is chosen —
+at which point this entry is superseded by one recording the choice —
+**or** if §8.6.5.8's obligation fails re-derivation, in which case half 2
+evaporates and the conflict never existed. ★ **A third trigger, and it is
+the one most likely to fire first: any commit that makes the CLI and the
+library API agree.** If one appears without two stated reasons, this entry
+is what it violated.

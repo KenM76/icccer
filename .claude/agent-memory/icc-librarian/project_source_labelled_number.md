@@ -1,6 +1,6 @@
 ---
 name: iccce-source-labelled-number
-description: DL-061 — a number carrying a SOURCE LABEL makes two claims and only the value is ever tested; "GWG's own patch value" was PRINTED INTO A REPORT for a figure the patch does not contain, and the artefact that would falsify it keeps its numbers in a FIGURE where no text tool can reach them
+description: DL-061 — a number carrying a SOURCE LABEL makes two claims and only the value is ever tested; "the suite publisher's own patch value" was PRINTED INTO A REPORT for a figure the patch does not contain, and the artefact that would falsify it keeps its numbers in a FIGURE where no text tool can reach them
 metadata:
   type: project
 ---
@@ -14,9 +14,9 @@ extraction can contradict the label. The check is a render, or there is
 no check.**
 
 **Why:** on 2026-08-18 `tools/difftest/src/passk.rs:1342` documented its
-`at_half` field as *"the same ΔE at `g = 0.5` — **GWG's own patch
+`at_half` field as *"the same ΔE at `g = 0.5` — **the suite publisher's own patch
 value**"*, and **`:2446` printed that phrase into the Pass K report**.
-**The GWG 23.0 patch's gray panel is 25 %, not 50 %.** The ΔE at
+**The PCS 23.0 patch's gray panel is 25 %, not 50 %.** The ΔE at
 `g = 0.5` is measured correctly and is a fine sample of the ramp —
 **only the reason given for choosing it is false.**
 
@@ -25,7 +25,7 @@ value**"*, and **`:2446` printed that phrase into the Pass K report**.
 - **Nothing recomputes.** No ΔE, no tolerance. **A change ledger has
   nothing to record** — [[iccce-gate-must-not-reward-deletion]]'s DL-055
   shape, arriving in a doc comment.
-- **The label is what made it credible.** *"GWG's own patch value"* is
+- **The label is what made it credible.** *"the suite publisher's own patch value"* is
   the sentence that stops a reader looking it up. **DL-057 said a wrong
   clause is worse than a vague one because the citation makes the
   argument persuasive** — same mechanism, applied to a number
@@ -38,8 +38,8 @@ value**"*, and **`:2446` printed that phrase into the Pass K report**.
   value to perturb** ([[iccce-documented-is-not-tested]]).
 
 **★★ Where the wrong pair most plausibly came from — a mechanism, not an
-accusation.** `GHENT_COMPATIBILITY.md` **§3.3, one table after the wrong
-row, attributes "50 % K, 50 % Gray and 50 % spot black" to GWG 3.0** and
+accusation.** `SUITE_COMPATIBILITY.md` **§3.3, one table after the wrong
+row, attributes "50 % K, 50 % Gray and 50 % spot black" to PCS 3.0** and
 calls it the deceptive gray-equivalence lookalike. ⇒ **a number can
 migrate between adjacent rows of one table without anybody mistyping
 anything, and it arrives wearing the destination row's subject.** Filed

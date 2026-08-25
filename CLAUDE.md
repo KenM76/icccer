@@ -156,23 +156,23 @@ reference and its number, and names its oracle** — ground truth,
 cross-check against another implementation, and self-comparison are three
 different strengths of claim in that folder exactly as they are here.
 
-### 11. ★★★ NO NEW GHENT MATERIAL IN A TRACKED FILE — operator decision, 2026-08-25
+### 11. ★★★ NO NEW SUITE MATERIAL IN A TRACKED FILE — operator decision, 2026-08-25
 
-**Ken's words: *"ship it and stop adding Ghent material."*** Effective
+**Ken's words: *"ship it and stop adding suite material."*** Effective
 immediately, binding on every session.
 
-**What the decision settles.** The Ghent PDF Output Suite 5.0 is licensed,
+**What the decision settles.** The print-conformance suite is licensed,
 non-redistributable, carries a **no-commercial-use** clause and an
-**affirmative obligation to reproduce GWG's notice** in any substantial
+**affirmative obligation to reproduce the suite publisher's notice** in any substantial
 copy — the most restrictive terms of the four corpora this project touches.
-`docs/GHENT_COMPATIBILITY.md` was untracked for that reason on 2026-08-18,
-but `docs/NUMERIC_CLAIMS.md` kept accepting Ghent-derived rows, and that
+`docs/SUITE_COMPATIBILITY.md` was untracked for that reason on 2026-08-18,
+but `docs/NUMERIC_CLAIMS.md` kept accepting suite-derived rows, and that
 document **is** tracked and **has been public on GitHub throughout**. The
 decision does not undo that. It stops the growth.
 
 **The rule, stated so it can be applied without re-deciding:**
 
-- **Nothing Ghent-derived may be ADDED to a tracked file from now on.** Not
+- **Nothing suite-derived may be ADDED to a tracked file from now on.** Not
   a measurement, not a patch identifier, not a file name, not an
   indirect-object number, not a device colour read out of one of its
   documents, not the identity or `cprt` of a profile embedded in one, and
@@ -180,8 +180,8 @@ decision does not undo that. It stops the growth.
 - **What is already there STAYS.** It ships in `v0.2.0`. Removing it would
   mean rewriting published history, which the operator did not ask for and
   which would not un-publish anything.
-- **Ghent work itself continues** — in `docs/GHENT_COMPATIBILITY.md`
-  (untracked, still the reference), in `tools/ghent/` for anything generic,
+- **suite work itself continues** — in `docs/SUITE_COMPATIBILITY.md`
+  (untracked, still the reference), in `tools/suite/` for anything generic,
   and in `tools/patch-compare/` case files, which live **outside the
   repository** rather than in a gitignored path inside it.
 - **Tracked documents may still POINT at the untracked ones** by section, as
@@ -201,7 +201,7 @@ anyway.
 
 > ★ **Placed at 11 rather than 10 deliberately.** Inserting it *before*
 > the request-channel rule would have renumbered that rule to 11, and
-> **eleven passages across `ARCHITECTURE.md`, `GHENT_COMPATIBILITY.md` and
+> **eleven passages across `ARCHITECTURE.md`, `SUITE_COMPATIBILITY.md` and
 > `NEXT_SESSION.md` cite "rule 10" meaning the channel** — including four
 > that cite a specific item number within it. Renumbering breaks a
 > cross-reference silently: the citation still resolves, to the wrong rule.

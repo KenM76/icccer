@@ -6,14 +6,17 @@
 - [The absence of a publication is not evidence](project_absence_of_publication_is_not_evidence.md) — DL-054: an ACCESS bar recorded as an EXISTENCE fact; the 12-ULP residual was the FILE's, and the wrong OWNER survived because the NUMBER was right.
 - [A wrong clause is worse than no clause](project_wrong_clause_refusal_and_discarded_halves.md) — DL-057: a discarded half's error is what the CALLER sees, and a correct citation on the wrong subject invites acceptance.
 - [An artifact's existence is not the obligation's status](project_artifact_existence_is_not_obligation_status.md) — DL-058: a GENERATED file goes quietly wrong while staying well-formed; and a crates.io check expires, reserves nothing, authorises nothing.
-- [A patch is named for what it LOOKS at](project_patch_named_for_what_it_looks_at.md) — DL-059: GWG 23.0 was ours and is pdfce's; corroborated 2026-08-18 by the artwork's own numbers.
+- [A patch is named for what it LOOKS at](project_patch_named_for_what_it_looks_at.md) — DL-059: PCS 23.0 was ours and is pdfce's; corroborated 2026-08-18 by the artwork's own numbers.
 - [An inferred environment constraint is a READING](project_inferred_environment_constraint_is_a_reading.md) — DL-060, now VERIFIED: pypdfium2 renders; and engines' silence about a FIGURE reads as absence of the fact.
-- [A number labelled with its source](project_source_labelled_number.md) — DL-061: "GWG's own patch value" printed into a report for a value the patch lacks; the label is the untested half.
+- [A number labelled with its source](project_source_labelled_number.md) — DL-061: "the suite publisher's own patch value" printed into a report for a value the patch lacks; the label is the untested half.
 - [A stale STATUS decays faster than a number](project_stale_status_decays_faster_than_a_number.md) — DL-062, now FIVE instances ⇒ DL-068: carry the two ref HASHES, not a push count. The field itself is wrong.
 - [Words are read by humans, the COUNT by code](project_words_are_read_by_humans_count_by_code.md) — DL-063: `malformations: N` counts DISCLOSURES; two files, same bytes, same count, one conformant.
 - [A fabricated value is a forged credential](project_fabricated_value_is_a_forged_credential.md) — DL-067: a v2 `profileID` invented from reserved bytes, `malformations: 0`. Worse than a false accusation — it invites verification.
 - [A claim in a UNIT is scoped to that unit](project_claim_in_a_unit_is_scoped_to_that_unit.md) — Pass L falsified two of our own doc-comment claims; and §C is SELF-comparison because the oracle was MEASURED blind to it.
 - [A fitted table cannot express a CLAMP](project_fitted_table_cannot_express_a_clamp.md) — DL-069/DL-070: opposite-direction misses signal a DISCONTINUITY; our own CLUT smooths the same way; no ΔE against a screen capture.
+- [A refusal correct at one layer is non-conformance at another](project_refusal_at_one_layer_is_nonconformance_at_another.md) — DL-072: the CLI's exit-2 vs §8.6.5.8's obligation. The dangerous commit is the TIDYING one.
+- [A producer census is not a consumer fact](project_producer_census_is_not_a_consumer_fact.md) — NC-307's measurer honours none of what it counted; and rule 11 is about the MATERIAL, not the MEASURER.
+- [A gate catches only ENUMERATED failures](project_gate_catches_only_enumerated_failures.md) — wasm32 cannot see a thread spawn; invariant 7, not a better gate. And a byte-grep over PDFs reads zero and is believed.
 
 - [Documented is not tested](project_documented_is_not_tested.md) — DL-051: five injections, the BEST-documented constant caught by NONE; the doc comment's length is what hid it. Injection, never inspection.
 - [An injection measures ONE magnitude](project_injection_measures_one_magnitude.md) — DL-064: the red runs discharge the debt, the GREEN run is the floor; rival named with `1e-9`, guard claimed without a number.
@@ -22,10 +25,10 @@
 - [A count from a sample is not the population](project_count_from_a_sample_is_not_the_population.md) — DL-053: "two iccMAX" was TEN; [VERIFIED] certifies the measurement happened, never what it ranged over.
 
 - [ICC.1 PDF blocker — cleared](project_icc1_pdf_operator_blocker.md) — resolved 2026-08-11; the lasting lesson is that "free download" never implies "automated retrieval permitted" (ITU-R is next).
-- [iccce Pass status](project_iccce_pass_status.md) — to the 2026-08-25 **`0.2.0` changelog** filing: version bumped, no ledger row; next free NC-307/NA-013, DL-071 newest.
+- [iccce Pass status](project_iccce_pass_status.md) — to the 2026-08-25 **consumer-requirements** filing: tip `b5d0ccb`, NC-307 + DL-072; next free NC-308/NA-013/DL-073.
 - [A release range is not the dispatch's list](project_release_range_is_not_the_dispatch_list.md) — Pass G/H were named as 0.2.0 content and shipped in 0.1.0; and a tag ref is an ANNOTATED TAG OBJECT, not the commit.
 - [A tool that quotes licensed material gets SPLIT](project_licensed_tool_split_outside_the_tree.md) — DL-071: the case file lives OUTSIDE the repo, not gitignored inside it; and the deleted predecessor took the only auditor of its own numbers.
-- [A gitignored file is invisible to a citation sweep](project_gitignored_file_invisible_to_citation_sweep.md) — 9 reported where 13 existed; it under-counts toward a FALSE ALL-CLEAR. Search `GHENT_COMPATIBILITY.md` by name.
+- [A gitignored file is invisible to a citation sweep](project_gitignored_file_invisible_to_citation_sweep.md) — 9 reported where 13 existed; it under-counts toward a FALSE ALL-CLEAR. Search `SUITE_COMPATIBILITY.md` by name.
 - [Compatibility is not certification](project_compatibility_not_certification.md) — DL-045/046/047: a third-party corpus gives a CATEGORICAL expectation but never a number; promote a [REPORTED] claim only by re-running with a control.
 - [Ground truth: a test is not a row](project_ground_truth_cannot_exist.md) — DL-041: the LUT path's ground truth CANNOT exist; Annex D.6.3 now has a TEST but still no ledger row — NC-001 remains the only one.
 - [A negative finding removes its own auditor](project_negative_finding_removes_its_auditor.md) — DL-042: a wrong REJECTION survives forever; re-audit the REASON an item is owed, not just the item.

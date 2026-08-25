@@ -1,6 +1,6 @@
 ---
 name: project-passk-icc1-is-silent-on-black
-description: ICC.1 says NOTHING about black preservation (closed negative, A51) — ICC's only black construct disclaims itself; the DeviceGray→CMYK rule is shall-level ISO 32000-1 §10.3.3 and belongs to pdfce; "GWG 23.0" is not a GWG id; and TWO different rules share the name "black preservation".
+description: ICC.1 says NOTHING about black preservation (closed negative, A51) — ICC's only black construct disclaims itself; the DeviceGray→CMYK rule is shall-level ISO 32000-1 §10.3.3 and belongs to pdfce; "PCS 23.0" is not a the suite's publisher id; and TWO different rules share the name "black preservation".
 metadata:
   type: project
 ---
@@ -35,10 +35,10 @@ written down.**
    one name**: lcms2 maps K by **equal `L*`** on the K ramp; **Cholewo (2000) by
    the `K_MIN`/`K_MAX` ratio**. *State which iccce implements before any
    cross-check of the K value means anything.*
-4. ★ **"GWG 23.0 (Four different Grays)" is not a GWG requirement id.** GWG 2022
+4. ★ **"PCS 23.0 (Four different Grays)" is not a the suite's publisher requirement id.** PCS2022
    uses `Dxxx`/`Rxxx`; the four-way equivalence is **`D0013 "Black Colour"`**, a
    *definition consumed by the overprint requirements*. The `n.m` form is the
-   **Ghent PDF Output Suite patch** numbering. **An engineer's citation label is
+   **the print-conformance suite patch** numbering. **An engineer's citation label is
    a claim too** — this one arrived in the dispatch brief and propagated into a
    module header before it was checked.
 5. **No published ΔE exists to grade against.** Cholewo prints visual figures

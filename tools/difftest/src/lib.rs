@@ -188,7 +188,7 @@ pub mod pass5;
 pub mod pass5b;
 pub mod pass5c;
 pub mod pass6;
-// ★ Pass G — the Ghent v5.0 population sample. The first differential grading
+// ★ Pass G — the print-conformance suite population sample. The first differential grading
 // this project has done against profiles a *real document producer* embeds,
 // rather than synthetic, OS-shipped or standards-body-issued ones. It reads a
 // **licensed, uncommittable** corpus via `$ICCCE_PRIVATE_FIXTURES` and skips

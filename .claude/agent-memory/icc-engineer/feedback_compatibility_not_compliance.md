@@ -10,7 +10,7 @@ testing — a press run, a proof, a spectrophotometer — aim for
 *compatibility* with the standard and keep going. Do not treat the
 unavailable certification path as a reason to stop.**
 
-**Why:** Ken said this on 2026-08-17 while handing over the Ghent PDF
+**Why:** Ken said this on 2026-08-17 while handing over the suite PDF
 Output Suite 5.0: *"I know some things you stopped work on because they
 required physical testing that we don't have. We aren't going to aim for
 compliance like that. Just aim for compatibility."* This project has a
@@ -21,7 +21,7 @@ things, and the second is achievable alone.
 **How to apply:** split any such standard into the part that needs a
 measurement instrument and the part that does not, and do the second
 part properly. The line is usually sharper than it first looks — for the
-Ghent suite, certification needs proofing hardware, but "does the parser
+suite, certification needs proofing hardware, but "does the parser
 accept every profile real producers embed?", "is a declared source
 profile actually honoured?" and "do a vendor's v2 and v4 encodings of one
 space agree?" are all answerable on this machine with no instrument at
@@ -38,10 +38,10 @@ to be supported.
 strength of claim, but for a **named** programme the strength of the
 claim is not the only constraint — **using the name is a separate
 question from earning the claim.** Ken proposed *"compatible with the
-Ghent suite"* and, weaker, *"tested with the Ghent suite"*; both are
+suite"* and, weaker, *"tested with the print-conformance suite"*; both are
 honest about evidence and **neither escapes the problem**, because
-`docs/GHENT_COMPATIBILITY.md` §2.2 anticipated the first phrase verbatim
-and holds that any public statement naming Ghent needs GWG's written
+`docs/SUITE_COMPATIBILITY.md` §2.2 anticipated the first phrase verbatim
+and holds that any public statement naming suite needs the suite publisher's written
 permission first. Weakening the verb moves along the evidence axis; the
 binding axis is the mark. **So when the standard is a trademarked
 programme rather than a published document, check the name before
@@ -50,4 +50,4 @@ measurement (*"20 real-world print-industry ICC profiles, v2 and v4"*)
 over naming the suite, which is both permission-free and a stronger
 statement than *"tested with"*.
 
-Related: [[project-ghent-compatibility]].
+Related: [[project-suite-compatibility]].

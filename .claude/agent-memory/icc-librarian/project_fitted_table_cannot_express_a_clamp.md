@@ -1,6 +1,6 @@
 ---
 name: iccce-fitted-table-cannot-express-a-clamp
-description: DL-069/DL-070 (2026-08-25, GWG010) — two rival tables missing in OPPOSITE directions is the signature of a DISCONTINUITY, not bad fitting; and the reference was a screen capture, the weakest evidence class this ledger has ever admitted.
+description: DL-069/DL-070 (2026-08-25, PCS010) — two rival tables missing in OPPOSITE directions is the signature of a DISCONTINUITY, not bad fitting; and the reference was a screen capture, the weakest evidence class this ledger has ever admitted.
 metadata:
   type: project
 ---
@@ -10,11 +10,11 @@ because a clamp is a DISCONTINUITY and an interpolant is defined by not
 having one — and the same argument runs against iccce's own CLUT path,
 one stage earlier.** `ARCHITECTURE.md` **DL-069**; rows `NC-301` …
 `NC-305` in `NUMERIC_CLAIMS.md` §3.38; narrative
-`GHENT_COMPATIBILITY.md` §4.7.
+`SUITE_COMPATIBILITY.md` §4.7.
 
 **Why:** `pdfce` reported (2026-08-25, `Pass 122.7`, a note marked
 *"no reply owed"*) that its three interim `DeviceCMYK`→sRGB tables all
-miss Acrobat on one Ghent patch **in opposite directions** — `naive`
+miss Acrobat on one suite patch **in opposite directions** — `naive`
 blue 0 / green 143, `calibrated` blue 55 / green 165, Acrobat 0 / 156.
 Read as a fitting problem that is baffling. Read as a **shape** problem
 it is forced: the colour is **out of sRGB gamut on the blue axis**, so a
@@ -63,7 +63,7 @@ filling a gap.
   correct selection and a silent fallback are **indistinguishable** on
   that profile — candidate separation zero
   ([[iccce-agreement-can-be-the-symptom]], DL-033).
-- The case **can never become a committed fixture**: Ghent (licensed),
+- The case **can never become a committed fixture**: suite (licensed),
   Heidelberg (the embedded profile), Acrobat (a capture of a commercial
   product), Microsoft (the Windows colour profiles). It lives as a
   **written number plus a harness that takes paths** — so **no test fails
