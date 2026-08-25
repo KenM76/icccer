@@ -7457,3 +7457,183 @@ and **the specifics are not reproduced anywhere in this repository.**
 - **That `SUITE_COMPATIBILITY.md` §10's numbers were verified.** ★★ §10 is written by this filing and is `[REPORTED]` at exactly the reply's strength. **This role has not opened the corpus.** ★ Its one exception is stated in §10.5: the *"51 files"* figure has a second, independent source in this project's own 2026-08-17 enumeration.
 - **That anything was pushed, published, tagged or reserved.** ★ **This filing fetched nothing, published nothing and authorises nothing** (rule 9).
 - **That the request channel was polled.** ★ Again instructed **not** to arm a monitor, and did not. ★★ **One file was read, by name** — the reply this entry is about, because it is the primary artifact and a dispatch is a report of it. **No statement is made about the channel's other contents.**
+
+---
+
+## 2026-08-25 — the **`767233d` scope correction** (thirty-sixth `SESSION_LOG` entry). **A pushed commit's message asserts that its diff contains a VOCABULARY SUBSTITUTION AND NOTHING ELSE. The same diff also carries an entire measured filing — `NC-307`, `DL-072`, four new document sections. The clause is TRUE OF THE SCRUB'S OWN EDITS and FALSE OF THE COMMIT, and the whole distance between the two is `git add -A`**
+
+**Filed by `icc-librarian`, which has no shell and ran nothing.** ★ **No
+code changed, no number moved, no tolerance moved, `TOLERANCES.md` was not
+opened, and no colour value was computed.** ★★ **No commit was amended, no
+ref was rewritten, and nothing was pushed** — see *"What is NOT being
+done"* below, which is half the content of this entry.
+
+### The commit, and what it says about itself
+
+**`767233d774a63176bb3c5b68f762162ccf0eef93`** — subject *"scrub: the
+suite's name and its publisher's acronym leave this repository"*, the
+mechanical pass that discharged the operator's 2026-08-25 ruling. Its
+message body ends with a four-part self-description whose final clause is
+the subject of this entry:
+
+> *"Per `SCRUB_SPEC` §6, this changes VOCABULARY ONLY. Every number, date,
+> verdict, hash and conclusion in every `SESSION_LOG` and ledger entry is
+> exactly as it was, no entry was deleted for being awkward, **and nothing
+> else was fixed while in here — a scrub whose diff also contains
+> corrections stops being reviewable as a scrub.**"*
+
+★★★ **The final clause is false, and the sentence states its own cost
+correctly.** The commit's diff also contains the **consumer-requirements
+filing** — the thirty-fifth entry above, made the same day and still
+uncommitted in the working tree when the scrub instruction arrived.
+
+### ★★ The two changesets, recorded SEPARATELY — which is item 2 of the correction and the part that matters most
+
+An auditor who reads `767233d`'s message and then its diff will find
+ledger prose, a new decision-log entry and two new `NUMERIC_CLAIMS.md`
+sections inside a commit that says it substituted words. ★★★ **The
+available misreading is far worse than the original error: it makes
+MEASURED CONTENT look like the output of a mechanical substitution
+table.** So the two are separated here by name.
+
+| # | changeset | what it is | how to tell it apart in the diff |
+|---|---|---|---|
+| **A** | **the scrub proper** | `SCRUB_SPEC` §6 vocabulary substitution across the tree, plus the file renames the gate's docstring records (*"five paths … including an entire directory"*) | term-for-term replacements; **no new sections, no new identifiers, no sentence that did not exist before** |
+| **B** | **the consumer-requirements filing** | `NC-307` (`NUMERIC_CLAIMS.md` **§3.39**) · **§7.29** · `DL-072` (`ARCHITECTURE.md` §5) · `ARCHITECTURE.md` **§3.1** and **§4.1** + standing invariant **7** · `FEATURES.md` §3 and §5 · a dated block under `ROADMAP.md` Pass 8 · a dated addendum inside `DL-059` §2 · the thirty-fifth `SESSION_LOG` entry | **wholly new prose**, authored 2026-08-25, measured by `pdfce` and filed by `icc-librarian` — **none of it produced by, or touched by, the substitution table** |
+
+★ **Changeset B is documented in full one entry above.** This entry adds
+nothing to it and re-states none of its numbers; it exists so that the
+commit `B` landed in can be read correctly.
+
+### ★★★ The mechanism, so the record carries a cause and not merely an error
+
+**The claim was written about the scrub's own edits, where it is true. It
+is false about the commit.** `[REPORTED]` by `icc-engineer`, whose account
+of the sequence this is:
+
+1. The consumer-requirements filing was written and **left uncommitted in
+   the working tree** — which the entry above states in its own words:
+   *"`.git/refs/heads/master` reads `b5d0ccb…` … **This filing's edits are
+   in no commit.**"*
+2. The operator's scrub instruction arrived. The mechanical pass ran over
+   **the whole tree**, which necessarily includes the uncommitted filing's
+   files.
+3. The commit was made with **`git add -A`**, which swept **both**
+   changesets into one index.
+4. The message was composed **from the pass**, because that is what the
+   author had just done.
+
+★★★ **Nothing in steps 1–4 is careless in isolation. The defect is
+structural: at step 4 the author described the work, and `git` committed
+the index — and step 3 is exactly the move that makes those two different
+things.** The check that would have caught it is `git status` **before**
+staging, or `git diff --cached --stat` **before** committing; **neither
+was run** *(`[REPORTED]`)*. Generalised as **`DL-073`**.
+
+### What is NOT being done, and why the correction lives here instead
+
+★★★ **No history rewrite. No amend. No force-push. None was proposed and
+none is requested.**
+
+- The commit is **published** *(★ VERIFIED as a reading of a local file:
+  `.git/refs/remotes/origin/master` reads
+  `19b53832ba968deed7139a16417433bbf538fec0`, and `.git/logs/HEAD` records
+  `767233d` as the commit immediately preceding it. ★ That is this
+  repository's **last observed** remote state, which is a dated reading and
+  **not** a live statement about the remote.)*
+- The operator's instruction of the same day — *"doesn't matter if it is in
+  the history"* — was **about the suite's name**, `[REPORTED]`. ★★ **It is
+  not a general licence to rewrite published commits, and this librarian
+  does not widen an operator's sentence by finding a reading it does not
+  name** — the same discipline the entry above applied to rule 11.
+- Rewriting a pushed ref is a **destructive operation outside the working
+  tree**, which **rule 9** reserves to the operator absolutely.
+
+⇒ **The commit message stays wrong forever, and the record is where it is
+corrected.** ★ That is not a workaround; it is what an append-only log is
+for. A reader who arrives at `767233d`, reads its message and wonders,
+finds this entry by grepping the hash.
+
+### Evidence, split by who observed it
+
+★★ **This role has no shell.** The split is stated rather than blurred,
+because the dispatch's account is a claim like any other.
+
+**VERIFIED here, by reading plain-text files in the working tree and
+`.git/` at this filing:**
+
+- `.git/logs/HEAD` — `b5d0ccb…` → **`767233d…`** *"scrub: the suite's name
+  and its publisher's acronym leave this repository"* → **`19b5383…`**
+  *"fix(ci): the name gate could not see the commit it was gating"*. ★ The
+  hash and the **subject line** the dispatch quoted both match.
+- `.git/refs/heads/master` and `.git/refs/remotes/origin/master` both read
+  **`19b5383…`**.
+- **`DL-072` is present in `docs/ARCHITECTURE.md`** (§5, dated 2026-08-25),
+  and **`NC-307` / §3.39 / §7.29 are present in `docs/NUMERIC_CLAIMS.md`**.
+- The thirty-fifth entry above states the filing was **in no commit** when
+  it was written, at `b5d0ccb`. ★★ **Only two commits exist after
+  `b5d0ccb`**, so changeset B entered the history at one of them — and the
+  other is a five-line CI fix.
+- `tools/check-suite-name-absent.py` **exists**, checks **contents and file
+  names**, and its `tracked_files()` includes `--others
+  --exclude-standard`, i.e. **untracked-but-not-ignored files**. ★ Its own
+  docstring records the 2026-08-25 red CI run caused by the earlier,
+  index-only version — **the same class of error as this entry's, in the
+  same session, in the opposite direction.**
+
+**`[REPORTED]` by `icc-engineer` from a shell, NOT re-derived here:**
+
+- The commit **message body** and therefore the quoted false clause. ★★
+  `.git/logs/HEAD` carries **subject lines only**; the body is inside a
+  compressed object this role cannot read. **The quotation above is the
+  dispatch's, verbatim, and is labelled as such.**
+- `git show 767233d:docs/ARCHITECTURE.md` containing **`DL-072`** (2
+  occurrences) — i.e. that changeset B is in **`767233d`** specifically
+  rather than in `19b5383`.
+- The diff stat: **`docs/ARCHITECTURE.md` +458**, **`docs/NUMERIC_CLAIMS.md`
+  +607/−206**.
+- That `git add -A` was used and that `git status` / `git diff --cached`
+  were not run beforehand.
+- The operator's *"doesn't matter if it is in the history"* and its scope.
+
+### What was assigned
+
+| id | what |
+|---|---|
+| **`DL-073`** | **a commit message's claim about "this commit" is a claim about the INDEX** — `ARCHITECTURE.md` §5 |
+| **no `NC-` row** | ★★ **nothing was measured.** The three figures above are a **diff stat reported by another agent**, not a measurement of any material this project characterises; `NUMERIC_CLAIMS.md` gains nothing and **`NC-308` remains the next free id** |
+| **next free** | **`NC-308`**, **`NA-013`**, **`DL-074`** |
+
+### What this entry does NOT claim
+
+- **That the correction was needed for anything but the record.** ★ No
+  document in this repository ever repeated the false clause; it exists in
+  exactly one place, the commit message, which cannot be edited.
+- **That `19b5383` does or does not contain part of changeset B.** ★★ Not
+  verifiable without a shell. The dispatch's `git show` places changeset B
+  at `767233d`; **this role read no commit object.**
+- **That the scrub itself is correct**, or that changeset A preserved every
+  number, date, verdict, hash and conclusion as its message says. ★★★
+  **That half of the message was NOT audited here and is not endorsed by
+  this entry.** Verifying it means diffing a scrubbed tree against its
+  predecessor — a shell operation, and **it is now owed** (below).
+- **That CI is green, that anything is tagged, or that the remote is at any
+  particular state now.** ★ Two local ref files were read; nothing was
+  fetched.
+- **That anything else in the tree was corrected while filing this.** ★★★
+  Deliberately not — **that is the identical failure this entry is about**,
+  and doing it here would have made the entry self-refuting.
+- **That the request channel was polled.** ★ Instructed not to arm a
+  monitor, and did not. **No channel file was opened at this filing.**
+
+### Newly owed
+
+1. **★★ Audit changeset A's other three claims** — that every number, date,
+   verdict, hash and conclusion survived the substitution, and that no entry
+   was deleted. One shell operation (diff `b5d0ccb`..`767233d`, filtered to
+   substitutions); **nobody has run it**, and this entry deliberately does
+   not assume it.
+2. **★ The seven items owed by the thirty-fifth entry are UNMOVED** —
+   including the `wasm32` `cargo build` measurement, the §8.6.5.8
+   re-derivation, and the still-missing 2026-08-21 `SESSION_LOG` entry.
+   **Nothing here discharges any of them.**

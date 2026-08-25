@@ -16,6 +16,7 @@
 - [A fitted table cannot express a CLAMP](project_fitted_table_cannot_express_a_clamp.md) — DL-069/DL-070: opposite-direction misses signal a DISCONTINUITY; our own CLUT smooths the same way; no ΔE against a screen capture.
 - [A refusal correct at one layer is non-conformance at another](project_refusal_at_one_layer_is_nonconformance_at_another.md) — DL-072: the CLI's exit-2 vs §8.6.5.8's obligation. The dangerous commit is the TIDYING one.
 - [A producer census is not a consumer fact](project_producer_census_is_not_a_consumer_fact.md) — NC-307's measurer honours none of what it counted; and rule 11 is about the MATERIAL, not the MEASURER.
+- [A commit message claims the INDEX, not your work](project_commit_message_claims_the_index.md) — DL-073: `git add -A` after a whole-tree pass; check `git diff --cached --stat`, and after a push correct the LOG, never the ref.
 - [A gate catches only ENUMERATED failures](project_gate_catches_only_enumerated_failures.md) — wasm32 cannot see a thread spawn; invariant 7, not a better gate. And a byte-grep over PDFs reads zero and is believed.
 
 - [Documented is not tested](project_documented_is_not_tested.md) — DL-051: five injections, the BEST-documented constant caught by NONE; the doc comment's length is what hid it. Injection, never inspection.

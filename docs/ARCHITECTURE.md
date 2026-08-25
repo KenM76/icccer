@@ -8611,3 +8611,120 @@ evaporates and the conflict never existed. ★ **A third trigger, and it is
 the one most likely to fire first: any commit that makes the CLI and the
 library API agree.** If one appears without two stated reasons, this entry
 is what it violated.
+
+---
+
+### DL-073 — ★★★ **a commit message's claim about "THIS COMMIT" is not a claim about the work you just did. It is a claim about the INDEX, and the index can contain somebody else's work. `git add -A` after a mechanical pass is the specific move that makes the two diverge — and once the commit is pushed there is no check left, only a correction in the log**
+
+**Date:** 2026-08-25 · **Occasioned by:** commit
+**`767233d774a63176bb3c5b68f762162ccf0eef93`**, whose message states that
+its diff contains a vocabulary substitution **and nothing else**, while the
+same diff carries an entire measured filing · **Filed by:**
+`icc-librarian`, from `icc-engineer`'s dispatch · **Rows affected:** none.
+**No code changes, no number moves, no tolerance moves, and no commit was
+amended.** · **Instance recorded in full:** `SESSION_LOG.md`, 2026-08-25,
+thirty-sixth entry · **Relates to** `DL-031` (a commit message's bare count
+can never be corrected) and `DL-068` (carry a dated reading, not a derived
+integer)
+
+#### The rule
+
+> ★★★ **A commit message may describe the WORK, or it may describe the
+> COMMIT. If it describes the commit — and especially if it makes a
+> NEGATIVE scope claim, *"nothing else is in here"* — the claim must be
+> read off the INDEX before the commit is made, not written from memory of
+> what was done.**
+>
+> The reading is one command: **`git diff --cached --stat`** immediately
+> before `git commit`, or **`git status`** immediately before staging.
+> **Neither was run** at the instance above *(`[REPORTED]`)*.
+
+#### The instance, in four steps that are each individually reasonable
+
+1. A filing measured and drafted earlier the same day sat **uncommitted in
+   the working tree**.
+2. An operator instruction arrived requiring a **mechanical pass over the
+   whole tree**. The pass necessarily edited the uncommitted filing's files
+   too — that is what *"whole tree"* means.
+3. The commit was made with **`git add -A`**, which stages everything the
+   working tree holds, **including work the author was not describing**.
+4. The message was written **from the pass**, because the pass is what the
+   author had just performed — and it asserted *"nothing else was fixed
+   while in here."*
+
+★★ **The assertion was TRUE of the pass's own edits and FALSE of the
+commit.** No step is careless; the divergence is created at step 3 and
+becomes permanent at step 4.
+
+#### ★★★ Why this is not a duplicate of `DL-031`
+
+`DL-031` is about a **number** in a commit message — *"the suite is green
+at 142"* — whose apparatus was omitted, and its lesson is that the
+uncorrectability of a commit message makes an unlabelled count
+particularly expensive. **This entry is about a claim with no number in it
+at all**, and the failure has a different source:
+
+| | `DL-031` | **`DL-073`** |
+|---|---|---|
+| the claim | a **count**, of something the author ran | a **scope**, of something `git` assembled |
+| why it went wrong | the apparatus was left off | ★★★ **the author and `git` were describing different sets** |
+| where the truth was, at write time | in the author's own terminal | **in the index**, one unrun command away |
+| the check | name the runner and the command | **`git diff --cached --stat` before committing** |
+
+★ They share one property and it is the reason both are decision-log
+entries rather than notes: **a commit message is the one artifact this
+project produces that can never be corrected in place.**
+
+#### ★★ The consequence that is worse than the false clause itself
+
+An auditor who takes the message at face value reads the commit as a pure
+mechanical substitution — and then finds new ledger sections, a new
+decision-log entry and new identifiers inside it. **The available
+conclusion is that measured content was produced by a substitution
+table**, which would corrupt the provenance of every number in it.
+
+⇒ **When a commit is discovered to carry two changesets, the correction
+must ENUMERATE THEM SEPARATELY**, not merely retract the false clause.
+Naming what changeset B actually is costs a paragraph; leaving an auditor
+to infer it costs the evidence class of everything in it.
+
+#### What follows for future commits
+
+1. **A negative scope claim is a claim about the index.** Read it, or do
+   not write it. *"This changes vocabulary only"* is exactly as strong as
+   the `git diff --cached` that backs it.
+2. **A mechanical pass over a dirty tree is the high-risk case**, because
+   the pass edits files the author is not thinking about, and `-A` then
+   stages them. ★ **Commit the in-flight work first, or stage the pass by
+   path.**
+3. ★★★ **The remedy after a push is the LOG, not a rewrite.** Amending or
+   force-pushing a published ref is a destructive operation outside the
+   working tree, reserved to the operator by **rule 9**, and an operator
+   instruction about *content* is not a licence to rewrite *history*. The
+   correction is a dated, hash-named entry that a reader arriving at the
+   commit can grep for.
+4. ★ **Do not fix anything else while filing the correction.** The
+   correction for a commit that mixed two changesets must not itself mix
+   two changesets.
+
+#### What this entry does NOT decide
+
+- **It does not require a hook or a gate.** ★★ One was considered and not
+  proposed: a pre-commit check cannot know which changeset the author
+  *meant*, so it can only enforce *"look at the index"*, which is what a
+  written rule already does. **This project has an entry — `DL-068` — about
+  preferring the dated reading over the derived artefact; the same
+  reasoning applies to preferring a stated discipline over a gate that
+  cannot see intent.**
+- **It does not judge the scrub commit's other three claims.** Whether every
+  number, date, verdict and hash survived the substitution **was not
+  audited** and is recorded as owed.
+- **It does not authorise any rewrite of `767233d` or any other pushed
+  commit.**
+
+**Revisit when:** a second instance appears — at which point the *"a
+written rule is enough"* judgement in the first bullet above has been
+falsified and a `pre-commit` check on negative scope claims becomes the
+proposal. ★ **Per `DL-068`, whose predecessor `DL-062` said *"revisit if a
+third instance appears"* and then fired twice with nothing built: the
+trigger here is deliberately set at TWO, not three.**
