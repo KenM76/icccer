@@ -62,8 +62,8 @@ keywords = ["icc", "cmm", "color-management", "color", "colour"]
 # PUBLISH ORDER follows from this: iccce-color and iccce-profile must be
 # on crates.io before iccce-cmm can be published, and iccce-cmm before
 # iccce-cli.
-iccce-color = { path = "../iccce-color", version = "0.1.0" }
-iccce-profile = { path = "../iccce-profile", version = "0.1.0" }
+iccce-color.workspace = true
+iccce-profile.workspace = true
 
 [lints]
 workspace = true

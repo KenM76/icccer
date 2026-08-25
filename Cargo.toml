@@ -37,12 +37,42 @@ members = [
 ]
 
 [workspace.package]
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 rust-version = "1.85"
 license = "MIT"
 repository = "https://github.com/KenM76/iccce"
 authors = ["Ken Mantle"]
+
+# ------------------------------------------------------------------------
+# ★ THE ONE PLACE THE VERSION NUMBER IS DUPLICATED, and it is duplicated
+# because Cargo cannot do otherwise.
+#
+# `workspace.package.version` above is inherited by each member through
+# `version.workspace = true`. It CANNOT be inherited into a *dependency
+# requirement* — `{ path = ..., version = ... }` takes a literal. And the
+# literal is not optional: a path dependency with no version builds
+# locally but makes the crate UNPUBLISHABLE, because `cargo package`
+# rejects it. That was found on 2026-08-17 by running `cargo package` on
+# all five crates rather than trusting a claim that the metadata was
+# ready; `iccce-cli` could not be packaged at all.
+#
+# Before 2026-08-25 these literals lived in the member manifests, FIVE
+# copies of the version number, with a comment in two of them warning
+# that they "must move with it in the same commit". The 0.1.0 → 0.2.0
+# bump proved the warning insufficient: the workspace version moved, the
+# five literals did not, and `cargo build` failed with a message about a
+# missing crate rather than about a stale version pin.
+#
+# Hoisting them here does not remove the duplication — Cargo will not
+# allow that — but it takes it from five sites to ONE, and puts that one
+# three lines below the number it must match. When bumping the version,
+# BOTH numbers in this file change, and nothing outside this file does.
+# ------------------------------------------------------------------------
+[workspace.dependencies]
+iccce-color = { path = "crates/iccce-color", version = "0.2.0" }
+iccce-profile = { path = "crates/iccce-profile", version = "0.2.0" }
+iccce-cmm = { path = "crates/iccce-cmm", version = "0.2.0" }
 
 [workspace.lints.rust]
 # ARCHITECTURE.md §3.4: no `unsafe` without a written justification and a

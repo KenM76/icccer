@@ -59,14 +59,13 @@ path = "src/main.rs"
 # `iccce-cmm/Cargo.toml` described a path — color/profile → cmm → cli —
 # whose last step did not exist.
 #
-# ★ Same maintenance hazard as the one documented in
-# `iccce-cmm/Cargo.toml`: Cargo cannot inherit
-# `workspace.package.version` into a *dependency requirement*, so these
-# literals are a second copy of the version number and must move with it
-# in the same commit.
-iccce-color = { path = "../iccce-color", version = "0.1.0" }
-iccce-profile = { path = "../iccce-profile", version = "0.1.0" }
-iccce-cmm = { path = "../iccce-cmm", version = "0.1.0" }
+# ★ The version literals these lines used to carry were hoisted into the
+# root `[workspace.dependencies]` on 2026-08-25, after the 0.1.0 → 0.2.0
+# bump proved that "must move with it in the same commit" is a warning
+# and not a mechanism. See the comment above that table.
+iccce-color.workspace = true
+iccce-profile.workspace = true
+iccce-cmm.workspace = true
 # No argument-parsing dependency yet: one subcommand does not justify
 # one. When the surface grows, the candidate is clap (MIT OR Apache-2.0,
 # permissive — classified per docs/LEGAL.md §1) and adding it is a
