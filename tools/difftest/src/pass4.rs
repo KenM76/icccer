@@ -728,7 +728,7 @@ pub fn grid() -> Vec<[f64; 4]> {
 /// sixteen hypercube corners, which `grid()` emits first.
 ///
 /// Kept as a function rather than a constant range so that a future change to
-/// `grid()`'s ordering is caught by [`tests::corner_indices_really_are_corners`]
+/// `grid()`'s ordering is caught by the test `corner_indices_really_are_corners`
 /// instead of silently re-pointing the control at interior points.
 #[must_use]
 pub fn corner_indices(g: &[[f64; 4]]) -> Vec<usize> {
@@ -1060,7 +1060,7 @@ pub(crate) fn fclamp(v: f64) -> f64 {
 /// each is used with its own upper-node rule*. Mixing them — which the first
 /// draft of this module did — returns the value at node 0 for an input of 1.0
 /// and was caught by
-/// [`tests::both_schemes_reproduce_a_separable_function_exactly`], which is
+/// the test `both_schemes_reproduce_a_separable_function_exactly`, which is
 /// exactly what that test is for.
 pub(crate) fn cell_lcms2(x: f64, points: usize) -> (usize, f64) {
     let x = fclamp(x);

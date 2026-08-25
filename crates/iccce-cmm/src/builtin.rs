@@ -396,8 +396,13 @@ pub enum SrgbTrc {
 /// irrelevant next to its robustness.
 ///
 /// The result is asserted against the continuity conditions themselves
-/// in [`tests::slope_continuous_variant_is_c1_to_machine_precision`] —
-/// an expectation from the *clause*, not from this function.
+/// in this module's test `slope_continuous_variant_is_c1_to_machine_precision`
+/// — an expectation from the *clause*, not from this function.
+///
+/// (Written as code rather than as an intra-doc link: rustdoc does not
+/// document `#[cfg(test)]` items, so `[`tests::…`]` is an unresolvable
+/// link and `RUSTDOCFLAGS: -D warnings` turns it into a build failure.
+/// It did — CI's rustdoc job had been red since this doc comment landed.)
 #[must_use]
 pub fn srgb_trc_params(variant: SrgbTrc) -> [f64; 5] {
     match variant {
