@@ -13,6 +13,7 @@
 - [Words are read by humans, the COUNT by code](project_words_are_read_by_humans_count_by_code.md) — DL-063: `malformations: N` counts DISCLOSURES; two files, same bytes, same count, one conformant.
 - [A fabricated value is a forged credential](project_fabricated_value_is_a_forged_credential.md) — DL-067: a v2 `profileID` invented from reserved bytes, `malformations: 0`. Worse than a false accusation — it invites verification.
 - [A claim in a UNIT is scoped to that unit](project_claim_in_a_unit_is_scoped_to_that_unit.md) — Pass L falsified two of our own doc-comment claims; and §C is SELF-comparison because the oracle was MEASURED blind to it.
+- [A fitted table cannot express a CLAMP](project_fitted_table_cannot_express_a_clamp.md) — DL-069/DL-070: opposite-direction misses signal a DISCONTINUITY; our own CLUT smooths the same way; no ΔE against a screen capture.
 
 - [Documented is not tested](project_documented_is_not_tested.md) — DL-051: five injections, the BEST-documented constant caught by NONE; the doc comment's length is what hid it. Injection, never inspection.
 - [An injection measures ONE magnitude](project_injection_measures_one_magnitude.md) — DL-064: the red runs discharge the debt, the GREEN run is the floor; rival named with `1e-9`, guard claimed without a number.
@@ -21,7 +22,10 @@
 - [A count from a sample is not the population](project_count_from_a_sample_is_not_the_population.md) — DL-053: "two iccMAX" was TEN; [VERIFIED] certifies the measurement happened, never what it ranged over.
 
 - [ICC.1 PDF blocker — cleared](project_icc1_pdf_operator_blocker.md) — resolved 2026-08-11; the lasting lesson is that "free download" never implies "automated retrieval permitted" (ITU-R is next).
-- [iccce Pass status](project_iccce_pass_status.md) — to the 2026-08-19 **perceptual-cost** filing: tip `3c93b62`; NA-012 MEASURED (`3.681203`); NC-269…NC-280; next free NC-281/NA-013, DL-066 newest.
+- [iccce Pass status](project_iccce_pass_status.md) — to the 2026-08-25 **`0.2.0` changelog** filing: version bumped, no ledger row; next free NC-307/NA-013, DL-071 newest.
+- [A release range is not the dispatch's list](project_release_range_is_not_the_dispatch_list.md) — Pass G/H were named as 0.2.0 content and shipped in 0.1.0; and a tag ref is an ANNOTATED TAG OBJECT, not the commit.
+- [A tool that quotes licensed material gets SPLIT](project_licensed_tool_split_outside_the_tree.md) — DL-071: the case file lives OUTSIDE the repo, not gitignored inside it; and the deleted predecessor took the only auditor of its own numbers.
+- [A gitignored file is invisible to a citation sweep](project_gitignored_file_invisible_to_citation_sweep.md) — 9 reported where 13 existed; it under-counts toward a FALSE ALL-CLEAR. Search `GHENT_COMPATIBILITY.md` by name.
 - [Compatibility is not certification](project_compatibility_not_certification.md) — DL-045/046/047: a third-party corpus gives a CATEGORICAL expectation but never a number; promote a [REPORTED] claim only by re-running with a control.
 - [Ground truth: a test is not a row](project_ground_truth_cannot_exist.md) — DL-041: the LUT path's ground truth CANNOT exist; Annex D.6.3 now has a TEST but still no ledger row — NC-001 remains the only one.
 - [A negative finding removes its own auditor](project_negative_finding_removes_its_auditor.md) — DL-042: a wrong REJECTION survives forever; re-audit the REASON an item is owed, not just the item.

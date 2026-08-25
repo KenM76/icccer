@@ -6951,3 +6951,311 @@ this role holds no count it ran itself.
   not to touch it** (a persistent monitor is already armed by the lead
   session and a duplicate cannot be stopped mid-session). **No statement
   about the channel's contents is made here.**
+
+---
+
+## 2026-08-25 — the **GWG010 shading-cell** filing (thirty-fourth `SESSION_LOG` entry). **An inbound note marked *"no reply owed"* was answered by measurement the day it arrived — and the answer was a NORMATIVE CLAMP, not a better-fitted table. The first filing this project has made against a WORKING TREE WITH NO COMMIT BEHIND IT, and the first whose only comparison partner is a PHOTOGRAPH OF ANOTHER APPLICATION'S WINDOW**
+
+**Measured by `icc-engineer`; filed by `icc-librarian`, which has no shell
+and ran nothing.**
+
+### The occasion
+
+`pdfce` wrote
+`open/note_cmyk_to_srgb_injects_blue_into_saturated_orange.md` —
+**informational, "no reply owed"**. Its content: `pdfce`'s three interim
+`DeviceCMYK`→sRGB lookup tables all miss Acrobat's rendering of one Ghent
+patch, and **miss it in opposite directions** (`naive` matches Acrobat's
+blue at `0` and undershoots green by 13; `calibrated`/`neutral_black`
+overshoot green by 9 and leave a **uniform blue floor of 55/255**). Its
+question, in effect: *can a real ICC transform hit blue ≈ 0 **and**
+green ≈ 156 at once?*
+
+★★ **The lead answered it by measurement rather than deferring it**, and
+the whole of the durable half is in `docs/`, because the channel is in
+**no git repository** (DL-044).
+
+### What was found
+
+1. **★★ The patch carries its own output intent, and it is a big
+   real-world PRODUCER profile.** `1_GWG010_CMYK_OP_x3.pdf` is **PDF/X-3**
+   with a **1 526 728-byte ICC v2.0.0 `prtr` CMYK→`Lab `** profile, `desc`
+   *"ISO Coated"*, `OutputConditionIdentifier` **FOGRA27**, written by
+   **Heidelberg Printopen 4.0.5.2**. `iccce inspect` parses it without
+   error. ★ **`A2B0` and `A2B2` share tag offset 296** — perceptual and
+   saturation are byte-identical.
+2. **★★★ The load-bearing measurement is a CONSTANT PLATEAU, not a
+   gradient.** The `shading` cells are radial with `Extend [true true]`
+   and a `FunctionType 3` stitch at `Bounds [0.8764]`, so **every pixel
+   beyond that radius carries one colour: `DeviceCMYK (0, 0.5, 1, 0)`** —
+   a large uniform area, entangled with no gradient geometry and no
+   renderer interpolation.
+3. **★★★ At perceptual intent every FOGRA-family source reaches
+   blue = 0 EXACTLY** while holding green in the mid-140s — the
+   combination `pdfce` said neither of its tables could produce.
+4. **★★★ And it is a CLAMP, measured as one.** Sweeping magenta down
+   `(0, m, 1, 0)` at CoatedFOGRA39/perceptual, **blue is exactly
+   `0.000000` at all seven points** and red saturates at exactly
+   `1.000000` from `m = 0.2` down. **A converged value moves with its
+   input; a clamped one is bit-identical**, because it is `TRC⁻¹(0)` every
+   time — **ICC.1:2022 Annex F.8–F.16**, `MatrixTrc::pcs_to_device`.
+
+> **★★★ THE FINDING, and it generalises far beyond `pdfce`: a fitted
+> interpolation table cannot reproduce a normative clamp, because a clamp
+> is a DISCONTINUITY and a smooth interpolant is defined by not having
+> one. The two rival tables miss in opposite directions not because either
+> was fitted badly, but because "both at once" is not in their function
+> space.** **DL-069.**
+
+★★ **The entry carries the half that cuts against us**: iccce's own CLUT
+path interpolates a 16-point grid and smooths exactly the same way. **The
+clamp survives only because it is applied analytically, AFTER every
+interpolation.** ★ Corollary for rule 8's optimisation territory: **a
+pre-computed fast-path table would inherit `pdfce`'s limitation exactly.**
+
+### What was assigned
+
+| id | what |
+|---|---|
+| **`NC-301`** | ★★★ the plateau — 4 sources × 2 intents against the capture. **CoatedFOGRA39/perceptual matches all three channels exactly**; the defensible claim is *"the FOGRA family at perceptual reproduces the capture within **3 counts** per channel"*, **NOT** *"Acrobat used FOGRA39"* |
+| **`NC-302`** | ★★★ the clamp evidence — **blue exactly `0.000000` at seven sweep points**, red exactly `1.000000` at three. **Not a gate**; the committed gate is `out_of_gamut_clamps_before_inverse_trc` |
+| **`NC-303`** | the whole-cell distribution, reproducing `pdfce`'s statistic — ★★ **the area weighting is a RECONSTRUCTION** (the clip path and CTM before `sh` were never read) and **the caveat is in the row, not a footnote** |
+| **`NC-304`** | the embedded profile's identity and tag census + `acceptance`. ★★ **`12 tags` stated, ELEVEN enumerated** — the twelfth is named nowhere and **was not guessed** |
+| **`NC-305`** | perceptual ≡ saturation on that profile. ★★★ **Filed as a NEGATIVE**: because `A2B0` and `A2B2` are byte-identical, *"correctly selected `A2B2`"* and *"silently fell back to `A2B0`"* are **indistinguishable here** — candidate separation **zero** (DL-033). The dispatch's *"confirming the tag-sharing is honoured"* over-reads by one step |
+| **new class** | ★★ **`rendering-cross-check-screen-capture`**, `NUMERIC_CLAIMS.md` §1 — **ranks BELOW `implementation-cross-check`**, because lcms2's colour path is pinned and a window grab's display leg is not |
+| **DL-069** | *a fitted interpolation table cannot reproduce a normative clamp — and the same argument runs against our own CLUT path, one stage earlier* |
+| **DL-070** | *a screen capture is a rendering cross-check and nothing stronger; **NO ΔE MAY EVER BE COMPUTED AGAINST ONE**, filed as a prohibition so adding it later means reversing a decision rather than filling a gap* |
+| **`NA-013`** | **not consumed.** No new approximation: the clamp is **normative behaviour**, already implemented, doc-commented and tested |
+| **`TOLERANCES.md`** | ★ **no row and no edit.** §3.38 has **no tolerance and no gate** |
+
+### ★★★ What this librarian found by reading, that the dispatch did not carry
+
+1. **The harness is NOT committed.** The dispatch says *"committed at
+   `tools/ghent/shading_cell.py`"*. **Both `.git/refs/heads/master` and
+   `.git/refs/remotes/origin/master` read
+   `842d3b8f0bd09d388b4f8edd1a1412642669eb12`**, and **`.git/logs/HEAD`
+   has no 2026-08-25 entry at all** *(VERIFIED — all three are plain
+   text)*. **The file exists in the working tree** *(verified — read in
+   full)*; **no row carries a commit hash**, because there is none. → ★
+   **And there never will be: the file was DELETED later the same day**
+   (see the coda).
+2. **★★ The harness's own docstrings name a function that does not
+   exist** — *"the clamp that `MatrixTrc::device_to_rgb` applies"*, twice.
+   **`device_to_rgb` has zero occurrences in `crates/`** *(verified by
+   grep)*; the function is **`MatrixTrc::pcs_to_device`**. ★ **DL-048's
+   mechanism in a new place, and it is the dangerous direction**: a reader
+   who greps the name, finds nothing, and concludes the clamp was removed
+   **has been misled by a document trying to be precise.**
+3. **★ The quantiser does not do what its docstring says.** *"Round-half-
+   away"* — the body is `np.round`, which is **round-half-to-even**.
+   Bounded at 1 count and probably never fires; filed because **a stated
+   method the code does not implement is a claim like any other.**
+4. **★ The `12 tags` census enumerates eleven** (item above).
+5. **★★★ The 2026-08-21 session has no `SESSION_LOG` entry.** This file
+   holds **33** `## 2026-` headings before today's and the last is dated
+   **2026-08-20**, while `docs/NEXT_SESSION.md` opens with a **2026-08-21
+   handoff describing seven commits and two real defects found and fixed**
+   *(VERIFIED — counted and read)*. **Second time in six days** that work
+   landed, was quoted in a handoff, and was never filed. ★★ **This filing
+   does not write that entry**: the dispatch carried evidence for the
+   GWG010 measurement and for nothing else, and **filing a session from a
+   handoff's own account would file a document's claims as
+   measurements.**
+
+### `docs/NEXT_SESSION.md` — stale in three places. **Recorded, NOT edited**
+
+Both ref hashes (`533ea85…`) and the tip are stale — the tree has moved to
+`842d3b8…`; and *"`DL-068` last, next `NC-301`/`NA-013`"* **was true when
+this filing began and false when it ended.**
+
+★★★ **DL-068 is working, and this is its first observed payoff.** The
+handoff carried **hashes instead of a push count**, and they did exactly
+what the decision predicted: **went historical rather than false, and
+announced it by not matching what the next reader found.** A *"7 commits
+ahead"* in that slot would have been silently wrong today **and would have
+looked identical to a right answer.** ★ The self-reference is not a
+defect: a handoff records the tip *before* committing itself, so its own
+commit is by construction absent from the pair.
+
+### Newly owed
+
+1. **★★ Two documentation defects in `tools/ghent/shading_cell.py`** —
+   the non-existent `device_to_rgb`, and the rounding rule. **Owed to
+   `icc-engineer`; not edited here** (not this role's file). *Done when
+   the docstrings name `pcs_to_device` and describe `np.round`'s actual
+   tie rule.* → ★ **DISCHARGED BY DELETION later the same day, and the
+   successor was CHECKED rather than assumed** — see the coda below and
+   `NUMERIC_CLAIMS.md` §7.28 item 4.
+2. **★ The twelfth tag.** *Done when `iccce inspect`'s full tag table for
+   that profile is pasted into `GHENT_COMPATIBILITY.md` §4.7 — one
+   command, closes permanently.*
+3. **★★★ The 2026-08-21 session needs a `SESSION_LOG` entry**, from a
+   dispatch carrying its numbers.
+4. **★★ `NC-268`'s two corrections are THIS ROLE'S and were NOT done** —
+   `NEXT_SESSION.md` item 3 (the guard floor is `1e-12`; `1.106780e-1`
+   should be `1.1067772e-1`, the old figure being a **re-based** number
+   rather than a stale one). ★ **The ledger is append-only**: a correction
+   is a new row carrying `supersedes:`, and a new row needs the
+   measurement's provenance — **which this dispatch did not carry.**
+   Filing it from a handoff's summary line would make the correction
+   itself second-hand.
+
+### What is explicitly NOT claimed
+
+- **That the harness is committed, or that the tree is clean.** ★★ Both
+  are `git status` / `git log` facts and **this role has no shell.** What
+  is **VERIFIED** is two ref files, the reflog's last line, and that every
+  file described reads as described **right now**.
+- **That any 8-bit count above was produced by the run described.**
+  ★★ Every number in §3.38's tables is **`[REPORTED]` by one runner, one
+  machine, one day, one run per condition.** What was verified is the
+  **apparatus**: the constants, the swept member set, the sampling
+  geometry, the quantiser, and the existence and location of the clamp
+  the finding turns on.
+- **That Acrobat used any particular source profile.** ★★★ The single
+  most quotable over-claim available in this material, and it is
+  **recorded as an open confound** in every document that carries the
+  table.
+- **That the capture is colorimetry.** A `PrintWindow` grab through an
+  unrecorded display transform and monitor profile, quantised to 8 bits.
+  **No ΔE may be computed against it** (DL-070).
+- **That this is an accuracy gain over `pdfce`'s tables.** ★★ Rule 10
+  item 4 stands — their table is fitted to *pdfium*, ours is graded
+  against *lcms2*, and the swap is **lateral in evidence class**. The
+  claim made is **structural and narrow**.
+- **That the standing debt moved.** ★★★ **No `published-ground-truth`
+  row for any transform, thirteenth-plus consecutive filing** — and
+  §3.38 is the first block in this ledger whose **only** comparison
+  partner is **weaker than lcms2.** It is a real addition (lcms2 does not
+  render PDFs) and **must not read as progress on accuracy.**
+- **That anything was pushed, tagged or published.** ★ This filing
+  fetched nothing, published nothing and **authorises nothing** (rule 9).
+- **That the request channel was polled.** ★ This role was instructed
+  **not** to arm a monitor. **One file was read, by name, as evidence.**
+  No statement is made about the channel's other contents.
+
+---
+
+### ★★★ CODA, filed later the same day — **the day did NOT end with an untracked harness. It ended with the harness DELETED, split into a public tool and a private case file outside the repository, on an operator decision that closed the licence question this entry left open**
+
+**Nothing measured changed. Every number above stands.** What changed is
+**the apparatus** and **one operator decision**, and the entry is amended
+here rather than rewritten because *how a measurement was made* is part of
+the measurement.
+
+**Operator decision, 2026-08-25, in his own terms:** *"split it into a
+public generic tool plus local file."*
+
+| | |
+|---|---|
+| **deleted** | `tools/ghent/shading_cell.py` — it **inlined a licensed suite's shading dictionary, indirect-object numbers, endpoint colours and the embedded press profile's identity as constants**. ★ **VERIFIED**: `tools/ghent/` now holds `extract_icc.py` and `icc_terms.py` and nothing else |
+| **added, tracked** | `tools/patch-compare/patch_compare.py` + `README.md` — **contains no numbers at all**, reads a case file named on the command line |
+| **added, OUTSIDE the tree** | `D:/Dev/temp/iccce-gwg/gwg010_shading.case.json` — every licensed specific. ★★ **Not gitignored inside the repository**: a gitignored path is one `git add -f` away from the entanglement the 2026-08-18 decision was made to prevent |
+| **filed** | **`DL-071`** (the split pattern) · **`NC-306`** (the OPM 1 cell) · `NUMERIC_CLAIMS.md` **§3.38.9**, **§3.38.10**, **§7.28** |
+
+### What was assigned at the split
+
+| id | what |
+|---|---|
+| **`DL-071`** | *a tool that must quote licensed material is split into a generic engine and a private data file, and the data file lives **outside** the repository rather than in a gitignored path inside it.* ★★ **Filed rather than folded into the 2026-08-18 decision, and the reason is stated explicitly**: that decision **is not in the decision log at all** *(verified)* — it exists in a `.gitignore` comment, in `NEXT_SESSION.md` and in an untracked document. A pattern recorded only in a `.gitignore` comment is one refactor from being lost |
+| **`NC-306`** | the **OPM 1** cell — same colour, Acrobat median **identical** (`243 / 146 / 0`), same `1 102 px / 14` distinct RGB. ★★★ **Its iccce arm carries ZERO information** (same input ⇒ same output by construction); the whole content is **one region of a capture against another region of the same capture**, which is **no class in §1** and specifically **not `self-consistency`**, because here *"self"* is **Acrobat**, not iccce |
+| **next free** | **`NC-307`**, **`NA-013`** *(still unconsumed)*, **`DL-072`** |
+
+### ★★★ What this librarian found by reading, that the dispatch did not carry
+
+1. **★★★ A gitignore-respecting search UNDER-COUNTS this project's
+   citations, and it under-counts in the direction that produces a false
+   all-clear.** The first sweep returned **9** of the **13** hits. The
+   four missing ones are all in **`docs/GHENT_COMPATIBILITY.md`**, which
+   is **gitignored**, and the search tool skips ignored files when it
+   walks a directory while searching a named file normally. ★ **A shell
+   `grep -rn docs/*.md` would have found all 13** — the discrepancy is
+   entirely the tool's. **Standing method note: that file must be
+   searched by name, every time.** *"Zero remaining citations"* is a
+   sentence this role writes often, and the project's most
+   citation-dense document is invisible to the default sweep.
+2. **★★ The dispatch's account of the tool's validation needed one
+   correction.** It says the tool validates against *"exactly the four
+   class names in `NUMERIC_CLAIMS.md` §1."* **§1 defines fourteen
+   classes; the tool accepts four** *(verified)*. Nothing false is
+   enforced — the four are all in §1 — but *"the four class names in §1"*
+   reads as *"§1 has four classes."* ★ **Two rows of §3.38 are not
+   expressible in it**: `NC-302` (`normative-rule-conformance`) and
+   `NC-305` (`self-consistency`), correctly, because the field describes
+   a **reference image** and those rows have none.
+3. **★★★ The equivalence of the two apparatuses is `[REPORTED]` and is
+   now UNAUDITABLE IN PRINCIPLE.** The dispatch states every number
+   *"reproduces exactly"*; **no transcript was carried and this role has
+   no shell.** ★ **The old harness was deleted, not archived**, so
+   nothing can adjudicate a future disagreement between a re-run and the
+   tables above. **`DL-042`'s shape**: the act that settled the question
+   removed the only thing that could re-open it.
+4. **★★ The twelfth tag is `targ`** — named in the case file, which
+   enumerates all twelve. ★ **A PARTIAL discharge**: the owed condition
+   was *`iccce inspect`'s table pasted*, i.e. **tool output**, and what
+   arrived is a list in a document by **the same role that filed the
+   count of twelve**. The census is now internally checkable; it is not
+   independently checked. **A second fact came with it**: `B2A0` and
+   `B2A2` **also** share an offset, so the byte-identity runs in **both**
+   directions — which **strengthens `NC-305`'s zero-separation finding**.
+5. **★ The successor did NOT inherit either documentation defect**
+   *(verified, not assumed)*: `device_to_rgb` occurs **nowhere** in
+   `tools/patch-compare/`, and the new `to8()` docstring states
+   **round-half-to-even** and says why it matters.
+6. **★★ A ramp's `1 995` row count is a SAMPLING-GRID artefact.** 2 001
+   bins, six empty — **1, 2, 4, 6, 8, 16**, nearest `t = 0`, where a
+   1 201 × 1 201 grid has no point at that radius; the last bin **is**
+   populated. ★★★ **The lesson is the near-miss, not the number**: the
+   README's first draft asserted the empty bins were near `t = 1` — a
+   plausible, mechanism-flavoured explanation, **unchecked and wrong**,
+   in a document whose subject is not doing that. It was corrected by
+   **looking**. **A plausible explanation is a claim.**
+
+### ★★★ Newly owed — and the first one is an OPERATOR decision, not an engineering task
+
+1. **★★★ The licence boundary this split respects runs straight through
+   `NUMERIC_CLAIMS.md` §3.38, which is TRACKED.** The four things the
+   harness was deleted for inlining — the shading dictionary, the
+   indirect-object numbers, the endpoint colours, the profile's identity
+   (including its **quoted `cprt` string**) — **are all already in the
+   ledger, in the repository.** ★ **This filing did not act on it** (a
+   licence call is the operator's and the ledger is append-only) **and
+   did not make it worse**: no new licensed specific was written into any
+   tracked document today — the twelfth tag, the second shared offset and
+   the OPM cell's pixel box went into the **untracked** narrative and the
+   **outside-the-tree** case file. `NUMERIC_CLAIMS.md` §7.28 item 6 lists
+   the three available shapes of answer.
+2. **★★ `NC-268`'s two corrections are STILL owed to this role and were
+   AGAIN not sent** — second consecutive filing. The dispatch says so in
+   terms. The reason they cannot be filed from a summary line is
+   unchanged: **a correction is a new row carrying `supersedes:`, and a
+   new row needs the measurement's provenance.**
+3. **★★★ The 2026-08-21 session still has no `SESSION_LOG` entry** —
+   second consecutive filing at which the dispatch carried evidence for
+   one thing only.
+4. **★ A case file has no history, no backup and no review.** `DL-071`
+   cost 2. A number in the ledger is now anchored to an artifact this
+   project does not version and cannot diff.
+
+### What is explicitly NOT claimed by the coda
+
+- **That anything is committed.** ★★ **Both `.git/refs/heads/master` and
+  `.git/refs/remotes/origin/master` still read
+  `842d3b8f0bd09d388b4f8edd1a1412642669eb12`** *(★ VERIFIED — re-read at
+  this filing; per `DL-068` the hashes are carried, not a count)*. **The
+  new tool, the deletion, `NC-306` and this coda are in no commit.**
+  ★ *"Intended to be tracked"* is the dispatch's word and is **not**
+  evidence of tracking; `git status` is a shell operation and this role
+  has none.
+- **That the case file's structural claims are correct.** ★ It was read
+  as a **document**. **Neither the PDF nor the extracted profile was
+  opened here** — both are outside the repository and binary.
+- **That the OPM agreement says anything about iccce or confirms
+  `pdfce`'s `Pass 122.6`.** ★★★ **iccce composites nothing**, and
+  consistency with a claim about another codebase, measured by nobody
+  here, is not evidence for it.
+- **That the split makes anything publishable.** ★★ Rule 9 is untouched:
+  *"safe to track"* is not *"may be pushed."* **This filing fetched
+  nothing, published nothing and authorises nothing.**
+- **That the request channel was polled.** ★ Again instructed not to arm
+  a monitor. **No channel file was read at this filing at all.**

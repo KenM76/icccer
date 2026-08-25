@@ -5896,6 +5896,103 @@ and **NA-012**.
 > *(verified — working tree read)*. **Nothing in this block changes the
 > operator decisions below**, and no number moved.
 
+### ★★★ Updated 2026-08-25 — **`pdfce`'s `Pass 122.7` hand-off was ANSWERED BY MEASUREMENT the day it arrived, and the answer turned out to be a NORMATIVE CLAMP. The first measurement on this corpus that goes through a patch's own CONTENT, and the first whose reference is a SCREEN CAPTURE**
+
+**Nothing above is edited; this is what changed.** Filed by
+`icc-librarian` from `icc-engineer`'s measurement of the same day.
+
+- **★★ The occasion was an inbound note marked *"no reply owed"*.**
+  `pdfce` wrote `open/note_cmyk_to_srgb_injects_blue_into_saturated_orange.md`
+  reporting that its three interim `DeviceCMYK`→sRGB tables all miss
+  Acrobat on one Ghent patch **in opposite directions**, and offered the
+  cell as a calibration case. ★ **An informational note is the easiest
+  kind to leave unanswered**; this one was answered the day it arrived,
+  and the durable half is in `docs/` because the channel is **in no git
+  repository** (DL-044).
+- **★★★ The finding: `1_GWG010_CMYK_OP_x3.pdf`'s shading cell has a
+  large CONSTANT plateau** — `DeviceCMYK (0, 0.5, 1, 0)`, every pixel at
+  radius ≥ the stitch bound — and at **perceptual** intent **every
+  FOGRA-family source reaches blue = 0 exactly** while holding green in
+  the mid-140s. **That is the combination `pdfce` said neither of its
+  tables could produce.**
+- **★★★ And the reason is the transferable part: it is a GAMUT CLAMP, not
+  a better-fitted table.** Measured, not assumed — a seven-point sweep in
+  which blue stays at **exactly `0.000000`** throughout. **A fitted grid
+  interpolates smoothly and therefore cannot express a discontinuity at
+  all**, which is why the two rival tables miss in opposite directions.
+  ★ **The entry carries the half that cuts against us too:** iccce's own
+  CLUT interpolation smooths exactly the same way, and the clamp survives
+  only because it is applied **analytically, after** every interpolation.
+- **★★ A NEW and WEAKER evidence class was added**, because the
+  comparison partner is a **`PrintWindow` screen capture of a running
+  Acrobat** — through an unrecorded display transform and monitor
+  profile, then quantised to 8 bits. **It ranks below the lcms2
+  cross-check**, and **no ΔE may ever be computed against it.**
+- **Where it lives:** `GHENT_COMPATIBILITY.md` **§4.7** (narrative, the
+  profile census, and why it can never be a fixture);
+  `NUMERIC_CLAIMS.md` **§3.38 / `NC-301` … `NC-305`** and the new class
+  in **§1**; `ARCHITECTURE.md` **DL-069** (the structural finding) and
+  **DL-070** (the ΔE prohibition).
+- **★★ The apparatus changed later the same day, for a licensing reason,
+  and the rows did not.** The measurement was made by
+  `tools/ghent/shading_cell.py`; **that file was deleted** because it had
+  inlined a licensed suite's specifics as constants, and the operator's
+  decision was to **split it into a public generic tool plus a private
+  case file that lives outside the repository** — `ARCHITECTURE.md`
+  **DL-071**. What a reader runs today is
+
+      python tools/patch-compare/patch_compare.py --case <case.json>
+
+  with patch ids **`plateau`**, **`plateau-opm1`** and **`whole-cell`**.
+  ★ **That the new tool reproduces the old numbers is `[REPORTED]`, and
+  the old tool no longer exists to adjudicate it** (`NUMERIC_CLAIMS.md`
+  §3.38.1).
+- **★ One row was added at the split: `NC-306`** — the **OPM 1** cell
+  carries the **same** colour and Acrobat renders it **identically**
+  (`243 / 146 / 0`). ★★ **Its iccce arm carries no information** (same
+  input, same output by construction) and it says **nothing about
+  iccce**, which composites nothing at all. Filed as a **pre-registered
+  negative**; §3.38.9.
+- **★ It also produced the first patch-level reading on this corpus.**
+  Every earlier row here was a *profile* extracted from a patch and
+  driven directly (§4.1–§4.6). This one reads the **shading dictionary,
+  its `FunctionType 3` stitch and its `FunctionType 4` tint transform**
+  out of the file's own objects. ★ `NUMERIC_CLAIMS.md` §7.22's standing
+  debt — *"the patch PDF's content stream has never been read"* — is
+  **partly discharged for THIS patch and for no other**; **GWG 23.0's is
+  still unread**, which is the one §7.22 is actually about.
+
+★★★ **What did NOT change, and each of these is the sentence most likely
+to be dropped when this is retold:**
+
+1. **No accuracy claim against `pdfce`'s tables.** ★ Rule 10 item 4
+   stands: their table is fitted to *pdfium*, our oracle for a CMYK LUT
+   path is *lcms2*, and swapping one for the other is a **lateral move in
+   evidence class**. What is established is that **one feature — a
+   gamut-boundary discontinuity — is outside a fitted grid's
+   representable set.**
+2. **Nothing was rendered.** The patch's *content* was read; **iccce
+   still rasterises nothing**, and the only rendered artifact in the
+   comparison is somebody else's.
+3. **It is NOT established which CMYK source Acrobat used.** Three of the
+   four FOGRA-family sources land within 3 counts of the capture on
+   green. **An open confound, recorded rather than resolved.**
+4. **Zero graded rows.** No difftest record, no tolerance, no gate; **no
+   `pass=` count moves.** ★★ **And these rows are protected by nothing** —
+   the corpus is non-redistributable, so the finding **cannot become a
+   fixture** and no test will fail if the transform drifts.
+5. **The operator block below is untouched.** More numbers do **not**
+   make *"passes the Ghent suite"* available.
+
+**★ What remains open out of this:** (a) the **Acrobat-source confound**,
+which needs a source-discriminating experiment rather than a tighter
+number; (b) ★★ **whether iccce should expose a *"honour the document's
+output intent"* story to consumers at all** — this file *carries* its own
+`/DestOutputProfile`, a Heidelberg press profile, and the harness had to
+**extract it by hand** to use it. **That is a scope question for the
+operator and `icc-engineer`, not a measurement**, and it is recorded here
+so it is not decided by accretion.
+
 ### ★★★ Blocked on the operator — three decisions, and no agent may take any of them
 
 *(There was no "blocked-on-operator" section in this document before

@@ -7947,3 +7947,341 @@ not the fix; **or** an agent in this project ever gains the ability to
 observe the remote directly, which would change what
 `refs/remotes/origin/master` is evidence *of* and would make a live count
 defensible again.
+
+---
+
+### DL-069 — ★★★ **a FITTED INTERPOLATION TABLE cannot reproduce a NORMATIVE CLAMP, because a clamp is a DISCONTINUITY and a smooth interpolant is defined by not having one. The two rival tables missed in OPPOSITE directions not because either was fitted badly, but because the shape they were asked to have is outside the set a table of that form can express — and the same argument runs against OUR OWN CLUT path, one stage earlier**
+
+**Date:** 2026-08-25 · **Occasioned by:** `pdfce`'s channel note
+`open/note_cmyk_to_srgb_injects_blue_into_saturated_orange.md` (2026-08-25,
+informational, *"no reply owed"*), reporting that its three interim
+`DeviceCMYK`→sRGB lookup tables all miss Acrobat's rendering of one Ghent
+patch **in opposite directions** · **Measured by** `icc-engineer`;
+**drafted and filed by** `icc-librarian` · **The evidence is
+`NUMERIC_CLAIMS.md` §3.38 — `NC-301` (the plateau) and `NC-302` (the
+clamp sweep)**; the narrative is `GHENT_COMPATIBILITY.md` §4.7 · **No code
+changes. This entry decides what may be CLAIMED and what shape of remedy
+is available, not what the engine does.**
+
+#### The observation that started it, in the consumer's own numbers
+
+On one saturated-orange patch — `DeviceCMYK (0, 0.5, 1, 0)`, a **large
+constant plateau**, not a gradient — `pdfce`'s tables land like this
+*(`pdfce`'s measurement, `[REPORTED]`)*:
+
+| table | blue | green | against Acrobat's `0` / `156` |
+|---|---:|---:|---|
+| `naive` | **0** | 143 | blue **exact**, green **13 low** |
+| `calibrated` / `neutral_black` | **55** | 165 | green **9 high**, blue **55 high** |
+
+★ **Read as a fitting problem this is baffling**: one table nails the
+channel the other misses by 55, and vice versa on green. **Read as a
+shape problem it is forced.**
+
+#### The mechanism, and it is not a calibration fact
+
+Every FOGRA-family source at **perceptual** intent puts this colour
+**outside the sRGB gamut on the blue axis**. iccce's destination model
+therefore does what **ICC.1:2022 Annex F.8–F.16** requires: it **clamps
+each linear component to `[0,1]` BEFORE applying the inverse TRC**
+(`MatrixTrc::pcs_to_device`, `crates/iccce-cmm/src/matrix_trc.rs`, whose
+doc comment carries the clause and whose
+`out_of_gamut_clamps_before_inverse_trc` test asserts the ordering).
+
+**That the value is CLAMPED rather than CONVERGED is measured, not
+assumed** — `NC-302`: sweeping magenta down `(0, m, 1, 0)` for
+`m ∈ {0.5, 0.45, 0.4, 0.3, 0.2, 0.1, 0.0}`, **blue is exactly `0.000000`
+at all seven points**, and red **saturates at exactly `1.000000`** from
+`m = 0.2` downward. A converged value moves with its input; **a clamped
+one is bit-identical, because it is `TRC⁻¹(0)` every time.**
+
+> ★★★ **So the "blue floor" `pdfce` measured is not an error in a table.
+> It is the SHADOW OF A GAMUT BOUNDARY** — a **kink**, a first-derivative
+> discontinuity, sitting inside the region the patch occupies.
+
+#### The decision — the structural claim, stated at its exact width
+
+> ★★★ **A fitted lookup table over a regular grid — `pdfce`'s is
+> 6×6×6×6 — reproduces a hard clamp NOWHERE, and no refit changes that.**
+> Interpolation between grid nodes is *by construction* smooth across the
+> cell it interpolates. A clamp is a discontinuity **in the derivative**
+> at a surface that does not align with the grid. The table can be fitted
+> to sit **on the boundary** (`naive`: blue reaches 0 everywhere, and
+> pays for it in green) or to sit **above it** (`calibrated`: green is
+> better, blue floors at 55) — **it cannot do both, because "both" is not
+> in its function space.**
+
+★★ **This is why the two tables miss in opposite directions.** It is not
+a choice made badly; **it is a shape a fitted table of that form cannot
+have.** Any future refit of the same structure buys a different trade,
+not the answer.
+
+#### ★★★ The half of this that cuts against US, and it is the part worth keeping
+
+**The same argument applies to iccce's own CLUT interpolation, and iccce
+escapes it only by an accident of ORDER.**
+
+- iccce's LUT path **also** interpolates a regular grid — the embedded
+  FOGRA27 profile's `A2B0` is an `mft2` with `clutPoints = 16`
+  (`NC-304`). **Whatever discontinuities the press profile's own
+  behaviour contains, iccce smooths across them exactly as `pdfce`'s
+  table does.** iccce has no magic here.
+- **The clamp survives only because it is applied AFTER interpolation and
+  ANALYTICALLY**, in the destination matrix/TRC model, as a `clamp(0,1)`
+  on a computed number. It is never sampled, never fitted, never
+  interpolated.
+
+> ★★ **The transferable rule: a normative discontinuity must live in
+> CODE, on the far side of every interpolation. The moment it is baked
+> into sampled data it stops being a discontinuity and becomes a slope.**
+
+★ **Corollary a future session will need:** if iccce ever *ships* a
+pre-computed CMYK→sRGB table as a fast path (rule 8's optimisation
+territory), **that table inherits `pdfce`'s limitation exactly**, and the
+clamp must be re-applied analytically after the lookup rather than
+assumed to be in the samples.
+
+#### ★★★ What this does NOT decide
+
+1. **It is NOT an accuracy claim against `pdfce`'s tables, and must never
+   be quoted as one.** `CLAUDE.md` rule 10 item 4 is unchanged: `pdfce`'s
+   table is fitted to *pdfium* output, iccce's oracle for a CMYK LUT path
+   is *lcms2*, and **replacing one with the other is a LATERAL move in
+   evidence class.** What this entry establishes is narrower and
+   different in kind: **one specific feature — a gamut-boundary
+   discontinuity — is outside the representable set of a fitted grid**,
+   and iccce reproduces it because it computes it. **Nothing here says
+   iccce is closer anywhere else.**
+2. **It does not establish that Acrobat is right.** The comparison
+   partner is a **screen capture** — `DL-070`, and the new
+   `rendering-cross-check-screen-capture` class in `NUMERIC_CLAIMS.md`
+   §1. **Acrobat is an implementation, not the standard** (rule 7).
+3. **It does not establish which CMYK source Acrobat used.**
+   `CoatedFOGRA39/perceptual` matched all three channels exactly, and
+   **three of four FOGRA-family sources are within 3 counts on green** —
+   an open confound, recorded at `NC-301` and not resolved.
+4. **It changes no code, adds no gate and moves no tolerance.** §3.38
+   contributes **zero** graded rows to any `pass=` count, and its numbers
+   are protected by nothing — the corpus is non-redistributable and
+   cannot become a fixture (`NUMERIC_CLAIMS.md` §3.38.7).
+5. **It does not claim the clamp is the ONLY difference** between the two
+   approaches on this patch. Green still differs by up to 10 counts
+   across the sweep, and **nothing here explains that residual.**
+
+**Revisit if:** a fitted table is ever shown to reproduce a clamp exactly
+— which would mean the boundary happened to align with grid nodes, a
+**fixture-specific accident** rather than a refutation, and would need
+saying so explicitly; **or** iccce gains a sampled fast path, at which
+point the corollary above becomes a requirement on that path; **or** the
+clamp's own normative status changes — `pcs_to_device` cites **ICC.1:2022
+Annex F.8–F.16**, and a later edition moving the clamp relative to the
+inverse TRC would invalidate the mechanism while leaving every number in
+§3.38 looking untouched.
+
+---
+
+### DL-070 — ★★★ **a SCREEN CAPTURE of another application's window is a rendering cross-check and NOTHING STRONGER, and NO ΔE MAY EVER BE COMPUTED AGAINST ONE. Filed as a prohibition rather than a caveat, so that adding the number later requires REVERSING A DECISION instead of FILLING IN A GAP**
+
+**Date:** 2026-08-25 · **Occasioned by:** the same measurement as
+`DL-069` — the first in this project's history whose only comparison
+partner is a photograph of a competitor's window · **Drafted and filed by**
+`icc-librarian` · **The class it names is
+`rendering-cross-check-screen-capture`, added to `NUMERIC_CLAIMS.md` §1
+at the same filing; the rows are `NC-301` and `NC-303`.**
+
+#### What the artifact actually is
+
+`D:\Dev\temp\acro-refs\*.png` are **`PrintWindow` captures of a running
+Acrobat**, taken 2026-08-18. The binary **self-identifies as Acrobat Pro
+25.1**; **its licence tier was never established**. Each capture has been
+through:
+
+1. Acrobat's own colour pipeline to a **display** — not to a file;
+2. a transform to **whatever monitor profile Windows had installed at
+   capture time**, which nobody recorded;
+3. **8-bit quantisation**, and whatever the window compositor did.
+
+★★ **None of those three stages is named, pinned or reproducible.**
+Compare an lcms2 cross-check, where the version, build, platform, profile,
+intent and direction are all written into the row.
+
+#### The decision
+
+> ★★★ **Rows of class `rendering-cross-check-screen-capture` are stated
+> in 8-BIT CHANNEL COUNTS and in no other unit. No ΔE — of any formula,
+> in any space — may be computed against such a row, now or later.**
+
+**Two reasons, and they are independent — killing either leaves the
+prohibition standing:**
+
+1. **A ΔE against a screen grab dresses a rendering comparison up as
+   colorimetry.** ★ The unit *is* the claim: `ΔE2000 = 1.4` asserts a
+   perceptual distance between two **colours**; here one side is not a
+   colour measurement, it is a **pixel that came out of an unknown
+   display transform.** The number would be arithmetically fine and
+   epistemically false — **rule 1's exact failure mode, applied to our
+   own paperwork.**
+2. ★★★ **At perceptual intent the value is GAMUT-CLAMPED (`DL-069`,
+   `NC-302`), so a ΔE computed in sRGB would be MEASURING THE CLAMP.**
+   Both sides sit **on** the boundary at blue = 0. Their sRGB distance is
+   small **because the boundary compressed them together**, not because
+   the underlying colours agree — and the same two colours could be
+   arbitrarily far apart in the PCS. **A tolerance built on that number
+   would be tightest exactly where the evidence is weakest.**
+
+#### ★★ Why a prohibition and not a caveat
+
+A caveat is discharged by *reading* it, and a later session under time
+pressure will read *"a ΔE here would be misleading"* as *"a ΔE here needs
+care."* ★ **A decision-log entry with a `Revisit if` clause makes the
+addition an act with a name**: whoever adds the number must first say
+which of the two reasons above no longer holds. This is `DL-042`'s shape
+— **a negative finding removes its own auditor**, so the reason an item is
+forbidden has to be re-auditable, not just the item.
+
+#### What this does NOT decide
+
+1. **It does not say the capture is worthless.** ★★ It answers a question
+   **lcms2 structurally cannot**: *"where does a shipping PDF renderer
+   put this patch?"* — lcms2 does not render PDFs. That is why the class
+   was added rather than the evidence discarded.
+2. **It does not forbid a ΔE against a FUTURE Acrobat-derived artifact of
+   a different kind.** ★ A colour-managed **export** to a known
+   destination profile, or a spectrophotometer reading of a print, is a
+   different artifact and would get a different class. The prohibition is
+   on **captures**, and it is the capture's display leg that earns it.
+3. **It does not rank Acrobat below lcms2 as an implementation.** ★★ The
+   ranking is over **artifacts and their provenance**, not over vendors.
+   A pinned Acrobat pipeline with a recorded display profile would move
+   the artifact, not the company.
+4. **It does not apply retroactively to any existing row.** No row in
+   this ledger before `NC-301` has a screen capture in it *(and none was
+   found looking — the class is new because the evidence shape is new)*.
+
+**Revisit if:** the capture's display leg becomes **known and pinned** —
+a recorded monitor profile plus a documented Acrobat colour setting —
+which would move the artifact toward `implementation-cross-check` and
+make a ΔE arguable; **or** a comparison is wanted at a point that is
+**demonstrably inside the destination gamut on every channel**, which
+kills reason 2 but **not reason 1**, and therefore still does not license
+the number; **or** a genuinely colorimetric reference for this corpus
+appears — a measured print, or Ghent's own reference PDF rendered through
+a pinned pipeline — at which point the screen capture stops being the
+best available evidence and the question is moot.
+
+---
+
+### DL-071 — ★★★ **a tool that must QUOTE LICENSED MATERIAL to do its job is SPLIT into a generic engine and a private data file, and the data file lives OUTSIDE the repository rather than in a gitignored path inside it. Second instance in eight days of the same boundary, which is what makes it a pattern; and the log had NO ENTRY for the first, which is why this one is not a duplicate**
+
+**Date:** 2026-08-25 (later the same day as `DL-069` / `DL-070`) ·
+**Occasioned by:** `tools/ghent/shading_cell.py` — written that morning to
+answer `pdfce`'s question, and found to have inlined a licensed test
+suite's specifics as constants · **Decided by the operator**, whose terms
+were *"split it into a public generic tool plus local file"* ·
+**Drafted and filed by** `icc-librarian` · **Rows affected:** `NC-301` …
+`NC-306` (`NUMERIC_CLAIMS.md` §3.38), whose apparatus this replaces ·
+**No code behaviour changes and no number moves.**
+
+#### ★★ Why this is filed at all, checked against the alternative first
+
+The dispatch that requested it asked the right question: **is this already
+covered by the 2026-08-18 decision that untracked
+`docs/GHENT_COMPATIBILITY.md`?** It is not, and the reason is worth
+stating explicitly rather than by omission:
+
+1. ★★★ **The 2026-08-18 decision IS NOT IN THIS LOG.** *(**VERIFIED** —
+   searched `ARCHITECTURE.md` for it; the decision lives in
+   `.gitignore`'s comment block, in `NEXT_SESSION.md`, and in
+   `GHENT_COMPATIBILITY.md` §2.2 — **all three of which are either
+   untracked or not the decision log**, and one of which is invisible to
+   a default repository search.) A pattern whose only record is a comment
+   in a `.gitignore` is one refactor away from being lost.
+2. **It decides something the earlier one did not.** 2026-08-18 removed a
+   **document** from tracking. This one is about **executable code that
+   is worth publishing**, and its content is the *split* — the engine
+   stays public precisely because the data left it.
+3. **The placement rule is new**, and it is the transferable half.
+
+#### The decision
+
+> ★★★ **When a tool must carry licensed third-party specifics to do its
+> job, split it: a GENERIC ENGINE that contains no numbers and is tracked
+> and public, plus a CASE FILE holding every licensed value, which lives
+> OUTSIDE the repository — not in a gitignored path inside it.**
+
+**The placement clause is the load-bearing one, and its reason is one
+sentence: a gitignored path is one `git add -f` away from the entanglement
+the decision was made to prevent.** ★ An ignore rule protects against
+*inattention*, not against a deliberate act, a tooling default, an IDE
+that stages what it sees, or a future contributor who reads the ignore
+entry as *"noisy build output"* rather than *"legally load-bearing."*
+**Absence from the tree is a stronger guarantee than presence-plus-a-rule,
+and it costs nothing that the rule was buying.**
+
+#### What "contains no numbers" means, concretely
+
+The engine may hold **plumbing** — how to inflate a stream, how to sample
+an annulus, how to weight a radial ramp. It may **not** hold a colour
+value, a pixel coordinate, a stitch bound, an object number, a document
+name, or a profile's identity. ★ **The test is not "is this secret" but
+"did I read it out of somebody else's file?"** If the answer is yes, it is
+case data.
+
+★★ **A second property fell out of the split and was not the reason for
+it**, and it is worth keeping: **a tool that reads its comparison from
+data can be made to REFUSE an unlabelled claim.** `patch_compare.py`
+requires `reference.evidence_class` with **no default** and validates it
+against named classes, and it **prints the declaration and the
+provenance string above every table** *(verified by reading it)*. The old
+harness could not have done this — its comparison was hard-coded, so
+there was nothing to declare. ★ **`DL-070`'s prohibition also moved from
+prose into code**: the tool has **no ΔE and no flag that would enable
+one**, so the prohibition is now enforced by the absence of a feature
+rather than by a reader's memory.
+
+#### ★★ What this costs, stated because a decision that only has upsides is under-examined
+
+1. **A published tool nobody can run as-shipped.** The public half is
+   useless without a case file, and the case file for the only case that
+   exists is on one machine. ★ Mitigated deliberately: the README carries
+   a **worked example built entirely from Windows-shipped profiles**, so
+   the shape is reproducible even though the finding is not.
+2. **The measurement's apparatus is now a thing that can go missing.**
+   A case file outside the tree has **no history, no backup and no
+   review**; it can be edited with nothing recording that it was. ★ **A
+   number in `NUMERIC_CLAIMS.md` produced from a case file is anchored to
+   an artifact this project does not version**, which is weaker than the
+   already-weak anchor of an uncommitted working tree.
+3. ★★★ **The old apparatus was DELETED, not archived**, so the two
+   apparatuses can never be compared. The claim that the new tool
+   reproduces the old numbers exactly is `[REPORTED]` and is now
+   **unfalsifiable** — `DL-042`'s shape, where the act that settles a
+   question removes the only thing that could re-open it.
+
+#### What this does NOT decide
+
+1. **It does not say the ledger is clean.** ★★★ `NUMERIC_CLAIMS.md`
+   §3.38 — **tracked** — already carries the shading dictionary, the
+   endpoint colours, the stitch bound and the embedded profile's quoted
+   `cprt`. **The material this decision keeps out of the tool is already
+   in the tree, in the ledger**, and that is recorded as an **operator
+   decision owed** at §7.28 item 6. This entry does not resolve it and
+   must not be read as having done so.
+2. **It does not make anything publishable.** Rule 9 is untouched:
+   **publishing is the operator's act**, and *"this file is safe to
+   track"* is not *"this file may be pushed."*
+3. **It does not apply to synthetic or self-authored data.** A fixture
+   this project wrote belongs in the repository; the rule is about
+   material **read out of somebody else's licensed artifact**.
+4. **It does not license a gitignored data file "just this once."** ★ The
+   placement clause is the entry; a case file inside the tree is a
+   reversal of this decision and needs a new one.
+
+**Revisit if:** the suite's licensor grants written permission for the
+specifics (which `GHENT_COMPATIBILITY.md` §8 item 1 already records as
+required for any public mention of Ghent), **or** a case file's absence
+from version control is observed to have cost a measurement — a number in
+the ledger that cannot be reproduced because the case file drifted or was
+lost, which is cost 2 above **firing** rather than being anticipated —
+at which point the question is not *"track it"* but *"where does an
+unversioned but backed-up artifact live?"*

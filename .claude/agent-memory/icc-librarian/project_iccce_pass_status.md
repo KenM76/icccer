@@ -1,6 +1,6 @@
 ---
 name: iccce-pass-status
-description: iccce status snapshot to the 2026-08-20 PASS L + profileID filing (33rd SESSION_LOG entry; tip 0a88ad6; the FIRST filing ever made against work COMMITTED AND NEVER FILED — 4 commits, zero doc mentions; lcms2 implements the C0 reading of sRGB but A57 STAYS OPEN; §C is SELF-COMPARISON not a cross-check, so 14/11/2-of-5169 is one class weaker than the dispatch assumed; two of our own doc-comment claims FALSIFIED because a claim in a UNIT is silently scoped to that unit's domain; DL-067 a fabricated value is a FORGED CREDENTIAL, DL-068 DL-062's revisit-if has fired twice so carry ref HASHES not a push count; NC-281…NC-300 in §3.37 + §7.26, next free NC-301/NA-013 — NA-013 declined a THIRD time, on the ground that H.273 governs CICP not ICC profiles) (earlier: the 2026-08-19 PERCEPTUAL-COST filing, 32nd SESSION_LOG entry, tip 3c93b62; NA-012's cost is MEASURED at 3.681203 dE2000 and its UNMEASURED retired; NC-269…NC-280 in the new §3.36 + §7.25, next free NC-281/NA-013 — NA-013 again NOT consumed; DL-065 + DL-066 filed, 66 decision-log entries; suite pass=353 fail=0 skip=9) (earlier: the LEAK-GUARD INJECTION filing, 31st SESSION_LOG entry; DL-064 filed, 64 decision-log entries; NC-267 + NC-268 filed in the new §3.35 + §7.24, next free NC-269/NA-013 — NA-013 deliberately NOT consumed; reflog tip abdf445, two commits past the measured 400179b; the injection DISCHARGED the Pass K debt and found that below 5.0e-2 the WHOLE SUITE is green with a defect compiled in) (earlier: the DISCLOSURE-CHANNEL filing, 30th entry, DL-063, no row moved, tip 400179b) (earlier: the 2026-08-18 STALE-STATUS filing (29th SESSION_LOG entry; DL-062 filed with TWO instances, 62 decision-log entries; NO row moved, next free still NC-267/NA-013; §7.23 item 1 DISCHARGED but its difftest-row debt item 4 STAYS OPEN) (earlier: the PASS K filing, tip 60c32dd, clean; NC-243…NC-266 + NA-012 filed — largest row block ever, and ZERO of them published-ground-truth because A51 makes it impossible; E8/NC-256 is rule 7's strongest form — the ORACLE is wrong by algebra; §D is self-comparison of the ORACLE; the compiled-path defect was already fixed in a05476c so 0.617121 is HISTORY; next free NC-267/NA-013, DL-061 newest, 27 log entries) (earlier: the first-use-of-the-raster filing at tip 1a0509b; Pass K LANDED as 846952f; the raster capability is now VERIFIED not REPORTED; GWG 23.0's row was wrong about its NUMBERS too — 25%/0/0/0/75, which is ISO 32000's formula evaluated; two false statements found in passk.rs PROSE, one printed into the report; next free NC-243/NA-012, DL-061 newest, 27 session-log entries) (ORIGINAL SCOPE COMPLETE — Passes 0–7 DONE; ICC's own sRGB document INVERTED the 12-ULP attribution — it is the FILE's error; NC-230 is the ledger's SECOND published-ground-truth row so "NC-001 is the only one" retires; a shipped crash fixed; crates.io names checked but only 5 of 6 and NOT a reservation; GWG 23.0 reclassified OUT of "ours" so six-genuinely-ours becomes FIVE and the suite is 51 patches not ~48; Pass K exists in the WORKING TREE and in NO commit; PDF page RENDERING turns out to be available via pypdfium2 so NC-230's second reading is unblocked; next free NC-243/NA-012, DL-060 newest, 26 session-log entries; Pass H filed at pass=274)) — what remains is Pass 8 in pdfce, purchased documents, Passes 9–10, standing debts
+description: iccce status snapshot to the 2026-08-25 `0.2.0` CHANGELOG filing (Cargo.toml is 0.2.0 and the five inter-crate literals are hoisted into [workspace.dependencies]; PASS G AND PASS H SHIPPED IN 0.1.0, NOT in this release — verify a release range against the reflog, because refs/tags/v0.1.0 is an ANNOTATED TAG OBJECT and is not the tagged commit; "NC-001 is the only published-ground-truth row" was RETIRED at §7.19 and the live sentence is the narrower "no published-ground-truth row for any TRANSFORM"; THIRD_PARTY_LICENSES.md and docs/FEATURES.md §2/§4/§6 went stale on the bump; no ledger row, next free still NC-307/NA-013) (earlier the same day: the APPARATUS-SPLIT filing (both refs STILL 842d3b8, nothing committed; the measuring harness tools/ghent/shading_cell.py is DELETED and replaced by tracked tools/patch-compare/ + a case file OUTSIDE the repo; NC-306 filed in §3.38.9 + §7.28, next free NC-307/NA-013; DL-071 the split pattern, next free DL-072; a gitignore-respecting search UNDER-COUNTS this project's citations 9-of-13 because docs/GHENT_COMPATIBILITY.md is gitignored — search it BY NAME) (earlier the same day: the GWG010 SHADING-CELL filing, 34th SESSION_LOG entry; the harness the dispatch called "committed" was in NO commit; NC-301…NC-305 in §3.38 + §7.27, next free NC-306/NA-013; DL-069 a fitted table cannot reproduce a normative CLAMP — and our own CLUT smooths the same way, the clamp surviving only because it is applied ANALYTICALLY AFTER interpolation; DL-070 forbids any ΔE against a screen capture; new WEAKEST class rendering-cross-check-screen-capture; NOT "Acrobat used FOGRA39"; the 2026-08-21 session still has no SESSION_LOG entry) (earlier: the 2026-08-20 PASS L + profileID filing (33rd SESSION_LOG entry; tip 0a88ad6; the FIRST filing ever made against work COMMITTED AND NEVER FILED — 4 commits, zero doc mentions; lcms2 implements the C0 reading of sRGB but A57 STAYS OPEN; §C is SELF-COMPARISON not a cross-check, so 14/11/2-of-5169 is one class weaker than the dispatch assumed; two of our own doc-comment claims FALSIFIED because a claim in a UNIT is silently scoped to that unit's domain; DL-067 a fabricated value is a FORGED CREDENTIAL, DL-068 DL-062's revisit-if has fired twice so carry ref HASHES not a push count; NC-281…NC-300 in §3.37 + §7.26, next free NC-301/NA-013 — NA-013 declined a THIRD time, on the ground that H.273 governs CICP not ICC profiles) (earlier: the 2026-08-19 PERCEPTUAL-COST filing, 32nd SESSION_LOG entry, tip 3c93b62; NA-012's cost is MEASURED at 3.681203 dE2000 and its UNMEASURED retired; NC-269…NC-280 in the new §3.36 + §7.25, next free NC-281/NA-013 — NA-013 again NOT consumed; DL-065 + DL-066 filed, 66 decision-log entries; suite pass=353 fail=0 skip=9) (earlier: the LEAK-GUARD INJECTION filing, 31st SESSION_LOG entry; DL-064 filed, 64 decision-log entries; NC-267 + NC-268 filed in the new §3.35 + §7.24, next free NC-269/NA-013 — NA-013 deliberately NOT consumed; reflog tip abdf445, two commits past the measured 400179b; the injection DISCHARGED the Pass K debt and found that below 5.0e-2 the WHOLE SUITE is green with a defect compiled in) (earlier: the DISCLOSURE-CHANNEL filing, 30th entry, DL-063, no row moved, tip 400179b) (earlier: the 2026-08-18 STALE-STATUS filing (29th SESSION_LOG entry; DL-062 filed with TWO instances, 62 decision-log entries; NO row moved, next free still NC-267/NA-013; §7.23 item 1 DISCHARGED but its difftest-row debt item 4 STAYS OPEN) (earlier: the PASS K filing, tip 60c32dd, clean; NC-243…NC-266 + NA-012 filed — largest row block ever, and ZERO of them published-ground-truth because A51 makes it impossible; E8/NC-256 is rule 7's strongest form — the ORACLE is wrong by algebra; §D is self-comparison of the ORACLE; the compiled-path defect was already fixed in a05476c so 0.617121 is HISTORY; next free NC-267/NA-013, DL-061 newest, 27 log entries) (earlier: the first-use-of-the-raster filing at tip 1a0509b; Pass K LANDED as 846952f; the raster capability is now VERIFIED not REPORTED; GWG 23.0's row was wrong about its NUMBERS too — 25%/0/0/0/75, which is ISO 32000's formula evaluated; two false statements found in passk.rs PROSE, one printed into the report; next free NC-243/NA-012, DL-061 newest, 27 session-log entries) (ORIGINAL SCOPE COMPLETE — Passes 0–7 DONE; ICC's own sRGB document INVERTED the 12-ULP attribution — it is the FILE's error; NC-230 is the ledger's SECOND published-ground-truth row so "NC-001 is the only one" retires; a shipped crash fixed; crates.io names checked but only 5 of 6 and NOT a reservation; GWG 23.0 reclassified OUT of "ours" so six-genuinely-ours becomes FIVE and the suite is 51 patches not ~48; Pass K exists in the WORKING TREE and in NO commit; PDF page RENDERING turns out to be available via pypdfium2 so NC-230's second reading is unblocked; next free NC-243/NA-012, DL-060 newest, 26 session-log entries; Pass H filed at pass=274)) — what remains is Pass 8 in pdfce, purchased documents, Passes 9–10, standing debts
 metadata:
   type: project
 ---
@@ -1038,7 +1038,237 @@ tests, difftest **`pass=373 fail=0 skip=9 error=0`** (`353 + 20` closes),
 clippy clean. ★ **Weaker than NC-280's two-runner census.**
 **47 fixtures still** *(VERIFIED by listing)*.
 
-Related: [[iccce-gate-in-input-units-cannot-certify-output]],
+**★★★ UPDATED 2026-08-25, THE GWG010 SHADING-CELL FILING (thirty-FOURTH
+`SESSION_LOG` entry). The FIRST filing ever made against a WORKING TREE
+WITH NO COMMIT BEHIND IT, and the first whose only comparison partner is
+a PHOTOGRAPH.** ★★ **The dispatch said the harness was *"committed"*; it
+is not** — `.git/refs/heads/master` **and** `origin/master` both read
+**`842d3b8`** (subject: the 2026-08-21 memory commit) and **`.git/logs/HEAD`
+has NO 2026-08-25 line** *(VERIFIED — plain text)*. **No row carries a
+commit hash, because none exists.**
+
+**The occasion:** `pdfce`'s `open/note_cmyk_to_srgb_injects_blue_into_saturated_orange.md`,
+**informational, "no reply owed"** (`Pass 122.7`) — its three interim
+`DeviceCMYK`→sRGB tables miss Acrobat on one Ghent patch **in OPPOSITE
+directions** (`naive` blue 0 / green 143; `calibrated` blue 55 / green
+165; Acrobat 0 / 156). ★ **An informational note is the easiest kind to
+leave unanswered**; the lead answered it by measurement the same day.
+
+**★★★ THE FINDING (DL-069), and it generalises far beyond colour: a
+FITTED INTERPOLATION TABLE CANNOT REPRODUCE A NORMATIVE CLAMP, because a
+clamp is a DISCONTINUITY and an interpolant is defined by not having
+one.** The two tables miss in opposite directions **not because either
+was fitted badly but because "both at once" is not in their function
+space.** ★★ **The half that cuts at US: iccce's own CLUT interpolation
+smooths identically — the clamp survives ONLY because it is applied
+ANALYTICALLY, AFTER every interpolation** (ICC.1:2022 **Annex F.8–F.16**,
+`MatrixTrc::pcs_to_device`). **Corollary: any shipped pre-computed
+fast-path table inherits pdfce's limitation exactly.**
+
+**The measurement:** the patch's `shading` cells stitch at
+`Bounds [0.8764]` into a **CONSTANT** ⇒ a large uniform plateau at
+`DeviceCMYK (0, 0.5, 1, 0)`. At **perceptual**, **every FOGRA-family
+source reaches blue = 0 EXACTLY**; `CoatedFOGRA39/perceptual` = **243 /
+146 / 0**, matching the capture on all three. ★ **Proven a CLAMP not a
+converged value by a 7-point magenta sweep: blue exactly `0.000000`
+throughout, red exactly `1.000000` from m = 0.2 down.**
+
+**★★★ NEW EVIDENCE CLASS `rendering-cross-check-screen-capture` — RANKS
+BELOW `implementation-cross-check`**, because the reference is a
+`PrintWindow` grab of Acrobat through an **unrecorded** display transform
+and monitor profile. **DL-070 forbids computing a ΔE against it**, for
+two independent reasons (it dresses rendering up as colorimetry; and at
+perceptual the value is clamped, so the ΔE would measure the clamp).
+★ Filed as a **prohibition** so a later session must reverse a decision
+rather than fill a gap.
+
+**★★ NEVER round these up:** **NOT** *"Acrobat used FOGRA39"* — three of
+four FOGRA sources are within 3 counts on green, one point of nine;
+**NOT** an accuracy gain over pdfce (rule 10 item 4 — lateral in evidence
+class); **NOT** rendered (iccce still rasterises nothing);
+**NC-303's area weighting is a RECONSTRUCTION** (the clip path/CTM before
+`sh` were never read).
+
+**★★ NC-305 is a NEGATIVE and the dispatch over-read it:** `A2B0` and
+`A2B2` **share tag offset 296** (byte-identical), so *"correctly selected
+`A2B2`"* and *"silently fell back to `A2B0`"* are **indistinguishable
+here** — candidate separation **zero** (DL-033).
+
+**★★ FOUND BY READING, not carried by the dispatch:** the harness's
+docstrings name **`MatrixTrc::device_to_rgb` — zero occurrences in
+`crates/`** (DL-048's mechanism, and in the dangerous direction: a reader
+who greps it concludes the clamp was removed); `to8()` says
+*"round-half-away"* but calls `np.round` = **half-to-EVEN**; the profile
+census says **12 tags and enumerates 11** (not guessed); and ★★★ **the
+2026-08-21 session has NO `SESSION_LOG` entry** — 33 headings, last dated
+2026-08-20, while `NEXT_SESSION.md` carries a 7-commit handoff. **Not
+written here: the dispatch carried evidence for GWG010 and nothing else.**
+
+**★★★ DL-068's FIRST OBSERVED PAYOFF:** the 2026-08-21 handoff carried
+**ref hashes instead of a push count**, and they went **historical rather
+than false** — announcing it by not matching `842d3b8`. A *"7 commits
+ahead"* would have been silently wrong.
+
+**Ledger: `NC-301` … `NC-305` in the new §3.38 + §7.27; next free
+`NC-306` / `NA-013` (NA-013 not consumed — the clamp is normative
+behaviour, not a new approximation). DL-069 + DL-070 filed; 70
+decision-log entries. `SESSION_LOG.md` has 34 entries.
+`GHENT_COMPATIBILITY.md` gained §4.7; `TOLERANCES.md` untouched — §3.38
+has NO tolerance and NO gate, and ZERO graded rows.** ★★ **These rows are
+protected by NOTHING** — Ghent + Heidelberg + Acrobat + Microsoft
+encumbrances mean the case **can never be a committed fixture**.
+★ **Still owed to ME: `NC-268`'s two corrections** (floor `1e-12`;
+`1.106780e-1` → `1.1067772e-1`) — **not done, because a correction row
+needs the run's provenance and this dispatch carried none.**
+★ Cross-project lesson written:
+`C:\personal_rag\pdf\lesson_20260825_fitted_cmyk_table_cannot_reproduce_a_gamut_clamp_because_a_clamp_is_a_discontinuity.md`.
+
+**★★★ UPDATED 2026-08-25 LATER THE SAME DAY — THE APPARATUS-SPLIT FILING
+(thirty-FIFTH librarian filing; NO new `SESSION_LOG` heading — a dated
+CODA on the 34th entry, because the day did not end where that entry
+said it did). NOTHING MEASURED CHANGED; the thing that produced the
+measurements was DELETED.** See [[iccce-licensed-tool-split-outside-the-tree]]
+(**DL-071**) and [[iccce-gitignored-file-invisible-to-citation-sweep]].
+
+**Operator decision:** *"split it into a public generic tool plus local
+file."* `tools/ghent/shading_cell.py` **DELETED** *(verified —
+`tools/ghent/` now holds `extract_icc.py` + `icc_terms.py` only)*;
+`tools/patch-compare/patch_compare.py` + `README.md` added, **contain no
+numbers at all**; the case file is at
+`D:/Dev/temp/iccce-gwg/gwg010_shading.case.json`, **OUTSIDE the repo —
+not gitignored inside it, because a gitignored path is one `git add -f`
+away from the entanglement.** ★ **`DL-070` is now enforced IN CODE** (no
+ΔE, no flag); `reference.evidence_class` is **mandatory with no
+default**.
+
+**★★★ THE HAZARD TO MY OWN JOB, and it is the most reusable thing here:
+a gitignore-respecting search UNDER-COUNTS this project's citations.**
+The first sweep returned **9** of **13**; the missing four are all in
+**`docs/GHENT_COMPATIBILITY.md`, which is gitignored**. **ALWAYS search
+that file BY NAME in addition to any directory sweep** — *"zero remaining
+citations"* is a sentence I write often and the project's most
+citation-dense document is invisible to the default tool.
+
+**★★★ THE EQUIVALENCE OF OLD AND NEW APPARATUS IS `[REPORTED]` AND NOW
+UNAUDITABLE** — the old tool was **deleted, not archived**, so nothing
+can adjudicate a future re-run disagreeing with `NC-301` … `NC-305`.
+DL-042's shape. **If a re-run disagrees, that is NOT evidence about the
+transform.**
+
+**★★ `NC-306` (the OPM 1 cell): its iccce arm carries ZERO information**
+— same device colour ⇒ same output **by construction**; the whole content
+is **one region of a capture against another region of the same capture**,
+which is **no class in §1** and **NOT `self-consistency`** (there *"self"*
+means iccce). Acrobat median **identical, `243/146/0`**. ★ It says
+**nothing about iccce** (we composite nothing) and **does not confirm
+`pdfce`'s Pass 122.6**. ★★ It **was PRE-REGISTERED** — the case file
+states the reason for adding it *before* the result — which is what makes
+it a negative finding rather than an absence (DL-023).
+
+**★ Two corrections to the dispatch:** (a) the tool validates against
+**four** class names and **§1 defines FOURTEEN** — *"the four class names
+in §1"* reads as *"§1 has four classes"*; `NC-302` and `NC-305` are not
+expressible as a `reference.evidence_class` at all. (b) A ramp's
+**`1 995`** rows is a **sampling-grid artefact** (2 001 bins, six empty:
+**1, 2, 4, 6, 8, 16**, nearest `t = 0`); the README's first draft said
+they were near `t = 1` — **plausible, unchecked, wrong**, corrected by
+looking.
+
+**★★★ NEWLY OWED, AN OPERATOR DECISION:** the licence boundary the split
+respects **runs straight through `NUMERIC_CLAIMS.md` §3.38, which is
+TRACKED** — the shading dictionary, object numbers, endpoint colours and
+the profile's quoted `cprt` are all already in the repo. **I did not act
+(a licence call is the operator's, the ledger is append-only) and did not
+make it worse** — every new licensed specific went to the untracked
+narrative or the outside-the-tree case file.
+
+**Discharges:** §7.27 item 1 (the `device_to_rgb` + rounding docstrings)
+— **BY DELETION, and the successor was CHECKED**: `device_to_rgb` occurs
+nowhere in `tools/patch-compare/`, and `to8()` now states
+round-half-to-even. §7.27 item 2 (the twelfth tag) — **PARTIAL**: it is
+**`targ`** (115 930 B of CGATS data), enumerated in the case file, so the
+census is now internally checkable — but it is `[REPORTED]` **by the same
+role that filed the count**, not `iccce inspect` output. ★ **Bonus:
+`B2A0`/`B2A2` ALSO share an offset**, so the byte-identity runs in **both
+directions** — strengthens `NC-305`.
+
+**Ledger: `NC-306` in §3.38.9 (+ §3.38.10, a caveat with deliberately NO
+id); new §7.28. Next free `NC-307` / `NA-013`. DL-071 filed; 71
+decision-log entries. `SESSION_LOG.md` still has 34 entries.**
+★ **`NC-268`'s two corrections are STILL owed to me — second consecutive
+filing, the dispatch said in terms it was not sending them.** ★ The
+2026-08-21 `SESSION_LOG` entry is **also still owed, second consecutive
+filing.** ★ Cross-project lesson written:
+`C:\personal_rag\python\lesson_20260825_subprocess_relative_forward_slash_exe_path_fails_two_ways_on_windows.md`.
+
+**★★★ UPDATED 2026-08-25, THE `0.2.0` CHANGELOG FILING (third filing of
+the day; the only file edited was `CHANGELOG.md`). NO LEDGER ROW — next
+free still `NC-307` / `NA-013`, `DL-071` newest.** The operator gave an
+explicit go-ahead to commit, push and tag today; **`Cargo.toml`
+`workspace.package.version` reads `0.2.0`** *(verified)* and the five
+inter-crate version literals are hoisted into a root
+`[workspace.dependencies]` table with members using
+`iccce-color.workspace = true` *(verified)* — the bump **broke the
+build** first, and two of the five literals carried a comment saying they
+*"must move with it in the same commit"*, so **the warning existed and
+was insufficient.**
+
+**★★★ THE RELEASE RANGE IS NOT WHAT A DISPATCH SAYS IT IS — VERIFY IT
+AGAINST THE TAG.** The dispatch listed *"the Ghent corpus measured (Pass
+G)"* as content of `0.2.0`. **It is not: `4bf291a` *"conformance: Pass G
+and Pass H — real-world profiles, graded"* sits at reflog line 79 and the
+`0.1.0` release commits at lines 89–92, with the range's first commit
+`46de522` at line 93** *(verified by reading `.git/logs/HEAD`)*. **Pass G
+and Pass H shipped in `0.1.0`.** ★ `.git/refs/tags/v0.1.0` holds
+**`d637318`**, which appears **nowhere in the reflog** — it is an
+**annotated tag object**, not the commit, so *a tag ref does not give you
+the tagged commit* and the ordering had to come from the reflog instead.
+★★ Generalises: **a release note is a claim about a COMMIT RANGE, and the
+range is the one thing a dispatch cannot establish by describing it.**
+
+**★★★ THE DISPATCH ASKED ME TO PRINT A SENTENCE THAT WAS RETIRED ELEVEN
+FILINGS AGO:** *"NC-001 remains the only `published-ground-truth` row in
+the whole ledger."* **False since §7.19** — `NC-230` is the second, and
+`tools/difftest` holds a third population (Pass H, and now Pass I's
+adaptation rows). ★ **The live standing sentence is the narrower one:
+*no `published-ground-truth` row exists for any TRANSFORM*** — that is
+what §7.21 … §7.28 actually carry. **A retired sentence keeps circulating
+because it is short and it flatters nobody, so nothing makes it go red.**
+★ Also mis-cited: the operator decision on *"may published numbers live
+in an MIT repository as fixtures?"* is **§7.15 newly-owed 6**, not §7.16
+— §7.16's three operator items are the suite-naming permission, the
+Compliancy programme, and the joint render harness.
+
+**★★ TWO GENERATED/DERIVED ARTEFACTS WENT STALE ON THE BUMP AND NOTHING
+WILL SAY SO.** `THIRD_PARTY_LICENSES.md` is cargo-about output and still
+names all five crates at **`0.1.0`** — it must be regenerated
+(`cargo about generate --workspace about.hbs -o THIRD_PARTY_LICENSES.md`)
+**before the tag**, or the release ships a licence manifest naming the
+wrong versions. And `docs/FEATURES.md` §6 still says **"Version `0.1.0`
+in `Cargo.toml`"**, §4 says *"through NC-280"* (now `NC-306`), and §2
+says **"iccce does not gate `wasm32` in CI"** — which
+`.github/workflows/ci.yml`'s `wasm32` job (on `push`, added pre-`0.1.0`
+at reflog line 87) **contradicts**. ★ The `wasm32` line is the dangerous
+one: it is quoted at `pdfce` as a consumer-facing caveat.
+
+**★ What I verified by reading for this entry, none of it from the
+dispatch:** the release workflow attaches binary assets on a `v*` tag and
+**contains no publish step**; `--preserve-black`'s policy name is
+mandatory in the argument parser and `k-only-ratio` maps to a named
+refusal; `violations: N`'s occasion was a **false accusation against five
+ICC-published v2 profiles** by our own `passh/B` row; `about.toml`'s
+fifth `clarify` block and the one-block-per-member invariant;
+`patch_compare.py`'s three enforced properties. ★★ **I deliberately did
+NOT name the licensed suite in `CHANGELOG.md`** — it is about to become a
+**public artifact**, §7.16 operator item 1 is unresolved, and §7.28 item
+6 records that the ledger is *already* entangled and awaiting an operator
+call. Describing the tool generically costs nothing and matches what the
+tool does about itself.
+
+Related: [[iccce-licensed-tool-split-outside-the-tree]],
+[[iccce-gitignored-file-invisible-to-citation-sweep]],
+[[iccce-fitted-table-cannot-express-a-clamp]],
+[[iccce-gate-in-input-units-cannot-certify-output]],
 [[iccce-unfailable-row-protected-only-by-siblings]],
 [[iccce-injection-measures-one-magnitude]],
 [[iccce-words-humans-count-code]],
