@@ -110,10 +110,20 @@ discovered late:
    project); and **`pdfce-core`/`pdfce-render` must never gain a network
    client under any future decision**. iccce satisfies all three today —
    the whole `Cargo.lock` is five packages, all of them ours — but that is
-   a *dated observation, not a standing guarantee*, and **iccce does not
-   gate wasm32 in CI**. Adding a dependency here can silently break a
-   consumer's CI gate. Classify against those three before adding
-   anything, not just against rule 9.
+   a *dated observation, not a standing guarantee*. Classify against those
+   three before adding anything, not just against rule 9.
+
+   ★★ **CORRECTED 2026-08-25: this rule used to say "iccce does not gate
+   wasm32 in CI", and that was FALSE.** `.github/workflows/ci.yml` has a
+   `wasm32` job that builds all four library crates for
+   `wasm32-unknown-unknown` on every push to `master`, and a companion gate
+   asserting every line of `cargo tree` is an `iccce-*` crate at a local
+   path. Both landed in `68d4601`, **before `v0.1.0`** — so the sentence was
+   already wrong when it was written here. ★ It was also **repeated to
+   `pdfce` in the request channel as a caveat about this library**, which
+   is the part that makes it worth a paragraph rather than a deletion: a
+   false caveat *understates* what a consumer can rely on, so it is the one
+   direction of error that never gets challenged by the person it misleads.
 3. **★ Overprint is `pdfce`'s problem, not this project's.** It is
    **compositing, not conversion** — it decides which colorant channels a
    paint operation writes to, in a device space, *before* any conversion
@@ -145,6 +155,56 @@ which exists because of rule 1 above: **a colour claim carries its
 reference and its number, and names its oracle** — ground truth,
 cross-check against another implementation, and self-comparison are three
 different strengths of claim in that folder exactly as they are here.
+
+### 11. ★★★ NO NEW GHENT MATERIAL IN A TRACKED FILE — operator decision, 2026-08-25
+
+**Ken's words: *"ship it and stop adding Ghent material."*** Effective
+immediately, binding on every session.
+
+**What the decision settles.** The Ghent PDF Output Suite 5.0 is licensed,
+non-redistributable, carries a **no-commercial-use** clause and an
+**affirmative obligation to reproduce GWG's notice** in any substantial
+copy — the most restrictive terms of the four corpora this project touches.
+`docs/GHENT_COMPATIBILITY.md` was untracked for that reason on 2026-08-18,
+but `docs/NUMERIC_CLAIMS.md` kept accepting Ghent-derived rows, and that
+document **is** tracked and **has been public on GitHub throughout**. The
+decision does not undo that. It stops the growth.
+
+**The rule, stated so it can be applied without re-deciding:**
+
+- **Nothing Ghent-derived may be ADDED to a tracked file from now on.** Not
+  a measurement, not a patch identifier, not a file name, not an
+  indirect-object number, not a device colour read out of one of its
+  documents, not the identity or `cprt` of a profile embedded in one, and
+  not the suite's name in a newly-written passage.
+- **What is already there STAYS.** It ships in `v0.2.0`. Removing it would
+  mean rewriting published history, which the operator did not ask for and
+  which would not un-publish anything.
+- **Ghent work itself continues** — in `docs/GHENT_COMPATIBILITY.md`
+  (untracked, still the reference), in `tools/ghent/` for anything generic,
+  and in `tools/patch-compare/` case files, which live **outside the
+  repository** rather than in a gitignored path inside it.
+- **Tracked documents may still POINT at the untracked ones** by section, as
+  they already do. A pointer is not a quotation.
+- ★ **`tools/patch-compare/patch_compare.py` is the shape to copy.** A tool
+  that must handle licensed material gets split: a generic engine holding no
+  numbers, plus a data file outside the tree. See `ARCHITECTURE.md` `DL-071`.
+
+**The one thing that stays open and is NOT settled by this**: whether
+published numbers from *other* licensed sources — ICC's informative-annex
+values, CIE's CC BY-SA tables, a vendor `cprt` — may live in this
+repository. `NUMERIC_CLAIMS.md` §7.15 newly-owed 6 has carried that since
+2026-08-17 and it still blocks the second ground-truth fixture. **Do not
+read today's decision as having answered it.** It answered the corpus with
+the strictest terms, which is the one where the answer would have been "no"
+anyway.
+
+> ★ **Placed at 11 rather than 10 deliberately.** Inserting it *before*
+> the request-channel rule would have renumbered that rule to 11, and
+> **eleven passages across `ARCHITECTURE.md`, `GHENT_COMPATIBILITY.md` and
+> `NEXT_SESSION.md` cite "rule 10" meaning the channel** — including four
+> that cite a specific item number within it. Renumbering breaks a
+> cross-reference silently: the citation still resolves, to the wrong rule.
 
 ## Cross-project knowledge bases
 

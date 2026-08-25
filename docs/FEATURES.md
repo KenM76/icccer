@@ -96,10 +96,22 @@ is the point, and is why the benchmark is not merely a timing tool.
 
 **The whole dependency tree is five packages and all of them are ours.**
 That satisfies `pdfce`'s three hard gates today — no copyleft anywhere,
-no network client, and nothing that would break a `wasm32` build. ★ But
-that is a **dated observation, not a standing guarantee**, and **iccce
-does not gate `wasm32` in CI** while `pdfce` does. Adding a dependency
-here can silently break a consumer's CI gate.
+no network client, and nothing that would break a `wasm32` build.
+
+★★ **Two of those three are CI-enforced here, and this paragraph said
+otherwise until 2026-08-25.** `.github/workflows/ci.yml`'s `wasm32` job
+builds `iccce-color`, `iccce-profile`, `iccce-cmm` and `iccce-measure`
+for `wasm32-unknown-unknown` on every push to `master`, and a companion
+step fails the build unless **every** line of `cargo tree` names an
+`iccce-*` crate carrying a local path. Both landed in `68d4601`, before
+`v0.1.0`. The retracted sentence — *"iccce does not gate `wasm32` in
+CI"* — was wrong when written and was quoted to `pdfce` as a caveat.
+
+★ What remains a **dated observation rather than a standing guarantee**
+is the *absence of a network client*, which nothing gates. And the
+dependency gate is a gate on the tree, not a promise about the future:
+it forces a human to read a licence before a dependency lands, which is
+the intended friction, not a guarantee that none ever will.
 
 ### Colorimetry — `iccce-color`
 
@@ -261,7 +273,7 @@ disclosed**. No `link` fixture exists in either repository.
 ## 4. What is measured, and to what
 
 Full detail in `docs/NUMERIC_CLAIMS.md` (numbered claims through
-**`NC-280`**) and `docs/TOLERANCES.md` (every tolerance with its
+**`NC-306`** as of 2026-08-25) and `docs/TOLERANCES.md` (every tolerance with its
 justification). Summary — ★ **each figure below is dated, because an
 apparatus count goes stale silently:**
 
@@ -343,9 +355,13 @@ wrong.
 
 ## 6. Status and stability
 
-**Version `0.1.0` in `Cargo.toml`.** ★ `README.md` §Status says `0.0.1`
-as of 2026-08-18 — one of them is stale and the manifest is
-authoritative.
+**Version `0.2.0` in `Cargo.toml`**, released 2026-08-25. ★ Check
+`README.md` §Status against it: the two disagreed between 2026-08-18 and
+2026-08-25 (`0.0.1` there against `0.1.0` here), and **the manifest is
+authoritative**. ★★ The version literal also appears in the root
+`[workspace.dependencies]` table, which is the *only* other place it may
+appear — see that table's comment for why Cargo cannot remove the second
+copy and what happens when the two disagree.
 
 **Nothing has been published to crates.io.** All six crate names were
 unregistered when checked on 2026-08-17 — *a dated observation, not a
