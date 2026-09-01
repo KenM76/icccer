@@ -1,6 +1,6 @@
 ---
 name: commit-message-claims-the-index-not-the-work
-description: DL-073 — a commit message's claim about "this commit" (especially a NEGATIVE scope claim) is a claim about the INDEX, not about the work just done; `git add -A` after a whole-tree mechanical pass is what makes the two diverge, and after a push the only remedy is a dated correction in the log
+description: DL-073 — a commit message's claim about "this commit" (especially a NEGATIVE scope claim) is a claim about the INDEX, not about the work just done; `git add -A` after a whole-tree mechanical pass is what makes the two diverge, and after a push the only remedy is a dated correction in the log. ★ Plus DL-081 (2026-09-01): the rule was applied to an HONEST message and the diff vindicated it anyway — a distrust rule is NOT judged by its catch rate, and phrase such rules as a NAMED READING so they can be discharged
 metadata:
   type: project
 ---
@@ -53,6 +53,46 @@ Here there is no number: the claim is *scope*, and its truth lived in the
 index rather than in the author's terminal. The shared property, and the
 reason both are decision-log entries: **a commit message is the one
 artifact this project produces that cannot be corrected in place.**
+
+## ★★★ DL-081, 2026-09-01 — the rule was applied to an HONEST message, and THAT is the case worth remembering
+
+`DL-073` was applied to **`d328b95`** (message: `chore(memory)`), whose
+scope claim was load-bearing — the twelve `--bpc` figures were re-run on
+a build of that tree, one commit past the `v0.3.0` tag, so
+*"artefact = release artefact"* depended on it. The librarian **refused
+the message** and named the reading that would settle it. The reading was
+taken: **`git diff --name-only a4d9003 d328b95` returns two paths, both
+under `.claude/agent-memory/icc-engineer/`.** ★ **The message was
+accurate.**
+
+> ★★★ **A rule that distrusts a class of evidence is NOT judged by its
+> catch rate. When the distrusted claim is FALSE the rule prevents an
+> error — loudly, with a correction commit and a story. When it is TRUE
+> the rule converts a belief into evidence — invisibly, because nothing
+> happens. Assessed on the visible half alone, a distrust rule looks
+> like overhead and gets retired exactly when it has been working.**
+
+★★ **The corollary, and it is the reusable half:** `DL-073` does **not**
+say *"distrust the message"* — it says **"read it off the diff."** A rule
+phrased as **distrust** can never be discharged and becomes a permanent
+tax. **A rule phrased as a NAMED READING is discharged by taking the
+reading** — one command, either outcome, done. **Prefer the second
+phrasing when minting any rule of this kind.**
+
+**How to apply:** when someone proposes dropping a verification step
+because *"it keeps coming back clean"*, that is **not** an argument — an
+inspection that agrees tells you nothing about an inspection that would
+have disagreed (`DL-051`, injection vs inspection). Retire such a rule on
+**cost**, argued openly, or because its prescribed reading is
+unavailable — never on its catch rate.
+
+★ **Two dates, because the distance is the point:** minted **2026-08-25**
+(`767233d`, claim FALSE), applied **2026-09-01** (`d328b95`, claim TRUE).
+The dispatch described this as *"twice in one session"*; it was corrected
+to seven days, since a session boundary is a fact about the environment
+nobody measured. ★ **The class never moved** — the diff is still
+`[REPORTED]` (the librarian has no shell); what improved is the
+**instrument**, not the strength.
 
 ★ **Related shape, opposite direction, same day:**
 `tools/check-suite-name-absent.py` originally ran `git ls-files` (index

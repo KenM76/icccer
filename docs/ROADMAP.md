@@ -5913,6 +5913,131 @@ re-check.** The durable home is this subsection plus `ARCHITECTURE.md`
 **DL-058**. *(Recorded as a librarian judgement, so it can be overturned
 by naming it rather than by being noticed as an absence.)*
 
+### ★★★ Dated update, 2026-09-01 — **THE RELEASE RECORD. `v0.3.0` is tagged and pushed; NOTHING IS PUBLISHED TO crates.io and the operator has not answered the question. And the reason this subsection exists at all is that `v0.2.0` HAD NO RECORD ANYWHERE**
+
+**Filed by `icc-librarian`** from `icc-engineer`'s release dispatch.
+Decision recorded as `ARCHITECTURE.md` **`DL-079`**; status pass at
+`NUMERIC_CLAIMS.md` **§7.35**. **No numeric claim is added, changed or
+invalidated — a release measures nothing.**
+
+#### 1. ★★★ Why this subsection had to be created rather than appended to
+
+**Searched at this filing: this document contained no release entry for
+`v0.1.0` or `v0.2.0`, and `docs/SESSION_LOG.md` contains only
+*refusals*** — `SESSION_LOG.md:7453` and `:7818` record that a dispatch
+asserted `v0.2.0` was tagged, released and CI-green, that **no evidence
+for any of the three was carried**, and that therefore nothing was
+written down.
+
+★★ **The refusal was correct** — this role may not assert an unmeasured
+fact about the environment. **The hole it left was not.** Nobody returned
+with the evidence, so the project's own record has been silent about its
+second release ever since. `DL-079` §3 states the operative rule taken
+from it: **a filing that declines an item for want of evidence must name
+who owes the evidence and what would discharge it, in the same paragraph
+as the refusal.** An unowned refusal is a slow deletion.
+
+#### 2. The three releases, with the evidence class of every column stated
+
+| version | tag ref (**an annotated tag OBJECT, not the commit**) | release commit | evidence |
+|---|---|---|---|
+| **`v0.1.0`** | `.git/refs/tags/v0.1.0` present *(★ VERIFIED — loose ref file, read 2026-09-01)* | `3d88466` *"release: 0.1.0 — and iccce-cli could not have been published at all"* *(reflog)* | tag EXISTS; its CI result is **unknown here** |
+| **`v0.2.0`** | present, reads **`e9fc6b7f3f45e51c288960af834ad363ea2256b5`** *(★ VERIFIED)* | `578bf45` *"release: 0.2.0 — and the version literal now lives in ONE place, not five"* *(reflog)* | tag EXISTS; **its CI result is unknown here and was never evidenced** |
+| **`v0.3.0`** | present, reads **`e3e78bbd3fb9a26c3fcfae0ead4c5f2c982b0bff`** *(★ VERIFIED)* | **`a4d9003`** *"release: 0.3.0 — nothing here changes a converted colour value"* *(reflog)* | tag EXISTS; pushed *(reflog)*; **CI `success` is `[REPORTED]` — run **`33489492338`** (`CI`, on `a4d9003`) and **`33489492467`** (`Release`, on the tag), added 2026-09-01; a **third `CI` run on the tip `d328b95`** also `success`, **id not carried** — see §4 item 4's two addenda for what an id does and does not buy** |
+
+> ★ **A COLUMN THIS TABLE SHOULD HAVE HAD FROM `v0.1.0`, added 2026-09-01
+> and owed as process:** every future row carries **the run id**, not a
+> word. `v0.1.0` and `v0.2.0` cannot get one retroactively from here —
+> their CI results are **unknown and were never evidenced** — which is
+> the concrete cost of the omission and the argument for the column.
+> Recorded as owed at `NUMERIC_CLAIMS.md` §7.36.4 item 2 so it does not
+> depend on a librarian raising it again (`DL-079`'s never-re-asked hold).
+
+> ★★★ **NONE of those tag hashes is a commit hash.** `e3e78bb` matches no
+> entry in `.git/logs/refs/heads/master`. That is the expected shape of an
+> **annotated tag object**, and this project has already been caught
+> quoting one as a commit. **Never write "released at `e3e78bb`".**
+
+#### 3. `v0.3.0` — what shipped, and what pushed
+
+Five commits above `3af2d87`, all corroborated in
+`.git/logs/refs/heads/master` *(read at this filing — the hashes, order
+and subjects are read from the reflog, **not** taken from the dispatch)*:
+
+| commit | subject |
+|---|---|
+| `0e9c62c` | `feat(bpc)`: a BPC that resolved to the identity now says so — `DL-078` |
+| `f4ca7c0` | `test(fixtures)`: a committed `B2A2`, so intent discrimination stops depending on one machine |
+| `9562654` | `docs`: twelve measurements, and two documents that were true and still misled |
+| **`a4d9003`** | **`release`: 0.3.0 — nothing here changes a converted colour value** |
+| `d328b95` | `chore(memory)`: two standing instructions from 2026-09-01 |
+
+**Both refs read `d328b95d2a1580c50e2ebdb86e44303eb40f80bf`** *(★
+VERIFIED — `.git/refs/heads/master` and `.git/refs/remotes/origin/master`,
+both plain text)*, and `.git/logs/refs/remotes/origin/master` carries
+`update by push` at `a4d9003` and again at `d328b95`. ★ Per **`DL-068`**
+the two hashes are carried and **no push count is derived from them**; a
+remote ref file is a **dated local reading**, never a statement about the
+remote's present contents.
+
+**Version bumped `0.2.0` → `0.3.0`** at every co-located site — verified
+at source where this role can read it: `Cargo.toml:40` (workspace) and
+`:73`–`:75` (the three `[workspace.dependencies]` pins), `README.md:127`,
+`docs/FEATURES.md:407`. *(`THIRD_PARTY_LICENSES.md` is `[REPORTED]`,
+not re-read.)*
+
+#### 4. ★★★ What the release does NOT mean — and this is the part most likely to be misread later
+
+1. **No converted colour value changed.** `[REPORTED]` by
+   `icc-engineer` as bit-identical to `0.2.0`, and `CHANGELOG.md` leads
+   with that sentence. ★★★ **A version bump is not evidence about
+   colour.** `0.3.0` is a **disclosure** release: `Chain::bpc_disclosure`,
+   three `BpcScale` accessors, a CLI stderr line, a committed fixture.
+   The bump to a new minor is because **public API was added**, nothing
+   more.
+2. **Nothing was published to crates.io**, and the question is **open
+   with the operator, unanswered.** `DL-079` §1. `README.md:138` and
+   `CHANGELOG.md` both still say nothing has been published *(verified at
+   this filing)* — **keep it that way until he rules.**
+3. **The release defends no figure.** `NC-308` … `NC-318` are asserted by
+   no test, no difftest record and no CI job — before the release and
+   after it (`NUMERIC_CLAIMS.md` §3.42.1 and §7.35). **Shipping a number
+   does not promote it.**
+4. **"CI is green" is `[REPORTED]` and has no durable form here.** No run
+   id was carried and none is readable from this machine without a
+   shell — a workflow *file* is not a run. §7.35 newly-owed 2 asks that
+   future CI-green statements carry the run id, for exactly `DL-068`'s
+   reason: **`success` and `failure` look identical in authority once the
+   sentence is a month old.**
+   > ★★ **DATED ADDENDUM, 2026-09-01 (later the same day) — the run ids
+   > arrived, and the sentence above is now half-retired.** `CI`
+   > **`33489492338`** and `Release` **`33489492467`**, both
+   > **`success`**, both started `2026-09-01T08:55:01Z`, both
+   > `[REPORTED]` by `icc-engineer` from a named `gh run list` command.
+   > ★ **The claim is still `[REPORTED]`** — this role ran no `gh` and
+   > opened no run page. What retires is *"has no durable form"*: a run
+   > id is a **re-checkable address**, which is all `DL-068` ever asked
+   > for. ★★★ **Coverage, and it must travel with the ids:** the `CI`
+   > run is on **`a4d9003`**, the release commit — **not** on the tip
+   > `d328b95`, which was pushed **2 min 29 s after those runs started**
+   > *(reflog timestamps, read at the filing)*. Write **"CI concluded
+   > `success` on `a4d9003`"**, never *"the repository is green"*.
+   > `NUMERIC_CLAIMS.md` §7.36.1 carries the full statement.
+   > > ★★★ **SECOND DATED ADDENDUM, 2026-09-01 (later still) — the
+   > > coverage sentence above is RETIRED.** A **third** `CI` run was
+   > > supplied, head **`d328b95`** (the tip), conclusion **`success`**.
+   > > The correct form is now **"CI concluded `success` on both
+   > > `a4d9003` and the tip `d328b95`."** ★★ **Still `[REPORTED]`** —
+   > > coverage widened by a **fourth observation of the same kind**, not
+   > > by a stronger one. ★★★ **And the tip run carries NO id** (the
+   > > listing requested `headSha`, not `databaseId`), which is a worked
+   > > example of why the column note above is owed as **process** rather
+   > > than as a one-off. `NUMERIC_CLAIMS.md` **§7.36.6b**.
+5. **No gate result here was observed by this role.** `fmt`, `clippy`,
+   `doc`, `cargo test --workspace`, the `wasm32` build, the `cargo tree`
+   gate, the suite-name gate and `cargo package --workspace` are all
+   `[REPORTED]`.
+
 ---
 
 ## suite compatibility — **a standing workstream, NOT a Pass** (opened 2026-08-17)
@@ -6701,3 +6826,71 @@ quietly filed under the nearest strong-sounding class it fits.
 **NOT in the done-when, and stated so it is not read in:** whether
 `Intent::Absolute` should select its own tag (§2 item 4) — that is a clause
 question for `icc-spec-librarian`, and no fixture can answer it.
+
+### ★★★ Dated update, 2026-09-01 — **THREE of the five done-when conditions are MET, on one fixture, and the 2026-08-29 handoff's account of this gap is now FALSE and must not be acted on. Shipped in `v0.3.0` at `f4ca7c0`**
+
+**Filed by `icc-librarian` at the `v0.3.0` release filing.** ★★ **The
+section above is NOT edited** — it is a dated reading and rewriting it
+would falsify its date. This subsection supersedes it where they
+conflict, per this document's standing practice.
+
+#### 1. What landed, verified at source
+
+`fixtures/synthetic/v2-cmyk-intent-separated-b2a.icc` and
+`crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs` — **both
+files read at this filing**, not taken from the dispatch. The fixture
+carries **six `mft2` tags at six distinct offsets** (`A2B0`/`A2B1`/`A2B2`
+and `B2A0`/`B2A1`/`B2A2`), the three `B2Ax` being twins with **one scalar
+changed**: a per-intent `K` floor of `[0.00, 0.20, 0.40]`, with `C`, `M`,
+`Y` held identical.
+
+| done-when | status |
+|---|---|
+| **1** — a fixture separates `B2A0` from `B2A1`, a test asserts a **lower bound**, **proved capable of failing by injection** | ★★★ **MET.** `saturation_and_media_relative_select_different_b2a_tables` asserts a **signed** equality at `1e-12` *and*, separately, a floor `MINIMUM_USEFUL_SEPARATION = 4e-2`. Injection **I6b** (2026-09-01, recorded at the constant): the floor was shrunk to `[0, 655, 1310]/65535`, **the equality still passed** and **only the floor caught it**, at `9.994659e-3` |
+| **2** — a fixture carries `A2B2` and/or `B2A2`, with a test that fails if the saturation arm selects another tag | ★★★ **MET.** Both, and the assertion is **signed** — the doc comment states why: *"a CMM that swapped `B2A1` and `B2A2` would satisfy an absolute-value assertion and fail this one"* |
+| **3** — a **v4 `mAB `/`mBA `** pair separates `A2B0` from `A2B1` | **OPEN.** The new fixture is v2 `mft2`. The v4 element pipeline's tag-fetch path is still covered on the legacy tag type only |
+| **4** — the **type-3 parametric-curve** check reaches `cargo test` or difftest, with an `NC-` row | **OPEN, and still the free one.** Nothing at this filing indicates it landed; it was not re-grepped here |
+| **5** — every new fixture has its **shared terms enumerated** per `DL-077`, **beside the fixture** | ★★★ **MET, and exceeded.** The test's module header carries a *"What the arms SHARE"* section naming the source profile, probe, PCS connection, interpolation code and every constant but one — and backs it with **two guards that run**: a bit-identity check on `C M Y`, and a **zero-separation control** on `v2-cmyk-chromatic-neutral.icc` measuring `0.0` **in the same run** |
+
+★★ **The rival hypothesis is RUN, not argued.** *"The CMM ignored the
+intent and read `B2A0` three times"* has a measured value — `0.0`, from
+the sibling fixture — so the candidate separation `0.20` is a **measured
+distance between two observed values**, which is `DL-037`'s separation
+discipline discharged inside a unit test rather than in the conformance
+runner.
+
+#### 2. ★★★ The two things a later reader will get wrong
+
+1. **`0.20` IS NOT A COLOUR FACT.** The test says so itself: *"A
+   saturation table that differs from a media-relative table by a flat
+   20 % black floor is **not** what a saturation intent does … Anybody
+   citing `0,20` as a fact about rendering intents, black generation, or
+   ink has misread this file."* Its class is **`derived-expectation`**,
+   about **structure only** — no implementation's output appears in any
+   expectation. **It is not accuracy evidence and must never be quoted as
+   any.**
+2. **The gap is NARROWER, not CLOSED.** Conditions 3 and 4 are open, and
+   `§2` item 4 (`Intent::Absolute`) remains a clause question no fixture
+   can answer.
+
+#### 3. ★★ What this closes elsewhere, and one thing it does NOT close
+
+- **`docs/NEXT_SESSION.md`'s 2026-08-29 block is now FALSE where it says
+  *"no synthetic fixture carries `A2B2` or `B2A2` at all"* and that
+  destination-side intent selection has *"no separating fixture anywhere
+  in the tree"*.** Both were true when written. The 2026-09-01 handoff
+  block enumerates them among the statements not to act on.
+- **It does NOT protect `NC-308` … `NC-318`.** `NUMERIC_CLAIMS.md` §7.34
+  newly-owed 2 predicted this in writing: *"a fixture that is not this
+  pair does not protect these rows, it replaces them with different
+  ones."* ★★ **The prediction held** — this fixture is a synthetic CMYK
+  destination measuring a structural ink separation; §3.42 measures a BPC
+  identity on two Windows system profiles. **Different rows, different
+  subject, no overlap.** §7.35 carries the debt forward.
+- ★ **It removes a silent-skip hazard**, which is worth its own line: the
+  only prior test exercising a saturation intent through a real LUT
+  destination read a **machine-local** Windows profile and **returned
+  success when that file was absent**. On every CI runner this project
+  has, the suite was green and the claim was unmeasured. **A skipped test
+  and a passing test print the same colour.** The new file has no
+  `Option` and no early return: an unreadable fixture is a hard failure.

@@ -43,6 +43,20 @@ work**: drop it and say so. This costs one read. See
 a number is scoped to the run that produced it exactly as a feature is
 scoped to the release that shipped it.
 
+★★ **CONFIRMED AGAIN 2026-09-01 at `v0.3.0`, and the method that works is
+now settled.** `.git/refs/tags/v0.3.0` reads `e3e78bb…` and matches **no**
+commit in the reflog — third tag, third annotated tag object. What
+corroborated the release without a shell: `.git/logs/refs/heads/master`
+for the commits, their **order** and their **subjects**, and
+`.git/logs/refs/remotes/origin/master` for `update by push` events. ★★★
+**Both refs and the reflogs are readable; a CI RESULT IS NOT.** No filing
+in this project has ever carried a workflow **run id**, so *"CI is green"*
+has no durable form here and must be written `[REPORTED]` every time —
+`NUMERIC_CLAIMS.md` §7.35 newly-owed 2. ★ And the dispatch's *"`v0.2.0` is
+the precedent"* turned out to be **false**: there was no `v0.2.0` release
+entry at all, for the reason in
+[[iccce-unowned-refusal-is-a-slow-deletion]].
+
 ★★ **The other half of the same filing, because it arrived together:**
 the dispatch also asked for the sentence *"NC-001 remains the only
 `published-ground-truth` row in the whole ledger."* **Retired at §7.19,

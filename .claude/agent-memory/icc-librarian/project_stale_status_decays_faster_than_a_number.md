@@ -1,6 +1,6 @@
 ---
 name: iccce-stale-status-decays-faster-than-a-number
-description: DL-062 (2026-08-18) — a document said "not fixed here, deliberately" about a defect fixed 28 s earlier; a stale STATUS decays faster than a stale number because the fix lands in someone else's commit. NOW EIGHT INSTANCES: #4/#5 are consecutive handoffs carrying a wrong PUSH COUNT ⇒ DL-068 rules the field itself wrong (carry the two REF HASHES); #6 is a "next free ids" line naming a DL its OWN filing had just consumed — FALSE AT THE INSTANT OF WRITING; ★★★ #7/#8 (2026-09-01) both came from OUTSIDE — pdfce flagged a README "In progress" row TWICE across two files, and #8 is a version line that NAMES ITS OWN VERIFICATION METHOD AND DATE and went stale anyway, which is why "re-verify harder" is not the fix
+description: DL-062 (2026-08-18) — a document said "not fixed here, deliberately" about a defect fixed 28 s earlier; a stale STATUS decays faster than a stale number because the fix lands in someone else's commit. NOW EIGHT INSTANCES: #4/#5 are consecutive handoffs carrying a wrong PUSH COUNT ⇒ DL-068 rules the field itself wrong (carry the two REF HASHES); #6 is a "next free ids" line naming a DL its OWN filing had just consumed — FALSE AT THE INSTANT OF WRITING; ★★★ #7/#8 (2026-09-01) both came from OUTSIDE — pdfce flagged a README "In progress" row TWICE across two files, and #8 is a version line that NAMES ITS OWN VERIFICATION METHOD AND DATE and went stale anyway, which is why "re-verify harder" is not the fix. ★★★ AND THE REVERSE FAILURE (2026-09-01, later): DL-068's run-id form was discharged BY REQUEST and the VERY NEXT CI observation omitted the databaseId — a field fixed by asking is not a field enforced
 metadata:
   type: project
 ---
@@ -217,6 +217,31 @@ exactly the mechanism the entry describes. *"I checked this, on this day,
 against the authoritative source"* is **not** a defence; it is a **dated
 reading**, and the fix is to say so, not to re-check harder.
 
+**★★★ UPDATED 2026-09-01 (later still) — `DL-068`'s FIELD LESSON RAN IN
+REVERSE, ONE FILING AFTER IT WAS DISCHARGED.** Not a ninth staleness
+instance — **the opposite failure**, and it belongs here because it is
+about the same field.
+
+`§7.35` newly-owed 2 asked, on `DL-068`'s reasoning, that a CI-green
+claim **carry the run id**. It was discharged at `§7.36.1` with two ids.
+**Hours later the next CI observation arrived without one**: the listing
+that finally covered the repository tip requested
+`name,status,conclusion,headSha,createdAt` — **`databaseId` was not among
+them** — so the only run in this project's record that covers the tip is
+the only one with **no re-checkable address**.
+
+> ★★★ **A field that has just been fixed by request is not a field that
+> is enforced. `DL-068` changes what gets WRITTEN; it builds no guard, and
+> the very next observation skipped it.**
+
+**How to apply:** when a filing discharges an omission **by asking for
+it**, record the *form* as owed process in a place the next actor reads
+(here: a required column in `ROADMAP.md`'s release table, `§7.36.4`
+item 2) — and expect the next instance to miss it anyway. ★ **The check
+is one line: does the claim carry an id, a hash or a date I could hand to
+someone with a shell?** If not, it is *"CI is green"* wearing a longer
+sentence.
+
 ★★ **A version line is a WORSE carrier than an ordinary stale number**,
 because a version is what a reader uses to decide **which documents apply
 at all**. A wrong ΔE misleads about one claim; a wrong version misleads
@@ -235,7 +260,35 @@ been caught in the same pass.) Related:
 the authoritative source`, `read from the ... on 2026-`, `Version \`0.`,
 and any status cell containing `In progress`.
 
-Related: [[iccce-pass-status]],
+**★★★ UPDATED 2026-09-01 (later still) — DL-068'S RULE GENERALISED TO CI,
+AND IT WORKED: THE ASK WAS MADE BY NAME AND THE EVIDENCE ARRIVED.** The
+`v0.3.0` release filing refused *"CI is green"* and filed §7.35
+newly-owed 2 asking for **the run id**, on exactly DL-068's reasoning —
+***`success` and `failure` look identical in authority once the sentence
+is a month old***, the way `4` and `0` did. A follow-up dispatch supplied
+`CI` **`33489492338`** and `Release` **`33489492467`**, both `success`.
+
+- ★★ **The claim stays `[REPORTED]`** — a run id read out of a dispatch
+  is not a run observed. What retires is *"has no durable form"*: an id
+  is a **re-checkable address** a future reader with a shell can settle
+  in one command. **An address is not a corroboration.**
+- ★★★ **The id and the verdict came from ONE `gh run list` observation**,
+  which the dispatch disclosed itself. `DL-077` applies — enumerate what
+  the two arms share; here they share the whole path, so a misread
+  listing makes both wrong together.
+- ★★★ **CARRY THE COVERAGE WITH THE ID.** The `CI` run is on the release
+  commit `a4d9003`, **not on the tip** — the tip was pushed 2 min 29 s
+  after those runs started (reflog epochs, readable without a shell:
+  [[iccce-git-files-readable-without-shell]]). Write **"CI concluded
+  `success` on `<commit>`"**, never *"the repository is green"*.
+- ★ **What made this cheap:** the ask named the artefact (`the run id`),
+  not a quality (`better evidence`). Compare `DL-079` — the two `v0.2.0`
+  holds were never re-asked and the record still has nothing.
+  `v0.1.0`/`v0.2.0` **can never get an id retroactively**, which is the
+  concrete cost of the years the field went uncarried.
+
+Related: [[provenance-is-a-different-axis-from-evidence-class]],
+[[iccce-pass-status]],
 [[iccce-artifact-existence-is-not-obligation-status]] (an artifact's
 existence is not the obligation's status — this is its twin: a
 *document's* claim about status is not the status),

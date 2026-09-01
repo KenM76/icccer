@@ -9815,3 +9815,432 @@ re-read to see whether the published text distinguishes them, since
 `bpc_disclosure()`, at which point the disclosure has become a **gate** and
 `DL-037`'s distinction has to be re-applied deliberately rather than
 inherited.
+
+---
+
+### DL-079 — ★★★ **In this project "RELEASE" means TAG AND PUSH. A crates.io publish is a SEPARATE act, it is IRREVERSIBLE IN A WAY A TAG IS NOT, and it remains UNAUTHORISED — the operator was asked and has NOT ANSWERED, which is neither a yes nor a no. And a second, smaller decision that cost more than it looks: A HOLD THAT IS NEVER RE-ASKED BECOMES A SILENT DECISION, which is how `v0.2.0` came to have no release record at all**
+
+**Filed 2026-09-01** by `icc-librarian`, from `icc-engineer`'s release
+dispatch, at the filing of **`v0.3.0`**. **Supersedes nothing; extends
+`DL-009` and corrects one dated statement in `DL-078`.**
+
+#### 1. The decision, stated so it does not have to be re-taken
+
+> ★★★ **The operator's word *"release"* is discharged by an annotated
+> tag and a push to `origin`. It is NOT discharged by, and does NOT
+> authorise, a publish to crates.io.**
+
+**Why this needed writing down rather than being obvious.** Rule 9 says
+*"publishing is the operator's act"* and names four things in one breath —
+pushing, tagging, releasing, crates.io. A dispatch carrying the single word
+*"release"* therefore arrives **ambiguous by construction**: it plainly
+authorises something, and the question is how far.
+
+**The reasoning that settles it, in the order it was applied:**
+
+1. **Precedent, checked rather than remembered.** `v0.1.0` and `v0.2.0`
+   were both discharged as tag-and-push with nothing published.
+   *(Corroborated at this filing: `.git/refs/tags/v0.1.0`,
+   `.git/refs/tags/v0.2.0` and `.git/refs/tags/v0.3.0` all exist as
+   plain-text loose refs; `README.md:138` and `CHANGELOG.md` both state
+   that nothing has been published to crates.io.)*
+2. **The asymmetry of the two acts, which is the load-bearing half.** A
+   tag can be moved or deleted before anything depends on it. **A
+   crates.io name cannot be released by a yank** — `ROADMAP.md:5748` and
+   `:5814` already record that, and `DL-058` records the companion fact
+   that crates.io has **no reservation mechanism**, so a name check is a
+   *dated observation with an expiry* and authorises nothing. ★ When one
+   reading of an ambiguous instruction is reversible and the other is
+   permanent, the ambiguity is resolved toward the reversible one **and
+   the other is surfaced as a question.**
+3. **It WAS surfaced, as a single question with three options and a
+   recommendation, and the operator has not answered.** *(`[REPORTED]` by
+   `icc-engineer`; this role saw no operator words.)*
+
+★★★ **Silence is not consent and it is also not refusal.** The question
+stays **open**, and `NUMERIC_CLAIMS.md` §7.35 newly-owed 3 carries it as
+the operator's and nobody else's. **No agent may read a non-answer as
+either ruling**, and no future dispatch may cite this entry as cover for
+publishing.
+
+#### 2. ★★ The correction this entry owes `DL-078`
+
+`DL-078` §5 item 6 states *"the code this entry describes is in no
+commit"*, with both refs at `3af2d87`. **That was true when written and
+is now false.** The decision log is append-only, so it is corrected here
+rather than edited there:
+
+| | |
+|---|---|
+| the BPC disclosure API | **`0e9c62c`** |
+| the committed `B2A2` fixture + test | **`f4ca7c0`** |
+| the ledger and document filings | **`9562654`** |
+| version bump + `CHANGELOG` | **`a4d9003`**, tagged **`v0.3.0`** |
+| agent memory | **`d328b95`** |
+| `refs/heads/master`, `refs/remotes/origin/master` | both **`d328b95d2a1580c50e2ebdb86e44303eb40f80bf`** *(★ **VERIFIED** — both loose ref files read at this filing)* |
+
+★★ **Corroborated, not merely reported:** `.git/logs/refs/heads/master`
+carries the five commits in that order above `3af2d87` with the subjects
+the dispatch names, and `.git/logs/refs/remotes/origin/master` carries
+`update by push` at `a4d9003` and again at `d328b95`.
+
+★★★ **And the trap that has caught this project before, re-confirmed:**
+`.git/refs/tags/v0.3.0` reads `e3e78bbd3fb9a26c3fcfae0ead4c5f2c982b0bff`,
+which **matches no commit in the reflog**. That is an **annotated tag
+object**, exactly as the `0.2.0` CHANGELOG filing warned. **A tag ref's
+hash is not the tagged commit**, and quoting it as one produces a hash
+that looks authoritative and resolves to nothing a reader can `show`
+without knowing why.
+
+#### 3. ★★★ The second decision, and it is the one with a general lesson: **a hold that is never re-asked becomes a silent decision**
+
+Filing this release exposed that **`v0.2.0` has no release record in any
+tracked document.** Not a wrong one — none. `SESSION_LOG.md:7453` and
+`:7818` record that a dispatch stated `v0.2.0` was tagged, released and
+CI-green, that **no evidence for any of the three was carried**, and that
+therefore **no document was edited to say any of it.**
+
+★★ **That refusal was correct.** This role may not assert an unmeasured
+fact about the environment, and it did not. **The failure is what
+happened next: nothing.** Nobody returned with the evidence, and six days
+later the repository's own history contains no statement that `v0.2.0`
+was ever released.
+
+> ★★★ **A refusal to record is a HOLD, not a verdict — and a hold with no
+> owner and no re-ask is indistinguishable, one month later, from a
+> finding that the event never occurred.**
+
+**The operative rule this project adopts from it:** *when a filing
+declines an item for want of evidence, it must name **who owes the
+evidence** and **what evidence would discharge it**, in the same
+paragraph as the refusal.* An unowned refusal is a slow deletion. ★ This
+is `DL-042`'s mechanism (*a negative finding removes its own auditor*)
+arriving in the paperwork rather than in the measurements — there, a
+wrong rejection survives forever because nothing re-audits the reason;
+here, a **right** rejection does the same damage by leaving a hole
+nothing points at.
+
+**Applied immediately at this filing:** `ROADMAP.md`'s release block
+records what can be verified about `v0.2.0` from loose refs and the
+reflog, states plainly what cannot be (its CI result), and
+`NUMERIC_CLAIMS.md` §7.35 newly-owed 1 names the owner.
+
+#### 4. What this entry does NOT decide
+
+1. **Not that `v0.3.0` is a good version number.** The `0.2.0 → 0.3.0`
+   choice over `0.2.1` is `icc-engineer`'s, on the ground that the
+   release **adds public API** (`Chain::bpc_disclosure` and three
+   `BpcScale` accessors) — recorded here as the reason, not ratified as
+   a policy. ★ SemVer under a `0` major promises nothing anyway, and
+   `CHANGELOG.md` says so at its head.
+2. **★★★ Not that `0.3.0` is more accurate than `0.2.0`.** **No converted
+   colour value changed.** `[REPORTED]` by `icc-engineer` as
+   bit-identical, and the `CHANGELOG` leads with that sentence
+   deliberately. **A version bump is not evidence about colour**, and a
+   reader who infers otherwise has been misled by the number rather than
+   by any claim in the document.
+3. **Not that CI passed.** See `NUMERIC_CLAIMS.md` §7.35 newly-owed 2 —
+   a *"CI is green"* with no run id has no durable form here.
+   > ★ **DATED ADDENDUM, 2026-09-01 (later the same day).** The run ids
+   > were supplied: **`CI` `33489492338`** and **`Release`
+   > `33489492467`**, both **`success`**, both `[REPORTED]` by
+   > `icc-engineer` from a named `gh run list` command. **This entry
+   > still does not claim CI passed** — a run id read out of a dispatch
+   > is not a run observed, and the `CI` run is on **`a4d9003`**, not on
+   > the current tip `d328b95`. `NUMERIC_CLAIMS.md` **§7.36.1** states
+   > exactly what the ids buy and what they do not.
+   > ★★ **SECOND DATED ADDENDUM, 2026-09-01 (later still).** A **third**
+   > `CI` run was supplied — head **`d328b95`**, the tip, conclusion
+   > **`success`** — so the coverage sentence above is retired and the
+   > correct form is now **"CI concluded `success` on both `a4d9003` and
+   > the tip `d328b95`."** ★★★ **This entry STILL does not claim CI
+   > passed.** What changed is coverage, not class: a fourth observation
+   > of the same kind, on the same one-listing-one-reporter path
+   > (`DL-077`), read out of a dispatch by a role with no shell. ★ **And
+   > the tip run carries NO run id** — that listing requested
+   > `headSha` and not `databaseId` — so the run that finally covers the
+   > tip is the one without the re-checkable address this item exists to
+   > demand. Owed by `icc-engineer`; `NUMERIC_CLAIMS.md` **§7.36.6b**
+   > item 1.
+4. **Not that the release defends anything.** ★★ `NC-308` … `NC-318` are
+   asserted by no test, no difftest record and no CI job, before the
+   release and after it. **Shipping a figure does not protect it.**
+5. **Not that the operator authorised a monitor or a poll.** ★★★ **No
+   file under `D:\Dev\FeatureRequests\` was listed, opened or written at
+   this filing** — instructed a sixth time.
+
+**Revisit if:** the operator answers the crates.io question, **in either
+direction** — a *"no"* is as much worth recording as a *"yes"*, and this
+entry's §1 is the place a later reader will look; **or** a future
+dispatch uses the word *"release"* to mean something broader, at which
+point §1's equation is the thing being changed and must be changed by a
+new entry, not by re-reading this one; **or** anything in this repository
+is ever depended on by a third party through a git rev, at which point
+the *"a tag is reversible"* half of §1 reason 2 weakens and should be
+re-argued rather than inherited.
+
+---
+
+### DL-080 — ★★★ **A PROVENANCE CHALLENGE IS DISCHARGED BY RE-MEASURING, NOT BY ARGUING — and the cost of discharging it is set by WHERE THE NUMBERS HAVE ALREADY TRAVELLED, not by how hard the re-run is. Twelve rows changed evidence strength and not one value moved, which is the cheapest outcome a challenge can have and is available only BEFORE the figures are quoted outside the repository**
+
+*(added 2026-09-01, at the evidence-supply follow-up to the `v0.3.0`
+release filing; `icc-librarian`, from `icc-engineer`'s dispatch)*
+
+#### 1. What happened, in the order it happened, because the order is the entry
+
+1. `NC-308` … `NC-319` were measured on an **uncommitted working tree**
+   at version `0.2.0` (`NUMERIC_CLAIMS.md` §3.42.1).
+2. The work was committed and released as `v0.3.0`, and the release
+   filing supplied **four corroborated commit hashes**.
+3. ★★★ **The librarian refused the chain**, in one sentence:
+   ***"a commit existing is not evidence that it contains what was
+   measured."*** The upgrade was filed as **PARTIAL** — *the code has a
+   commit; the measurements do not.*
+4. ★★★ **The engineer did not argue. He re-ran.** `cargo clean` had
+   removed every artefact, so the binary was **rebuilt from scratch**,
+   the **729-operand grid** and the `--bpc` table were re-run against it,
+   and the outputs were compared **programmatically** against the twelve
+   filed values.
+5. **All twelve reproduced exactly** — six decimals and operand counts
+   alike.
+
+#### 2. The decision
+
+**A refusal to accept a provenance chain is discharged by re-taking the
+measurement, and by nothing else.** Not by a hash, not by a commit
+message, not by an assurance that the tree was clean, and not by the
+librarian being persuaded. ★ **The three cheap substitutes all have the
+same defect**: each is a *claim about* the artefact made by the same
+party whose earlier claim is in question, so accepting one closes the
+question without ever putting an instrument on it (`DL-051` — inspection
+could not find what injection found; `DL-064` — the red runs are what
+discharge the debt).
+
+**Corollary, and it is the operationally useful half.** ★★★ **A
+re-measurement that reproduces the prior value exactly is NOT a new
+claim and mints NO row.** It moves the same claims along a different
+axis. Provenance strength and evidence class are **orthogonal**:
+
+| axis | what moved here | what did not |
+|---|---|---|
+| **provenance** | deleted uncommitted tree ⟶ **a tree that exists, builds, and runs** | — |
+| **evidence class** | — | ★★★ `self-consistency`, **no oracle**, **REPORTED not graded**, **asserted by no test** — all unchanged |
+
+**Never write a provenance upgrade as an accuracy upgrade.** The twelve
+figures are exactly as weak as correctness evidence as they were before
+the re-run; what improved is a reader's ability to get back to them.
+This is the same distinction `DL-079` §4.2 draws for a version bump and
+`NUMERIC_CLAIMS.md` §7.35 draws for a release: **shipping a number does
+not promote it, and neither does reproducing it.**
+
+#### 3. ★★★ The reason the challenge was cheap, and it is a fact about TIMING, not about rigour
+
+**Re-running cost one rebuild.** It cost that little because **nothing
+depended on the figures yet** — no downstream document had quoted them,
+no consumer had adopted them, no published artefact repeated them. Had
+the challenge been raised a month later, the same refusal would have
+required auditing every place the numbers had reached first.
+
+★★ **And the boundary was already crossed once, which is why this is
+written as a warning rather than a success story.** A reply in the
+`pdfce` request channel
+(`open/reply_all_four_asks_measured_and_your_bpc_would_have_done_nothing.md`)
+**quoted the twelve figures before the re-run existed** — `[REPORTED]`
+by `icc-engineer`, who disclosed it unprompted rather than letting the
+upgrade backfill it. The numbers were correct and nothing needs
+retracting. ★★★ **That is an outcome, not a method.** The figures left
+the repository at a provenance strength this project's own ledger had
+already refused, and they would have had to be chased down had the
+re-run disagreed. The channel's own rule — *a colour claim carries its
+reference and its number, and names its oracle* (`CLAUDE.md` rule 10) —
+says nothing about provenance, and this is the gap.
+
+⇒ **The rule to apply going forward:** *the moment a figure is about to
+leave this repository is the last cheap moment to challenge where it
+came from.* Filed as owed at `NUMERIC_CLAIMS.md` §7.36.4 item 1, because
+whether the channel reply is itself the trigger to settle provenance is
+a policy call and not this entry's to make.
+
+#### 4. ★★ What the discharge did NOT reach, stated so it is not rounded away
+
+**The artefact is one commit past the tag.** `git describe` =
+**`v0.3.0-1-gd328b95`** — the suffix means the built tree was
+**`d328b95`'s**, not `a4d9003`'s, which is the commit `v0.3.0` names.
+*(Verified without a shell: `.git/refs/heads/master` reads `d328b95…`
+and `.git/logs/refs/heads/master`'s last two lines are `a4d9003` then
+`d328b95`.)* The gap is bridged by the claim that **`d328b95` touches
+`.claude/agent-memory/` and no source**, which is a claim about a
+**commit's scope** — ★★★ **and `DL-073`, minted three commits earlier,
+exists for exactly the case where a commit's stated scope was wider than
+its contents.** Its message says `chore(memory)`; `DL-073` establishes
+that a commit message is not evidence of scope. Settling it needs
+`git diff --name-only a4d9003 d328b95`, which no librarian can run.
+
+⇒ ★★★ **The unrounded statement: *the figures reproduce on a
+from-scratch build of `d328b95`, which is the release tree plus one
+commit `[REPORTED]` to touch no source.*** Do not shorten it to
+*"verified against the release."*
+
+> ### ★★★ DATED ADDENDUM, 2026-09-01 (later still) — **the `git diff` this section says nobody here can run WAS run, and it settles the last link. The artefact-equals-release claim is now DIFF-EVIDENCED**
+>
+> `git diff --name-only a4d9003 d328b95` returns, **complete and
+> unelided, two paths**, both under
+> `.claude/agent-memory/icc-engineer/` (`MEMORY.md` and
+> `feedback_always_release_and_clean_build_artifacts_when_done.md`); the
+> path-filtered form over `crates/ Cargo.toml Cargo.lock fixtures/
+> tools/` returns **`0`**. Run by `icc-engineer`; **`[REPORTED]`** —
+> this role has no shell and git objects are not readable as plain text.
+>
+> ★★★ **What this changes is the KIND of evidence, not its class.** §4
+> above objects that the bridge rested on a **commit message**, which
+> `DL-073` rules out. It now rests on **the diff `DL-073` names as the
+> correct reading.** The class stays `[REPORTED]`; the instrument became
+> the right one. ★ **That distinction is the entry** — `DL-073` did not
+> say "distrust the claim", it said "read it off the diff", and the
+> difference between those two is whether a rule can ever be discharged.
+>
+> ★★ **Two things the addendum does not sweep** *(a correction does not
+> sweep its own block —* `DL-075`*)*: the trees are **not
+> byte-identical** — two Markdown files differ, and *"Markdown under
+> `.claude/` is not a build input"* is **a reading**; and the
+> **path-filtered confirmation is the weaker of the two commands**,
+> since an enumerated pathspec cannot see a root `build.rs`,
+> `rust-toolchain.toml`, `.cargo/` or `.github/` (`DL-076`). The
+> unfiltered command is what settles it. Full working at
+> `NUMERIC_CLAIMS.md` **§7.36.6a** and §3.42.1's **third** addendum.
+
+#### 5. What this entry does NOT decide
+
+1. **Not that the twelve rows are defended.** ★★★ They are asserted by
+   **no test, no difftest record and no CI job**, before the re-run and
+   after it. `NUMERIC_CLAIMS.md` §7.35 item 2 is **still owed**, and
+   **re-running is not a test** — a test fails on its own when something
+   breaks; a re-run happens only when someone chooses to do it.
+2. **Not that a run id makes CI observed.** See `DL-079` §4.3's dated
+   addendum and `NUMERIC_CLAIMS.md` §7.36.1. ★ The id and the verdict
+   came from **one observation** — `DL-077`'s test applies and they
+   share the whole path, so the id is an **address**, not a
+   corroboration. ★★ **Unchanged by the 2026-09-01 addendum above**: a
+   third, tip-covering `CI` run arrived `[REPORTED]` `success`, which is
+   **more coverage of the same class**, and it arrived **without a run
+   id** (`NUMERIC_CLAIMS.md` §7.36.6b).
+3. **Not that provenance challenges should be raised on everything.**
+   This one was worth it because the rows were **anchorless by their own
+   filing's admission**. A challenge to a chain that already ends in a
+   run instrument buys nothing.
+4. **Not anything about `NC-319`.** Its missing lcms2 pin is untouched
+   and **still owed**.
+
+**Revisit if:** a re-measurement is ever raised as a challenge's
+discharge and **disagrees** — at which point the interesting question is
+which of the two runs was the defective one, and this entry's §1 order
+is the record that lets it be asked; **or** a figure is challenged after
+it has been quoted outside this repository, which is §3's expensive case
+and the first instance should be written up; **or** `git diff` is ever
+run across `a4d9003..d328b95`, at which point §4's last link stops being
+a claim and the sentence in `NUMERIC_CLAIMS.md` §3.42.1 should be
+narrowed to say so. ★★ **That third clause DISCHARGED 2026-09-01** — the
+diff was run, §4 carries a dated addendum, and §3.42.1 gained a **third**
+addendum narrowing the sentence exactly as this clause required. ★ It is
+recorded as discharged rather than deleted so that the next reader can
+see the revisit condition **fired and was acted on**, which is the only
+thing that distinguishes a live revisit clause from decoration.
+
+---
+
+### DL-081 — ★★★ **A RULE THAT DISTRUSTS A CLASS OF EVIDENCE IS NOT JUDGED BY ITS CATCH RATE. When the distrusted claim is FALSE the rule prevents an error; when it is TRUE the rule converts a belief into evidence. Both are wins and ONLY THE FIRST IS VISIBLE — so a distrust rule assessed on visible wins gets retired at exactly the moment it has been working. `DL-073` was applied twice, seven days apart, to a false claim and then to a true one, and the TRUE case is the one worth an entry**
+
+**Date:** 2026-09-01 · **Occasioned by:** `DL-073` being applied to
+`d328b95`'s commit message, and the subsequent
+`git diff --name-only a4d9003 d328b95` showing that **that message was
+accurate** · **Filed by:** `icc-librarian`, from `icc-engineer`'s
+evidence dispatch · **Rows affected:** **none.** No code changed, no
+number moved, no tolerance moved, and **no evidence class was
+promoted** · **Instance recorded in full:** `NUMERIC_CLAIMS.md`
+**§7.36.6**, and `SESSION_LOG.md` 2026-09-01, forty-first entry ·
+**Relates to** `DL-073` (the rule in question), `DL-042` (a negative
+finding removes its own auditor), `DL-060` (an inferred environment
+constraint is a reading), `DL-051` (inspection could not find what
+injection found)
+
+#### The rule
+
+> ★★★ **Do not weaken, skip or retire a verification step on the ground
+> that the thing it distrusts keeps turning out to be true. A distrust
+> rule has two payouts and they do not look alike:**
+>
+> | the distrusted claim is… | the rule's payout | visible? |
+> |---|---|---|
+> | **FALSE** | an **error is prevented**, with a name and a commit | ★★★ **loudly** — it produces a correction, an entry, a story |
+> | **TRUE** | **a belief becomes evidence** — same conclusion, different epistemic standing | ★★★ **not at all** — nothing happens, and the step looks like overhead |
+>
+> ⇒ **A rule assessed on the first row alone is indistinguishable from
+> luck**, because a rule that has only ever caught liars has no
+> demonstrated behaviour on honest inputs. **The second row is what
+> makes it a rule rather than a hunch.**
+
+#### The two applications, and the dates are the entry
+
+| | `DL-073`'s minting | this application |
+|---|---|---|
+| **date** | **2026-08-25** *(the date in `DL-073`'s own header)* | **2026-09-01** |
+| **commit** | **`767233d`** | **`d328b95`** |
+| **the message's scope claim** | a vocabulary substitution **and nothing else** | *"two standing instructions"* — i.e. memory only |
+| **the truth** | ★★★ **FALSE** — the same diff carried an entire measured filing | ★★★ **TRUE** — the diff is two files, both under `.claude/agent-memory/` |
+| **what the rule bought** | a correction commit (`3af2d87`) and a rule | ★★ **a diff-evidenced bridge** where there had been a message-evidenced one |
+
+★ **A correction to the dispatch, made because a session boundary is a
+fact about the environment.** The dispatch describes the two
+vindications as happening *"in one session."* **They are seven days
+apart** — `DL-073`'s header reads 2026-08-25, verified at this filing.
+This role did not observe either session's boundaries and does not
+assert them. The distance makes the point stronger, not weaker: the rule
+survived a week and a change of subject before being tested on an honest
+input.
+
+#### Why this is a decision and not an anecdote
+
+Because the cheap move it forbids is **specific, tempting, and would be
+made in good faith**. After `d328b95`, the available reasoning is: *"the
+message was right; the diff cost a round-trip to an agent with a shell;
+next time take the message."* That reasoning is **valid on the evidence
+and wrong**, and it is wrong for the reason `DL-051` gives about
+inspection versus injection — **an inspection that agrees tells you
+nothing about an inspection that would have disagreed.**
+
+★★ **The corollary that keeps this cheap.** `DL-073` does **not** say
+*"distrust the claim"*; it says **"read it off the diff."** A rule
+phrased as distrust can never be discharged and becomes a permanent tax.
+**A rule phrased as a named reading is discharged by taking the
+reading** — one command, either outcome, done. ⇒ **Prefer the second
+phrasing when minting any rule of this kind.** *(This is why §4's
+addendum above is filed as a KIND-of-evidence change rather than as a
+class promotion: taking the prescribed reading is what the rule asked
+for, and it still leaves `[REPORTED]` exactly where it was.)*
+
+#### What this entry does NOT decide
+
+1. **Not that `[REPORTED]` was promoted anywhere.** ★★★ **It was not.**
+   The diff and the third CI run are both dispatch-carried; this role
+   ran no `git`, no `gh` and no build. **Better instrument, same class.**
+2. **Not that every distrust rule earns its keep.** The claim is about
+   how a rule is **evaluated**, not that rules are free. A rule whose
+   prescribed reading is expensive, or which has no prescribed reading
+   at all, is a fair candidate for retirement — **on cost, argued
+   openly, never on "it keeps coming back clean."**
+3. **Not anything about the twelve rows' protection.** ★★ They remain
+   **asserted by no test, no difftest record and no CI job**
+   (`NUMERIC_CLAIMS.md` §7.35 item 2, still owed). A better provenance
+   chain is not a defence.
+4. **Not anything about `NC-319`.** Its missing lcms2 pin is untouched
+   and **still owed**.
+
+**Revisit if:** a distrust rule in this project is ever proposed for
+removal — this entry is the argument the proposal must answer, and *"it
+has never caught anything"* is **not** an answer; **or** a rule of this
+kind is minted **without** a named reading that discharges it, at which
+point the corollary above applies and the rule should be rephrased
+before it is filed; **or** `DL-073` is ever applied and the prescribed
+diff is **unavailable** (a rewritten history, a lost remote), which is
+the case neither entry has faced and where the honest answer may be that
+the link simply cannot be closed.

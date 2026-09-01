@@ -9188,6 +9188,140 @@ values where §3.40 and §3.41 carry only pointers.
 > row of this section red**. This is §3.38.7's *"protected by nothing"*
 > recurring, and it is stated here rather than in a footnote.
 
+> ### ★★★ DATED ADDENDUM, 2026-09-01 (later the same day) — **the commit
+> ### anchor row above is SUPERSEDED, and the upgrade is PARTIAL in a way
+> ### that has to be written down rather than rounded**
+>
+> The `NONE` in the table above was true when written. The work these
+> rows describe was committed and released the same day, and the anchor
+> is now supplied — **but only for the CODE, not for the MEASUREMENT.**
+>
+> | | |
+> |---|---|
+> | the disclosure API these rows describe | **`0e9c62c`** |
+> | the committed `B2A2` fixture and its test | **`f4ca7c0`** |
+> | this document's filing of the rows | **`9562654`** |
+> | the version bump they shipped in | **`a4d9003`**, released as **`v0.3.0`** |
+> | `refs/heads/master` and `refs/remotes/origin/master` | both **`d328b95d2a1580c50e2ebdb86e44303eb40f80bf`** *(★ **VERIFIED** — both loose ref files read as plain text at this filing)* |
+>
+> ★★ **The four hashes are corroborated, not merely reported.**
+> `.git/logs/refs/heads/master` carries all four in order above
+> `3af2d87`, with the commit subjects the dispatch names, and
+> `.git/logs/refs/remotes/origin/master` carries `update by push` at
+> `a4d9003` and again at `d328b95` *(both files read at this filing)*.
+>
+> ★★★ **What is STILL a working-tree anchor, and it is the part that
+> matters.** Every figure in §3.42 was measured on **an uncommitted tree
+> at workspace version `0.2.0`**. That the tree which was measured is
+> byte-identical to the tree that was committed is **`[REPORTED]` by
+> `icc-engineer`** — this role has no shell, ran no `diff`, and **a
+> commit existing is not evidence that it contains what was measured.**
+> The correct statement is therefore: *the rows describe code that now
+> has a commit and a release; the measurements were taken before that
+> commit existed and have not been re-run against it.*
+>
+> ★ **The "protected by nothing" paragraph above is UNCHANGED by the
+> release.** Shipping a figure does not defend it. §7.34 newly-owed 2 —
+> a difftest row for the `--bpc` identity on this pair, or a written
+> statement that these figures are permanently `[REPORTED]` — **is still
+> owed**, and §7.35 records it as carried rather than discharged.
+
+> ### ★★★ SECOND DATED ADDENDUM, 2026-09-01 (later still) — **the
+> ### measurement anchor the first addendum said was missing has been
+> ### SUPPLIED, by re-running. Twelve rows changed evidence strength and
+> ### NOT ONE NUMBER MOVED**
+>
+> The paragraph two above ends: *"the measurements were taken before that
+> commit existed and have not been re-run against it."* **That sentence is
+> now false, and this is the note that retires it.** It is left standing
+> above rather than edited, because what it described was true when
+> written and the sequence is the point (`DL-080`).
+>
+> **What `icc-engineer` did, reported at this filing:** every build
+> artefact having already been removed by `cargo clean`, the binary was
+> **rebuilt from scratch**, the full **729-operand grid** and the `--bpc`
+> table were re-run against that artefact, and the outputs were compared
+> **programmatically** against the twelve values filed above — not read
+> side by side by eye.
+>
+> | | |
+> |---|---|
+> | **result** | ★★★ **All twelve reproduce exactly** — to the six decimals filed, and with **identical operand counts** (`726`/`728`/`726`/`728`/`727`/`0`/`0`, and the ICC-absolute refusal still refused by name) |
+> | **what that upgrades** | The rows are no longer anchored to a **deleted uncommitted working tree**. They are anchored to a tree that **exists in the repository and has been built and run**. A future reader can rebuild and re-run rather than take a dispatch's word |
+> | **what it does NOT upgrade** | ★★★ **The evidence CLASS of every row is unchanged.** `NC-308` … `NC-313` are still **`self-consistency`**, still **REPORTED, NOT GRADED**, still with **no oracle in any of them**, and still asserted by **no test, no difftest record and no CI job**. Provenance and evidence class are different axes and this note moves exactly one of them |
+> | **who observed it** | **`icc-engineer`.** ★ This librarian has no shell, ran no build and compared no output; the twelve `MATCH` verdicts are **`[REPORTED]`** |
+> | **the driver** | ★★ **Deleted.** It lived in `%TEMP%`, and the dispatch states — correctly — that **it is not apparatus and must not be filed as such.** ⇒ The re-run is **not repeatable from this repository**; it is a dated observation, exactly like the original |
+>
+> ★★★ **THE ARTEFACT IS NOT THE TAGGED TREE, AND THE DIFFERENCE IS ONE
+> COMMIT.** The dispatch describes the rebuild as *"from the tagged
+> tree"* and supplies the output that shows it is not quite:
+> **`git describe` = `v0.3.0-1-gd328b95`**. The suffix `-1-g` means
+> **one commit past the tag** — so the tree built was **`d328b95`'s**,
+> not **`a4d9003`'s**, which is the commit `v0.3.0` names.
+> *(Corroborated here without a shell: `.git/logs/refs/heads/master`'s
+> last two lines are `a4d9003` then `d328b95`, and `.git/refs/heads/master`
+> reads `d328b95d2a1580c50e2ebdb86e44303eb40f80bf` — **all three files read
+> as plain text at this filing**.)*
+>
+> That gap is bridged by one claim and it should be named rather than
+> waved through: **`d328b95` touches `.claude/agent-memory/` and no
+> source.** ★★ **That is a claim about a commit's SCOPE, and this project
+> minted `DL-073` three commits earlier for precisely the case where a
+> commit's stated scope was wider than its contents.** Checking it needs
+> `git diff --name-only a4d9003 d328b95`, which this role cannot run. Its
+> reflog subject — *"chore(memory): two standing instructions from
+> 2026-09-01"* — is **the commit message, which `DL-073` establishes is
+> not evidence of scope.**
+>
+> ⇒ **The precise, unrounded statement of what these twelve rows now
+> have:** *the figures reproduce on a from-scratch build of the tree at
+> `d328b95`, which is the release tree `a4d9003` plus one commit
+> `[REPORTED]` to touch no source.* **Do not shorten that to "verified
+> against the release."** The shortening is one word long and it discards
+> the only unchecked link left.
+>
+> > ### ★★★ THIRD DATED ADDENDUM, 2026-09-01 (later still) — **the one unchecked link WAS checked, with the instrument `DL-073` prescribes, and the sentence above is narrowed rather than promoted**
+> >
+> > The paragraph above says the gap *"needs `git diff --name-only
+> > a4d9003 d328b95`, which this role cannot run."* **It was run** — by
+> > `icc-engineer`, at this filing — and the **complete, unelided**
+> > output is **two paths**:
+> > `.claude/agent-memory/icc-engineer/MEMORY.md` and
+> > `.claude/agent-memory/icc-engineer/feedback_always_release_and_clean_build_artifacts_when_done.md`.
+> > A second, path-filtered form over `crates/ Cargo.toml Cargo.lock
+> > fixtures/ tools/` returns **`0`**.
+> >
+> > | | |
+> > |---|---|
+> > | **class** | ★★ **still `[REPORTED]`** — no shell here, and git objects are compressed, so this is not corroborable the way a loose ref file is |
+> > | **what improved** | ★★★ the **kind** of evidence. `DL-073` says a commit message is not evidence of scope **and names the reading that is**. The bridge now rests on that reading |
+> > | **what did NOT improve** | ★★★ the **evidence class of the twelve rows** — `self-consistency`, **no oracle**, **REPORTED not graded**, **asserted by no test**. A third axis has now moved (message ⟶ diff) and the class has still not |
+> > | **the residual** | the trees are **not byte-identical**: two Markdown files under `.claude/agent-memory/` differ. *"Markdown under `.claude/` is not a build input"* is **a reading**, labelled — but one settled by inspection, not by trust |
+> >
+> > ⇒ ★★★ **The narrowed statement, which replaces the one above:** *the
+> > twelve figures reproduce on a from-scratch build of `d328b95`, whose
+> > tree is `[REPORTED]` by an unfiltered `git diff --name-only` to
+> > differ from the release tree `a4d9003` in two Markdown files under
+> > `.claude/agent-memory/` and nowhere else.* **It is still not
+> > "verified against the release"** — and note that the *filtered*
+> > confirmation, taken alone, would have been the weaker of the two
+> > (`DL-076`: an enumerated pathspec misses a root `build.rs`,
+> > `rust-toolchain.toml` or `.github/`). Full working at **§7.36.6a**.
+>
+> ★★ **Two NEW observations came out of the re-run, and they are not
+> reproductions.** The behaviour they describe **did not exist on the
+> `0.2.0` tree**, so nothing above could have measured them: the identity
+> disclosure **fires on stderr at saturation**, and is **silent at
+> media-relative** — both asserted **on the running binary's stderr**,
+> not on the source. They are consistent with `NC-313`'s
+> `0`-of-`729` and `NC-312`'s `727`-of-`729`, and they are the **first
+> observation of the `0.3.0` disclosure surface behaving as its own
+> documentation says.** ★ **They are minted NO `NC` number**: a
+> disclosure firing or not firing is `behavioural, 0/1` with no value
+> compared to anything, `icc-engineer` observed it, and `DL-078`'s
+> API contract is where it belongs. Recorded here so the observation
+> exists somewhere durable rather than only in a dispatch.
+
 #### 3.42.2 `NC-308` … `NC-311` — intent SEPARATION at a LUT CMYK destination. **A separation claim, and it is not an accuracy claim**
 
 The question the dispatch put: *does the matrix/TRC intent collapse reach a
@@ -13962,6 +14096,470 @@ list below is carried, not verified.**
 > filing consumed**; **`NA-013` was NOT consumed** — §3.42 registers no new
 > approximation, because the `--bpc` identity is a *conforming outcome of a
 > clause*, not a departure from one.
+
+---
+
+### 7.35 Status re-checked 2026-09-01 (later the same day) at the **`v0.3.0` release** filing. ★★★ **NO ROW IS ADDED, CHANGED OR INVALIDATED — a release is not a measurement.** Two of §7.34's six newly-owed items are DISCHARGED and verified at source; the three that matter most are UNMOVED; and the release act itself produced one new owed item that is nobody's to close but the operator's
+
+**Filed by `icc-librarian`** from `icc-engineer`'s release dispatch.
+**Next free ids after this filing: `NC-320`, `NA-013`, `DL-080`** — this
+filing consumes **`DL-079`** and mints no row.
+
+> ★★★ **Why there is no row.** Tagging, pushing and bumping a version
+> compare nothing and measure nothing. The twelve figures this release
+> ships are `NC-308` … `NC-319`, filed hours earlier at §3.42, and they
+> are **the same figures at the same strength** — §3.42.1's dated
+> addendum supplies their commit anchor and states precisely what that
+> upgrade does and does not buy. **Shipping a number does not promote
+> it.** A reader who sees `0.3.0` beside a figure must not read the
+> version as evidence about the figure.
+
+#### 1. §7.34's six newly-owed items, re-checked
+
+| # | item | status at this filing |
+|---|---|---|
+| **1** | **`NC-319` has no pin** | ★★★ **STILL OWED — carried forward explicitly**, as the dispatch asked. Nothing in the release supplied an lcms2 commit hash, and this role may not invent one. ★★ **The release makes it slightly worse in one specific way and it is worth naming:** an `oracle-behaviour-at-pin` row with no pin is now **inside a tagged release**, so the unpinnable statement has a version number beside it. That does not strengthen it; it widens the audience that can quote it. **Owed to `icc-spec-librarian` or `icc-engineer`.** |
+| **2** | **`NC-308` … `NC-318` are protected by nothing** | ★★★ **STILL OWED, and §7.34's own prediction held.** That item said the parallel synthetic `B2A2` fixture *"is the obvious carrier — but a fixture that is not this pair does not protect these rows, it replaces them with different ones."* The fixture landed (`f4ca7c0`), is excellent, and **is not this pair**: it is a synthetic CMYK destination and an authored RGB source, measuring a **structural** separation in ink, while §3.42 measures a **BPC identity** on two Windows system profiles. **No test, no difftest record and no CI job asserts any of the eleven.** |
+| **3** | **`NC-315` … `NC-317` cannot be re-derived from the tree** | ★★ **STILL OWED, and the ground moved under it slightly.** The instrumentation was already reverted; the release did not restore it, and the dispatch reports **all three `target/` directories deleted**, so no build artefact of the instrumented binary survives locally either. The open question is unchanged: **should the estimator carry a permanent, feature-gated disclosure of its exit and its fitted root** (`DL-037`'s move, `DL-049`'s precedent). |
+| **4** | **`docs/FEATURES.md` enumerated TWO `--bpc` outcomes where there are THREE** | ★★★ **DISCHARGED — VERIFIED AT SOURCE, not taken from the dispatch.** `docs/FEATURES.md:70`–`:86` now reads *"**Opt-in and never forced**, with **three** outcomes, not two"* and enumerates refusal, application, and *"★ **Accepted and resolved to the IDENTITY**, changing nothing"* with the measurement, the clause and the two disclosure surfaces *(read 2026-09-01 at this filing)*. |
+| **5** | **`README.md:127` states the wrong version — `DL-062` instance #8** | ★★★ **DISCHARGED — VERIFIED AT SOURCE.** `README.md:127` now reads *"Version `0.3.0` — read from `Cargo.toml`'s `[workspace.package]` on 2026-09-01"*, matching `Cargo.toml:40` *(both read at this filing)*. ★★ **And the repair did the thing that is rarer than the repair:** `README.md:131`–`:137` now carries the instance history in place — *"This line has now been stale twice … If it goes stale a third time, the fix is not a better sentence: it is to stop restating the number here and point at the manifest."* **A pre-registered escalation, written into the document that keeps failing.** |
+| **6** | **The `--bpc` overclaim sweep is complete for tracked documents** | **CARRIED, unchanged, and NOT re-run.** ★ Its one deliberate residue is unrepaired by design: `ROADMAP.md:3779`'s *"`Chain::with_bpc()` **applies** it"* sits inside a dated verified-in-tree block, and editing it would falsify its date. ★★ **A reader must not infer from `0.3.0` that the sweep was re-run against the released tree — it was not.** |
+
+★★ **Note what discharged items 4 and 5, because it is not the release.**
+Both were fixed in the documentation commit `9562654`, which the release
+then shipped. **The release is the vehicle, not the cause.** Filing them
+as *"discharged at the release"* would attach the credit to the wrong act
+and would suggest, falsely, that a release sweeps documentation.
+
+#### 2. ★★★ Newly owed at this filing
+
+1. **★★★ `v0.2.0` HAS NO RELEASE RECORD IN ANY TRACKED DOCUMENT, and
+   `v0.3.0`'s nearly went the same way.** The dispatch names `v0.2.0` as
+   *"the precedent"* for the shape of a release entry. ★★ **There is no
+   such precedent.** Searched at this filing: `docs/ROADMAP.md` contains
+   no `0.2.0` release entry (its only two hits are about `README.md`'s
+   stale version line), and `docs/SESSION_LOG.md`'s only statements about
+   it are **refusals** — `SESSION_LOG.md:7453` and `:7818` record that
+   *"`v0.2.0` was tagged or released, or that CI is green"* was **stated
+   by a dispatch, unevidenced, and therefore not written down.**
+   > ★★★ **That refusal was correct and it is the failure mode at the
+   > same time.** Declining to record an unevidenced claim leaves the
+   > record with **nothing at all**, and nobody ever came back with the
+   > evidence. A refusal is a *hold*, and a hold that is never revisited
+   > is indistinguishable from a decision that the thing never happened.
+   **Owed:** either `v0.2.0` gets the same treatment `v0.3.0` gets in
+   `ROADMAP.md` at this filing, or a line saying deliberately that it
+   will not. ★ Partial evidence now exists and is recorded in
+   `ROADMAP.md`'s release block: `.git/refs/tags/v0.2.0` is present and
+   reads `e9fc6b7f3f45e51c288960af834ad363ea2256b5` *(verified — read at
+   this filing)*.
+2. **★★ A "CI is green" claim has no durable form in this project.** The
+   dispatch states both GitHub workflows completed **success** on the
+   tag. ★★★ **Nothing readable from this machine without a shell
+   evidences it** — a workflow *file* is not a run, and this project has
+   carried *"still no CI run observed by anyone here"* across more than
+   twenty filings. **Owed to `icc-engineer`:** when a CI-green statement
+   is meant to be durable, carry **the run id or the run URL**, the way
+   `DL-068` requires ref hashes rather than a push count. A bare
+   *"CI is green"* decays exactly like *"N commits ahead"* did, and for
+   the same reason — **`success` and `failure` look identical in
+   authority once the sentence is a month old.**
+3. **★ The crates.io question is OPEN and is the operator's.** See
+   `ARCHITECTURE.md` **`DL-079`**. Nothing was published; `README.md:138`
+   and `CHANGELOG.md` both still say so *(verified at this filing)*.
+   **Owed to the operator, and to nobody else.**
+
+#### 3. Carried unchanged, and NOT re-checked at this filing
+
+★★★ **The sixth consecutive PARTIAL status pass.** The list below is
+carried, not verified.
+
+- **§7.34 items under "Carried unchanged"** — §7.33 items 1–3, §7.32 item
+  1, §7.30 item 4, §7.28 item 6, §7.26 items 1 and 3, §7.24 items 1–2,
+  §7.23 items 4–7 — **still NOT CHECKED**, now for a second filing.
+- **`TOLERANCES.md`** — **not read at this filing, and not touched.** Its
+  §1 four-kind table still lacked `derived-expectation` and
+  `intra-run-fixture-invariant` when last read on 2026-08-29. ★★ **A new
+  reason to look:** the fixture released at `f4ca7c0` declares itself
+  `derived-expectation` in its own module header, and its
+  `MINIMUM_USEFUL_SEPARATION` **reuses** `TOLERANCES.md` §3.10.11 row
+  `F3`'s `4 × 10⁻²` rather than minting a constant *(read at this filing
+  in `crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs:176`–
+  `:187`)*. **Reuse across sections is a thing the tolerance budget
+  should know about**; whether §3.10.11 gains a cross-reference is
+  `icc-conformance`'s call, not this role's.
+- **The standing debt — NOT MOVED.** Still **no `published-ground-truth`
+  row for any transform**. `IEC 61966-2-1` remains paywalled and
+  unobtained. ★ `v0.3.0` ships without one, exactly as `v0.1.0` and
+  `v0.2.0` did, and the version number says nothing about it either way.
+
+#### 4. ★★★ What this filing does NOT claim about the repository
+
+- **That any gate ran.** ★★★ `cargo fmt`, `clippy`, `cargo doc`,
+  `cargo test --workspace` (23 test binaries, 0 failed), the `wasm32`
+  build, the `cargo tree` gate, `tools/check-suite-name-absent.py` and
+  `cargo package --workspace` are **all `[REPORTED]` by `icc-engineer`**.
+  **This role has no shell and ran none of them.** ★ **No count is
+  carried into any row** — `DL-031`: a bare census integer is ambiguous
+  from birth, and "23 test binaries, 0 failed" is a statement about
+  **binaries**, not about tests and certainly not about coverage.
+- **That the released tree equals the measured tree.** See §3.42.1's
+  dated addendum.
+- **That `v0.3.0`'s CI passed.** See newly-owed 2.
+- **That anything was published to crates.io.** ★★ **Nothing was**, and
+  this filing authorises nothing (rule 9).
+- **That the tag object is the release commit.** ★★★
+  `.git/refs/tags/v0.3.0` reads
+  `e3e78bbd3fb9a26c3fcfae0ead4c5f2c982b0bff` *(verified — read at this
+  filing)*, which is **not** `a4d9003` and not any commit in
+  `.git/logs/refs/heads/master`. That is the expected shape of an
+  **annotated tag object**, and this project has already been caught by
+  it once. **Never quote a tag ref's hash as the tagged commit.**
+- **That the request channel was touched.** ★★★ Instructed a **sixth**
+  time not to arm a monitor and not to poll: **no file under
+  `D:\Dev\FeatureRequests\` was listed, opened or written at this
+  filing.** Every statement about the channel in `NEXT_SESSION.md`'s new
+  block is attributed to `icc-engineer`.
+
+---
+
+### 7.36 Status re-checked 2026-09-01 (later still), at the **evidence-supply follow-up** to the `v0.3.0` release filing. ★★★ **Two of §7.35's items are DISCHARGED by evidence arriving, not by anything new being built. No row is added and no number moved — twelve rows changed PROVENANCE STRENGTH while every figure stayed bit-identical**
+
+**Filed by `icc-librarian`** from `icc-engineer`'s follow-up dispatch,
+sent as a fresh dispatch because `SendMessage` was unreachable.
+**Next free ids after this filing: `NC-320`, `NA-013`, `DL-081`** — this
+filing consumes **`DL-080`** and mints no row.
+*(★ Superseded by §7.36.6, which consumes **`DL-081`**: the next free are
+**`NC-320`**, **`NA-013`**, **`DL-082`**. Left standing because the line
+was true of §7.36 as filed.)*
+
+> ★★★ **Why there is no row, again, and it is a different reason from
+> §7.35's.** §7.35 minted nothing because *a release measures nothing*.
+> This filing mints nothing because **a re-measurement that reproduces
+> the prior value exactly is not a new claim** — it is the same twelve
+> claims with a better answer to *"where did they come from?"*. Minting
+> `NC-320` … `NC-331` here would **double-count the same measurement**
+> and would let a later reader believe the ledger holds twenty-four
+> `--bpc` observations when it holds twelve, taken twice.
+
+#### 1. ★★★ §7.35 newly-owed 2 — **the CI-green claim — DISCHARGED, and the class it lands in is NOT "verified"**
+
+The item asked, in `DL-068`'s terms, that a durable CI-green statement
+**carry the run id**. It now does.
+
+| workflow | run id | head | event | conclusion |
+|---|---|---|---|---|
+| **`CI`** | **`33489492338`** | `master` | push | **`success`** |
+| **`Release`** | **`33489492467`** | `v0.3.0` | push | **`success`** |
+
+| field | value |
+|---|---|
+| **who observed** | **`icc-engineer`**, 2026-09-01, from **`gh run list --json name,status,conclusion,databaseId`** — the command is named, which is the half of `DL-031` that a bare census integer never carries |
+| **provenance class** | ★★★ **`[REPORTED]`, and it stays `[REPORTED]`.** This role has no shell, did not run `gh`, and cannot open a run page. **A run id does not make an unobserved thing observed** |
+| **what the id DOES buy** | ★★ **A re-checkable address.** *"CI is green"* decays into an unfalsifiable sentence; *"run `33489492338` concluded `success`"* is a statement a future reader **with a shell and repository access can settle in one command**. That is exactly `DL-068`'s property — carry the hash, not the count — and it is the whole reason the item was raised |
+| **what it does NOT buy** | ★★★ **The id and the verdict came from ONE observation.** The dispatch says so itself, and it is right to. `DL-077`: **enumerate what the two arms share.** They share the entire observation path — one listing, one reading, one reporter. If that listing was misread, **the id and the `success` are wrong together and agree perfectly.** ⇒ The id is an **address**, never a **corroboration** of the conclusion |
+
+> ★★ **ONE THING THIS ROLE DID CORROBORATE, without a shell, and it is
+> about ATTACHMENT rather than outcome.** The dispatch says both runs
+> started **`2026-09-01T08:55:01Z`**, on the push of `a4d9003` and the
+> tag. `.git/logs/refs/remotes/origin/master`'s second-to-last line
+> records `update by push` to `a4d9003` at Unix time **`1788252899`**
+> = **`2026-09-01T08:54:59Z`**, and `.git/logs/refs/heads/master` records
+> `a4d9003` committed at **`1788252876`** = **`08:54:36Z`** *(both files
+> read as plain text at this filing; the arithmetic is this librarian's)*.
+> **The push precedes the reported run start by two seconds and the
+> commit by twenty-five.** That is consistent with these two runs having
+> been triggered by that push, and it is **an independent reading** —
+> nothing in it came from the dispatch except the timestamp being checked.
+> ★ **It corroborates WHICH PUSH the runs hang off. It says nothing
+> whatever about `success`**, and must never be quoted as though it did.
+
+> ★★★ **THE COVERAGE OF THE GREEN, STATED BEFORE ANYONE QUOTES IT.
+> `33489492338` RAN ON `a4d9003`, WHICH IS NOT THE CURRENT TIP.** The
+> tip is **`d328b95`**, pushed at **`1788253048`** = **`08:57:28Z`**
+> *(read at this filing)* — **two minutes twenty-nine seconds after the
+> runs the dispatch names had already started.** No run on `d328b95` was
+> carried, and none is readable here.
+> ★★ **A reading, labelled as one:** `.github/workflows/ci.yml:13`–`:18`
+> triggers on `push: branches: [master, main]` **with no `paths-ignore`
+> and no `paths` filter** *(read at source at this filing)*, so a push of
+> `d328b95` would be expected to start a CI run. **Whether one exists and
+> what it concluded is NOT EVIDENCED HERE**, and this filing asserts
+> neither. ⇒ The honest form is **"CI concluded `success` on the release
+> commit `a4d9003`"**, not *"CI is green"* and not *"the repository is
+> green"*. `d328b95` is `[REPORTED]` to touch only `.claude/agent-memory/`
+> — see §3.42.1's second addendum for why that claim is load-bearing in
+> two places at once.
+>
+> ★★★ **SUPERSEDED IN PART, 2026-09-01 (later still) — a third CI run WAS
+> supplied, it is on `d328b95`, and it concluded `success`. Both
+> sentences this box declines to write can now be written. See
+> §7.36.6.** The box is left standing because the reading it contains
+> (*"a push of `d328b95` would be expected to start a CI run"*) was an
+> **inference**, and §7.36.6 is the record of that inference being
+> checked rather than assumed — which is the only thing that
+> distinguishes it from a lucky guess.
+
+★ **What this discharges is the ITEM, not the standing gap.** §7.35 and
+more than twenty filings before it carry *"still no CI run observed by
+anyone here."* **That sentence is still true of this role** and is not
+retired: a run id read out of a dispatch is not a run observed. What
+retires is the narrower complaint that **a CI-green claim in this project
+had no durable form**. It now has one, and the form is the run id.
+
+#### 2. ★★★ §7.35's §3.42.1 provenance hole — DISCHARGED by RE-RUNNING, and the discharge is PARTIAL by exactly one commit
+
+Fully written up in **§3.42.1's second dated addendum**; the summary and
+what a status pass must carry forward:
+
+| | |
+|---|---|
+| **the challenge** | §3.42.1's first addendum refused the provenance chain in one sentence: ***"a commit existing is not evidence that it contains what was measured."*** |
+| **the response** | Not an argument. `cargo clean` had already removed every artefact, so the binary was **rebuilt from scratch** and the **729-operand grid** and `--bpc` table **re-run and compared programmatically** |
+| **the result** | ★★★ **Twelve of twelve reproduce exactly**, six decimals and operand counts alike |
+| **carried forward** | ★★ The artefact is **`d328b95`**, **one commit past the tag** (`git describe` = `v0.3.0-1-gd328b95`). Equality with the release tree rests on a **commit-scope claim** of the kind `DL-073` exists for |
+| **NOT changed** | ★★★ The **evidence class** of every row. `self-consistency`, no oracle, **REPORTED not graded**, and **§7.35 item 2 — *"protected by nothing"* — is UNTOUCHED and STILL OWED.** A figure that reproduces is not a figure that is defended; **re-running is not a test** |
+
+#### 3. Explicitly carried forward, unmoved by this filing
+
+| item | status |
+|---|---|
+| **`NC-319` has no lcms2 pin** | ★★★ **STILL OWED**, and the dispatch says so itself — *"nothing here touches it."* An `oracle-behaviour-at-pin` row **with no pin**, now inside a tagged release. **Owed to `icc-spec-librarian` or `icc-engineer`** |
+| **`NC-308` … `NC-318` are asserted by nothing** | ★★★ **STILL OWED** (§7.35 item 2). The re-run supplies provenance, not protection |
+| **`NC-315` … `NC-317` cannot be re-derived from the tree** | **STILL OWED** (§7.35 item 3). The rebuild was of the **released** binary; the reverted instrumentation was not restored, so nothing here re-derives the estimator internals |
+| **crates.io** | **OPEN with the operator, unanswered.** `DL-079`. Nothing published, and this filing authorises nothing (rule 9) |
+| **`v0.2.0` has no release record** | **STILL OWED** (§7.35 newly-owed 1) — untouched by this filing |
+| **the standing debt** | **NOT MOVED.** Still **no `published-ground-truth` row for any transform** |
+| **everything under §7.35's "carried, not verified"** | ★ **STILL NOT CHECKED**, now for a third filing. **This is the SEVENTH consecutive PARTIAL status pass** |
+
+#### 4. ★★★ Newly owed at this filing
+
+1. **★★ The channel reply went out with the weaker provenance, and the
+   record should say so rather than let the upgrade backfill it.** The
+   dispatch discloses this unprompted: the figures in the channel file
+   `open/reply_all_four_asks_measured_and_your_bpc_would_have_done_nothing.md`
+   **were correct, and were sent before the re-run existed.** ★★★ **They
+   were therefore quoted OUTSIDE this repository at a provenance strength
+   this document had already refused.** Nothing needs retracting — the
+   numbers reproduced — **but that is an outcome, not a method.**
+   **Owed:** a decision on whether a figure may leave this repository
+   before its provenance is settled, or whether the channel reply is
+   itself the trigger to settle it. See `ARCHITECTURE.md` **`DL-080`**.
+   ★ **No file under `D:\Dev\FeatureRequests\` was read at this filing**
+   — the reply's existence, name and contents are **`[REPORTED]`**.
+2. **★ A CI-green claim now has a form; nothing enforces that the form is
+   used.** The run id arrived because a status item asked for it by name.
+   **Owed, cheaply:** that the release checklist in `ROADMAP.md` name the
+   run id as a required column, so the next release does not depend on a
+   librarian happening to raise it. ★ `DL-079`'s lesson in a second
+   register — **a hold that is never re-asked is indistinguishable from a
+   decision that the thing never happened**, and this one was re-asked
+   only because the engineer chose to.
+
+#### 5. ★★★ What this filing does NOT claim
+
+- **That CI ran, or passed.** ★★★ **`[REPORTED]` in full.** No `gh`
+  command was run here, no run page opened, no HTTP request made. The two
+  ids are transcribed from the dispatch.
+- **That the current tip is green.** The named `CI` run is on `a4d9003`.
+  See §7.36.1's coverage box. ★★★ **NARROWED at §7.36.6** — a `CI` run on
+  the tip `d328b95` is now `[REPORTED]` `success`. **This bullet's class
+  is unchanged**: still `[REPORTED]`, still no `gh` run here.
+- **That the re-run happened, or that twelve values matched.**
+  `[REPORTED]` by `icc-engineer`. This role ran no build, no binary and
+  no comparison, and **the driver that produced the comparison has been
+  deleted** — correctly, since it is not apparatus, but the consequence
+  is that **nothing in this repository can reproduce the re-run either.**
+- **That `d328b95` touches no source.** `[REPORTED]`. What is verified
+  here is only that `d328b95` is the tip and sits one commit above
+  `a4d9003` in `.git/logs/refs/heads/master`.
+  ★★★ **NARROWED at §7.36.6 — and the KIND of evidence changed even
+  though the CLASS did not.** The claim no longer rests on the commit's
+  **message**; it rests on an **unfiltered `git diff --name-only
+  a4d9003 d328b95`** naming exactly two files, which is the instrument
+  `DL-073` prescribes. Still `[REPORTED]` — this role ran no `git`.
+- **That any gate ran**, at this filing or the release. Unchanged from
+  §7.35 item 4.
+- **That anything was published to crates.io.** ★★ **Nothing was.**
+- **That the request channel was touched.** ★★★ Instructed a **seventh**
+  time not to arm a monitor and not to poll: **no file under
+  `D:\Dev\FeatureRequests\` was listed, opened or written at this
+  filing.** Every statement about the channel reply above is attributed
+  to `icc-engineer`.
+
+#### 6. ★★★ DATED ADDENDUM, 2026-09-01 (later still) — **the two sentences §7.36 deliberately left wide are NARROWED. Both wide sentences were correct; both are now replaced by a settled fact, and NEITHER narrowing moves a provenance class**
+
+**Filed by `icc-librarian`** from `icc-engineer`'s evidence dispatch.
+★★ **This is NOT a new status pass and does not open §7.37.** Nothing was
+re-checked; two named holes were filled. Opening a §7 section would move
+the status-pass counter (*"the seventh consecutive PARTIAL"*) for a
+filing that re-checked nothing, which is the same double-counting
+argument §7.36's header makes about minting `NC-320` … `NC-331`.
+**Still `NC-320` / `NA-013`**; this addendum consumes **`DL-081`**.
+
+##### 6a. The commit-scope question — SETTLED, by the instrument `DL-073` names
+
+| | |
+|---|---|
+| **the command** | **`git diff --name-only a4d9003 d328b95`**, run by `icc-engineer`, output supplied **complete and unelided** |
+| **the output** | exactly two paths: `.claude/agent-memory/icc-engineer/MEMORY.md` and `.claude/agent-memory/icc-engineer/feedback_always_release_and_clean_build_artifacts_when_done.md` |
+| **corroborating command** | `git diff --name-only a4d9003 d328b95 -- crates/ Cargo.toml Cargo.lock fixtures/ tools/ \| wc -l` ⟶ **`0`** |
+| **provenance class** | ★★ **`[REPORTED]`.** This role has no shell and ran no `git`. Git objects are zlib-compressed and **cannot** be read as plain text the way `.git/refs/` and `.git/logs/` can |
+| **what DID change, and it is not the class** | ★★★ **The KIND of evidence.** The bridging claim previously rested on the commit's **message** (`chore(memory)`), which `DL-073` rules out by name. It now rests on **the diff `DL-073` prescribes**. A `[REPORTED]` reading of the right instrument is a different object from a `[REPORTED]` reading of the wrong one |
+
+> ★★★ **THE CORROBORATING COMMAND IS WEAKER THAN THE COMMAND IT
+> CORROBORATES, AND THE ORDER MATTERS.** The pathspec
+> `-- crates/ Cargo.toml Cargo.lock fixtures/ tools/` is an
+> **enumeration**, and `DL-076` — *a gate catches only ENUMERATED
+> failures* — applies to it exactly as to a CI job. It does not cover a
+> root `build.rs`, `rust-toolchain.toml`, `.cargo/config.toml`,
+> `deny.toml`, `.github/workflows/`, or any top-level path invented
+> later. ★★ **A change to `.github/workflows/` would have read `0` from
+> it** — and for a claim whose companion half is *"and CI is green on
+> it"*, that is precisely the wrong blind spot to have.
+> ⇒ **The load-bearing evidence is the FIRST command, which was
+> unfiltered and stated complete.** The second is belt-and-braces over a
+> subset and must never be quoted alone as settling scope.
+
+**The residual, stated rather than rounded away.** The two trees are
+**not byte-identical** — they differ in two Markdown files under
+`.claude/agent-memory/icc-engineer/`. The step from *"they differ only
+there"* to *"the rebuilt artefact is the release artefact"* is the
+reading that **Markdown under `.claude/` is not a build input** — no
+Cargo target includes it, nothing `include!`s it. ★ **That is a reading,
+labelled as one**, but it is a reading any reader can settle by
+inspection in seconds, which is a different order of residual from an
+unchecked claim about a commit's contents. *(`feedback_always_release_and_clean_build_artifacts_when_done.md`
+**does exist** under `.claude/agent-memory/icc-engineer/` — **[VERIFIED]**,
+listed at this filing. That corroborates the file's EXISTENCE and
+nothing about which commit created it.)*
+
+⇒ ★★★ **The narrowed statement, replacing §3.42.1's second addendum's
+last line:** *the twelve figures reproduce on a from-scratch build of
+`d328b95`, whose tree is `[REPORTED]` by an unfiltered `git diff` to
+differ from the release tree `a4d9003` in two Markdown files under
+`.claude/agent-memory/` and nowhere else.* **Do not shorten this to
+"verified against the release" either** — the class is still
+`[REPORTED]`, and what got shorter is the residual, not the chain.
+
+##### 6b. The CI coverage question — a THIRD run exists, it is on the tip, and it is `success`
+
+`gh run list --limit 4 --json name,status,conclusion,headSha,createdAt`,
+run by `icc-engineer`, four rows returned:
+
+| workflow | `headSha` | status | conclusion |
+|---|---|---|---|
+| **`CI`** | **`d328b95`** | completed | **`success`** |
+| `Release` | `a4d9003` | completed | `success` |
+| `CI` | `a4d9003` | completed | `success` |
+| `CI` | `3af2d87` | completed | `success` |
+
+⇒ **"CI concluded `success` on `a4d9003`, and the tip is unevidenced"**
+is replaced by **"CI concluded `success` on both `a4d9003` and the tip
+`d328b95`."**
+
+★★★ **What changed is COVERAGE, not STRENGTH, and the dispatch says so
+itself.** These are still ids and verdicts read out of a dispatch by a
+role with no shell. The refusal to round `[REPORTED]` up to verified
+**stands**, and was not asked to move. The gap was real and is now
+closed by **a fourth observation of the same kind**, not by a stronger
+one — `DL-077`'s test still applies, and all four rows share the whole
+observation path: one listing, one reading, one reporter.
+
+**Four things this table does NOT support, each of which a later reader
+would otherwise take from it:**
+
+1. ★★★ **THE TIP RUN CARRIES NO RUN ID — the very field the discharge in
+   §7.36.1 was ABOUT.** That listing requested
+   `name,status,conclusion,headSha,createdAt`; **`databaseId` is not
+   among them.** So the run that finally covers the tip is the one run
+   in this project's record **without a re-checkable address**, which is
+   `DL-068`'s entire complaint arriving from the other direction. ★ The
+   two ids we do hold (`33489492338`, `33489492467`) belong to the
+   `a4d9003` runs. **Newly owed, and cheap: the `databaseId` of the `CI`
+   run on `d328b95`.** Owed by **`icc-engineer`**; discharged by one
+   `gh run list --json databaseId,headSha`. *(Named here in the same
+   paragraph as the gap, per `DL-079` §3.)*
+2. **A count of runs.** `--limit 4` **truncates**; the listing is the
+   four most recent, not an inventory. It supports *"the most recent
+   `CI` run has head `d328b95`"*; it does **not** support *"there are
+   three `CI` runs"* — **a count is not an inventory**, and this one is
+   not even a count.
+3. **A start time for the tip run.** `createdAt` **was requested and no
+   value was carried into the table.** So the tip run cannot be
+   correlated against the push of `d328b95` at `08:57:28Z` the way the
+   `a4d9003` runs were correlated against theirs in §7.36.1. That
+   correlation is **absent**, not negative.
+4. ★★ **That §7.36.1's table and this one disagree.** They do not, and
+   the appearance of conflict is a **different JSON field**: §7.36.1's
+   *head* column carries **ref names** (`master`, `v0.3.0`) from a
+   listing that did not request `headSha`; this table carries
+   **`headSha`** (`a4d9003`, `d328b95`). `Release` on ref `v0.3.0` and
+   `Release` on sha `a4d9003` are **the same run**. **Do not "correct"
+   either table against the other.**
+
+##### 6c. ★ The inference in §7.36.1's coverage box was checked, and that is why it is left standing
+
+That box read `.github/workflows/ci.yml:13`–`:18` — `push: branches:
+[master, main]`, **no `paths` and no `paths-ignore`** *(★ **[VERIFIED]**
+— re-read at source at this filing; the trigger block is unchanged)* —
+and inferred that a push of `d328b95` **would be expected** to start a
+run. It then refused to assert that one existed. **The run exists.**
+
+★★★ **The inference being right is not what makes this worth a
+paragraph. The inference having been LABELLED as an inference is.** Had
+it been written as a fact, today's dispatch would have confirmed a
+sentence that was, at the moment of writing, **unevidenced** — and the
+project would have learned nothing except that guessing works. This is
+`DL-060`'s rule (*an inferred environment constraint is a READING*)
+paying out in the direction where it is invisible: **a labelled reading
+that turns out true costs one word and buys a checkable history.**
+
+##### 6d. ★★★ The refusal that was vindicated twice — `DL-081`
+
+`DL-073` was minted **2026-08-25** *(★ **[VERIFIED]** — the date is in
+`ARCHITECTURE.md` `DL-073`'s own header, read at this filing)*,
+occasioned by `767233d`, whose message made a scope claim that **was
+false**. It was applied on **2026-09-01** to `d328b95`, whose message
+made a scope claim that **was true**. ★ **Seven days apart, not one
+session** — the dispatch's *"twice in one session"* is corrected here
+because a session boundary is a fact about the environment and this role
+did not measure one.
+
+> ★★★ **A rule that distrusts a class of evidence is not validated by
+> its catch rate. When the distrusted claim is FALSE the rule prevents
+> an error; when it is TRUE the rule converts a belief into evidence.
+> Both are wins and only the first is visible — so a rule judged on
+> visible wins gets retired precisely when it has been working.**
+
+Filed as `ARCHITECTURE.md` **`DL-081`**. It is entered as a decision
+rather than an anecdote because the decision it settles is forward-facing
+and cheap to get wrong: **do not weaken or drop a verification step on
+the ground that the thing it distrusted keeps turning out to be true.**
+
+##### 6e. What this addendum does NOT claim
+
+- **That any `git` or `gh` command was run here.** ★★★ **None was.**
+  Both outputs are transcribed from the dispatch. `[REPORTED]`.
+- **That the tip run's conclusion is corroborated.** It is a single
+  observation on the same path as the other three (`DL-077`).
+- **That the twelve rows are protected.** §7.35 item 2 — *"asserted by
+  no test, no difftest record and no CI job"* — is **untouched and still
+  owed**. ★★ A green CI run on the tip does **not** assert them:
+  **`.github/workflows/ci.yml` contains no occurrence of `bpc` at all**
+  *(★ **[VERIFIED]** — grepped at this filing)*. ★ The wider half —
+  *"asserted by no test"* — is **carried from §7.35, not re-derived
+  here.**
+- **That `NC-319`'s missing lcms2 pin moved.** ★★ **Nothing here touches
+  it**, exactly as the dispatch states. **Still owed.**
+- **That the evidence class of anything moved.** ★★★ **Nothing was
+  promoted.** Two `[REPORTED]` statements got wider coverage and a
+  better-chosen instrument.
+- **That anything was published to crates.io.** ★★ **Nothing was**, and
+  this addendum authorises nothing (rule 9).
+- **That the request channel was touched.** ★★★ Instructed an **eighth**
+  time not to arm a monitor and not to poll: **no file under
+  `D:\Dev\FeatureRequests\` was listed, opened or written.**
 
 ---
 
