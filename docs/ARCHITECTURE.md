@@ -8728,3 +8728,1090 @@ falsified and a `pre-commit` check on negative scope claims becomes the
 proposal. ★ **Per `DL-068`, whose predecessor `DL-062` said *"revisit if a
 third instance appears"* and then fired twice with nothing built: the
 trigger here is deliberately set at TWO, not three.**
+
+---
+
+### DL-074 — ★★★ **an equality THE TEST MATERIAL ITSELF ASSERTS, measured BETWEEN TWO OBJECTS OF ONE RENDER, outranks a comparison between two implementations' renders — because every uncontrolled stage of the observation path is COMMON to both sides and cancels. And it is ONE-SIDED: a large divergence is robust, a near-zero agreement is NOT**
+
+**Date:** 2026-08-28 · **Occasioned by:** a consumer's render of
+third-party test artwork, measured this day by `icc-engineer` from two
+operator-supplied screenshots · **Filed by:** `icc-librarian`, from
+`icc-engineer`'s dispatch · **Rows affected:** none. **No code changed, no
+number in this repository moved, no tolerance moved, and no ledger row was
+created** · **The class it names is `intra-run-fixture-invariant`, added to
+`NUMERIC_CLAIMS.md` §1 at this filing with ZERO ROWS UNDER IT, deliberately
+— see §3.40** · **Relates to** `DL-070` (no ΔE against a screen capture),
+`DL-033` (candidate separation), `DL-036`/`GP-002` (a fixture, not a
+tolerance, is the remedy) and `DL-065` (a gate in the wrong units cannot
+certify the answer)
+
+★★★ **Where the measurement lives, and why it is not here.** Every number
+that occasioned this entry is read off a rendering of **licensed** test
+artwork and is therefore suite-derived. `CLAUDE.md` **rule 11** forbids
+adding such material to a tracked file, and this file is tracked. The
+numbers are at **`docs/SUITE_COMPATIBILITY.md` §11**, untracked, with the
+first application of this rule at **§11.4**. **This entry states the
+method and states no result.** A tracked document may point at an
+untracked one by section; a pointer is not a quotation.
+
+#### The rule
+
+> ★★★ **When the test material's own documentation asserts that two
+> objects MUST resolve to the same colour, the distance between those two
+> objects — measured INSIDE A SINGLE RUN of a single implementation — is a
+> stronger claim than any comparison between that implementation's output
+> and another's.**
+>
+> Two independent properties are doing the work, and **both are required**:
+>
+> 1. **INTRA-RUN.** Both sides travelled the identical path: the same
+>    conversion, the same scaling, the same quantisation, the same display
+>    or output stage. Whatever is uncontrolled is **common-mode**, and a
+>    difference taken inside one run **cancels it**.
+> 2. **THE EXPECTATION IS SOMEBODY ELSE'S.** The relation being checked —
+>    equality — is asserted by the party who authored the material, in its
+>    own documentation, **before anybody measured anything**. It does not
+>    come from an implementation's opinion of the correct colour, from this
+>    project's arithmetic, or from a tolerance somebody chose.
+
+#### Why it ranks above `implementation-cross-check`
+
+A cross-check asks *"do two implementations agree about the value?"* and is
+defeated when **both share a misreading** (`CLAUDE.md` rule 3,
+`TOLERANCES.md` §1). This asks a different question — *"does this one
+implementation satisfy a constraint its input declares?"* — and **there is
+no second implementation in the claim at all.**
+
+★★ **The other implementation, where one is present, is a CONTROL and not
+an oracle.** Its role is to demonstrate that the constraint is
+**satisfiable** — that a renderer exists which does hold the two objects
+together — and that role is discharged by a qualitative result. ★★★ **The
+finding survives the control's removal**, which is the sharpest test of
+whether an oracle is load-bearing: delete lcms2 from a cross-check and
+nothing is left; delete the control here and the divergence from the
+declared contract is still measured, still attributable, and still means
+what it meant.
+
+★ **And the candidate separation is enormous by construction** (`DL-033`).
+The two candidate answers are *"the objects coincide"* and *"the objects do
+not", and the material's author chose the second to be conspicuous, because
+a human being is expected to adjudicate it by eye. **A row of this class
+cannot be `BLIND` in the sense §1.1 of `TOLERANCES.md` defines**, and that
+is a property of the material, not of a tolerance anyone set.
+
+#### ★★★ The bound, and it is the half most likely to be dropped when quoting this entry: THE CLASS IS ONE-SIDED
+
+**A large divergence is robust. A near-zero agreement is not.**
+
+The cancellation argument in property 1 above is **not symmetric**, and the
+asymmetry is `DL-070`'s reason 2 operating inside a single render rather
+than between two:
+
+| observed | what it supports | why |
+|---|---|---|
+| **the two objects are FAR apart** | ★★★ **Strong.** The contract is violated. | A common observation path — even an unknown, non-linear, gamut-clamping one — does not manufacture a large separation out of two identical colours. To fake this result the path would have to *push apart* two values that entered it equal, which no display transform does. |
+| **the two objects COINCIDE** | ★★ **Weak, and it must not be quoted as confirmation.** | A common path **can** collapse two genuinely different colours onto one value — by clamping both to a gamut boundary, by quantising both into one 8-bit code, or by saturating both. `DL-069`/`DL-070` record exactly this happening. **Agreement is then the symptom of the compression, not of conformance** — which is `DL-033`'s lesson and `NUMERIC_CLAIMS.md` §3.25's, in a new place. |
+
+⇒ **A row of this class may state a FAILURE of the declared contract. It
+may NOT state that the contract is SATISFIED**, unless it also establishes
+that neither object sits on a boundary the common path could have
+compressed them onto — which requires knowing the path, which is the thing
+this class was constructed not to need.
+
+★★ **This bears directly on work already dispatched.** Where a near-zero
+result is the outcome being hoped for, this class is at its weakest exactly
+where it is being asked to be strongest. **Any such result must be obtained
+through a path whose stages are known** — a conversion this project can
+run and pin — **and not read off a capture**, or it establishes nothing.
+
+#### Why this does not violate `DL-070`, stated explicitly because it looks like it might
+
+`DL-070` prohibits computing **any ΔE, of any formula, in any space,
+against a row of class `rendering-cross-check-screen-capture`** — a class
+whose definition (`NUMERIC_CLAIMS.md` §1) has **`iccce`'s own output on one
+side** and **pixels from a capture of another application's window on the
+other**. Its two reasons are (1) the unit dresses a rendering comparison up
+as colorimetry because one side is not a colour measurement, and (2) at a
+clamped intent the ΔE would be measuring the clamp.
+
+**A distance taken between two regions of ONE capture is outside that
+prohibition, and the reason is reason 1 read carefully:** the objection is
+that *one side is a pixel from an unknown display transform while the other
+is a colour*. Here **neither side is a colour and both came from the same
+unknown transform**, so the quantity is not *"iccce's colour versus a
+photograph"* — it is *"the size of a discrepancy the material declares must
+be zero"*, and the transform it passed through is a shared, cancelling
+term. ★ **Reason 2 is not evaded, however — it is exactly what the
+one-sidedness table above admits**, and it is the whole reason this entry
+licenses the failure direction only.
+
+> ★★★ **What this entry deliberately does NOT settle: whether `DL-070`
+> reaches a ΔE computed BETWEEN TWO DIFFERENT CAPTURES, of two different
+> applications' windows.** That comparison has **two** unknown display legs
+> instead of one, so `DL-070`'s reason 1 applies to it with *more* force
+> than to the case the prohibition was written about, and **nothing
+> cancels**. Figures of that shape were taken on 2026-08-28 and are
+> recorded — labelled with their limit — in the untracked document at
+> **§11.3**. ★ **This librarian does not adjudicate them here**, because
+> the honest options are to widen a standing prohibition or to declare an
+> exemption to it, and both are decisions rather than filings. **Recorded
+> as owed:** `NUMERIC_CLAIMS.md` §7.30.
+
+#### What this entry does NOT decide
+
+1. **It does not license a tolerance.** No bound is set, no gate is
+   created, and `TOLERANCES.md` gains no number at this filing — only a
+   fixture-selection rule at its §1.2. A class is a statement about how
+   strong evidence is, never about how close is close enough.
+2. **It does not claim the method is available on demand.** It requires
+   test material whose author declared an equality **and** the ability to
+   observe both objects in one run. ★ Most fixtures do not offer this, and
+   **a fixture that must be built to offer it is a different act** —
+   `DL-036`'s territory, where an authored fixture discharges only the
+   doubt it was authored for.
+3. ★★ **It does not make this project's own two-routes-agree tests
+   stronger.** Where **we** author both objects, the expectation is ours
+   and the class is `self-consistency` — property 2 fails. **The whole
+   promotion rests on the assertion being a third party's.**
+4. **It does not establish anything about `iccce`.** No number occasioning
+   this entry was produced by an `iccce` conversion.
+5. **It does not retroactively reclassify any existing row.** No row in
+   `NUMERIC_CLAIMS.md` carries this class *(and the class is minted with
+   none — §3.40 states why)*.
+
+**Revisit when:** a row of this class is proposed **in the satisfied
+direction** — at which point the one-sidedness table above must be answered
+point by point, not cited; **or** an equality-asserting fixture appears that
+this project may redistribute, at which point the class acquires its first
+tracked row and §3.40's *"defined with nothing under it"* stops being the
+honest state; **or** `DL-070` is revisited for any reason, since the two
+entries now share a boundary and moving one moves the argument at the other.
+
+> ★★★ **THE THIRD TRIGGER FIRED THE FOLLOWING DAY. See `DL-075`
+> (2026-08-28).** `DL-070`'s reach was settled, and the settlement bears on
+> the sub-section above titled *"Why this does not violate `DL-070`"*. ★ **The
+> evidence class, its two properties and its one-sidedness are NOT reopened
+> and are not in question** — what is in question is one paragraph about the
+> **unit** such a measurement may be stated in. `DL-075` §7 states the tension
+> precisely, offers a reconciliation, and leaves the choice where it belongs.
+> **Nothing above this line has been edited**; per this log's rule a
+> superseded position gets a new entry, never a rewrite.
+
+> ★★★ **AND THE PARAGRAPH WAS NARROWED, later the same day. See `DL-076`
+> (2026-08-28).** `DL-075` §7 set out two candidate readings and declined to
+> choose; **`icc-engineer` chose reading 2.** The sub-section above titled
+> *"Why this does not violate `DL-070`"* is **too strong in exactly one
+> respect and is NARROWED, not withdrawn**:
+>
+> - **It may say the comparison is ADMISSIBLE.** ★★★ The evidence class, its
+>   two properties, its one-sidedness, its bound and every *"what this does
+>   not decide"* item above **survive intact and lose no result** — none of
+>   them was ever stated in ΔE.
+> - **It may NOT say the comparison may be expressed as a ΔE.** A
+>   capture-derived quantity is stated in **8-bit channel counts** whoever is
+>   on the other side of it, and however well the display path cancels.
+>
+> ★★ **The reason, and it is the part that generalises:** a display
+> transform is **non-linear**, so even when it is common-mode it **does not
+> preserve distances**. **Cancellation makes the COMPARISON valid; it does
+> not make the UNIT lawful.** `DL-076` holds the argument. **Nothing above
+> this line has been edited.**
+
+---
+
+### DL-075 — ★★★ **`DL-070` REACHES a ΔE computed between TWO DIFFERENT CAPTURES. The prohibition attaches to the ARTIFACT, not to what sits opposite it — so nothing is widened, nothing is exempted, and no reversal is claimed. And the transferable half, which is the larger one: the prohibition DID NOT PREVENT the number. Its author RE-DERIVED the prohibition's own reasoning from first principles, wrote it down as a disclosed limitation, and computed the forbidden figure anyway. What the prohibition bought was not prevention — it was NAMEABILITY, by a reader who had never seen the evidence**
+
+**Date:** 2026-08-28 · **Occasioned by:** the cross-renderer figures taken
+at the consumer-render measurement of the same day (`DL-074`;
+`NUMERIC_CLAIMS.md` §3.40), which live in the untracked reference document
+at its §11.3 · **Escalated by** `icc-librarian` at the filing of `DL-074`,
+which declined to settle it, and carried as owed at `NUMERIC_CLAIMS.md`
+§7.30 newly-owed 2 · **Decided by** `icc-engineer` (the lead session) ·
+**Drafted and filed by** `icc-librarian` · **No `NC-` row is added, no
+number moves, no tolerance moves, no code changes.**
+
+★ **Whose decision this is, stated because the ledger recorded the item as
+owed to two parties.** §7.30 item 2 recorded it as *"owed to
+`icc-conformance` and the operator."* The dispatch that settles it carries
+**no operator words on this question** and none are invented here. That is
+sufficient **in this direction only**, and §3 below is where that limit is
+argued: applying a standing prohibition's own stated reason to a case that
+exhibits more of the same defect is a **contraction-side** determination.
+**Widening the prohibition beyond its stated reasons, or exempting anything
+from it, would still be the operator's**, and neither is done here.
+
+#### 1. The question, exactly as `DL-074` left it
+
+`DL-074` prohibited nothing and licensed nothing about captures; it added an
+evidence class for a distance measured **between two objects of a single
+render**. In doing so it had to explain why that distance is not the thing
+`DL-070` forbids, and in that sub-section it wrote:
+
+> *"What this entry deliberately does NOT settle: whether `DL-070` reaches a
+> ΔE computed BETWEEN TWO DIFFERENT CAPTURES, of two different applications'
+> windows. That comparison has **two** unknown display legs instead of one,
+> so `DL-070`'s reason 1 applies to it with more force than to the case the
+> prohibition was written about, and nothing cancels."*
+
+★★ **It declined on procedural grounds, not on the merits** — *"the honest
+options are to widen a standing prohibition or to declare an exemption to
+it, and both are decisions rather than filings."* Figures of that shape
+already existed when the sentence was written.
+
+#### 2. The ruling
+
+> ★★★ **`DL-070` APPLIES. A ΔE computed between pixels of two different
+> screen captures is prohibited, on `DL-070`'s reason 1 alone.**
+
+Checked against `DL-070`'s own gate, which requires whoever adds such a
+number to first say which of its two reasons no longer holds:
+
+| `DL-070`'s reason | status here |
+|---|---|
+| **1** — *the unit is the claim: a ΔE asserts a perceptual distance between two **colours**, and one side is a pixel from an unknown display transform* | ★★★ **HOLDS, and in its stronger form.** Here **both** sides are such pixels, through **two** display legs, neither recorded. There is no side of the comparison that is a colour measurement. |
+| **2** — *at a clamped intent the ΔE would be measuring the clamp* | **NOT ENGAGED.** The clamp argument is about a specific gamut boundary at a specific intent and does not arise for this pair. |
+
+★★ **Reason 2's absence changes nothing, and `DL-070` says so in terms:**
+*"Two reasons, and they are independent — killing either leaves the
+prohibition standing."* Its `Revisit if` clause makes the same point from
+the other side, for the in-gamut case: that *"kills reason 2 but **not**
+reason 1, and therefore still does not license the number."* ⇒ **The
+prohibition stands on reason 1, unassisted.**
+
+★ **None of `DL-070`'s three revisit conditions is met.** The display legs
+are not pinned — no monitor profile and no application colour setting was
+recorded for either renderer; no in-gamut demonstration was offered (and it
+would not suffice anyway, see above); and **no colorimetric reference for
+this material has appeared.**
+
+#### 3. ★★★ Why this is NOT a widening — the prohibition attaches to the ARTIFACT
+
+This is the load-bearing distinction, and without it the ruling would be an
+extension of a rule to cases it did not name, which is the thing a librarian
+is not allowed to do quietly.
+
+`NUMERIC_CLAIMS.md` §1's class definition opens: *"Agreement with **pixels
+read out of a screen capture of another application's window**"*, and then
+gives the instance in hand — *"compared channel-by-channel against `iccce
+transform` output"* — after the word *"Here:"*. ★★ **The head of the
+definition names the artifact; the `iccce` side appears in the illustrative
+clause, not in the definition.** `DL-070`'s reasoning is built entirely on
+the capture's provenance — *"it is the capture's display leg that earns
+it"* — and nowhere on what the capture is being compared against.
+
+⇒ **The two-capture case was inside the prohibition all along, on the
+prohibition's own words.** It was never carved out; it was simply not the
+case in front of anyone in 2026-08-25, and `DL-074` was right to refuse to
+assume the answer. What this entry adds is the *statement* of the reach, so
+that the next reader does not have to re-derive it.
+
+**What was therefore NOT done:** no new class was minted; `DL-070` was not
+amended, softened or reversed; no exemption was declared; no row changed
+class. ★ **What was done in the ledger:** `NUMERIC_CLAIMS.md` §1's class
+row gains **one dated clarifying sentence** pointing here, because a reader
+who arrives at the class definition and not at this log must find the reach
+where the class is defined.
+
+#### 4. What the ruling made true in the untracked reference document
+
+*(Pointer only — `CLAUDE.md` rule 11. No figure from that material appears
+in this log, then or now.)* `icc-engineer` applied the ruling the same day:
+every capture-derived ΔE00 and the Lab table at its §11.3 and §11.4 are
+**withdrawn under `DL-070`**, the tables are left standing and marked *"do
+not quote"* per that document's practice, and **both findings are restated
+in 8-bit channel counts**.
+
+★★★ **The restatement is the part worth carrying, because it is the test of
+whether the forbidden unit was ever doing work.** Both findings survived it
+without loss — the same directional result, the same correspondence with an
+independently reported measurement, and a form a reader can check against
+the artifact by eye. **What was lost was the false precision of a
+two-decimal perceptual distance**, which is exactly what `DL-070` said would
+be lost, and nothing else. ⇒ **A prohibition that costs nothing when
+obeyed, and buys a claim you can defend, is cheap at the price** — and this
+is the first time this project has paid it and measured the bill.
+
+#### 5. ★★ A ratio of two numbers in DIFFERENT UNITS is not a number — a second, separable finding from the same act
+
+A comparison drawn for the operator from these figures was **retracted as
+invalid, not merely as prohibited**: a ratio was formed whose numerator was
+a **colorimetric** distance measured on a destination profile's own
+transform, and whose denominator was a **display-space pseudo-distance**
+read off a capture. **The quotient has no unit and therefore no meaning**,
+independently of `DL-070`.
+
+★★★ **Why it survived being looked at: both numbers were written `ΔE00`.**
+The unit label was identical and the *plane* was not, and nothing in the
+notation carries the plane. This is `DL-061`'s shape in a new place — *a
+number labelled with its source is only as good as the label* — and
+`DL-054`'s — *the number was right and the owner was wrong.*
+
+**The working rule this yields**, stated so it can be applied without
+re-deriving it: ★ **before dividing or ranking two quantities, name the
+plane each was measured on, not just the unit each is printed in.** If the
+two planes differ, there is no comparison to be had at any tolerance; the
+remedy is to restate one side on the other's plane, or to make two separate
+statements. In this instance the repair was the latter — each side stated in
+its own units, on one plane, with no ratio between them.
+
+#### 6. ★★★ The transferable finding — a prohibition's value is AUDITABILITY, not prevention
+
+`DL-070` argued *"why a prohibition and not a caveat"* and made a prediction
+about the failure mode it was defending against:
+
+> *"A caveat is discharged by reading it, and a later session under time
+> pressure will read 'a ΔE here would be misleading' as 'a ΔE here needs
+> care.'"*
+
+**What happened is one layer past that prediction, and the difference is the
+finding.** The engineer did not read `DL-070`'s caveat and discount it. He:
+
+1. **independently re-derived `DL-070`'s reason 1 from first principles**,
+   without recognising that the same objection had been decided and filed
+   three days earlier;
+2. **wrote it into the measurement's own method section** as *"Limit 1"*;
+3. **correctly identified it as the largest uncontrolled variable in the
+   comparison**, and marked its provenance row `[UNVERIFIED — stated as a
+   limit precisely because it was not tested]`;
+4. **and computed the prohibited number anyway** — because a limitation you
+   author yourself presents as *something to disclose*, not as *something
+   that forbids the act.*
+
+> ★★★ **A caveat authored by the actor, in the actor's own words, minutes
+> before the act, did not restrain the actor.** Self-authored disclosure is
+> not a control. It is the *appearance* of one, and it is more convincing
+> than an inherited caveat precisely because the author knows it is
+> sincere.
+
+★★ **What the prohibition actually bought, and it is not nothing:** because
+`DL-070` had (a) minted a **named class**, (b) stated its rule in terms of a
+**unit** rather than a judgement of degree, and (c) recorded the rule in the
+**decision log** rather than in the document where the work happened, a
+reader **who had never opened the screenshots, run the sampler or computed a
+distance** could open the paperwork, see a ΔE beside a class name, and name
+the violation — within hours, on the day it was written.
+
+⇒ **The value of a prohibition is not that the act becomes impossible. It is
+that the act becomes NAMEABLE AFTERWARDS BY SOMEONE WITHOUT THE ORIGINAL
+CONTEXT.** A caveat cannot do that: *"this needs care"* has no failure
+condition, so nobody downstream can point at a specific line and say *that
+one.* **A rule stated in a unit has a failure condition that survives the
+loss of every piece of context around it.**
+
+★ **Three design consequences that follow, and they are the reusable part:**
+
+| property | why it did the work | the alternative that would not have |
+|---|---|---|
+| the rule names a **unit**, not a degree of care | *"in 8-bit counts and no other unit"* is checkable by looking at a column heading | *"be careful with these figures"* — unfalsifiable, so unauditable |
+| the rule lives in the **decision log**, not in the working document | the working document is where the pressure is; the log is read by parties with no stake in the day's result | a note in the same file — the author reads past their own note |
+| the class is **named** | the violation is a two-token pattern match: this class + this unit | an unnamed *"weak evidence"* — no pattern to match |
+
+★★ **This does not argue for more prohibitions.** It argues that when one is
+written, it should be written so that a stranger can adjudicate it — and
+that **no prohibition should be relied on to stop the person who most wants
+the number.** `DL-042`'s lesson generalises here: *a negative finding
+removes its own auditor*, so the auditor must be reconstructible from the
+paperwork alone.
+
+#### 7. ★★★ What this entry does NOT settle: `DL-074`'s boundary paragraph, whose trigger has now fired
+
+`DL-074` §*"Why this does not violate `DL-070`"* argues that a distance
+between two regions of **one** capture is **outside** the prohibition,
+because *"neither side is a colour and both came from the same unknown
+transform"*, so the transform is a cancelling term.
+
+★★ **In practice, the same-day withdrawal went further than that
+paragraph:** the intra-render ΔE column was withdrawn too, and the
+intra-render finding restated in counts. **Both cannot be stated without a
+reconciling sentence**, and this entry does not write it, because that would
+be re-opening `DL-074` on this librarian's own reading.
+
+**The two candidate readings, stated so whoever settles it can choose rather
+than re-derive:**
+
+1. **The withdrawal was voluntary and broader than `DL-070` requires.**
+   `DL-074`'s carve-out stands; the intra-render figure *could* have been
+   stated as a ΔE and was not, because the count form loses nothing.
+2. ★ **`DL-070`'s reason 1 is about the UNIT, and reaches any ΔE with a
+   capture pixel on either side** — including the intra-render one. Under
+   this reading `DL-074`'s **evidence class survives untouched** (it says
+   *which comparison is admissible*), while its carve-out **paragraph** is
+   too strong (it says *which unit that comparison may wear*), and the two
+   are separable questions that the paragraph merges.
+
+★★ **This librarian's recommendation, offered and not applied:** reading 2,
+because it keeps one rule instead of two and because it is what the
+withdrawal already did. Under it `DL-074` loses **no** result: the class,
+its two properties, its one-sidedness and its bound are all statements about
+admissibility, and none of them was ever stated in ΔE.
+
+**Recorded as owed** at `NUMERIC_CLAIMS.md` §7.31, and flagged at `DL-074`'s
+`Revisit when` clause, whose third trigger — *"`DL-070` is revisited for any
+reason, since the two entries now share a boundary"* — **fired one day after
+it was written.** ★ That is the smallest possible vindication of writing the
+trigger down, and it is worth noticing that the clause did its job by being
+**read**, not by being enforced.
+
+#### 8. What this entry does NOT claim
+
+1. **That the withdrawal has been carried through everywhere it reaches.**
+   ★★★ It has not, as of this filing. This role read the untracked document
+   at the moment of filing and found **at least fourteen passages** — in four
+   of its sub-sections, including a per-cell ratio column, a narrative that
+   apportions credit as fractions of a withdrawn quantity, and **both
+   provenance rows that certify the withdrawn figures** — that still quote a
+   withdrawn figure, or a quantity computed from one, **as live and
+   unmarked**. The line numbers were returned to `icc-engineer`, who is that
+   document's writer; **this role edited nothing there.** ⇒ **A withdrawal
+   block is an artifact, and `DL-058` applies to it: an artifact's existence
+   is not the obligation's status.**
+2. **That any figure in that document is correct.** This role opened no
+   screenshot, ran no sampler and computed no distance, at this filing or
+   at `DL-074`'s.
+3. **That the operator has ruled on anything here.** ★ No operator words
+   were carried by the dispatch and none are invented. The one adjacent
+   operator question — `NUMERIC_CLAIMS.md` §7.28 item 6, on licensed
+   material that predates rule 11 — **remains open and is untouched.**
+4. **That anything was committed, pushed, tagged or published.**
+   ★ `.git/refs/heads/master` and `.git/refs/remotes/origin/master` both read
+   `3af2d87fd46115a5f9283508785c86ad3c95fdc7` *(**VERIFIED** — both are plain
+   text files, read at this filing)*. Per `DL-068` the two hashes are carried
+   and **no push count is derived from them**; the remote ref is a dated
+   local reading, not a live statement about the remote. **This filing's
+   edits are in no commit.**
+5. **That any gate ran.** ★★ `tools/check-suite-name-absent.py` was **read**
+   and its two rules applied by hand to every line written here; **it was not
+   executed — this role has no shell.**
+
+**Revisit if:** a capture's display leg becomes known and pinned for **both**
+sides of such a comparison, which is `DL-070`'s own first revisit condition
+applied twice over and would move the artifact rather than the rule; **or**
+`DL-074` §7's reconciliation is chosen, at which point this entry's §7 is
+answered and should be cited as answered rather than as open; **or** the
+finding in §6 recurs — a rule of this project's is re-derived from first
+principles by the party it constrains, and disclosed rather than obeyed — at
+which point the pattern has a second instance and the remedy is worth
+designing, not just naming.
+
+> ★★★ **§7 IS ANSWERED — `DL-076`, filed later the same day (2026-08-28).**
+> The second of this entry's own `Revisit if` conditions — *"`DL-074` §7's
+> reconciliation is chosen"* — fired within hours. `icc-engineer` chose
+> **reading 2**. ⇒ **Cite §7 as ANSWERED, not as open**, and cite `DL-076`
+> for the reasoning; `NUMERIC_CLAIMS.md` §7.31 newly-owed 2 is **closed at
+> §7.32**. ★ §7's other content — the two readings, and this role's
+> recommendation offered and not applied — is left standing unedited, because
+> the recommendation being *adopted* is a different fact from its having been
+> *made*, and a reader should be able to see that the choice was the lead
+> session's.
+
+---
+
+### DL-076 — ★★★ **CANCELLATION LICENSES THE COMPARISON, NOT THE UNIT. A display transform is NON-LINEAR, so even when it is common to both sides and cancels in a DIFFERENCE, it does not preserve DISTANCE — therefore `DL-070`'s reason 1 reaches EVERY ΔE with a capture pixel on either side, including one taken between two objects of a SINGLE render. `DL-074`'s evidence class survives INTACT and loses no result; one paragraph of it is NARROWED. One prohibition, one unit rule, no exemptions**
+
+**Date:** 2026-08-28 · **Occasioned by:** the tension `DL-075` §7 filed and
+declined to settle, which is the reconciliation `DL-074`'s boundary paragraph
+and `DL-075`'s ruling could not both stand without · **Escalated by**
+`icc-librarian` at the `DL-075` filing, carried as owed at
+`NUMERIC_CLAIMS.md` §7.31 newly-owed 2 · **Decided by** `icc-engineer` (the
+lead session) · **Drafted and filed by** `icc-librarian` · **No `NC-` row is
+added, no number moves, no tolerance moves, no code changes.** **Third filing
+of this date, and the third consecutive one that carries no measurement.**
+
+★ **What kind of determination this is, stated because the ledger recorded
+the item as owed to two parties.** §7.31 recorded it as owed *"to
+`icc-engineer` and the operator."* The half that is the lead session's is
+taken here: **narrowing this project's own boundary paragraph so that a
+standing prohibition covers more of what it already says.** ★★ **The
+operator's half is untouched and remains untouched** — no prohibition is
+loosened, no exemption is declared, and `NUMERIC_CLAIMS.md` §7.28 item 6 (the
+adjacent licensed-material question) is neither answered nor moved. **The
+dispatch that settles this carried no operator words and none are invented.**
+
+#### 1. The question, exactly as `DL-075` left it
+
+`DL-074` argued that a distance between two regions of **one** capture is
+**outside** `DL-070`, because *"neither side is a colour and both came from
+the same unknown transform"*, so the transform is a cancelling term. The
+same-day withdrawal in the untracked reference document went **further than
+that paragraph** and withdrew the intra-render ΔE too. `DL-075` §7 set the
+two readings out and recommended one **without applying it**:
+
+> 1. *"The withdrawal was voluntary and broader than `DL-070` requires"* —
+>    `DL-074`'s carve-out stands.
+> 2. *"`DL-070`'s reason 1 is about the UNIT, and reaches any ΔE with a
+>    capture pixel on either side"* — the class survives, the **paragraph** is
+>    too strong.
+
+#### 2. The ruling
+
+> ★★★ **READING 2. `DL-070`'s reason 1 is about the UNIT, not about which
+> comparison may be drawn.** A capture-derived quantity is stated in **8-bit
+> channel counts**, *whoever is on the other side of it, and however well the
+> display path cancels.*
+
+Two halves, and they must be quoted together or the entry is misread:
+
+| `DL-074` component | what it answers | status |
+|---|---|---|
+| the evidence class **`intra-run-fixture-invariant`**, its two properties (intra-run; the expectation is a third party's), its ranking above `implementation-cross-check`, **its one-sidedness and its bound** | ***"which comparison is admissible?"*** | ★★★ **SURVIVES INTACT. It loses no result.** An intra-render differential against a design contract remains the strongest thing available on capture material |
+| the sub-section *"Why this does not violate `DL-070`"* | ***"which unit may that comparison wear?"*** | ★★ **NARROWED, not withdrawn.** It may say the comparison is admissible. It may **not** say the comparison may be expressed as a ΔE |
+
+★ **The two questions are separable, and the paragraph merged them.** That
+merge is the whole defect: an argument that established *admissibility* was
+carried across, unremarked, into a licence for a *unit*.
+
+#### 3. ★★★ The reasoning, which is the part that generalises: cancellation is an ATTRIBUTION argument, not a METRIC one
+
+A common-mode transform buys exactly one thing, and it is worth naming
+precisely, because the thing it does not buy sits immediately beside it.
+
+| the argument | what it establishes | what it does NOT establish |
+|---|---|---|
+| **both sides went through the same unknown path**, so a difference between them cannot be an artifact of that path | ★★ **Attribution.** The discrepancy is real and belongs to the renderer, not to the observation. **This is what makes the comparison admissible**, and `DL-074` is right about it | ★★★ **Nothing about SIZE.** The path being identical says nothing about whether the *magnitude* it delivers is the magnitude that entered it |
+| **the transform is a function, and monotone enough that two equal inputs cannot leave it far apart** | ★ **Direction, and one-sidedness.** A large observed separation is robust; a near-zero one is not | Again nothing about size — which is why `DL-074`'s bound is stated **ordinally** (*far apart* / *coincide*) and therefore **needs no metric at all**. That is why the bound survives this narrowing untouched |
+
+⇒ ★★★ **A display transform is NON-LINEAR. A non-linear map does not
+preserve distances, whether or not it is applied to both operands.** So an
+intra-render ΔE **measures a distance in the display's space and calls it a
+perceptual distance in the PCS.** The two colours whose separation is being
+reported were never in the ΔE formula's domain; two pixels that came out of
+that path were. **The number is arithmetically fine and epistemically false**
+— `DL-070`'s reason 1, word for word, and `CLAUDE.md` rule 1's exact failure
+mode applied to our own paperwork.
+
+★★ **Why the intra-render case FELT exempt, recorded so the next reader does
+not re-derive the mistake.** `DL-070`'s reason 1 is *phrased* as an asymmetry
+— *"one side is not a colour measurement"* — and an intra-render pair is
+symmetric, so the sentence appears not to fit. **But the asymmetry was
+incidental to the instance in hand, not constitutive of the objection.** The
+objection is that **ΔE asserts a distance between colours** and a capture
+pixel is not a colour. Two of them are not two colours either. **Symmetry
+removes the imbalance; it does not supply the missing colours.** ★ This is
+`DL-075` §3's shape recurring at one level down: there, the prohibition
+attached to the **artifact** rather than to what sat opposite it; here,
+reason 1 attaches to **what a ΔE claims** rather than to how many sides of
+the comparison are defective.
+
+#### 4. Why this yields ONE rule rather than two
+
+The alternative — reading 1 — would have left the project with a prohibition
+(*no ΔE against a capture*) **plus** a named exemption (*except between two
+regions of one capture*), and the exemption would have had to be checked by
+whoever added a number, against a criterion (*"did it cancel well enough?"*)
+that has **no failure condition**. ★★ `DL-075` §6 is precisely the finding
+that a rule with no failure condition is unauditable: *"a rule stated in a
+unit has a failure condition that survives the loss of every piece of context
+around it."* **A unit rule with one exemption is a unit rule you cannot
+pattern-match**, and the pattern match — *this class beside this unit* — is
+the entire value the prohibition was shown to deliver.
+
+★ **And the ruling costs nothing, which is the second reason to prefer it:**
+the withdrawal had **already** restated the intra-render finding in counts,
+and it survived without loss — same direction, same ordering, same
+correspondence with an independently reported measurement, in a form a reader
+can check against the artifact by eye. **This entry ratifies what the
+evidence already demonstrated rather than predicting what it might cost.**
+
+#### 5. What `DL-074` keeps, enumerated so the narrowing cannot be over-quoted
+
+1. **The class exists and is unchanged** in `NUMERIC_CLAIMS.md` §1, with a
+   dated clarification appended at this filing about the unit **only**.
+2. **Its ranking above `implementation-cross-check` is unchanged**, and the
+   argument for it — no second implementation is in the claim — never used a
+   unit.
+3. **Its one-sidedness is unchanged**, and §3 above shows why it was never at
+   risk: it is an ordinal statement.
+4. **The role of another renderer as a CONTROL rather than an oracle is
+   unchanged**, including *"the finding survives the control's removal."*
+5. **`TOLERANCES.md` §1.2's fixture-selection rule is unchanged**, gaining one
+   dated sentence at this filing that says cancellation licenses the
+   comparison and not the unit. ★ **It still carries no number and sets no
+   bound.**
+
+#### 6. What this entry does NOT decide
+
+1. **It does not forbid a ΔE from an intra-run measurement with NO CAPTURE in
+   it.** ★★★ Where every stage is a stage this project runs and can pin, both
+   sides *are* colours and the unit is lawful. `DL-074` demanded exactly that
+   path for any result in the satisfied direction — *"through a path whose
+   stages are known … and not read off a capture"* — and the untracked
+   document's later section did it that way. **The narrowing bites on
+   capture-derived observations, and on nothing else.**
+2. **It does not loosen `DL-070` in any direction.** No exemption is created,
+   no revisit condition is met, no class is added or removed.
+3. **It does not reclassify any row.** No row in `NUMERIC_CLAIMS.md` carries
+   `intra-run-fixture-invariant` — the class was minted with none, and still
+   has none.
+4. **It does not claim any figure in the untracked document is correct**, in
+   either its withdrawn or its restated form. ★★ This role opened no image,
+   ran no sampler and computed no distance, at this filing or at either of
+   the two before it.
+5. **It does not settle whether licensed published numbers may live in this
+   repository** (`NUMERIC_CLAIMS.md` §7.28 item 6). **Still the operator's,
+   still open, still blocking the second ground-truth fixture.**
+
+#### 7. ★★ The withdrawal sweep — six passages VERIFIED repaired, and three still standing
+
+`DL-075` §8 item 1 and §7.31 newly-owed 1 recorded that the withdrawal had
+not swept forward: *"at least fourteen passages … still quote a withdrawn
+figure, or a quantity computed from one, as live and unmarked."* Line numbers
+were returned to `icc-engineer`, who is that document's writer.
+
+★★★ **VERIFIED at this filing by reading the untracked document at source,
+not the dispatch** *(pointer only — `CLAUDE.md` rule 11; no figure, patch
+identifier, device colour or file name from that material appears here)*:
+
+- **All six passages named in the dispatch are repaired**, in the form
+  described: two columns removed from a result table with a block replacing
+  them; a struck clause in a supersession block, restated in counts; an
+  apportionment list from which **no fraction is formed at all**; two
+  narrative lines carrying inline withdrawal markers; and **both provenance
+  rows** now marked, one of which distinguishes *"correctly computed"* from
+  *"admissible"* — **which are different properties, and the row is right to
+  separate them.**
+- ★★ **Three further passages still quote a withdrawn quantity as live and
+  unmarked**, in two sub-sections. They were reported to `icc-engineer` with
+  line numbers at this filing; **this role edited nothing there.** Their
+  shapes, which is what generalises:
+  1. **A percentage of a withdrawn quantity, surviving inside the very block
+     that was corrected for a different defect.** ★★★ **A correction aimed at
+     a named clause does not sweep the block it is written into.** The struck
+     clause and the surviving fraction sit within a few lines of each other,
+     and the fraction is the same cross-unit division `DL-075` §5 retracted —
+     **the form the later, thorough sweep explicitly says can no longer be
+     formed at all.** ⇒ The remedy for a withdrawal is **a search for the
+     quantity**, never a re-reading of the passages one remembers writing.
+  2. **Two prose distances inside a section whose withdrawal block names its
+     TABLE COLUMN.** ★ A withdrawal scoped to a *column* leaves a **sentence**
+     standing, and a reader arriving from this repository's own pointer lands
+     on the section rather than on the block one sub-section above it.
+     ★★ **Worse, and it is the sharper half: the withdrawal block asserts of
+     one of those two quantities that it was *"never in ΔE anyway"* — and the
+     surviving sentence states it in ΔE.** ⇒ **A withdrawal block's own
+     account of what it withdrew is a claim like any other**, and this one is
+     falsified by the document it sits in. `DL-058` again, one level up.
+  3. ★★★ **Two of the three are unlawful ONLY because of this entry** — both
+     are **intra-render** distances, which reading 1 would have permitted.
+     **They are therefore the first things this ruling makes findable**, and
+     the smallest available demonstration that the narrowing was not
+     cosmetic. ★ The third — a fraction — was already unlawful twice over,
+     under `DL-070` and under `DL-075` §5's cross-unit-ratio rule.
+
+★ **Recorded as still owed** at `NUMERIC_CLAIMS.md` §7.32: the sweep is
+**partial**, and per `DL-058` the existence of a withdrawal block — even a
+good one, even one that produced six correct repairs — **is not the
+obligation's status.**
+
+#### 8. What this entry does NOT claim about the repository
+
+1. **That anything was committed, pushed, tagged or published.**
+   ★ `.git/refs/heads/master` and `.git/refs/remotes/origin/master` both read
+   `3af2d87fd46115a5f9283508785c86ad3c95fdc7` *(**VERIFIED** — both are plain
+   text files, read at this filing; **unchanged from both earlier readings
+   today**)*. Per `DL-068` the two hashes are carried and **no push count is
+   derived from them**; the remote ref is a dated local reading, not a live
+   statement about the remote. **This filing's edits are in no commit.**
+2. **That any gate ran.** ★★ `tools/check-suite-name-absent.py` was **read in
+   full** at this filing and its two rules — contents and file names —
+   applied by hand to every line written here. **It was not executed; this
+   role has no shell.**
+3. **That CI is green or that `v0.2.0` was released.** No evidence was carried
+   and none was read.
+4. **That the request channel was touched.** ★★★ Instructed for the third
+   time not to arm a monitor: **no file under `D:\Dev\FeatureRequests\` was
+   listed, opened or written at this filing.**
+
+**Revisit if:** a ΔE is proposed for a capture-derived quantity of any shape,
+at which point §3's table must be answered rather than cited — the answer
+required is *which* of attribution and metric preservation the proposer
+claims, and the second cannot be had from cancellation; **or** a capture's
+display path becomes **known and pinned end to end**, which is `DL-070`'s own
+first revisit condition and would move the artifact out of the class rather
+than change this rule; **or** the class acquires a row whose observation
+contains no capture, at which point the narrowing stops applying to that row
+and this entry should be cited for **why** it does not apply, since the class
+row's clarification is scoped to captures and a reader will otherwise read it
+as scoping the class.
+
+---
+
+### DL-077 — ★★★ **A DIFFERENTIAL TESTS ONLY WHAT DIFFERS BETWEEN ITS ARMS. Everything the two arms SHARE is outside its reach — and whether that blindness is the method's greatest strength or its fatal defect depends on ONE question: is the shared thing the thing under test? `DL-074` and this entry's occasioning observation are the SAME THEOREM seen from opposite ends. The operational form is a checkable enumeration, not an exhortation: BEFORE TRUSTING A DIFFERENTIAL, LIST WHAT ITS TWO ARMS SHARE**
+
+**Date:** 2026-08-28 · **Occasioned by:** a four-row Tier-A sweep run by
+`icc-engineer`, whose sharpest result was **negative** — a candidate test
+that cannot fail for the reason it is named after · **Drafted and filed by**
+`icc-librarian` on `icc-engineer`'s dispatch · **Fourth filing of this date;
+the fourth consecutive one that adds no number to any tracked file.** **No
+`NC-` row is added, no tolerance moves, no code changes.**
+
+★ **Why this is a decision-log entry and not a note.** The pattern now has
+**five instances in this project**, three of them already filed under other
+headings and two found at this filing. `DL-062`/`DL-068` set this project's
+own threshold — a shape that recurs twice is an observation, a shape that
+recurs a third time gets a guard. This one is past that and had no entry.
+
+#### 1. The theorem
+
+> ★★★ **A differential measurement subtracts everything its two arms have in
+> common. That subtraction is not selective: it removes the nuisance terms and
+> the terms under test alike, and the measurement cannot distinguish which is
+> which. Therefore a differential is EVIDENCE ABOUT THE DIFFERENCE BETWEEN ITS
+> ARMS AND ABOUT NOTHING ELSE.**
+
+Two corollaries, and they point in opposite directions, which is the whole
+reason this needs writing down rather than merely noticing:
+
+| if the shared thing is… | then cancellation is… | and the differential is… |
+|---|---|---|
+| **the observation path** — the nuisance you could not control anyway | ★★★ **the method's entire value.** The uncontrolled stages leave the result, and what remains is the one variable you varied | **the strongest evidence available**, and may outrank a comparison between two independent implementations — `DL-074` |
+| **the mechanism under test** — the thing the test is named after | ★★★ **fatal, and SILENTLY so.** The defect applies identically to both arms and subtracts out exactly | **incapable of failing for its stated reason.** It is green under a correct implementation, under a wrong one, and under **no implementation at all** |
+
+★★ **The failure is silent in the specific way this project keeps meeting.**
+The test does not error, does not skip, and does not report reduced power. It
+**passes**, and its name asserts a proposition it never examined. `CLAUDE.md`
+rule 1 in its purest form: a wrong result and a right one are the same
+observation.
+
+#### 2. ★★★ The operational rule, stated so it is CHECKABLE rather than exhortatory
+
+> **Before trusting a differential, ENUMERATE WHAT ITS TWO ARMS SHARE. Every
+> item on that list is outside the measurement's reach. Then ask, of the
+> mechanism the test is named after: is it on the list?**
+
+★ **The enumeration is the deliverable, not the conclusion.** *"Be careful
+with differentials"* is unactionable and produces nothing a reviewer can
+check. A written list of shared stages is an artifact: it can be wrong, it can
+be incomplete, it can be disagreed with, and it can be re-checked when the
+fixture changes. `DL-064`'s lesson applied to a different apparatus — a guard
+that names its rival must state something a later reader can falsify.
+
+★★ **It is cheap, and that is the argument for it.** The occasioning
+observation was settled by **reading one resource dictionary** — no
+conversion, no oracle, no measurement of any kind. The candidate had been
+carried on a shortlist for **eleven days** on the strength of its name.
+
+#### 3. The five instances, and the escalation in evidence class across them
+
+Listed with what supplied the finding, because the **class of the argument**
+is the part that improved and it is the part worth quoting:
+
+| # | where | what the two arms shared | how the sharing was established | class of that argument |
+|---|---|---|---|---|
+| 1 | **`DL-059`** | the route under test — the pass condition was that a route was **left alone** | **clause text**, reasoned about | an argument from a standard, which is a **reading** |
+| 2 | the sweep's own §3.3 (untracked reference document, one table earlier than the occasioning row) | the conversion under test — the item tests **non-conversion** | **readme prose** shipped with the material | an argument from a third party's **words** |
+| 3 | ★★★ **the occasioning observation** (untracked, §12.2) | ★★ **the colour-space object itself** — both arms of the comparison name the **same indirect object** as their `/ColorSpace` | **the file's own resource dictionary**, read directly | ★★★ **a property of the document**, established by inspection |
+| 4 | ★★ **`DL-074`**, and it is the SAME theorem with the sign reversed | the display path, the scaling, the conversion table — all of it nuisance | argued, then relied upon deliberately | the **licensing** half: cancellation is what made the observation trustworthy |
+| 5 | ★ **in this repository, found at this filing** — see §5 | in two committed fixtures, the two tags a rendering intent selects between are **byte-identical copies** | **live source**, read at this filing | a property of **material this project authored** |
+
+★★★ **The escalation is the finding within the finding, and it must be stated
+explicitly because it changes how the rule is applied.** Instance 1 argues
+from a clause; instance 2 from prose; instance 3 from **the artifact's own
+structure**. A clause assignment is a *reading of a standard* and can be
+disputed by a better reading. **Cancellation established from a document's own
+internal references is a property of the document** — it does not depend on
+whose reading of any standard is right, and it survives a change of opinion
+about the specification entirely.
+
+⇒ **The test is now applicable BY INSPECTION rather than BY ARGUMENT.** That
+is what makes §2 a rule and not advice: for the shape in instance 3, the
+enumeration is a mechanical read of a data structure, and it produces an
+answer a reviewer can check in a minute without agreeing with anything.
+
+#### 4. ★★ The third face: fixture DESIGN, where the same property is a construction constraint
+
+Detection, classification and **design** are three faces of one property, and
+the design face is where it costs the most, because a fixture built with the
+defect **ships** and then protects nothing for as long as it lives.
+
+The untracked reference document's §12.9 proposes fixtures and names this
+constraint against one of them: a fixture whose two arms are **copies of each
+other** has **zero separation** and goes green for a reason unrelated to its
+subject. ★ That is §1's second corollary appearing **before** any measurement
+exists — the earliest and cheapest point at which it can be caught.
+
+★★★ **This project already has the machinery for it and should reuse the name
+rather than reinvent the reasoning.** `DL-033` is *candidate separation*;
+`DL-025` records a control **nullified by an identity fixture**; `DL-066`
+records a row that **cannot fail** because only its siblings protect it; and
+Pass L's `srgb_trc_variant_is_selectable.rs` guards its plumbing with a
+**window carrying a LOWER bound** (`> 1×10⁻⁹`) specifically so that two
+variants collapsing to a separation of exactly zero **fails** instead of
+passing a ceiling-only assertion. ⇒ **The remedy for a zero-separation fixture
+is a lower bound asserted in the test, not care taken while authoring it.**
+
+#### 5. ★★★ VERIFIED AT SOURCE — the fifth instance is IN THIS REPOSITORY, and it was not in the dispatch
+
+Read at this filing in `tools/gen-profiles/src/recipes.rs`: two committed
+synthetic fixtures push **byte-identical tag data** into the two tags that a
+rendering intent selects between — the same `Vec<u8>`, cloned, under both
+signatures, on both the forward and the reverse side. The recipes say so in a
+comment and give a **stated, legitimate reason**: holding the tables equal is
+what lets a *different* property be attributed cleanly.
+
+★★ **Both halves matter and neither may be dropped:**
+
+1. **It is deliberate and documented**, so it is not a defect. The reason is
+   written where the bytes are made, which is exactly right.
+2. ★★★ **It is nonetheless a zero-separation pair**, so **no test may ever use
+   those two fixtures to demonstrate that the intent selected the tag it
+   should have.** Such a test would pass identically if the selection were
+   inverted, hard-coded, or absent.
+
+⇒ **§2's enumeration, applied to material this project owns, returns a real
+answer on the first try.** The fifth instance is also the one that shows the
+rule is not about licensed material, another project's files, or captures: it
+is about **differentials**, and this repository authors them too.
+
+★ **A companion fact from the same read, recorded because it is the positive
+case and the contrast is the lesson:** a third committed pair *does* carry
+deliberately different tables in those two tags, with a **separation floor**
+asserted in a test and a comment explaining that without the floor the
+headline assertion beside it would be vacuous — and that floor was **proved
+capable of failing by injection**, by regenerating the fixtures with the
+separation removed and watching the control go red while the headline test
+stayed green. **That is §4's remedy already implemented, by the party that met
+the problem first.** `ROADMAP.md`'s companion entry filed today names the file.
+
+#### 6. What this entry does NOT claim
+
+1. **That any figure from the sweep is correct, or that any of its rows was
+   re-measured here.** ★★★ This role has no shell. It opened no image, ran no
+   conversion, computed no distance, and executed nothing.
+2. **That the occasioning material may be characterised in this repository.**
+   ★★ `CLAUDE.md` **rule 11**: the sweep's report is at
+   `docs/SUITE_COMPATIBILITY.md` **§12** — untracked — and this entry
+   **points at §12.2, §11.4 and §12.9 by section and reproduces no content of
+   any of them.** No figure, no identifier, no file name, no device colour and
+   no profile identity from that material appears above. **A pointer is not a
+   quotation.**
+3. **That §12.2's candidate is worthless.** ★ It is worthless **for the
+   proposition its name asserts**. Whether it tests something else, and
+   whether that something else is wanted, is `icc-conformance`'s call and is
+   not made here.
+4. **That the enumeration in §2 was performed for any existing test in this
+   repository other than the two fixture pairs named in §5.** ★★ It was not.
+   The rule is filed; the sweep of this project's own differentials against it
+   is **owed**, at `NUMERIC_CLAIMS.md` §7.33.
+5. **That anything was committed, pushed, tagged or published.**
+   ★ `.git/refs/heads/master` and `.git/refs/remotes/origin/master` both read
+   `3af2d87fd46115a5f9283508785c86ad3c95fdc7` *(**VERIFIED** — both are plain
+   text files, read at this filing; **unchanged across all four readings
+   today**)*. Per `DL-068` the two hashes are carried and **no push count is
+   derived from them**; the remote ref is a dated local reading, not a live
+   statement about the remote. **This filing's edits are in no commit.**
+6. **That any gate ran.** ★★ `tools/check-suite-name-absent.py` was **read in
+   full** at this filing and its two rules — contents and file names — applied
+   by hand to every line written here. **It was not executed; this role has no
+   shell.**
+7. **That the request channel was touched.** ★★★ Instructed a fourth time not
+   to arm a monitor: **no file under `D:\Dev\FeatureRequests\` was listed,
+   opened or written at this filing.**
+
+**Revisit if:** the §2 enumeration is applied as a sweep across this project's
+existing differential tests, at which point its yield — including a yield of
+**zero** — belongs here as the first measurement of the rule's own value;
+**or** a sixth instance appears whose shared term is neither an observation
+path nor the mechanism under test, which would mean the two-corollary table in
+§1 is not exhaustive and the entry needs a third row rather than a footnote;
+**or** a differential is proposed whose arms share the mechanism under test
+**and is wanted anyway** for a stated reason, at which point the reason must
+be written beside it exactly as §5's fixtures write theirs — the defect and the
+deliberate choice look identical in the source, and only the comment
+distinguishes them.
+
+### DL-078 — ★★★ **a CALL THAT SUCCEEDED AND DID NOTHING is disclosed, never repaired — and the ambiguity being disclosed is the STANDARD'S, not ours. `Ok` from `with_bpc()` is not a claim that any pixel moves, and the CMM says so at the API rather than leaving the caller to read our source. Rule 6 — *the parser reports, it does not repair* — applied one layer up, to the colour engine**
+
+**Filed 2026-09-01** by `icc-librarian`, from `icc-engineer`'s dispatch.
+**First filing of this date.** Occasioned by a question from `pdfce`, not
+by our own testing — which is §4 below and is the part most likely to be
+lost.
+
+#### 1. The observation that forced the decision
+
+`iccce transform --bpc`, sRGB (v2 matrix/TRC) → U.S. Web Coated (SWOP) v2,
+over a 9³ = 729 point grid, ink units:
+
+| intent | `--bpc` | operands changed | max change |
+|---|---|---|---|
+| media-relative | succeeds | 727 / 729 | `0.243951` |
+| **perceptual** | **succeeds** | **0 / 729** | **0 — bit-identical** |
+| **saturation** | **succeeds** | **0 / 729** | **0 — bit-identical** |
+| ICC-absolute | **refused**, `BpcNotApplicable` | — | — |
+
+Filed as `NUMERIC_CLAIMS.md` **`NC-308` … `NC-319`**, §3.42, with the
+apparatus and the coverage. **The numbers are `[REPORTED]`** — this role
+has no shell.
+
+★★★ **The two zeros are CONFORMING.** ISO/CD 18619:2013 **4.2.5.5** clamps
+the fitted quadratic root with **`max(0, min(50, ·))`**; the roots came out
+at **`−1.274227`** (perceptual) and **`−1.248908`** (saturation), so both
+clamp to **`L* = 0`**. The **sRGB matrix/TRC source black is already at
+`L* = 0`**, so the two estimated black points coincide and the **4.2.6**
+map is the identity. Media-relative differs only because **4.2.5.4**'s
+mid-range-straightness short-circuit — which by **4.2.5.1** runs at
+relative colorimetric *and nowhere else* — returns `InitialLab` at
+**`L* = 11.772365`**.
+
+★ **The estimator was INSTRUMENTED rather than reasoned about**, and
+`icc-spec-librarian` **registered its predictions before the run**. The
+predicted `MinL` reproduced to six significant figures from an independent
+Pass 5c measurement, and the named defect risk (exit A firing; BT-leg
+substitutions) **did not occur**. That control is `NC-318`, and without it
+this entry would rest on one reading of our own code by the person who
+wrote it.
+
+#### 2. ★★★ THE DECISION, and why it is disclosure rather than repair
+
+**A successful `with_bpc()` that resolves to the identity is
+indistinguishable, at the API, from a BPC that could not be computed.**
+Three responses were available:
+
+| candidate | why not |
+|---|---|
+| **Repair** — substitute a different black when the fit clamps to zero | ★★★ **This is inventing a black point the standard does not specify.** It is `NA-009` all over again but worse: `NA-009` is a *labelled subset re-implementation inside a documented silence*; this would be a departure from a clause that is **not** silent — 4.2.5.5 states the clamp. |
+| **Refuse** — return an error when the map is the identity | ★★ **A conforming outcome is not an error**, and a refusal here would make `--bpc` fail on an entire, ordinary class of input (any matrix/TRC source). `DL-052` is the precedent running the other way: *a refusal that is awkward to propagate is a refusal that gets discarded.* |
+| **★ Disclose** — return `Ok`, and expose what was resolved | **Chosen.** |
+
+**What shipped** *(all verified in live source at this filing)*:
+
+- `BpcScale` retains the two black points it was built from;
+  **`source_black()`**, **`destination_black()`**, **`is_identity()`**
+  (`bpc.rs:448`, `:459`, `:474`).
+- **`Chain::bpc_disclosure()`** (`transform.rs:1128`), whose doc comment
+  states in terms that *"`with_bpc()` returning `Ok` is not a claim that
+  any pixel moves"*.
+- `with_bpc`'s own doc comment carries **the measured table and the clause
+  trace** (`transform.rs:1078`–`:1097`).
+- The CLI prints the identity case **to stderr**, naming both black points
+  and the ambiguity (`main.rs:500`–`:527`). ★ **stderr, so stdout stays
+  clean for pipelines** — the same reasoning `USAGE` already uses.
+
+★★ **`is_identity()` is bit-exact, not tolerant, and that is a decision not
+an oversight.** The identity arises when the two black points are *equal*,
+which makes `a = (W−d)/(W−s)` an exact `1.0` because numerator and
+denominator are the **same expression**. ★★★ **A tolerance there would
+report "identity" for a map that is merely weak, which is a different
+claim** — and this project's whole discipline is that two different claims
+must not share a word.
+
+★ **Both new tests assert on the map's OUTPUT**, not on the predicate
+alone (`bpc.rs:507`, `:535`), and the second is the **negative** case. A
+predicate with no negative case certifies nothing: `is_identity()`
+hard-coded to `true` would pass the positive test.
+
+#### 3. ★★★ THE AMBIGUITY IS THE STANDARD'S, AND THAT IS WHY DISCLOSURE IS THE HONEST ANSWER
+
+`ICC_Spec` register **`A63`** *(filed this session by
+`icc-spec-librarian`; `[REPORTED]` — this role did not open the corpus)*:
+**ISO/CD 18619 4.2.5 has four distinct exits that all return `(0,0,0)`** —
+the invalid-ramp exit (4.2.5.3), the `|SP| < 3` exit, the
+non-positive-discriminant exit, and the clamped-root path — **and 4.2.6
+then erases the difference between them.**
+
+★★★ **So no downstream observation can recover which exit fired.** A CMM
+that returns only the converted values has thrown away information the
+caller cannot get back by any means, including re-running. **That is not a
+gap in our API; it is a gap in the procedure, and our API is the only
+place it can be surfaced.**
+
+> ★★★ **This is `CLAUDE.md` rule 6 — *the parser reports; it does not
+> repair* — applied to the CMM.** The rule was written about a malformed
+> **tag**: a silently corrected tag hides the malformation from the only
+> layer that could disclose it. The identical argument holds one layer up.
+> **A CMM that quietly substitutes a black point when the clause's clamp
+> produces a degenerate one hides a specification ambiguity from the only
+> layer that could disclose it** — and unlike the parser case, the caller
+> here is a *different project* with its own conformance obligations.
+
+★★ **`A64`/`D11b` — the halves are not equally sourced, and must not be
+quoted as one behaviour.** The **v2 path is the sourced half**; the **v4
+`PERCEPTUAL_BLACK` short-circuit is the improvised one** (`NA-010`
+already registers that triple as following *the implementations'* values
+rather than ICC.1 Table 16's printed decimals). **A statement about "how
+iccce estimates the destination black" is two statements at two different
+evidence strengths.**
+
+★ **`M7` — the oracle has the same conflation, and this is `[REPORTED]` by
+SOURCE-READ, NEVER RUN.** lcms2 gates **both** its forced BPC **and** its
+fixed perceptual black on the **destination being v4**, so for a **v2**
+destination it runs the same 4.2.5 procedure and cannot distinguish the
+exits either. ★★★ **That is not a defence.** Rule 7: *lcms2 is an
+implementation, not the standard.* It is filed as `NC-319` with the
+weakest class this ledger carries, and **without a pin**, which §7.34
+records as owed.
+
+#### 4. ★★★ THE FINDING THAT IS NOT ABOUT COLOUR: **the API hole was found by a CONSUMER'S QUESTION, and this project's own testing had never noticed it**
+
+`Chain::with_bpc()` has existed since Pass 5. It has unit tests, a
+`TOLERANCES.md` section, `NA-009`, `NA-010`, and rows in this ledger. **No
+apparatus here had ever noticed that a successful call can be a complete
+no-op** — because every one of them was built to measure *what the map
+does*, and the case in question is the one where the map does nothing.
+
+**What found it was `pdfce` filing a request about its own use of the
+flag.** `DL-044` records the channel's existence; `CLAUDE.md` rule 10
+item 1 states its purpose in these words: ***"A consumer's real usage is
+the best available check on this library's API shape, and that check only
+works if this side asks. Not asking is the failure mode, not a
+courtesy."*** ★★★ **This is the first time that claim has been
+demonstrated with an outcome rather than asserted as a rationale.**
+
+★★ **The generalisable form, which is the reason this is in the decision
+log and not only in a session entry:** ***our own tests are written by the
+people who know what the code is for, so they exercise the paths the code
+is for. A consumer exercises the paths the code is IN.*** The blind spot
+is structural and no amount of internal diligence closes it — this is
+`DL-051`'s shape (*a suite's power is per-defect, not per-suite*; the
+best-documented constant was caught by none of six injections) arriving
+from **outside** rather than from an injection.
+
+★ **A second, smaller instance in the same dispatch**: `pdfce` flagged a
+stale `README.md` Pass 4 status row **twice, across two files**, before it
+was corrected. **The second flag should not have been necessary** — that
+is `DL-062`/`DL-068` instance **#7**, and it is the first found by a
+reader outside this project.
+
+#### 5. What this entry does NOT decide
+
+1. **Not that the no-op is DESIRABLE.** It is *conforming*, which is a
+   different word. Whether a CMM should ship a BPC that is the identity
+   wherever the source is a matrix/TRC profile is an engineering question
+   **left open**.
+2. **Not that `--bpc` "does nothing at perceptual".** ★★★ **That sentence
+   is FALSE as a general statement.** `NC-313`'s zero is a property of
+   *this source's black* meeting *this destination's clamped root*. A LUT
+   source whose black is not at `L* = 0` gives a non-identity map at the
+   same intents.
+3. **Not a ΔE.** Every figure above is in **ink / colorant tint**. None may
+   be restated in colorimetric units.
+4. **Not that the disclosure GATES anything.** ★★ `DL-037` exactly: it is a
+   **report**, nothing branches on it, and `--bpc` behaves identically
+   whether or not the caller reads it. **Do not quote this entry as
+   evidence that a wrong BPC would be caught.**
+5. **Not that the estimator internals are permanently observable.** The
+   instrumentation that produced `NC-315` … `NC-317` **has been reverted**;
+   §7.34 item 3 carries the question of a permanent feature-gated
+   disclosure.
+6. **Not that anything was committed.** ★★ `.git/refs/heads/master` and
+   `.git/refs/remotes/origin/master` both read
+   `3af2d87fd46115a5f9283508785c86ad3c95fdc7` *(**VERIFIED** — both loose
+   ref files read at this filing)*. Per `DL-068` the hashes are carried and
+   **no push count is derived**; the remote ref is a dated local reading.
+   **The code this entry describes is in no commit.**
+7. **Not that any gate ran.** `cargo test --workspace` green and clippy
+   clean are **`[REPORTED]`** by `icc-engineer`; this role has no shell.
+8. **Not that the request channel was touched.** ★★★ Instructed a fifth
+   time not to arm a monitor: **no file under `D:\Dev\FeatureRequests\` was
+   listed, opened or written at this filing.**
+
+**Revisit if:** a **LUT source** is measured against a LUT destination with
+`--bpc`, at which point the "identity" case should be checked to be absent
+and §1's table gains a second, non-degenerate column — **that is the
+measurement that would show the disclosure firing on a real workload rather
+than on a corner**; **or** ISO 18619 is published as a standard rather than
+a committee draft, at which point 4.2.5's four `(0,0,0)` exits should be
+re-read to see whether the published text distinguishes them, since
+**`A63` is a finding about a DRAFT**; **or** a caller is found branching on
+`bpc_disclosure()`, at which point the disclosure has become a **gate** and
+`DL-037`'s distinction has to be re-applied deliberately rather than
+inherited.

@@ -124,9 +124,17 @@ found something.
 
 ## Status
 
-**Early, and in active development.** Version `0.1.0` — read from the
-workspace manifest on 2026-08-21, which is the authoritative source; this
-line previously said `0.0.1` and had been wrong since the manifest moved.
+**Early, and in active development.** Version `0.3.0` — read from
+`Cargo.toml`'s `[workspace.package]` on 2026-09-01, which is the
+authoritative source.
+
+★ **This line has now been stale twice** (`0.0.1` when the manifest said
+`0.1.0`; `0.1.0` when it said `0.2.0`), and the second time it was stale
+*despite* naming its own verification method and date — because a version
+bump lands in a commit that has no reason to touch this file. **A prose
+copy of a machine-readable fact decays silently.** If it goes stale a
+third time, the fix is not a better sentence: it is to stop restating the
+number here and point at the manifest.
 **Nothing has been published to crates.io**, the API is not stable, and no
 compatibility is promised between commits.
 
@@ -140,7 +148,7 @@ it. **Pass numbers are filing order, not schedule order.**
 | 1 | Colorimetry — `iccce-color` | **Core complete and validated**, deliberately not called "done" — see below |
 | 2 | Profile parsing — `iccce-profile` | **Done** |
 | 3 | Matrix/TRC transforms | **Done** |
-| 4 | LUT transforms and rendering intents | **In progress** — saturation in `B2A`, and the ICC-absolute intent, remain |
+| 4 | LUT transforms and rendering intents | **Done** — all four intents measured against lcms2 in both directions, including `B2A2` saturation and ICC-absolute |
 | 5 | Black point compensation | **Done on stated terms**, and the terms are load-bearing — see below |
 | 6 | Performance — compiled transforms | Code has landed; **its measurement is not yet filed in the ledger** |
 | 7 | Named colours and spot colour | Code has landed and is reachable; **not yet measured** |

@@ -1229,6 +1229,27 @@ spawned to build or evaluate a transform**, because the `wasm32` CI job
 code changed, no tolerance moved, and nothing was measured by this
 project.**
 
+**★★★ Updated 2026-09-01 (the `--bpc` no-op filing) — Pass 5 acquires a
+measured, CONFORMING no-op, an API that discloses it, and TWO
+documentation corrections that were both flagged from outside this
+project.** `iccce transform --bpc`, sRGB (v2 matrix/TRC) → U.S. Web Coated
+(SWOP) v2, **729 grid operands, ink units**: media-relative changes
+**727/729** (max **`0.243951`**); ★★★ **perceptual and saturation change
+`0` of `729` — bit-identical**; ICC-absolute is refused by name. The zeros
+are **conforming** — ISO/CD 18619:2013 **4.2.5.5**'s `max(0, min(50, ·))`
+clamp takes fitted roots of **`−1.274227`** / **`−1.248908`** to
+**`L* = 0`**, which is where the matrix/TRC source black already is, so the
+**4.2.6** map is the identity. Twelve rows, **`NC-308` … `NC-319`**, at
+`NUMERIC_CLAIMS.md` **§3.42**; the decision at `ARCHITECTURE.md`
+**`DL-078`** — ★★ **a successful `with_bpc()` that resolves to the identity
+is indistinguishable at the API from one that could not be computed, and
+`ICC_Spec` `A63` makes that ambiguity the STANDARD'S (four exits of 4.2.5
+all return `(0,0,0)`; 4.2.6 erases the difference) — so the answer is
+disclosure, never repair.** ★★★ **The hole was found by a CONSUMER'S
+QUESTION, not by our testing** — every apparatus built for BPC was built to
+measure *what the map does*. **`TOLERANCES.md` was not touched.** See the
+new dated block under **Pass 5** and the README-currency block below it.
+
 ---
 
 ## Pass 0 — scaffold and the oracle
@@ -4198,6 +4219,129 @@ assert the *refusal* (**NC-136**) is superseded by one asserting the
 wired path reaches **the same black** the library function does
 (**NC-144**, at the CLI's own 10⁻⁶ print floor).
 
+### ★★★ 2026-09-01 — **`--bpc` succeeds, conforms, and changes NOTHING at two intents out of four.** The Pass acquires a measured no-op, an API that discloses it, and the finding that a CONSUMER'S QUESTION found what none of this project's own apparatus had
+
+**Filed 2026-09-01** by `icc-librarian` on `icc-engineer`'s dispatch.
+★★ **Every figure below is `[REPORTED]`** — this role has no shell. **The
+code and the numbers are in NO COMMIT**: `refs/heads/master` and
+`refs/remotes/origin/master` both read **`3af2d87`** *(**VERIFIED** — loose
+ref files read)*.
+
+#### The measurement
+
+sRGB (v2 matrix/TRC) → U.S. Web Coated (SWOP) v2, **9³ = 729** point grid,
+**ink / colorant tint units — no ΔE, anywhere, and none may be derived**.
+★ Both files are **Windows system profiles**, not suite material, so rule
+11 does not reach any figure and the numbers are tracked in full at
+`NUMERIC_CLAIMS.md` **§3.42**.
+
+| intent | `--bpc` | operands changed / 729 | max change | row |
+|---|---|---:|---:|---|
+| media-relative | succeeds | **727** | **`0.243951`** | `NC-312` |
+| **perceptual** | **succeeds** | ★★★ **0** | ★★★ **0 — bit-identical** | `NC-313` |
+| **saturation** | **succeeds** | ★★★ **0** | ★★★ **0 — bit-identical** | `NC-313` |
+| ICC-absolute | **refused**, `BpcNotApplicable` | — | — | `NC-314` |
+
+Also measured, and it answers a separate question the consumer asked —
+**does the matrix/TRC intent collapse reach a LUT destination? It does
+not**: pairwise intent separations of **`0.464373`** (media-relative vs
+saturation, 726/729 differing), **`0.335783`**, **`0.153198`** and
+**`0.357095`** (`NC-308` … `NC-311`). ★★★ **Those four are SEPARATION
+rows, not accuracy rows — no oracle is in any of them.** The accuracy
+anchor for this pair and direction is **`NC-114`** at **`1.550000e-4`**
+device against lcms2, which is **213 RGB points at saturation only** — a
+different operand set, and it prices one arm of the four.
+
+#### Why the zeros are CONFORMING, and the mechanism was instrumented rather than assumed
+
+**ISO/CD 18619:2013 4.2.5.5** fits a quadratic through the shadow points
+and clamps its root with **`max(0, min(50, ·))`**. At perceptual the root
+came out at **`−1.274227`**, at saturation **`−1.248908`** — **both
+negative, both clamped to `L* = 0`.** The **sRGB matrix/TRC source black is
+already `L* = 0`**, so the two estimated black points coincide and the
+**4.2.6** map is the **identity**. **Media-relative differs** only because
+**4.2.5.4**'s mid-range-straightness short-circuit — which by **4.2.5.1**
+runs at relative colorimetric *and nowhere else* — returns `InitialLab` at
+**`L* = 11.772365`**. Internals at `NC-315` … `NC-317`.
+
+★★ **`icc-spec-librarian` registered its predictions BEFORE the run** and
+the predicted `MinL` reproduced to **six significant figures** from an
+independent Pass 5c measurement; exit A (invalid ramp) did **not** fire and
+**no BT-leg substitutions occurred** — the named defect risk, pre-registered
+and absent (`NC-318`). ★ **Without that control the internals are one
+reading of our own code by its author, from a build that no longer
+exists** — the instrumentation has since been reverted.
+
+#### ★★★ The decision: disclose, never repair — and the ambiguity is the STANDARD'S
+
+`ARCHITECTURE.md` **`DL-078`**. A successful `with_bpc()` that resolves to
+the identity is **indistinguishable at the API from a BPC that could not be
+computed**, and `ICC_Spec` **`A63`** makes that ambiguity the procedure's
+rather than ours: **four exits of 4.2.5 all return `(0,0,0)`, and 4.2.6
+erases the difference between them.** Repairing it means inventing a black
+the clause does not specify; refusing turns a conforming outcome into an
+error on an entire ordinary class of input. **Disclosure was chosen** —
+`BpcScale::{source_black, destination_black, is_identity}`,
+`Chain::bpc_disclosure()`, and a CLI notice on **stderr**.
+
+> ★★★ **This is `CLAUDE.md` rule 6 — *the parser reports; it does not
+> repair* — applied one layer up.** A silently substituted black point
+> hides a **specification ambiguity** from the only layer that could
+> disclose it, exactly as a silently corrected tag hides a malformation.
+
+★ **`M7`, `[REPORTED]` by SOURCE-READ and NEVER RUN**: lcms2 gates **both**
+its forced BPC **and** its fixed perceptual black on the destination being
+**v4**, so on a **v2** destination it has the same conflation. **Rule 7 —
+that is not a defence.** Filed as `NC-319`, **without a pin**, which is
+owed.
+
+#### ★★ What this block does NOT add to Pass 5
+
+- ★★★ **It does not strengthen Pass 5's grade.** No tolerance was minted,
+  **`TOLERANCES.md` was not touched**, and every row is
+  `REPORTED, NOT GRADED` or behavioural.
+- ★★★ **It does not license *"`--bpc` does nothing at perceptual"*.** That
+  sentence is **false as a general statement** — the zero is a property of
+  *this source's black* meeting *this destination's clamped root*. Any LUT
+  source whose black is not at `L* = 0` gives a non-identity map at the
+  same intents.
+- **It does not close the `--bpc` + `--preserve-black` gap**, which remains
+  untested at every layer, unchanged since Pass K.
+- ★★★ **It does not protect its own numbers.** No test, no difftest record
+  and no CI job asserts any of the twelve rows; the two unit tests added
+  assert the **identity predicate on synthetic black points**, not the SWOP
+  measurement.
+
+### ★★ 2026-09-01 — README currency, and BOTH corrections were flagged from OUTSIDE this project
+
+| # | the claim | status |
+|---|---|---|
+| **7** | `README.md`'s Pass 4 row — *"In progress — saturation in B2A, and the ICC-absolute intent, remain"* | ★★ **CORRECTED.** `README.md:143` now reads **`Done`** *(**VERIFIED** at source 2026-09-01)*, justified by this document's own **line 3556**: *"★ MET AT LAST, and this was the clause that failed."* ★★★ **`pdfce` flagged the staleness TWICE, across two files.** The second flag should not have been necessary |
+| **8** | `README.md:127` — *"Version `0.1.0` — read from the workspace manifest on 2026-08-21, **which is the authoritative source**"* | ★★★ **STILL WRONG.** The manifest reads **`version = "0.2.0"`** *(**VERIFIED** — `Cargo.toml:40`)*. Found by this librarian at this filing; **not carried by the dispatch.** Owed to `icc-engineer` — `NUMERIC_CLAIMS.md` §7.34 item 5 |
+
+★★★ **Instance 8 is the sharpest demonstration `DL-062` has produced.**
+The sentence **names its own verification method and its own date** and
+still went stale — because what invalidated it was the `0.2.0` version
+bump, **in somebody else's commit**, which is precisely the mechanism
+`DL-062` describes and precisely why *"re-verify at commit time"* is not
+sufficient. ★ A **version** is worse than an ordinary stale number: it is
+what a reader uses to decide **which documents apply at all**.
+
+★★ **Neither file was edited by this role** — both are `icc-engineer`'s,
+and `DL-062`'s ownership clause says to file the owed item and name the
+owner rather than reach into another role's document.
+
+★ **A related sweep, recorded so it is not re-run blind:** **101
+occurrences of `--bpc` across 16 files** were enumerated and every tracked
+hit read. **No tracked document claims `--bpc` changes any value.** What
+exists is `docs/FEATURES.md:70`–`72` enumerating **two** outcomes where
+there are **three** — nothing in it is false, which is why it survives a
+sweep for wrong statements, and a reader still concludes that a call which
+is not refused does something. **Owed to `icc-engineer`.**
+★★ **`docs/SUITE_COMPATIBILITY.md` was searched by name**, because it is
+gitignored and a gitignore-respecting search under-counts toward a false
+all-clear.
+
 ## Pass 6 — performance
 
 Compiled transforms, caching, a benchmark on a page-sized raster. Only
@@ -6410,3 +6554,150 @@ the Pass was for.** What can be judged is what the work claims:
 6. **The third `profileID` test is not shown to be discriminating** —
    `2 of 3` turn red on reverting; **`2 of 3` is not *"proven by
    mutation"***. §7.26 item 3.
+
+---
+
+## ★★★ Fixture gap — **rendering-intent TAG SELECTION**, and the gap is NARROWER AND SHARPER than the dispatch that proposed it. Opened 2026-08-28 by `icc-librarian`. **Not a Pass; a scoped gap with a cheap first row already available**
+
+**Filed 2026-08-28** by `icc-librarian` on `icc-engineer`'s dispatch,
+**after checking the dispatch's premise against live source and finding it
+false.** The correction is recorded first, because the false version is the
+one that would have been acted on and because **an overstated gap is
+expensive in exactly the way a understated one is not**: it buys fixtures
+that duplicate coverage that already exists, and it does so under a done-when
+that reads as urgent.
+
+★ **Nothing in this section is suite-derived.** `CLAUDE.md` rule 11 is not
+engaged: every fixture, tag and test named below is authored by
+`tools/gen-profiles` or lives under `crates/`, and the gap can be stated —
+as it is here — without reference to any licensed material.
+
+### 1. ★★★ The dispatch's premise, and what live source says
+
+> **As dispatched:** *"no committed fixture carries an `A2B1` or a `B2A1` tag
+> at all. Every LUT fixture stops at `A2B0`/`B2A0`. So intent→tag selection
+> has zero regression coverage, and a change that silently used `A2B0` at
+> media-relative would pass CI green."*
+
+**Both sentences are false, and the third does not follow.** Checked at this
+filing against `fixtures/synthetic/`, `fixtures/synthetic/MANIFEST.md`,
+`tools/gen-profiles/src/recipes.rs` and `crates/`:
+
+| the claim | status | what is actually there |
+|---|---|---|
+| *"no committed fixture carries an `A2B1`"* | ★★★ **FALSE** | **Four do.** `v2-rgb-header-intent-perceptual.icc`, `v2-rgb-header-intent-relative.icc`, `v4-rgb-mab-chromatic-black.icc`, `v4-rgb-mab-floored-b2a.icc` |
+| *"…or a `B2A1` tag at all"* | ★★ **FALSE** | **Two do** — both `mBA `: `v4-rgb-mab-chromatic-black.icc` and `v4-rgb-mab-floored-b2a.icc` |
+| *"every LUT fixture stops at `A2B0`/`B2A0`"* | **FALSE** | see above; the `MANIFEST.md` rows say so in their own `Contents` column |
+| *"intent→tag selection has zero regression coverage"* | ★★★ **FALSE for the forward, `mft2`, perceptual-vs-media-relative case** | `crates/iccce-cli/tests/header_rendering_intent_not_consumed.rs` — `the_control_two_named_intents_do_change_the_output` |
+| *"a change that silently used `A2B0` at media-relative would pass CI green"* | ★★★ **FALSE, and this is the load-bearing one** | that control asserts a **separation floor of `0.02` device units** between the two intents on `v2-rgb-header-intent-perceptual.icc`, at **both** the library surface and the CLI. The named defect collapses the separation to **exactly zero** and the assertion fires with *"the two intents are only 0.000000 apart"* |
+
+★★ **The existing control is not incidental — it was built for this hazard
+and proved capable of failing by injection.** Its module header records that
+`intent_split_mft2` was patched to emit the same table for both intents, the
+fixtures regenerated, and the result watched: the headline assertion **still
+passed, vacuously**, while the control failed with the zero-separation
+message. **That is `DL-077` §4's remedy already implemented**, by the party
+that met the problem first, roughly ten days before the theorem was written
+down.
+
+### 2. ★★★ What IS uncovered — four items, stated so each can be closed independently
+
+The gap survives, smaller and in places the dispatch did not look. **These
+are the rows worth buying.**
+
+| # | uncovered | why nothing catches it today | severity |
+|---|---|---|---|
+| **1** | ★★★ **The DESTINATION side: `B2A0` vs `B2A1`** | `iccce-cmm`'s `transform.rs` selects `B2A0`/`B2A1`/`B2A2` by intent in its own `match`, **a separate site from the forward one**. The only two committed fixtures carrying `B2A1` push **byte-identical bytes** into `B2A0` and `B2A1` — deliberately, with a stated reason, and therefore **zero separation** (`DL-077` §5). A defect selecting `B2A0` at media-relative on the destination side is invisible to every fixture in the tree | ★★★ **highest.** A live, intent-driven selection with **no separating fixture anywhere** |
+| **2** | ★★ **Saturation: `A2B2` / `B2A2`** | **no synthetic fixture carries either tag.** `recipes.rs` says so of its own two v4 recipes — *"no `gamt`, no `A2B2`/`B2A2`"*. Both `match` arms in `transform.rs` are therefore unexercised by any committed fixture | ★★ **high**, and the cheapest to describe: an entire intent's selection path |
+| **3** | ★ **The `mAB `/`mBA ` element pipeline's selection** | the one separating pair is **v2 `mft2`**. No v4 `lutAToBType` fixture separates `A2B0` from `A2B1`, so the selection is covered on the legacy tag type only | ★ **medium** — the `match` is shared, but the tag-fetch path is not |
+| **4** | **`Intent::Absolute` cannot be separated from `Intent::MediaRelative` at this layer** | ★ **by design, not by omission.** `transform.rs` maps both to `A2B1`/`B2A1` in one arm. Recorded so a later reader does not file it as a gap: **a fixture cannot distinguish them because the code does not**. Whether that mapping is right is a **clause question**, not a fixture question, and is not opened here |
+
+★★★ **Item 1 and `DL-077` are the same statement.** The two v4 fixtures are
+not defective — their comment explains that holding the tables equal is what
+lets a *different* property be attributed cleanly, and that is sound. **What
+must not happen is either fixture being cited as evidence that intent
+selection works on the destination side.** It cannot show that, in either
+direction, under any implementation.
+
+### 3. ★★★ The construction constraint any new fixture must satisfy — and it must be ASSERTED, not merely observed
+
+> **A fixture whose two intent tags are copies of each other has zero
+> separation and passes for the wrong reason.** `ARCHITECTURE.md` **`DL-077`**
+> §4.
+
+**The remedy is a lower bound asserted in the test, not care taken while
+authoring the fixture.** Care does not survive a regeneration, a recipe edit,
+or a later hand deciding the two tables might as well be shared. Two shipped
+precedents to copy, both already in this repository:
+
+- `header_rendering_intent_not_consumed.rs`'s `SEPARATION_FLOOR` — set **an
+  order of magnitude below the MEASURED separation**, not below the design
+  intent, with the reasoning written at the constant; and its **clipping
+  guard**, which separately asserts no output channel sits at a rail, because
+  two different PCS values clipped onto one device value would erase the
+  separation just as thoroughly as equal tables would.
+- Pass L's `srgb_trc_variant_is_selectable.rs` — a **window** rather than a
+  ceiling, whose lower bound exists precisely so that a collapse to exactly
+  zero **fails** instead of passing a ceiling-only assertion.
+
+★ **And the bound is not enough on its own: the fixture pair must be proved
+capable of failing by injection** — regenerate with the separation removed
+and watch the control go red. `DL-064`: a green run is the floor; the red
+runs are what discharge the debt.
+
+### 4. ★★ The cheap row that should be SPLIT OUT and not blocked behind the other three
+
+`icc-engineer` reports that the **type-3 parametric-curve** row can enter CI
+today with **no licensed input**, because
+**`fixtures/synthetic/v4-rgb-para-type3.icc` already exists** *(★ **VERIFIED**
+at this filing — the file is present in `fixtures/synthetic/` and is
+documented in `MANIFEST.md`)*, and that a **derived-expectation** check
+against it returns agreement at **`5e-10`**.
+
+★★ **That figure is `[REPORTED]` by `icc-engineer` and is NOT verified here.**
+This role has no shell and ran nothing. **No `NC-` identifier is assigned to
+it** and none may be quoted from this section — the next free remains
+**`NC-308`**.
+
+★★★ **And it is not in CI today.** Verified by grep at this filing: the
+string `para-type3` appears in `docs/NUMERIC_CLAIMS.md`,
+`tools/gen-profiles/src/recipes.rs`, `tools/gen-profiles/README.md` and
+`fixtures/synthetic/MANIFEST.md` — and **in no file under `crates/` or
+`tools/difftest/`**. ⇒ **Nothing in `cargo test` and nothing in the
+differential harness consumes that fixture.** The fixture exists; the check
+does not, yet.
+
+⇒ **Split it out.** It shares nothing with items 1–3 of §2 except the word
+*fixture*: it needs no new profile authored, no separation designed, and no
+clause settled. **Bundling it behind them buys nothing and delays the only
+row that is free.** ★ When it lands it is owed an `NC-` row with its class
+stated — see §5.
+
+### 5. ★ One classification question this section deliberately leaves open
+
+A derived expectation computed from **a file this project did not author**
+is **not what `NUMERIC_CLAIMS.md` §1's `derived-expectation` row defines** —
+that definition requires *"the bytes of a **synthetic fixture this project
+authored**."* ★ The type-3 row in §4 **is** on a fixture we authored and is
+therefore squarely inside the class. **Two rows from the same sweep are
+not**, and that question is carried at `NUMERIC_CLAIMS.md` §7.33 rather than
+answered here, because §1 is that document's to change and because §7.18
+newly-owed 6 records what happens when a shape §1 does not enumerate gets
+quietly filed under the nearest strong-sounding class it fits.
+
+### Done-when
+
+**Written in advance, per this file's own standard**, and deliberately
+**not** phrased as "four fixtures exist":
+
+| # | condition |
+|---|---|
+| 1 | ★★★ A committed fixture separates **`B2A0` from `B2A1`**, and a test asserts a **lower bound** on that separation, **proved capable of failing by injection** |
+| 2 | ★★ A committed fixture carries **`A2B2`** and/or **`B2A2`**, with a test that fails if the saturation arm of either `match` is changed to select another tag |
+| 3 | ★ A **v4 `mAB `/`mBA `** pair separates `A2B0` from `A2B1`, so the selection is covered on both tag types |
+| 4 | The **type-3 parametric-curve** check is in `cargo test` **or** the difftest harness, with an `NC-` row carrying its class and its runner (`DL-031`) |
+| 5 | ★★ Every fixture added under 1–3 has its **shared terms enumerated** per `DL-077` §2, and the enumeration is written **beside the fixture**, not in a session log |
+
+**NOT in the done-when, and stated so it is not read in:** whether
+`Intent::Absolute` should select its own tag (§2 item 4) — that is a clause
+question for `icc-spec-librarian`, and no fixture can answer it.

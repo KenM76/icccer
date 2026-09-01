@@ -2,7 +2,274 @@
 
 ---
 
-# ★★★ HANDOFF — 2026-08-21. Seven commits, PUSHED. Two real defects found and fixed.
+# ★★★ HANDOFF — 2026-08-29. **Nothing is committed.** Four documents grew, no code changed, and the two things a reader is most likely to get wrong are both about UNITS and TARGETS
+
+**Read this block first. It supersedes the 2026-08-21 block below and
+anything else that conflicts.** Everything below is otherwise still the
+reference — **except** the six statements enumerated in "What the 2026-08-21
+block now gets wrong", which are false and must not be acted on.
+
+**Filed by `icc-librarian`, which has no shell and ran nothing.** Every
+statement here is either read from live source at this filing (**[VERIFIED]**)
+or attributed to the session that measured it (**[REPORTED]**). ★ Nothing was
+committed, pushed, tagged or published, and **this block authorises none of
+those** (rule 9).
+
+★ **Session span:** the work described here ran across **2026-08-28 and
+2026-08-29** — the fourth filing of 2026-08-28 and the §11.10 measurement of
+2026-08-29 are one continuous session that crossed midnight. Where a date
+matters below it is stated; do not assume one date for the lot.
+
+## Do this first, exactly as every previous block says
+
+1. **List `D:\Dev\FeatureRequests\iccce_FeatureRequests\open\`.**
+   ★ **It is 22 files** *(**[VERIFIED]** — listed at this filing)*, up from 8
+   at the last handoff. **Read `INDEX.md` before `open/`** — it is the memory,
+   and a row there is cheaper than reading a file in `open/`.
+   ★★ **Nothing is owed in either direction as of 2026-08-29**, and this was
+   **checked rather than carried forward**: every `open/` file whose
+   `**from:**` header reads `pdfce` is either marked *informational, no reply*
+   or has a named answer in the folder. Both of our long-outstanding asks —
+   the profile-population census and the header/tag channel disagreement —
+   were **answered together on 2026-08-27**, and our own coupled
+   output-intent request was answered **2026-08-25**. The last exchange
+   (2026-08-29) ends with our reply saying *"nothing owed back."*
+   ★ **A large `open/` is not a backlog.** Files stay there when the exchange
+   has no durable in-git home to point at; see the "one exchange that cannot
+   be closed" note in `INDEX.md`.
+2. **Re-arm the 15-minute channel poll.** Monitors die with the session.
+   ★ **Tell every dispatched subagent NOT to arm its own** — they inherit
+   `CLAUDE.md` rule 10 and each arms a duplicate that cannot be stopped
+   mid-session. **[REPORTED]** by `icc-engineer`: **six dispatches this
+   session, six prevention clauses, zero duplicate monitors.** That is the
+   second consecutive session in which the clause worked. **Keep using it.**
+   ★ **The monitor echoes your OWN writes.** Requests flow both ways and
+   filenames carry no direction — **read the file's `**from:**` header before
+   treating an event as inbound.** **[REPORTED]**: it fired that way **four
+   times** this session.
+
+## Ref hashes — no push count, deliberately (unchanged reasoning, `DL-068`)
+
+| | |
+|---|---|
+| `.git/refs/heads/master` | **`3af2d87fd46115a5f9283508785c86ad3c95fdc7`** |
+| `.git/refs/remotes/origin/master` | **`3af2d87fd46115a5f9283508785c86ad3c95fdc7`** |
+
+*(**[VERIFIED]** — both are plain text files; read directly at this filing.)*
+
+★ **A ref file records what the last fetch or push OBSERVED, never the
+remote's present contents.** It supports *"these two matched at that
+moment"* and **no publication claim beyond it.**
+
+★★★ **Do not reintroduce a "N commits ahead" line.** The 2026-08-21 block's
+explanation of why is still right and is still the reason this refresh is
+cheap to trust: the count went stale five times, **nothing in any handoff ever
+depended on it** (pushing is unauthorised regardless of what it says), and
+**`4` and `0` look identical in authority**. Carry the two hashes.
+
+## State of the tree
+
+| | |
+|---|---|
+| tip | **`3af2d87`** [VERIFIED] |
+| ★ working tree | **NOT clean.** This session's edits are **in no commit**: `ARCHITECTURE.md`, `ROADMAP.md`, `NUMERIC_CLAIMS.md`, `TOLERANCES.md`, `SESSION_LOG.md`, `.claude/agent-memory/`, and the **untracked** `docs/SUITE_COMPATIBILITY.md`. **[REPORTED]** by `icc-engineer`; this role cannot run `git status`. ★ Do not commit by `git add -A` — `DL-073` |
+| `cargo test --workspace` | **205 passed, 0 failed** — **[REPORTED]**, measured by `icc-engineer` this session |
+| difftest | **`pass=374 fail=0 skip=9 error=0`** — **[REPORTED]**, same |
+| ★ what those two numbers do NOT cover | **no code changed this session.** They are the same figures the 2026-08-21 block carried, re-measured five commits later. They are `apparatus-census` in character and **carry no `NC-` id** (`DL-031`: a count is not an inventory) |
+| ledger | **`DL-077`** is last; next free **`NC-308`** / **`NA-013`** / **`DL-078`** [VERIFIED] |
+
+## Where the session landed — by pointer, not by figure
+
+★★★ **`CLAUDE.md` rule 11 governs everything below.** The measurements were
+taken off **licensed** material, so **no figure, patch identifier, operand
+value, device colour, profile identity or file name from it appears in this
+tracked document.** Point at the section; a pointer is not a quotation.
+
+| document | what it gained |
+|---|---|
+| `docs/SUITE_COMPATIBILITY.md` *(untracked — `.gitignore:50`)* | **§11.8**, **§11.9**, **§11.10** and the whole of **§12** |
+| `docs/ARCHITECTURE.md` | **`DL-074`**, **`DL-075`**, **`DL-076`**, **`DL-077`** [VERIFIED — all four read at this filing] |
+| `docs/ROADMAP.md` | the **rendering-intent tag-selection fixture gap** — see below; it is **explicitly NOT a Pass** |
+| `docs/NUMERIC_CLAIMS.md` | **§3.40**, **§3.41**, **§7.30–§7.33** — four consecutive **partial** status re-checks, and **not one number entered the document at any of them** |
+
+## ★★★ THE TWO THINGS A FUTURE SESSION WOULD OTHERWISE GET WRONG
+
+These are the reason this refresh was requested, and they are first.
+
+### 1. `DL-070` and `DL-076` are UNIT rules, and they bind harder than they look
+
+> **A capture-derived comparison is stated in 8-bit counts — whoever is on
+> the other side of it.** Not a ΔE. Not a Lab distance. Counts.
+
+**Several figures filed earlier in this same session were WITHDRAWN** — not
+because the arithmetic was wrong, but because the **unit was inadmissible**.
+The arithmetic used this project's own tested code and was sound. *"Correctly
+computed"* and *"admissible"* are different properties.
+
+★ **`DL-076` is the sharp edge and it is counter-intuitive:** a display
+transform common to both sides **cancels in a difference** but, being
+**non-linear, does not preserve distance**. So cancellation licenses the
+*comparison* and **not the unit** — which means `DL-070` reaches **even a ΔE
+taken between two objects of a single render**. `DL-074`'s evidence class
+survives intact and loses no result; **one paragraph of it was narrowed, and
+nothing was exempted.**
+
+★★ **The worked example is the withdrawal blocks in `SUITE_COMPATIBILITY.md`
+§11.3** (and the provenance rows at §11.7). Read them before computing any
+distance that has a screen capture anywhere in its lineage. ★ Also read
+`DL-075`: the prohibition **did not prevent** the number — its author
+re-derived `DL-070`'s own reasoning from first principles, wrote it down as a
+disclosed limit, and computed the figure anyway. **A prohibition buys
+NAMEABILITY afterwards, not prevention.**
+
+★ A ΔE stays lawful where **no capture is anywhere in the path**. §11.6,
+§11.10's iccce column and all of §12 are computed through profiles, not off
+pixels, and are unaffected.
+
+### 2. ★★★ "iccce is closer to the reference" must NEVER harden into "tune iccce toward the reference"
+
+**This is the single most likely misreading of this session's output.**
+
+`SUITE_COMPATIBILITY.md` §11.9 and §11.10 both contain columns where **iccce
+is closer to a commercial renderer's capture** than the consumer is. §11.10
+also contains a region where **iccce is FURTHER and the consumer is closer**.
+
+> ★★★ **The capture is a REFERENCE, never a TARGET.** Rule 3 inverted —
+> treating another implementation's output as the thing to converge on — is
+> how a project quietly replaces colorimetry with imitation.
+
+★ §11.10 says this in its own words: the same conversion is **closer on one
+axis and further at the black end**, *"which engine is better" is the wrong
+question*, and **one number cannot summarise the table.** Do not let a later
+filing average it into one.
+
+## ★★ The open items, ranked — and the top one is NOT a defect
+
+1. ★★★ **The A42 black-point refusal — record it as ABSTENTION, NOT ERROR.**
+   `SUITE_COMPATIBILITY.md` §11.10 traces the **whole** black-end
+   disagreement to one cause: **we decline to estimate a black point on that
+   profile** — the estimator refuses by name rather than guessing — where the
+   reference implementation effectively assumes one.
+   > ★★★ **Refusing and being wrong look IDENTICAL in a results table.** Only
+   > the prose distinguishes them.
+   **A future session reading only the numbers will file this as a bug.** It
+   is rule 6's posture applied to estimation, and rule 4 is what requires the
+   *absence* of the approximation to be named beside the number. The open
+   question is whether iccce should offer an estimator here **at all** — an
+   engineering and clause question, **not** a defect to fix.
+2. ★★ **The `B2A0`/`B2A1` destination-side fixture gap** — see the next
+   section. Highest-value *buildable* item, and the only one with a written
+   done-when.
+3. ★ **The type-3 parametric-curve check is free and is not in CI.** The
+   fixture exists in `fixtures/synthetic/`; **nothing under `crates/` or
+   `tools/difftest/` consumes it** [VERIFIED by grep at the 2026-08-28
+   filing]. It needs no licensed input and no new profile authored. **Split
+   it out; do not block it behind the other three fixture items.**
+4. **The compiled path still has no difftest row**, and `TOLERANCES.md` §1
+   still does not enumerate the `derived-expectation` or
+   `intra-run-fixture-invariant` classes. ★ **Neither was re-checked at this
+   refresh** — `NUMERIC_CLAIMS.md` §7.33 §5 carries the full list of debts
+   explicitly marked NOT CHECKED, and that list is the authority, not this
+   one.
+5. **The standing debt is unmoved:** no `published-ground-truth` row for any
+   transform; `IEC 61966-2-1` still paywalled and unobtained; and
+   `NUMERIC_CLAIMS.md` §7.28 item 6 — **may published numbers from other
+   licensed sources live in this repository** — is **still open and was NOT
+   answered by rule 11**, which says so in terms.
+
+## ★★ The fixture gap in `ROADMAP.md` — filed with the dispatch's own premise corrected
+
+★ **It is filed as a scoped gap, NOT a Pass**, and the heading says so.
+
+**The dispatch that proposed it was FALSE in its load-bearing half**, and the
+correction is recorded above the gap because the false version is the one that
+would have been acted on:
+
+- *"No committed fixture carries an `A2B1` or a `B2A1`"* — **four carry
+  `A2B1`; two carry `B2A1`.**
+- *"Intent→tag selection has zero regression coverage"* — **a separation-floor
+  control already exists** (`crates/iccce-cli/tests/header_rendering_intent_not_consumed.rs`),
+  was built for exactly this hazard, and **was proved capable of failing by
+  injection** roughly ten days before the theorem it implements was written
+  down.
+
+> ★★ **An overstated gap is expensive in a way an understated one is not:** it
+> buys fixtures that duplicate existing coverage, under a done-when that reads
+> as urgent.
+
+**The surviving gap is real, and it is the DESTINATION side:** the only two
+committed fixtures carrying `B2A1` push **byte-identical payloads** into
+`B2A0` and `B2A1` — deliberately, with a stated and sound reason — and **no
+synthetic fixture carries `A2B2` or `B2A2` at all**. So an intent-driven
+selection on the destination side has **no separating fixture anywhere in the
+tree**.
+
+★★★ **That is a fifth instance of `DL-077`'s theorem inside our own
+repository** — *a differential tests only what DIFFERS between its arms; list
+what the two arms SHARE before trusting it.* The two fixtures are **not
+defective**; what must not happen is either being cited as evidence that
+destination-side intent selection works. **It cannot show that, in either
+direction, under any implementation.**
+
+★ **The remedy is an asserted lower bound, not care taken while authoring** —
+care does not survive a regeneration. Two shipped precedents to copy are named
+in the ROADMAP section, and `DL-064` applies: **a green run is the floor; the
+red runs are what discharge the debt.**
+
+## What the 2026-08-21 block now gets wrong — do not act on these six
+
+1. Its **ref-hash table (`533ea85`)** — both refs now read **`3af2d87`**.
+2. Its **"tip `533ea85`"** and **"working tree clean"** — five commits later,
+   and the tree carries uncommitted edits to five tracked documents.
+3. Its **"7 commits this session, PUSHED"** — true of that session, and it is
+   **not** a statement about this one. Nothing here is pushed.
+4. Its **channel line, "8 files"** — `open/` now holds **22**. *"Nothing owed
+   inbound"* happens to still be true, but **it was re-derived, not carried.**
+5. Its **"`DL-068` is last; next `NC-301`/`NA-013`"** — last is **`DL-077`**;
+   next free are **`NC-308`** / **`NA-013`** / **`DL-078`**.
+6. Its **"WHAT TO DO NEXT" items 2, 3 and 4** (the two false counts in
+   `tools/difftest/README.md`, `NC-268`'s two corrections, `NC-299`'s
+   `2 of 3`) — filed **status UNKNOWN** by `icc-librarian`, correctly: it has
+   no shell and an unchecked item must not be reported as either open or
+   closed.
+
+   > ### ★★★ ITEM 2 RESOLVED at this refresh by `icc-engineer`, who does have a shell — **it was ALREADY FIXED, and had been for the whole eight days it was carried as owed**
+   >
+   > Both halves, verified in the file rather than in the note:
+   >
+   > - §26.7's *"nine graded rows"* **does not appear, and did not appear at
+   >   `533ea85` either** — the tip when the item was written. The section now
+   >   reads ***"sixteen rows: ten graded, six `REPORTED`"***, counted from the
+   >   four `G_*` arrays in `passk.rs` and confirmed against a live run, **and
+   >   it carries its own correction note**: *"An earlier draft of this section
+   >   said 'nine graded', which is the licensed count wearing the wrong
+   >   label."*
+   > - §27.1's *"every `passl` record"* is now scoped to ***"Every
+   >   `passl/A/*` record"***, which is the narrowing that makes it true —
+   >   `passl/C/*` exists and is a different record family.
+   >
+   > ★★ **The transferable half, and it is the inverse of the staleness this
+   > project usually catches.** A carried open-items list goes stale by
+   > **over-reporting debt** — claiming work is owed that has already been
+   > paid — just as readily as by under-reporting it. **A false "still owed"
+   > is as much a wrong number as a false "done", and it is the one nobody
+   > checks, because acting on it merely wastes a session rather than
+   > shipping a defect.**
+   >
+   > ★ **Items 3 and 4 remain genuinely UNKNOWN.** Neither is a counting
+   > check: `NC-268`'s second correction needs the original measurement
+   > re-derived, and `NC-299`'s *"which of the three stayed green"* needs the
+   > mutation re-run. **Do not assume they went the same way as item 2** — one
+   > resolved item is not evidence about the others, which is the same error
+   > in the other direction.
+
+★ **What in that block is still good and should be kept:** the push-count
+retirement and its reasoning; all five of its "traps"; and its statement that
+a green census is evidence about **the tree it was measured on and no other**.
+
+---
+
+# ★★ SUPERSEDED — HANDOFF of 2026-08-21. Seven commits, PUSHED. Two real defects found and fixed.
 
 **Read this block first. It supersedes the 2026-08-19 block below and anything
 else that conflicts.** Everything below is otherwise still the reference,

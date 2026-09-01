@@ -116,7 +116,7 @@ right"* and *"this has not changed."* Ordered strongest to weakest as
 > for a strong general result.** It is not one. It is a strong answer to
 > a narrow question.
 
-| **rendering-cross-check-screen-capture** *(class added 2026-08-25 — see §3.38)* | Agreement with **pixels read out of a screen capture of another application's window**. Here: a `PrintWindow` grab of a running Acrobat (captured 2026-08-18; the binary self-identifies as **Acrobat Pro 25.1**, licence tier never established), compared channel-by-channel against `iccce transform` output quantised to 8 bits. | ★★★ **A distinct class, and it ranks BELOW `implementation-cross-check`.** The reason is one clause: **the capture's display leg is unknown.** An lcms2 cross-check compares two colour paths that are both *named and pinned* — a version, a build, a profile, an intent. A window grab has been through the capturing application's own display transform to **whatever monitor profile the operating system had installed at capture time**, and then through 8-bit quantisation, and **none of those three stages is recorded anywhere or reproducible**. ★★ **What it can support:** *"another shipping renderer puts this patch at these 8-bit counts, and iccce lands within N counts of it."* **What it cannot support:** any statement in colorimetric units, any statement about which source profile the other renderer used, and any statement that either side is right. ★★★ **NO ΔE MAY EVER BE COMPUTED AGAINST A ROW OF THIS CLASS** — see **`ARCHITECTURE.md` DL-070**, which records the prohibition and its two reasons so that a later session has to *reverse a decision* rather than merely *fill in a missing number*. ★ It sits **above `acceptance`** (a comparison against an independent artifact did happen) and **below `implementation-cross-check`** (the artifact's provenance is only partly known). |
+| **rendering-cross-check-screen-capture** *(class added 2026-08-25 — see §3.38)* | Agreement with **pixels read out of a screen capture of another application's window**. Here: a `PrintWindow` grab of a running Acrobat (captured 2026-08-18; the binary self-identifies as **Acrobat Pro 25.1**, licence tier never established), compared channel-by-channel against `iccce transform` output quantised to 8 bits. | ★★★ **A distinct class, and it ranks BELOW `implementation-cross-check`.** The reason is one clause: **the capture's display leg is unknown.** An lcms2 cross-check compares two colour paths that are both *named and pinned* — a version, a build, a profile, an intent. A window grab has been through the capturing application's own display transform to **whatever monitor profile the operating system had installed at capture time**, and then through 8-bit quantisation, and **none of those three stages is recorded anywhere or reproducible**. ★★ **What it can support:** *"another shipping renderer puts this patch at these 8-bit counts, and iccce lands within N counts of it."* **What it cannot support:** any statement in colorimetric units, any statement about which source profile the other renderer used, and any statement that either side is right. ★★★ **NO ΔE MAY EVER BE COMPUTED AGAINST A ROW OF THIS CLASS** — see **`ARCHITECTURE.md` DL-070**, which records the prohibition and its two reasons so that a later session has to *reverse a decision* rather than merely *fill in a missing number*. ★ It sits **above `acceptance`** (a comparison against an independent artifact did happen) and **below `implementation-cross-check`** (the artifact's provenance is only partly known). ★★★ **CLARIFIED 2026-08-28 — `ARCHITECTURE.md` `DL-075`: the prohibition attaches to the ARTIFACT, not to what sits opposite it.** The head of this definition names *pixels read out of a capture*; the `iccce` side appears after *"Here:"*, as the instance in hand, **not as part of the definition**. ⇒ A ΔE between **two different captures** — neither side `iccce`'s — **is covered, and covered more strongly**, having two unknown display legs instead of one with nothing cancelling. **Nothing was widened and nothing was exempted**; `DL-075` §3 argues why that is a statement of reach rather than an extension. |
 
 > **★★ Why this was not folded into `implementation-cross-check`, tested
 > against that alternative first (2026-08-25).** The fold is tempting —
@@ -152,6 +152,75 @@ right"* and *"this has not changed."* Ordered strongest to weakest as
 > folding it in would have put a count of *somebody else's files* under a
 > class whose definition says *"a census measures the harness"* — making
 > the row look like a statement about tooling this project controls.
+
+| **intra-run-fixture-invariant** *(class added 2026-08-28 — defined by `ARCHITECTURE.md` `DL-074`; ★★★ **NO ROWS IN THIS DOCUMENT CARRY IT**, see §3.40)* | The expectation is a **relation between two objects — equality — asserted by the party who AUTHORED the test material, in its own documentation, before anything was measured**; and both objects are observed **inside a single run of a single implementation**, so that every uncontrolled stage of the observation path (conversion, scaling, quantisation, display) is **common to both sides and cancels**. **No oracle is consulted for the value.** | ★★★ **Above `implementation-cross-check` for the one proposition it addresses**, because there is no second implementation in the claim: a cross-check dies when two implementations share a misreading, and this cannot, since it asks whether *one* implementation satisfies a constraint *its input declares*. Where another renderer appears it is a **control** — evidence the constraint is satisfiable — and **the finding survives its removal**. ★★★ **THE CLASS IS ONE-SIDED, and this is the half that will be dropped when it is quoted: it may state a FAILURE of the declared relation, and may NOT state that the relation is SATISFIED.** A large divergence is robust — no observation path manufactures a big separation from two equal inputs. A near-zero agreement is **not** robust, because a common path *can* collapse two genuinely different colours together by clamping, saturating or quantising them onto one value; `DL-069`/`DL-070` record precisely that happening, and §3.25 records agreement being the **symptom** of a defect. ★ **Not `fixture-declared-categorical`**: that class predicts *which named outcome occurs* and explicitly "cannot constrain any value"; this one carries a **magnitude**, in colorimetric units *(★ **NARROWED 2026-08-28 — `ARCHITECTURE.md` `DL-076`**: in colorimetric units **only where no capture is in the observation path**; a capture-derived instance carries its magnitude in **8-bit channel counts**, which is still a magnitude and still not a category — see the clarification at the end of this cell)*, of the distance from a declared contract. ★ **Not `self-consistency`**, and the difference is the whole promotion: where **we** author both objects the expectation is ours and the class collapses back to self-consistency. **The strength comes entirely from the assertion being a third party's.** ★★★ **CLARIFIED 2026-08-28 — `ARCHITECTURE.md` `DL-076`, and it is about the UNIT, never about admissibility: a row of this class whose observation is read off a SCREEN CAPTURE is stated in 8-BIT CHANNEL COUNTS AND IN NO OTHER UNIT.** `DL-070`'s reason 1 reaches it. **The comparison stays admissible and this class keeps every property above** — what it may not do is wear a ΔE. The reason a common display path does not rescue the unit: **that path is NON-LINEAR, so it cancels in the DIFFERENCE without preserving the DISTANCE.** Cancellation is an argument about **attribution** — the discrepancy is the renderer's, not the observation's — and never about **size**. ★ **Where no capture is in the path** (every stage run and pinned by this project) both sides are colours and a ΔE is lawful; that is the direction `DL-074` already required for any result in the satisfied direction. |
+
+> **★★ Why this was not folded into `fixture-declared-categorical`, tested
+> against that alternative first (2026-08-28).** The fold is the tempting
+> one — both read an expectation off a third party's fixture, and the
+> occasioning observation *does* have a categorical reading. It fails on
+> that class's own stated limit: *"no number is predicted, no oracle is
+> consulted, no instrument is required"* and *"what it cannot do is
+> constrain any value."* ★★★ **A row asserting a ΔE2000 distance from a
+> declared contract is not that.** Folding it in would have put a
+> **magnitude** under a class whose definition says it has none — and the
+> predictable consequence is the one §7.18 newly-owed 6 already recorded
+> against a different class: **a shape that §1 does not enumerate gets
+> quietly promoted to the nearest strong-sounding class it fits.** ★ The
+> converse fold, into `implementation-cross-check`, fails harder still: it
+> would put the control's role — *demonstrating the contract is
+> satisfiable* — where an **oracle's** role belongs, and an oracle is the
+> one thing this class does without.
+>
+> ★★ **The fold-refusal SURVIVES `DL-076`'s narrowing, stated because it
+> looks as though it might not (2026-08-28).** The argument above turns on
+> this class carrying a **magnitude** where
+> `fixture-declared-categorical` carries none — and the sentence *"a row
+> asserting a ΔE2000 distance from a declared contract is not that"* names
+> the magnitude in the one unit `DL-076` has since forbidden for
+> capture-derived rows. ★★★ **8-bit channel counts are still a magnitude.**
+> *"the two objects are N counts apart in a channel"* constrains a value;
+> *"the named outcome occurred"* does not.
+> **The fold would still put a magnitude under a class whose definition says
+> it has none**, and the refusal stands on the same ground it always did.
+
+> ★★★ **Why a class is minted with NOTHING under it, which is unusual and
+> is stated rather than glossed.** Every previous class arrived with rows.
+> This one cannot: the only measurement of this shape that exists was taken
+> off **licensed** material, so `CLAUDE.md` rule 11 keeps it out of this
+> tracked document entirely (§3.40). **The alternative was to leave the
+> shape unnamed**, and this ledger has already paid for that once —
+> §7.18 newly-owed 6 records `constructed-vs-reference-file` being *defined*
+> in one filing and *listed here* only in the next, with the reason:
+> **"§1 says 'every row states exactly one' and enumerated classes that did
+> not include it, which is the shape a class gets quietly promoted to a
+> stronger one."** ★ **The cost is admitted:** a reader meets a class here
+> and can follow it to no row in this repository. That is a real hole and
+> §7.30 carries it as owed, rather than letting the neat table imply the
+> evidence is reachable.
+
+> ★★★ **A SCOPE QUESTION ON `derived-expectation`, raised 2026-08-28 at the
+> Tier-A-sweep filing and DELIBERATELY NOT ANSWERED HERE (§7.33 item 1).**
+> The class's definition above requires the arithmetic to run on *"(b) the
+> bytes of a **synthetic fixture this project authored**."* ★ A sweep run this
+> date produced two expectations of the **same shape** — computed from a
+> file's own bytes plus quoted clause text, **with no implementation of any
+> kind in the loop** — except that **the file is one this project did not
+> author.** ★★ **That is not a smaller claim; on one axis it is a larger
+> one**, because the definition's own stated weakness is that *"the fixture
+> and the derivation are read out of the same corpus by the same project, so
+> a wrong corpus transcription makes them wrong together"* — a third party's
+> file does not share our transcription. ★★★ **It is nonetheless OUTSIDE the
+> class as written, and the class is not stretched to cover it by this note.**
+> `§7.18` newly-owed 6 records exactly what happens when a shape §1 does not
+> enumerate meets the nearest strong-sounding class it fits: **it gets quietly
+> promoted.** ⇒ Either the definition is widened by whoever owns it
+> (`TOLERANCES.md` §3.4.4.1 — `icc-conformance`), or a distinct class is
+> minted, or those rows carry a different class. **No row of either shape is
+> in this document**, and per `CLAUDE.md` rule 11 none may be: the two
+> expectations were computed on **licensed** material. **The question is
+> therefore live but not yet blocking any row here** — which is the cheapest
+> moment to settle it and the reason it is written down now.
 
 **A row without a class is not finished**, exactly as in
 `TOLERANCES.md` §1.
@@ -5075,6 +5144,63 @@ whole argument for a ledger whose rows carry their own class and coverage:
 **a retraction that has to unpick a row is expensive, and a retraction
 that only has to unpick a sentence is cheap.**
 
+#### 3.30.11 ★★★ **`NC-193` IS SUPERSEDED — 2026-08-28. It is STALENESS, not error: the row was true when filed, and what changed is OUR PARSER, in the direction rule 6 requires.** No figure is reproduced here and none may be
+
+**No row above is edited**, per this section's standing convention. `NC-193`
+recorded, on 2026-08-17 and at that tip, an `acceptance` result over the
+20-profile corpus: exit 0 and **`malformations: 0`** on every member.
+
+★★★ **That result no longer holds across the whole corpus.** Part of it now
+reports a malformation — **and the malformation is one of ours to be proud
+of**, not a regression:
+
+- ★★ **Nothing about any file changed.** The bytes are the same bytes.
+- ★★★ **Our DISCLOSURE WIDENED, correctly, and it was a fix.** The
+  `ROADMAP.md` Pass L retrospective §6 and **`ARCHITECTURE.md` `DL-067`**
+  record it: `profileID` was added in **v4**, and in **ICC.1:2001-04 Table 9**
+  header bytes `84..127` are **one 44-byte reserved block with no identifier
+  in it**. iccce had been reading `84..100` as a `profileID` **regardless of
+  edition** — fabricating a checkable identity claim — **and simultaneously
+  checking only `100..128` for reserved-block violations, so it missed 16
+  bytes of that edition's reserved region.** The range is now edition-gated.
+  **One defect, two directions, one line of code.**
+- ⇒ **A file whose v2 reserved block is non-zero was ALWAYS non-conformant on
+  that point and was ALWAYS reported as clean. Now it is reported.**
+  `CLAUDE.md` **rule 6**: the parser reports; it does not repair. **This is
+  the parser doing exactly that, on a corpus where it previously could not.**
+
+★★ **What is NOT written here, and the omission is the rule rather than an
+oversight.** **No count, no proportion, no file name, no profile identity, no
+byte value and no recomputed digest appears above.** `CLAUDE.md` **rule 11**:
+the corpus is licensed, this document is tracked and public, and a *new*
+measurement over that corpus may not be added here however small. **The re-run
+lives at `docs/SUITE_COMPATIBILITY.md` §12 — untracked.** A tracked document
+may point at an untracked one by section; **a pointer is not a quotation.**
+
+> ★ **Why a supersession NOTE is nonetheless judged inside rule 11, stated so
+> the operator can reverse it cheaply.** Rule 11's own words are *"it stops
+> the growth"* and *"what is already there STAYS."* `NC-193` is already
+> there. **Leaving a tracked, public row asserting a result that is now known
+> false is the precise failure §0 exists to prevent** — and correcting it
+> costs **no new suite-derived content**, because the correction is *"this
+> row's second half no longer holds; see §12"* and carries no measurement.
+> ★★ **If the operator reads rule 11 as covering even that, the remedy is to
+> delete this subsection — the row above it is unedited and nothing else in
+> this document depends on it.** The judgement is recorded rather than made
+> silently.
+
+★ **A CAUTION on how the widened disclosure is described, because the wrong
+description re-commits the defect `DL-067` fixed.** Bytes in a **v2** profile's
+`84..100` that happen to equal a correct MD5 over that profile are **not "a
+valid `profileID`"** — v2 **has no `profileID` field for them to be valid
+as**. They are a producer writing a later edition's field into reserved space.
+**The right sentence names the computation, not the field:** *"bytes matching
+the v4 `profileID` computation, in a region where that edition defines no
+identifier."* ★★ `DL-067`'s whole finding is that a plausible identifier
+presented as an identifier is **worse than a false accusation**, because it
+invites a consumer to verify it. **That hazard lives in prose as readily as in
+code**, and this note exists to keep it out of both.
+
 ---
 
 ### 3.31 ★★★ Pass G — the suite corpus MEASURED against lcms2. §3.30.0's *"there is no accuracy claim here"* is DISCHARGED; the v4 `mAB ` gap closes on a vendor's file; and the strongest rows in the section need no oracle at all
@@ -8781,7 +8907,474 @@ the standard, not from the corpus, and is untouched.
 
 ---
 
-## 4. Named approximations and deviations
+### 3.40 ★★★ A measurement with NO ROW — **the consumer render of 2026-08-28.** The section exists so that a reader of this ledger alone learns that the measurement was TAKEN, and where, rather than meeting silence
+
+**Filed 2026-08-28** by `icc-librarian`, from `icc-engineer`'s dispatch.
+**No code in this repository changed, no number here moved, no tolerance
+moved, and no `NC-` identifier was assigned** — the next free one remains
+**`NC-308`**.
+
+#### 3.40.1 Why there is no row, and it is not an oversight
+
+The operator supplied two screenshots of one page of **licensed** test
+artwork rendered by two applications; `icc-engineer` sampled them and
+computed distances with this project's own tested code. **Every figure so
+produced is read off a rendering of that artwork and is therefore
+suite-derived.**
+
+★★★ `CLAUDE.md` **rule 11** (operator decision, 2026-08-25): *"Nothing
+suite-derived may be ADDED to a tracked file from now on. Not a
+measurement, not a patch identifier, not a file name … not a device colour
+read out of one of its documents."* **`NUMERIC_CLAIMS.md` is tracked and
+has been public throughout.** ★ The rule is about the **material**, not
+about the instrument or the hand that held it — the same reading §3.39.3
+applied when it declined a census, and the same reading applies here even
+though the arithmetic was `iccce`'s own.
+
+**Where the measurement lives:** `docs/SUITE_COMPATIBILITY.md` **§11** —
+untracked *(gitignored at `.gitignore:50`, verified at this filing)*, and
+named by rule 11 itself as where that work continues. The method and its
+two limits are at **§11.2**; the finding this filing generalises is at
+**§11.4**; what it confirms and what it does not are at **§11.5**; **§11.6
+was reserved and deliberately empty *at that filing* — ★ that status has
+since changed and the pointers above have moved with it; see §3.40.5, added
+the same day.** **A tracked document may point at an untracked one by
+section; a pointer is not a quotation.**
+
+#### 3.40.2 What IS tracked from that measurement, and it is the whole of what this filing carries
+
+★★ **One methodological result, which contains no licensed material because
+it contains no result of any kind**: the evidence class
+**`intra-run-fixture-invariant`**, defined at §1 above and decided at
+`ARCHITECTURE.md` **`DL-074`**, with its operational form at
+`TOLERANCES.md` **§1.2**.
+
+The principle, stated here so this section is readable on its own: **when
+the test material's own documentation asserts that two objects must resolve
+to the same colour, the distance between those two objects measured inside
+a single run outranks any comparison between two implementations' renders**
+— because the uncontrolled observation path is common to both sides and
+cancels, and because the expectation is the material author's rather than
+an oracle's. ★★★ **And it is one-sided: it may state a failure of the
+declared relation and may not state that the relation is satisfied.**
+`DL-074` holds the reasoning and the bound.
+
+#### 3.40.3 ★ What this costs, stated rather than glossed
+
+A future reader of this ledger alone will find **the class and no
+instance**, and cannot check the reasoning against the observation that
+produced it. That is the same cost §3.39.3 recorded for the second
+population's census, and it is accepted for the same reason: **the
+alternative is not a tracked number, it is a rule violation.**
+
+★★ **Two consequences that are gaps rather than absences**, so that
+silence does not imply the work was never done — both carried in §7.30:
+
+1. **The evidence for `DL-074`'s ranking is not reachable from this
+   repository.** The entry argues the ranking from first principles, which
+   is checkable on its own terms; the observation that occasioned it is not.
+2. **`SUITE_COMPATIBILITY.md` §11.6 is an open obligation**, dispatched to
+   `icc-conformance` on 2026-08-28 and unanswered at this filing. ★ **Its
+   expected result is a near-zero one — which `DL-074` identifies as the
+   direction in which this class is WEAKEST**, so the reserved heading is
+   not merely empty, it is reserved for a number that will need a stronger
+   method than the one that made §11.4 usable.
+
+#### 3.40.4 What §3.40 does NOT claim
+
+- **Not that any number was verified by this librarian.** ★★★ This role has
+  no shell, did not open either screenshot, and has read no figure into
+  this document. The measurement is `[REPORTED]` by `icc-engineer` and
+  `[VERIFIED]` only in the untracked document's own §11.7 provenance table,
+  by the party that took it.
+- **Not that `iccce` was exercised.** ★ `iccce_color::delta_e::delta_e_2000`
+  and `iccce_cmm::builtin::srgb()` were used **as the instrument** —
+  no `iccce` colour **conversion** was in the path, and an instrument's use
+  is not a claim about the library's accuracy.
+- **Not that a defect exists in the consumer.** *(Verified at this filing,
+  against live source rather than the dispatch: `iccce` appears in every
+  `Cargo.toml` under `D:\Dev\pdfce\` **only inside comment prose** —
+  `Cargo.toml:69` and four lines of `tools/icc-census/Cargo.toml`. **No
+  dependency edge exists**, so no code of ours produced any observed
+  colour.)*
+- **Not a tolerance and not a gate.** `TOLERANCES.md` gains a
+  fixture-selection rule at §1.2 and **no number**.
+
+#### 3.40.5 ★★ Pointer status, updated the same day (2026-08-28) at the `DL-075` filing — because a STATUS decays faster than a number (`DL-062`)
+
+Two of §3.40's pointers were accurate for about half a day. They are
+corrected here rather than rewritten above, and **no finding, in numbers or
+in words, is added by this addendum** — §3.40 is written to the tighter
+reading of `CLAUDE.md` rule 11 and this note keeps it there.
+
+| pointer as filed | status now |
+|---|---|
+| *"§11.6 is reserved and deliberately empty"* | ★★ **NO LONGER EMPTY.** The dispatched work landed the same day and the section is populated. **What it contains is deliberately not characterised here** — not as a number and not as a sentence. `[REPORTED]`; this role read the untracked document's headings and its provenance table at this filing and **ran nothing, opened no image and verified no figure.** |
+| *"the finding this filing generalises is at §11.4"* | **Still §11.4, and the finding is intact — but its unit changed.** The capture-derived distances at §11.3 and §11.4 were **withdrawn** under `ARCHITECTURE.md` `DL-070`, as extended by **`DL-075`**, and both findings were **restated in 8-bit channel counts**, which is the only unit that class of evidence may wear. ★ **The finding survived the restatement**, which is the test of whether the withdrawn unit was carrying any weight. |
+
+★★★ **`§7.30` newly-owed 1 is therefore discharged as to EXISTENCE ONLY.**
+An empty reserved heading was the obligation (`DL-058`); the heading is no
+longer empty. **Whether what fills it is right, and whether any of it is
+quotable anywhere, is not established by this role and is not claimed here.**
+`DL-058`'s own lesson is the guard: *an artifact's existence is not the
+obligation's status.*
+
+#### 3.40.6 ★★ The UNIT this class may wear, settled the same day (2026-08-28) at the `DL-076` filing — the third filing of this date
+
+★★★ **The class is unchanged. One paragraph of `DL-074` was narrowed, and it
+is about a unit.** Stated here because a reader who meets the class at §1 and
+its only instance at §3.40 must not have to reach the decision log to learn
+which unit that instance is allowed to wear.
+
+> **A row of `intra-run-fixture-invariant` whose observation is read off a
+> SCREEN CAPTURE is stated in 8-bit channel counts and in no other unit.**
+> `ARCHITECTURE.md` **`DL-076`**, deciding what `DL-075` §7 left open.
+
+- **What survives untouched:** the class, its two properties, its ranking
+  above `implementation-cross-check`, **its one-sidedness and its bound**, and
+  the control-not-oracle role of another renderer. ★ **None of them was ever
+  stated in ΔE**, which is why the narrowing costs no result.
+- **The reason, in one sentence:** a display path that is common to both
+  sides **cancels in the difference without preserving the distance**, because
+  it is non-linear — so cancellation licenses the **comparison** and never the
+  **unit**.
+- ★ **Where no capture is in the path**, both sides are colours and a ΔE is
+  lawful. That is the direction `DL-074` already demanded for any result in
+  the satisfied direction, and it is untouched.
+
+★★ **§3.40.5's second row was written to this reading before it was ruled** —
+it stated counts as *"the only unit that class of evidence may wear."* **That
+was this role anticipating the answer, and it is now ratified rather than
+assumed.** ★ Its phrase *"as extended by `DL-075`"* is **imprecise and is
+marked rather than rewritten**: `DL-075` §3 argues at length that the ruling
+was a **statement of reach**, not an extension — the two-capture case was
+inside the prohibition's own words all along. Read *"as its reach was stated
+by `DL-075`"*. **No finding, in numbers or in words, is added by this
+addendum.**
+
+---
+
+### 3.41 ★★★ A SECOND measurement with NO ROW — **the four-row Tier-A sweep of 2026-08-28.** Pointer only, in the form §3.40 established. **No figure, no identifier, no file name, no device colour, no profile identity and no count appears in this section**
+
+**Filed 2026-08-28** by `icc-librarian`, from `icc-engineer`'s dispatch —
+**the fourth filing of this date and the fourth that adds no number to any
+tracked file.** **No code in this repository changed, no number here moved,
+no tolerance moved, and no `NC-` identifier was assigned** — the next free one
+remains **`NC-308`**.
+
+#### 3.41.1 Why there is no row
+
+Same reason as §3.40, and the argument is not restated: every figure the sweep
+produced is read off **licensed** material and is therefore suite-derived;
+`CLAUDE.md` **rule 11** keeps all of it out of this tracked, public document;
+**the rule is about the material, not about the instrument or the hand that
+held it.** §3.40.1 holds it in full.
+
+**Where the sweep lives:** `docs/SUITE_COMPATIBILITY.md` **§12** — untracked,
+written by `icc-engineer`, and named by rule 11 itself as where that work
+continues. The sub-sections this repository's tracked documents point at:
+
+| pointer | what a reader will find there |
+|---|---|
+| **§12.2** | the sweep's **negative** result, which is the strongest thing it produced |
+| **§11.4** | the earlier **positive** result the negative one is the mirror of — already pointed at from §3.40 |
+| **§12.9** | proposed fixtures, ranked, and one **construction constraint** among them |
+
+★★ **Those characterisations are deliberately at the level of *shape* —
+*"a negative result"*, *"proposed fixtures"* — and not of content.** That is
+the line §3.40.5 drew when it declined to characterise a populated section
+*"not as a number and not as a sentence."*
+
+#### 3.41.2 What IS tracked from this sweep, and it is the whole of it
+
+★★★ **One methodological result, which contains no licensed material because
+it contains no result of any kind**: `ARCHITECTURE.md` **`DL-077`** — *a
+differential tests only what differs between its arms; everything the arms
+share is outside its reach.*
+
+Stated here so this section is readable on its own: **a differential subtracts
+everything common to its two arms, and the subtraction is not selective.**
+Where the shared thing is the uncontrolled **observation path**, that is the
+method's entire value, and the differential can outrank a comparison between
+two implementations — which is `DL-074`. Where the shared thing is the
+**mechanism under test**, the differential is **incapable of failing for its
+stated reason**: it is green under a correct implementation, under a wrong
+one, and under **none at all**. ★★ **The operational form is an enumeration,
+not an exhortation — before trusting a differential, list what its two arms
+share** — and it is cheap: the occasioning case was settled by reading one
+data structure, after eleven days on a shortlist.
+
+★ **`DL-077` also carries a fifth instance found in this repository's own
+source**: two committed fixtures whose intent-selected tags are **byte-identical
+copies**, deliberately and for a stated reason. **That instance is not
+suite-derived at all**, which is why the entry is not a note about somebody
+else's corpus — and `ROADMAP.md`'s companion section states the resulting
+fixture gap without reference to any licensed material.
+
+#### 3.41.3 ★ What this costs, stated rather than glossed
+
+The same cost §3.40.3 and §3.39.3 recorded, now a third time: **a future
+reader of this ledger alone finds the reasoning and not the observation.**
+Accepted for the same reason — **the alternative is not a tracked number, it
+is a rule violation.**
+
+★★ **One gap rather than an absence**, so silence does not imply the work was
+never done: `DL-077` §3 argues that the newest instance is the **strongest**,
+because cancellation was established from the artifact's own internal
+structure rather than from a reading of a standard. **That argument is
+checkable only against the untracked document**, and a reader here takes the
+class of the evidence on report.
+
+#### 3.41.4 What §3.41 does NOT claim
+
+- **Not that any number was verified by this librarian.** ★★★ This role has no
+  shell, opened none of the material, ran no conversion and computed no
+  distance. Every result of the sweep is **`[REPORTED]`** by `icc-engineer`.
+- **Not that the sweep's four end-to-end figures may become a tolerance.**
+  ★★★ **They are explicitly UNGRADED cross-checks.** A graded row would need a
+  per-profile structural envelope computed **at run time**, because the
+  envelope is a property of *which table is loaded* — so fixing the four as
+  constants would be a **tuned tolerance**, which `CLAUDE.md` rule 5 forbids by
+  name. ★ **`TOLERANCES.md` was NOT touched at this filing** and gains no row,
+  no bound and no number from this sweep.
+- **Not that the CIE `L*` parameter observation is ground truth.** ★★ The
+  encoded parameters are reported to match that function to under half a
+  least-significant bit — and **the CIE 15 clause is recorded UNSOURCED in
+  this project's standards corpus.** ★★★ **A recognisable constant is not a
+  citation**; project rule 2 forbids writing colour maths from memory, and
+  *"I recognise that number"* is memory. The operator has declined to buy the
+  standard, so the observation stays **`[REPORTED]`** and **no
+  `primary-spec-constant` and no `published-ground-truth` claim rests on it.**
+  ★ This is the same shape as `NA-001`'s breakpoint, whose authority is
+  likewise paywalled and unobtained.
+- **Not that the classification of the sweep's two derived expectations is
+  settled.** ★ §1's dated scope note and §7.33 item 1: **a derived expectation
+  computed on a file this project did not author is outside
+  `derived-expectation` as §1 defines it**, and the class is not stretched to
+  reach it here.
+- **Not a tolerance, not a gate, and not an `NC-` row.**
+
+### 3.42 ★★★ `NC-308` … `NC-319` — **the `--bpc` NO-OP.** A flag that is accepted, runs, conforms, and changes nothing — measured at two intents out of four, on a real press destination. **The section's headline is not a divergence; it is that an API could not tell a caller the difference between a computation that came to nothing and a computation that could not be done**
+
+**Filed 2026-09-01** by `icc-librarian`, from `icc-engineer`'s dispatch.
+**Twelve rows, `NC-308` … `NC-319`; next free `NC-308`→`NC-320`.** ★★
+**Nothing in this section is suite-derived** — both profiles are Windows
+system profiles, so `CLAUDE.md` **rule 11** does not reach any figure here
+and the numbers are tracked in full. That is why this section carries
+values where §3.40 and §3.41 carry only pointers.
+
+#### 3.42.1 The apparatus, stated once and shared by every row below
+
+| field | value |
+|---|---|
+| **who measured** | **`icc-engineer`**, this session. ★★★ **This librarian ran nothing** — no shell — and every figure below is **`[REPORTED]`** on the dispatch. What this role verified is **live source**: `crates/iccce-cmm/src/bpc.rs`, `crates/iccce-cmm/src/transform.rs`, `crates/iccce-cli/src/main.rs`, `README.md`, `docs/ROADMAP.md` |
+| **binary** | `iccce transform`, **release build of the working tree** at workspace version `0.2.0` *(verified — `Cargo.toml:40`)* |
+| **commit anchor** | ★★★ **NONE.** `refs/heads/master` and `refs/remotes/origin/master` both read **`3af2d87`** *(verified — both loose ref files read 2026-09-01)*, and the dispatch states nothing was committed. **Every row in this section is anchored to a working tree**, which §7.1 item 1 identified at the Pass 1 filing as the weaker anchor. It is the **fourth** such section (§3.32, §3.33, §3.38 and now this) |
+| **source profile** | `C:\Windows\System32\spool\drivers\color\sRGB Color Space Profile.icm` — sRGB IEC61966-2.1, **v2, matrix/TRC** |
+| **destination profile** | `C:\Windows\System32\spool\drivers\color\USWebCoatedSWOP.icc` — U.S. Web Coated (SWOP), **v2 (2.1.0)**, `prtr`, CMYK, **`Lab ` PCS**, 557 168 bytes |
+| **operands** | **9³ = 729** point sRGB grid, each channel `i/8` for `i` in `0..=8` |
+| **unit** | ★★★ **ink / colorant tint, `0.0`–`1.0`. NO ΔE IS CLAIMED ANYWHERE IN THIS SECTION**, and none may be derived from these figures — a max-abs-ink distance is not a colorimetric distance and the two must never be quoted interchangeably |
+| **fixture category** | ★★ **(c) — machine-local system profiles.** Not ours, not committed, absent on any other machine. See the §6 row added at this filing |
+
+> ★★★ **THE COVERAGE STATEMENT, BEFORE ANY NUMBER.** One profile pair, one
+> machine, one binary, one day, **729 operands**, **no oracle in any row of
+> this section**, and **no test, no difftest record and no CI job asserts a
+> single figure below.** The two unit tests this session added
+> (`equal_black_points_give_a_disclosed_identity`,
+> `differing_black_points_are_not_an_identity` — *verified, read at
+> `bpc.rs:507` and `:535`*) assert the **identity predicate on synthetic
+> black points**. They do **not** assert the SWOP measurement, and a
+> regression that made `--bpc` move values on this pair would turn **no
+> row of this section red**. This is §3.38.7's *"protected by nothing"*
+> recurring, and it is stated here rather than in a footnote.
+
+#### 3.42.2 `NC-308` … `NC-311` — intent SEPARATION at a LUT CMYK destination. **A separation claim, and it is not an accuracy claim**
+
+The question the dispatch put: *does the matrix/TRC intent collapse reach a
+LUT destination?* **It does not** — the `B2A*` tag selection reaches the
+pixels.
+
+| ID | What | Class | Tolerance | Observed |
+|---|---|---|---|---|
+| **NC-308** | **media-relative vs saturation**, max abs ink delta over the grid | **self-consistency** — ★ both arms are `iccce`, one implementation evaluating two configurations | **∞ — REPORTED, NOT GRADED** | **`0.464373`**; **726 / 729** operands differ |
+| **NC-309** | **media-relative vs perceptual** | self-consistency | **∞ — REPORTED, NOT GRADED** | **`0.335783`**; **728 / 729** differ |
+| **NC-310** | **perceptual vs saturation** | self-consistency | **∞ — REPORTED, NOT GRADED** | **`0.153198`**; **726 / 729** differ |
+| **NC-311** | **media-relative vs ICC-absolute** | self-consistency | **∞ — REPORTED, NOT GRADED** | **`0.357095`**; **728 / 729** differ |
+
+★★★ **What these four rows establish, exactly: that the four intents select
+different tables and that the difference survives to the output.** That is
+`DL-033`'s candidate separation measured directly, and it is the
+precondition every intent-sensitive claim on this pair silently assumes.
+★★★ **What they do NOT establish is that any of the four answers is
+right.** A CMM wrong by 20 ΔE2000 at all four intents produces separations
+of exactly this shape. **Never write a row of this group as "the intents
+agree with lcms2"** — no oracle is in any of them.
+
+★★ **The accuracy anchor for this direction is a DIFFERENT row over a
+DIFFERENT operand set, and the dispatch's shorthand should not be carried
+forward as written.** The dispatch names *"Pass 4c §A's `1.55e-4` device
+vs lcms2"*. That resolves to **`NC-114`** (§3.14) —
+`pass4b/srgb-to-swop/saturation/device-vs-lcms2`, **`1.550000e-4`** device
+against lcms2 at tolerance `DEVICE_B2A` `5×10⁻⁴`. It is the **same profile
+pair and the same direction**, which is why the anchor is apt — but it is
+**213 RGB points, not 729**, it is the **saturation** intent alone, and the
+apparatus is an extension to `tools/difftest/src/pass4b.rs` §A rather than
+anything named `pass4c` *(verified — §3.14.1 and `ROADMAP.md:3562`)*.
+⇒ **`NC-114` prices one of the four arms above, over an operand set none
+of these rows share.** The media-relative, perceptual and ICC-absolute arms
+are priced by their own Pass 4b/4c rows, not by `NC-114`.
+
+#### 3.42.3 `NC-312` … `NC-314` — **the finding: `--bpc` succeeds and moves nothing, at two intents of the three it accepts**
+
+| ID | What | Class | Tolerance | Observed |
+|---|---|---|---|---|
+| **NC-312** | `--bpc` at **media-relative**: operands whose output changes, and the max change | **self-consistency** — both arms `iccce`, with and without the flag | **∞ — REPORTED, NOT GRADED** | **727 / 729** changed; **max `0.243951`** ink |
+| **★★★ NC-313** | `--bpc` at **perceptual** and at **saturation**: operands whose output changes | self-consistency | **∞ — REPORTED, NOT GRADED** | ★★★ **`0` of `729` at BOTH intents. Bit-identical output.** The call returns `Ok` and no value moves |
+| **NC-314** | `--bpc` at **ICC-absolute** | **behavioural, 0/1** — the refusal is sourced (Maria 2013's exclusion, corpus `icc__ref__bpc.md`), not measured | **exact** | **refused by name — `ChainError::BpcNotApplicable`** *(verified — `transform.rs:1107`)* |
+
+> ★★★ **`NC-313` IS A CONFORMING OUTCOME, NOT A DEFECT, AND THE TWO ARE
+> INDISTINGUISHABLE FROM THE OUTPUT.** That sentence is the whole section.
+> The mechanism is `NC-316`/`NC-317` below; the API consequence is
+> `ARCHITECTURE.md` **`DL-078`**.
+
+★★ **`NC-313` covers two intents in one row deliberately**, because the
+observed value is *identical* (`0` of `729`, bit-exact) and the row's
+coverage clause names both. The **mechanisms differ slightly** — the two
+fitted roots are not the same number — and that difference is carried by
+`NC-316` and `NC-317`, which are separate rows for exactly that reason.
+
+★ **`NC-312`'s `0.243951` is the number quoted as `0.2440` in
+`transform.rs`'s `with_bpc` doc-comment table** *(verified — read at
+`transform.rs:1083`)*. **The doc comment rounds; this row does not.** Quote
+the row, not the comment, whenever four decimals are not enough.
+
+#### 3.42.4 `NC-315` … `NC-318` — the ESTIMATOR INTERNALS, and **the instrumentation that produced them has been REVERTED**
+
+★★★ **Read this before quoting any figure in this sub-section.** The
+values were read out of **temporary instrumentation of
+`estimate_lut_destination_black`**, which the dispatch states has since
+been removed from the working tree. **They are therefore not reproducible
+from the tree as it stands** — reproducing them requires re-instrumenting.
+That is precisely why they are filed as rows: a number that exists nowhere
+else and cannot be re-derived by a later reader is the exact case §0 was
+written for.
+
+| ID | What | Class | Tolerance | Observed |
+|---|---|---|---|---|
+| **NC-315** | **media-relative** — the estimator's internal state and the exit taken | **normative-rule-conformance** *(inheriting §1's transcription risk, **and additionally that ISO/CD 18619 is a COMMITTEE DRAFT** — the same double caveat `NC-164` carries)* | **behavioural** for the exit; **∞ — REPORTED** for the values | `MinL` **`16.489806`** after the monotonic pass · `MaxL` **`100.000000`** · `\|SP\|` **n/a — short-circuited** · exit **4.2.5.4**, mid-range-straight ⇒ `InitialLab` · destination black **`L* = 11.772365`** |
+| **NC-316** | **perceptual** — same | normative-rule-conformance, same double caveat | behavioural / REPORTED | `MinL` **`16.571474`** · `MaxL` **`100.000000`** · `\|SP\|` **`72`** shadow points · exit **4.2.5.5**, fitted root · **fitted root pre-clamp `−1.274227`** · destination black **`L* = 0`** · quadratic `(a, b, c)` = **`9.796586345689706e-5`, `4.080969224877359e-3`, `5.041018274259003e-3`** |
+| **NC-317** | **saturation** — same | normative-rule-conformance, same double caveat | behavioural / REPORTED | `MinL` **`16.578972`** · `MaxL` **`99.963389`** · `\|SP\|` **`72`** · exit **4.2.5.5** · **fitted root pre-clamp `−1.248908`** · destination black **`L* = 0`** · quadratic `(a, b, c)` = **`9.808236533047826e-5`, `4.082937370529312e-3`, `4.946227598004866e-3`** |
+| **★★ NC-318** | **THE CONTROL** — `icc-spec-librarian` registered the predicted `MinL` **before the run**, from an independent earlier measurement (Pass 5c `bt_perc`) | **self-consistency** — an apparatus-agreement row, both arms `iccce` at two different dates | **six significant figures**, pre-registered | **`16.571474` predicted, `16.571474` observed.** ★ Additionally pre-registered and **NOT** observed: exit A (invalid ramp) did **not** fire, and **no BT-leg substitutions occurred** — the specific defect risk that was named in advance |
+
+★★★ **`NC-318` is what makes `NC-315` … `NC-317` worth anything.** Without
+it, the instrumented figures are a reading of our own code by the person
+who wrote it, taken once, from a build that no longer exists. With it, one
+of them was **predicted from a different session's measurement and matched
+to six figures**, and the named failure mode was **pre-registered and did
+not occur**. ★ **This is the shape §3.18.6 established and `DL-023`
+requires: name the negative result before the run, so that the absence of a
+defect is evidence rather than a shrug.**
+
+##### 3.42.4.1 The mechanism, sourced — why two intents come to nothing
+
+`icc-spec-librarian` filed the clause trace this session. The reading, in
+one paragraph so this ledger is legible on its own:
+
+- **ISO/CD 18619:2013 4.2.5.5** fits a quadratic through the shadow points
+  and clamps the root: **`max(0, min(50, ·))`**. At perceptual the root is
+  **`−1.274227`**; at saturation **`−1.248908`**. Both are negative, so
+  **both clamp to `L* = 0`**.
+- The **sRGB matrix/TRC source black is already `L* = 0`**, so the two
+  estimated black points **coincide**, and the **4.2.6** map is the
+  **identity**.
+- **Media-relative differs** because **4.2.5.4**'s mid-range-straightness
+  short-circuit — which by **4.2.5.1** runs **only** at relative
+  colorimetric — returns `InitialLab` at **`L* = 11.772365`** instead.
+  ★ **That is the same clause `NC-164` corrected `iccce` on**, and it is
+  the reason media-relative is the one intent of the three where the flag
+  does anything.
+
+**Corpus register entries filed this session** *(`[REPORTED]` — this
+librarian did not open `ICC_Spec`)*: **`A63`** — 4.2.5's four exits all
+return `(0,0,0)` and **4.2.6 erases the difference between them**;
+**`A64`/`D11b`** — ★ **the v2 path is the sourced half; the v4
+`PERCEPTUAL_BLACK` short-circuit is the improvised one**, and the two must
+not be quoted as one behaviour.
+
+#### 3.42.5 `NC-319` — **the lcms2 statement, and it is the weakest kind this ledger carries**
+
+| ID | What | Class | Tolerance | Observed |
+|---|---|---|---|---|
+| **NC-319** | lcms2 gates **both** its forced BPC **and** its fixed perceptual black on the **destination being v4**. ⇒ for a **v2** destination it runs the same 4.2.5 procedure and **has the same conflation** | **oracle-behaviour-at-pin** — ★★★ **BY SOURCE-READ, NEVER EXECUTED** | **none — no comparison was performed** | **`[REPORTED]`** by `icc-spec-librarian` as register **`M7`** |
+
+★★★ **This is the weakest lcms2 statement in this ledger, and it is the
+second of its kind.** The first is `A50`'s `cmsChannelsOf()` finding, filed
+at §3.32 as *"read from source at the pin, NOT executed"*. **A source-read
+is not a measurement**, and `oracle-behaviour-at-pin`'s own §1 definition
+says *"a measurement of what the oracle does"* — so the class is carried
+here **with the departure stated in the row itself** rather than silently.
+
+★★ **The pin is NOT carried by the dispatch.** `oracle-behaviour-at-pin`'s
+definition ends *"every such row is scoped to one pin, and the pin moving
+invalidates it"* — and **no commit hash for lcms2 came with this
+statement.** **`NC-319` is therefore scoped to a pin nobody wrote down**,
+which is an incomplete row and is filed as such. **§7.34 carries it as
+owed.** Do not repair it by assuming the pin `DL-012` names; that would be
+asserting an unmeasured fact about somebody else's repository.
+
+#### 3.42.6 ★★ What this section does NOT claim
+
+- **Not an accuracy result of any kind.** ★★★ **There is no oracle in
+  `NC-308` … `NC-318`.** Eleven of the twelve rows compare `iccce` with
+  `iccce`; the twelfth (`NC-319`) is a reading of somebody's source code.
+  **No row here may be quoted as agreement with lcms2, and none may be
+  promoted to `implementation-cross-check`.**
+- **Not a ΔE.** The unit is ink, everywhere. `0.464373` is **not** *"0.46
+  ΔE"* and the two are not convertible without a conversion nobody ran.
+- **Not a claim about any other profile pair.** ★★ **`NC-313`'s zero is a
+  property of THIS SOURCE'S BLACK meeting THIS DESTINATION'S clamped
+  root.** A source whose black is **not** at `L* = 0` — any LUT source, any
+  real press profile — would give a non-identity map at the same two
+  intents. **"`--bpc` does nothing at perceptual" is FALSE as a general
+  statement** and must never be written without its pair.
+- **Not a claim that the no-op is desirable.** ★ It is *conforming*, which
+  is a different word. Whether a CMM should ship a BPC that is the identity
+  wherever the source is a matrix/TRC profile is an engineering question
+  this filing does not answer and does not foreclose.
+- **Not a claim about `--bpc` combined with `--preserve-black`.** That
+  combination remains **untested at every layer** — unchanged since the
+  Pass K filing, and §7.23's item survives this session intact.
+- **Not a claim that `pdfce` should or should not pass `--bpc`.** The
+  reply in the request channel is a pointer plus a summary; **this section
+  is the durable half**, per `CLAUDE.md` rule 10.
+- **Not verified by this librarian as to any number.** ★★★ Every figure is
+  `[REPORTED]`. What is `[VERIFIED]` here is that the **four code changes
+  the dispatch describes exist in the working tree as described** —
+  `BpcScale::source_black`/`destination_black`/`is_identity` at
+  `bpc.rs:448/459/474`, the two tests at `:507`/`:535`,
+  `Chain::bpc_disclosure` at `transform.rs:1128`, the measured table in
+  `with_bpc`'s doc comment at `:1078`–`:1097`, and the CLI's **stderr**
+  disclosure at `main.rs:500`–`:527`.
+
+#### 3.42.7 ★★★ The finding that is not a number: **a consumer's question found the API hole, and this project's own testing did not**
+
+`Chain::with_bpc()` has existed and been exercised since Pass 5. **No test,
+no difftest row, no tolerance and no doc comment in this repository had
+ever noticed that a successful call can be a no-op** — because every
+apparatus that exercised it was built to check *what the map does*, and the
+case in question is the one where the map does nothing.
+
+**What found it was `pdfce` asking a question about its own use of the
+flag.** That is `DL-044`'s stated reason for the request channel existing
+and `CLAUDE.md` rule 10 item 1's *"not asking is the failure mode, not a
+courtesy"* — **demonstrated, with an outcome, for the first time in this
+direction.** ★ Filed here rather than only in `ARCHITECTURE.md` because a
+future reader auditing *why* these twelve rows exist will otherwise
+conclude they came from a routine sweep. **They did not. They came from
+somebody else's question**, and the channel that carried it is in **no git
+repository**.
+
+---
 
 `ARCHITECTURE.md` invariant 3 and project rule 4: *every approximation is
 named and measured.* This is the register of departures from exact
@@ -9848,6 +10441,7 @@ are the rows to re-run or retire.
 | **★★★ The `[0,1]` clamp's POSITION relative to the inverse TRC — ICC.1's Annex F.8–F.16 as `MatrixTrc::pcs_to_device` implements it** *(added 2026-08-25, §3.38)* | **NC-301, NC-302, NC-303 — and `ARCHITECTURE.md` DL-069's entire argument.** ★★ **This is the sharpest dependency in the ledger, because moving the clamp after the inverse TRC would leave every number in §3.38 LOOKING untouched** while the mechanism they demonstrate had ceased to exist. The `0.000000` values *are* the clamp; nothing else in those rows would move visibly. ★ **The committed detector is `out_of_gamut_clamps_before_inverse_trc`, not any row here.** |
 | **★ The Windows colour directory — `sRGB Color Space Profile.icm`, `CoatedFOGRA27.icc`, `CoatedFOGRA39.icc`, `USWebCoatedSWOP.icc`** *(added 2026-08-25, §3.38)* | **NC-301 … NC-303, all of them.** Category (c) system profiles: **not ours, not committed, absent on any other machine**, and the destination's **1 024-entry** curve is part of every converted value. ★ Unlike a difftest row these do not even *skip* — **nobody re-runs them at all** unless a human invokes the harness. |
 | **★ The suite patch `PCS1_010`, or the Acrobat capture at `D:\Dev\temp\acro-refs\`** *(added 2026-08-25, §3.38)* | **NC-301, NC-303, NC-304, NC-305.** A **re-capture** — different Acrobat build, different monitor profile, different render scale, different inset — **changes the reference without changing anything about iccce**, and the row would read as a drift in the transform. ★★ `pdfce` and this session already sampled the same cell's green at **156** and **159**; that is the mechanism, at the scale where it is harmless. |
+| **★★★ The Windows colour directory, SECOND ENTRY — `sRGB Color Space Profile.icm` + `USWebCoatedSWOP.icc`** *(added 2026-09-01, §3.42)* | **NC-308 … NC-318 — eleven rows, every one of them.** Same category (c) dependency as the row two above, and a **second, sharper** one on top of it: ★★★ **`NC-313`'s zero depends on the SOURCE being a matrix/TRC profile whose black is at `L* = 0`.** Swap the source for any LUT profile and the map stops being the identity — so the finding is invalidated not only by the files moving, but by the *pair* changing on one side. ★★ **`NC-315` … `NC-317` have a third dependency the others do not: the temporary instrumentation of `estimate_lut_destination_black` that produced them has been REVERTED**, so re-deriving them requires re-instrumenting the estimator. Nothing in CI, in `tools/difftest` or in the unit suite re-runs any of the eleven. |
 | **★★ `TOLERANCES.md` §2's `1.0` perceptibility anchor (DL-004 revisited)** *(added 2026-08-19, §3.36)* | **NC-271b, NC-271c, NC-272 and NC-273 — FOUR rows, and the anchor is used in THREE different directions.** As a **lower** bound on a pair's separation (`G4`), as an **upper** bound on an error (`G5`), and as the **threshold a population is counted against** (`G16`, via `G8`'s constant). ★★★ **Moving the anchor moves an entitlement criterion, a soundness criterion and a count simultaneously and in opposite senses** — a *larger* anchor entitles fewer pairs while making more of them "imperceptible". This is the first place in the ledger where one number is load-bearing in both directions at once. |
 
 ---
@@ -12640,6 +13234,734 @@ in the channel file and stay there, under rule 11.
 - **That the licensed population's census is correct, or that `SUITE_COMPATIBILITY.md` §10 now exists.** ★★ §10 is **written by this filing**; its contents are `[REPORTED]` from the reply at exactly the strength of the reply. **Nothing was verified against the corpus, which this role has not opened.**
 - **That anything was pushed, published, tagged or reserved.** ★ **This filing fetched nothing, published nothing and authorises nothing** (rule 9).
 - **That the request channel was polled.** ★ This role was again instructed **not** to arm a monitor, and did not. ★★ **One channel file WAS read** — the reply this filing is about — because it is the primary artifact and the dispatch is a report of it. **No statement is made about the channel's other contents.**
+
+---
+
+### 7.30 Status re-checked 2026-08-28 at the **consumer-render / evidence-class** filing. ★★★ **A PARTIAL re-check, and it says so: the §7 series' full sweep was NOT run.** The filing's entire tracked content is one evidence class and one decision — **not a single number entered this document**
+
+★★ **Read the scope before the items.** Previous §7.x sections re-checked
+the whole owed list. **This one does not**, because this filing carried no
+apparatus run, no commit, and no measurement this role could verify. ★ Per
+**`DL-062`**, *not checked* is recorded as **not checked**, never as
+*unmoved* — a status decays faster than a number.
+
+#### 1. What this filing changed, in full
+
+| document | change |
+|---|---|
+| `ARCHITECTURE.md` §5 | **`DL-074`** — new, dated 2026-08-28 |
+| `NUMERIC_CLAIMS.md` §1 | the class **`intra-run-fixture-invariant`**, with **zero rows** |
+| `NUMERIC_CLAIMS.md` **§3.40** | a pointer-only section; **no `NC-` id assigned — `NC-308` remains free** |
+| `NUMERIC_CLAIMS.md` §7.30 | this section |
+| `TOLERANCES.md` **§1.2** | a fixture-selection rule. ★ **No tolerance, no bound, no number** |
+| `SESSION_LOG.md` | the thirty-seventh entry |
+
+**Untouched:** every file under `crates/`, every file under `tools/`,
+`ROADMAP.md` *(no Pass shipped)*, `FEATURES.md`, `README.md`,
+`NEXT_SESSION.md`, and **`docs/SUITE_COMPATIBILITY.md`** *(which
+`icc-engineer` wrote; this role read it and did not edit it)*.
+
+#### 2. Newly owed by this filing
+
+1. ★★★ **`SUITE_COMPATIBILITY.md` §11.6 is reserved and EMPTY.**
+   `icc-conformance` was dispatched 2026-08-28 to produce the demonstration
+   and had not reported at this filing. **An empty reserved heading is an
+   obligation, not a gap** — and `DL-058`'s lesson applies to it: *an
+   artifact's existence is not the obligation's status.* ★ `DL-074` records
+   that the hoped-for outcome is a **near-zero** one, which is the direction
+   in which the new class is **weakest**, so the result will need a path
+   whose stages are known rather than a capture.
+2. ★★★ **Whether `DL-070` reaches a ΔE computed between TWO DIFFERENT
+   CAPTURES is UNDECIDED, and figures of that shape now exist** (untracked,
+   §11.3, labelled with their limit by the party who took them). `DL-074`
+   §"Why this does not violate `DL-070`" deliberately declines to settle it,
+   because the honest options are **widening a standing prohibition** or
+   **declaring an exemption to it**, and both are decisions rather than
+   filings. **Owed to `icc-conformance` and the operator.**
+3. **The new class has no reachable instance.** §3.40.3 states the cost;
+   the item is owed until either a redistributable equality-asserting
+   fixture appears, or the operator settles §7.28 item 6.
+4. ★★ **`TOLERANCES.md` §1's four-kind table still does not enumerate
+   `derived-expectation`** — owed since 2026-08-11 by that document's own
+   note — **and now does not enumerate this class either.** §1.2 was added
+   beside the table rather than into it, so **the debt is unchanged plus
+   one**, and is recorded here rather than being quietly absorbed.
+
+#### 3. ★★★ The §3.1 Tier-A classification — what was discharged, stated at its true denominator
+
+`SUITE_COMPATIBILITY.md` §3.1's supersession block warns that its
+**surviving five rows** *(the table prints six; one was withdrawn by
+`DL-059` and corrected again by `DL-061`)* should be read as **"not yet
+checked against the same test."** On 2026-08-28 **one** of those five was
+observed against a running implementation and **held**.
+
+> ★★★ **Record it as ONE ROW OF FIVE, corroborated by OBSERVATION — not as
+> the table vindicated.** Overstating this is precisely the drift the two
+> prior corrections to that table exist to prevent, and the row that was
+> wrong was wrong **in the claiming direction**, which nothing catches.
+
+★★ **And a sharper limit this librarian owes, which the discharge should
+not be quoted without.** §3.1's warning names a **specific** test: *"name
+the clause and the standard that assigns the behaviour to a layer."* **That
+is not the test that was run.** What was run is an observation — *does a
+consumer lacking the capability exhibit the predicted failure?* ★★★ **The
+two are not interchangeable, and `DL-059` is the proof**: a defect in
+**device-space routing** and an absence of **colour management** can produce
+the same visible failure on the same page, which is exactly how that row
+came to be misclassified in the first place. An observed failure therefore
+**corroborates** the classification and **cannot attribute the layer**.
+
+⇒ **`§7.20`'s clause-attribution obligation remains owed for all five
+surviving rows, including the one observed today.** The observation
+strengthens the case; it does not close the item.
+
+#### 4. ★★ An observation about §3.39.3 offered to the operator, NOT acted on
+
+While mirroring §3.39.3's pointer form, this librarian read it closely.
+★★★ **It states *"Those numbers are not reproduced here"* and, two
+sentences earlier, reproduces the census's findings in words** — a
+qualitative result over the licensed population, in a tracked, public file.
+**No integer appears**, which is presumably how it passed.
+
+- **Nothing was edited.** Rule 11 is explicit that *what is already there
+  STAYS*, and this role does not rewrite a published passage on its own
+  reading.
+- ★ **It is raised because it bears on how rule 11 gets applied next
+  time**, not because it needs repair: if a **qualitative** finding counts
+  as *"a measurement"*, the boundary is tighter than the ledger has been
+  applying, and if it does not, the rule should say so. **§3.40 was written
+  to the tighter reading** and carries no finding of any kind, so this
+  filing is safe under either.
+- **Owed to the operator**, alongside §7.28 item 6, which asks the adjacent
+  question about material predating the rule.
+
+#### 5. Owed items carried forward — **NOT re-checked at this filing**
+
+- **`NC-268`'s two corrections** — **NOT CHECKED.** No dispatch carried the
+  provenance a superseding row needs; the reason recorded at §7.29 is
+  unchanged as a *reason*, and its *status* was not re-read.
+- **§7.28 item 6 / the operator decision on already-present licensed text** —
+  **STILL OPEN.** ★ Item 4 above is adjacent to it and does not answer it.
+- **§7.20's clause audit of the Tier-A table** — **OPEN, and see §3 above**,
+  which is the only movement.
+- **§7.26 item 1, §7.26 item 3, §7.24 items 1–2, §7.23 items 4–7** — **NOT
+  CHECKED.**
+- **The standing debt** — **NOT MOVED.** No `published-ground-truth` row for
+  any transform; `IEC 61966-2-1` remains paywalled and unobtained. ★ Nothing
+  in this filing was ever a candidate to move it.
+
+#### 6. ★★★ What this filing does NOT claim about the repository
+
+- **That anything was committed by it.** ★★ **`.git/refs/heads/master` and
+  `.git/refs/remotes/origin/master` both read
+  `3af2d87fd46115a5f9283508785c86ad3c95fdc7`** *(★ **VERIFIED** — both are
+  plain text files, read at this filing)*. Per **`DL-068`** the two hashes
+  are carried and **no push count is derived from them**. ★ The remote ref
+  is this repository's **last observed** remote state — a dated local
+  reading, **not** a live statement about the remote. **This filing's edits
+  are in no commit.**
+- **That CI is green, that `v0.2.0` was released, or that any gate has run.**
+  ★★★ No evidence was carried and none was read. ★ **In particular
+  `tools/check-suite-name-absent.py` was NOT executed** — this role has no
+  shell. Its rules were **read** and applied by hand to every passage
+  written here.
+- **That anything in `pdfce`'s repository is at any particular state**,
+  beyond two facts read from live source at this filing and labelled in
+  §3.40.4 and in the `SESSION_LOG` entry: **no `iccce` dependency edge
+  exists**, and `CmykIntent` carries exactly two variants. ★ **No `pdfce`
+  commit hash was carried and none is invented.**
+- **That any figure in `SUITE_COMPATIBILITY.md` §11 is correct.** ★★★ This
+  role opened no screenshot, ran no sampler and computed no distance. §11's
+  numbers are `[REPORTED]` here at exactly the strength its own §11.7
+  provenance table gives them.
+- **That anything was pushed, published or tagged.** ★ **This filing
+  publishes nothing and authorises nothing** (rule 9).
+- **That the request channel was polled.** ★★★ This role was instructed
+  **not** to arm a monitor and did not; **no file in
+  `D:\Dev\FeatureRequests\` was listed, opened or written at this filing.**
+  The two notes said to have been written there are `[REPORTED]`.
+
+---
+
+### 7.31 Status re-checked 2026-08-28 at the **`DL-070`-reach / withdrawal** filing — the second filing of that date. ★★★ **Also PARTIAL, and narrower still: it settles ONE owed item, discharges a second AS TO EXISTENCE ONLY, and OPENS TWO. Not a number entered this document, again**
+
+★★ **Scope, before the items.** This filing carried a **decision** and a
+**reading of live source**; it carried **no apparatus run, no commit and no
+measurement**. Per **`DL-062`** every item not re-read is recorded as **not
+checked**, never as *unmoved*. ★ The §7 series' full sweep was **not** run —
+this is the second consecutive partial re-check and the debt at §7.29/§7.30
+is unchanged by it.
+
+#### 1. What this filing changed, in full
+
+| document | change |
+|---|---|
+| `ARCHITECTURE.md` §5 | **`DL-075`** — new, dated 2026-08-28; and a **flag block appended to `DL-074`'s `Revisit when` clause** recording that its third trigger fired. ★ `DL-074`'s body is **not edited** — this log's rule is that a superseded position gets a new entry, never a rewrite |
+| `NUMERIC_CLAIMS.md` §1 | **one dated clarifying sentence** appended to the `rendering-cross-check-screen-capture` row, pointing at `DL-075`. **No class added, none removed, no definition rewritten** |
+| `NUMERIC_CLAIMS.md` §3.40 | **§3.40.5** added — pointer status only; and one stale phrase in §3.40.1 marked as superseded *in place*, pointing at §3.40.5 |
+| `NUMERIC_CLAIMS.md` §7.31 | this section |
+| `SESSION_LOG.md` | a **same-day correction block appended to the thirty-seventh entry**. ★ **No thirty-eighth entry was opened** — one session, one date, one entry |
+
+**Untouched:** every file under `crates/`, every file under `tools/`,
+`ROADMAP.md` *(no Pass shipped; its `DL-070` line at ~§Pass-K remains
+correct as written)*, `TOLERANCES.md` *(its §1.2 carries no withdrawn
+figure — **verified by reading it at this filing**)*, `FEATURES.md`,
+`README.md`, `NEXT_SESSION.md`, **`NUMERIC_CLAIMS.md` §3.39.3** *(see item
+4c)*, and **`docs/SUITE_COMPATIBILITY.md`** *(read at this filing, not
+edited; `icc-engineer` is its writer)*.
+
+#### 2. ★★★ CLOSED — §7.30 newly-owed 2, and it is answered rather than deferred
+
+> **`DL-070` reaches a ΔE computed between two different captures.** The
+> prohibition attaches to the **artifact**, not to what sits opposite it.
+> **`ARCHITECTURE.md` `DL-075`.**
+
+- **Decided by `icc-engineer`** (the lead session), on this role's
+  escalation. ★★ **No operator words were carried by the dispatch and none
+  are invented here.**
+- ★★★ **Why that is sufficient in this direction and would not have been in
+  the other.** §7.30 recorded the item as owed to `icc-conformance` **and
+  the operator**, because the two honest outcomes named at `DL-074` were
+  *widening a prohibition* and *declaring an exemption*. The ruling is
+  **neither**: it applies `DL-070`'s own stated reason 1 to a case that
+  exhibits **more** of the same defect, and `DL-075` §3 shows the case was
+  inside the definition's head clause all along. **A loosening would still
+  be the operator's.**
+- **`icc-conformance`'s half is discharged by publication**, not by
+  agreement: the ruling is in the log, in the class row, and in the session
+  entry, which is where that role reads.
+
+#### 3. Discharged AS TO EXISTENCE ONLY — §7.30 newly-owed 1
+
+The reserved-and-empty heading in the untracked document **is no longer
+empty** (§3.40.5). ★★ **That closes the `DL-058` obligation — an empty
+reserved heading — and closes nothing else.** Whether its content is right,
+and whether any of it may be quoted anywhere, is `[REPORTED]` and untested
+by this role.
+
+#### 4. Newly owed by this filing
+
+1. ★★★ **THE WITHDRAWAL IS INCOMPLETE, and it is incomplete in the
+   direction that matters.** `icc-engineer` withdrew the capture-derived
+   distances at the untracked document's §11.3 and §11.4 in a block at the
+   head of §11.3. Reading that document at this filing, **at least fourteen
+   passages across four of its sub-sections still quote a withdrawn figure —
+   or a quantity computed from one — as live and unmarked**, including a
+   **per-cell ratio column** of exactly the retracted cross-unit form, a
+   narrative that apportions credit **as fractions of a withdrawn
+   quantity**, and **both provenance rows that certify the withdrawn figures
+   without a withdrawal marker.** ★ Line numbers were returned to that
+   document's writer; **this role edited nothing there.** ⇒ **`DL-058`: an
+   artifact's existence is not the obligation's status** — a withdrawal
+   *block* is not a *withdrawal*, and the passages a reader is most likely
+   to quote are the summarising ones, which are the ones still standing.
+2. ★★ **`DL-074`'s boundary paragraph and `DL-075`'s ruling cannot both be
+   stated without a reconciling sentence.** `DL-075` §7 sets out the two
+   candidate readings and recommends one; it **does not choose**, because
+   choosing would re-open `DL-074` on this librarian's reading. **Owed to
+   `icc-engineer` and the operator.** ★ `DL-074`'s evidence class, its two
+   properties, its one-sidedness and its bound are **not in question** under
+   either reading.
+3. ★ **The `TOLERANCES.md` §1 four-kind table** still does not enumerate
+   `derived-expectation` **or** `intra-run-fixture-invariant` — **unchanged
+   from §7.30 item 4, carried, and not re-checked** beyond confirming §1.2
+   carries no withdrawn number.
+4. **§7.30 item 4 (the §3.39.3 observation) remains OPEN and is not acted
+   on**, and now carries a recorded position:
+   > ★★ **`icc-engineer`, 2026-08-28: *"§3.40 written to the tighter reading
+   > is the correct precedent, and if the two readings ever have to be
+   > reconciled it should be by tightening §3.39.3, never by loosening
+   > §3.40."*** **Recorded, agreed by this role, and NOT ACTED ON.**
+   - **§3.39.3 was not edited** and this filing did not open it for repair.
+     Rule 11 says *what is already there STAYS*, and the question of which
+     reading governs is **the operator's** — §7.28 item 6 asks the adjacent
+     question and is **still open**.
+   - ★ **§3.40.5, added today, was written to the tighter reading** and
+     carries no finding in numbers or in words, so the precedent is now two
+     sections deep rather than one.
+
+#### 5. Owed items carried forward — **NOT re-checked at this filing**
+
+- **`NC-268`'s two corrections** — **NOT CHECKED.**
+- **§7.28 item 6 / the operator decision on already-present licensed text** —
+  **STILL OPEN.** ★ Item 4 above is adjacent and does not answer it.
+- **§7.20's clause audit of the Tier-A table** — **OPEN for all five
+  surviving rows.** ★★ §7.30 §3's correction was **verified as accepted at
+  source** at this filing: the untracked document's §11.5 now carries a
+  same-day correction block stating that *"discharged"* was the wrong word,
+  naming the clause-attribution-versus-observation distinction, citing
+  `DL-059`, and printing the denominator as **five**. **The obligation is
+  unchanged; only its acceptance is newly verified.**
+- **§7.26 item 1, §7.26 item 3, §7.24 items 1–2, §7.23 items 4–7** — **NOT
+  CHECKED.**
+- **The standing debt** — **NOT MOVED.** No `published-ground-truth` row for
+  any transform; `IEC 61966-2-1` remains paywalled and unobtained. ★ Nothing
+  in this filing was ever a candidate to move it.
+
+#### 6. ★★★ What this filing does NOT claim about the repository
+
+- **That anything was committed by it.** ★★ **`.git/refs/heads/master` and
+  `.git/refs/remotes/origin/master` both read
+  `3af2d87fd46115a5f9283508785c86ad3c95fdc7`** *(★ **VERIFIED** — both are
+  plain text files, read at this filing; **unchanged from §7.30's reading
+  earlier the same day**)*. Per **`DL-068`** the two hashes are carried and
+  **no push count is derived from them**; the remote ref is a **dated local
+  reading**, not a live statement about the remote. **This filing's edits
+  are in no commit.**
+- **That CI is green, that `v0.2.0` was released, or that any gate has run.**
+  ★ **In particular `tools/check-suite-name-absent.py` was NOT executed** —
+  this role has no shell. It was **read in full** at this filing and its two
+  rules applied by hand to every line written here.
+- **That any figure in the untracked document is correct**, in either its
+  withdrawn or its surviving form. ★★★ This role opened no image, ran no
+  sampler and computed no distance.
+- **That the request channel was polled.** ★★★ This role was instructed
+  **not** to arm a monitor and did not; **no file under
+  `D:\Dev\FeatureRequests\` was listed, opened or written at this filing.**
+  That two channel notes were corrected, and that one was renamed, is
+  `[REPORTED]` by `icc-engineer` and is **unverified here**.
+- **That anything was pushed, published or tagged.** ★ **This filing
+  publishes nothing and authorises nothing** (rule 9).
+
+---
+
+### 7.32 Status re-checked 2026-08-28 at the **`DL-074`-narrowing** filing — the **third** filing of this date. ★★★ **PARTIAL again, and it is the narrowest of the three: it closes ONE owed item, VERIFIES a second's repair at source and finds it incomplete, and opens ONE. A number entered this document at none of the three**
+
+★★ **Scope, before the items.** This filing carried a **decision** and a
+**reading of live source**; it carried **no apparatus run, no commit and no
+measurement**. Per **`DL-062`** every item not re-read is recorded as **not
+checked**, never as *unmoved*. ★ The §7 series' full sweep was **not** run —
+**three consecutive partial re-checks now**, and the debt at §7.29/§7.30 is
+unchanged by any of them. ★★ That the partials are *labelled* partial is not
+a substitute for the sweep; it is only what keeps the debt visible.
+
+#### 1. What this filing changed, in full
+
+| document | change |
+|---|---|
+| `ARCHITECTURE.md` §5 | **`DL-076`** — new, dated 2026-08-28; a **second flag block appended to `DL-074`** recording that its boundary paragraph is narrowed; and a **flag appended to `DL-075`** recording that its §7 is answered. ★ **Neither `DL-074`'s nor `DL-075`'s body is edited** |
+| `NUMERIC_CLAIMS.md` §1 | the **`intra-run-fixture-invariant`** row gains a dated clarification about the **unit**, one in-place narrowing marker on the phrase *"in colorimetric units"*, and a dated note under the fold-refusal block-quote. **No class added, none removed, no definition rewritten** |
+| `NUMERIC_CLAIMS.md` §3.40 | **§3.40.6** added — the unit, and one imprecise phrase in §3.40.5 marked *in place* |
+| `NUMERIC_CLAIMS.md` §7.32 | this section |
+| `TOLERANCES.md` §1.2 | **one dated sentence, no number and no bound**: cancellation licenses the comparison, not the unit |
+| `SESSION_LOG.md` | a **second same-day block appended to the thirty-seventh entry**. ★ **No thirty-eighth entry was opened** — one session, one date, one entry |
+
+**Untouched:** every file under `crates/`, every file under `tools/`,
+`ROADMAP.md` *(**grepped at this filing** for `DL-074` and `DL-075` —
+**no match**, so this filing's narrowing could not have made any line of it
+stale. ★ That is a search, **not** a full read of the file, and nothing
+broader about `ROADMAP.md` is claimed; §7.31's separate statement about its
+`DL-070` line stands and is not re-checked)*, `FEATURES.md`,
+`README.md`, `NEXT_SESSION.md`, `NUMERIC_CLAIMS.md` §3.39.3, and
+**`docs/SUITE_COMPATIBILITY.md`** *(read at this filing, **not edited**;
+`icc-engineer` is its writer)*.
+
+#### 2. ★★★ CLOSED — §7.31 newly-owed 2
+
+> **Reading 2.** `DL-070`'s reason 1 is about the **unit**, so it reaches an
+> intra-render ΔE as well. **`DL-074`'s evidence class survives intact and
+> loses no result**; its boundary paragraph is **narrowed, not withdrawn**.
+> **`ARCHITECTURE.md` `DL-076`.**
+
+- **Decided by `icc-engineer`** (the lead session), on this role's
+  recommendation. ★★ **No operator words were carried by the dispatch and
+  none are invented here.**
+- ★★ **Why the lead session could take it.** The item was recorded as owed to
+  `icc-engineer` **and** the operator because the honest outcomes included a
+  *loosening*. The ruling is the opposite: it **narrows this project's own
+  carve-out** so that a standing prohibition covers what its reason already
+  said. **A loosening would still be the operator's**, and none is done.
+- ★ **The generalising sentence, recorded because it is what a later reader
+  needs and not the ruling itself:** a common-mode display transform is
+  **non-linear**, so it **cancels in the difference without preserving the
+  distance**. Cancellation is an **attribution** argument; a unit is a
+  **metric** claim; the boundary paragraph merged them.
+
+#### 3. ★★ VERIFIED at source, and INCOMPLETE — §7.31 newly-owed 1
+
+The withdrawal sweep reported by `icc-engineer` was **checked against the
+untracked document itself rather than against the dispatch**:
+
+- **All six passages named in the dispatch are repaired**, in the form
+  described. ★ **[VERIFIED]** by reading, at this filing.
+- ★★ **Three further passages still quote a withdrawn quantity as live and
+  unmarked**, in two sub-sections — one of them **a fraction of a withdrawn
+  quantity surviving inside the very block that was corrected for a different
+  defect**, and **two of them unlawful only by virtue of today's ruling**
+  (both are intra-render distances). ★★ One of those two is stated in ΔE in a
+  sentence, while the withdrawal block a sub-section earlier asserts of it
+  that it was *"never in ΔE anyway"* — **a withdrawal block's account of what
+  it withdrew is itself a claim, and that one is falsified by its own
+  document.**
+  Line numbers were returned to that document's writer; **this role edited
+  nothing there.** `DL-076` §7 holds the shapes.
+- ⇒ **The item stays OPEN.** `DL-058`: six correct repairs are an artifact,
+  and **an artifact's existence is not the obligation's status.**
+
+#### 4. Newly owed by this filing
+
+1. ★★ **The withdrawal sweep is still incomplete** — three passages, two
+   sub-sections, reported with line numbers to `icc-engineer` and **not
+   verified as repaired by this role.** ★ The transferable half is recorded
+   at `DL-076` §7: **a correction aimed at a named clause does not sweep the
+   block it is written into**, so the remedy is a search for the *quantity*,
+   never a re-reading of the passages one remembers writing.
+
+#### 5. Owed items carried forward — **NOT re-checked at this filing**
+
+- **`TOLERANCES.md` §1's four-kind table** still does not enumerate
+  `derived-expectation` or `intra-run-fixture-invariant` — **carried from
+  §7.30 item 4 and §7.31 item 3, unchanged.** ★ §1.2 was **edited** at this
+  filing and **still carries no number**, verified by reading.
+- **`NC-268`'s two corrections** — **NOT CHECKED.**
+- **§7.28 item 6 / the operator decision on already-present licensed text** —
+  **STILL OPEN**, and explicitly not touched by `DL-076` §6 item 5.
+- **§7.20's clause audit of the Tier-A table** — **OPEN for all five
+  surviving rows**, not re-checked beyond §7.31's verification.
+- **§7.30 item 4 (the §3.39.3 observation)** — **OPEN**, unmoved, with
+  `icc-engineer`'s recorded position unchanged.
+- **§7.26 item 1, §7.26 item 3, §7.24 items 1–2, §7.23 items 4–7** — **NOT
+  CHECKED.**
+- **The standing debt** — **NOT MOVED.** No `published-ground-truth` row for
+  any transform; `IEC 61966-2-1` remains paywalled and unobtained.
+
+#### 6. ★★★ What this filing does NOT claim about the repository
+
+- **That anything was committed by it.** ★★ **`.git/refs/heads/master` and
+  `.git/refs/remotes/origin/master` both read
+  `3af2d87fd46115a5f9283508785c86ad3c95fdc7`** *(★ **VERIFIED** — both are
+  plain text files, read at this filing; **unchanged across all three
+  readings today**)*. Per **`DL-068`** the two hashes are carried and **no
+  push count is derived from them**; the remote ref is a **dated local
+  reading**, not a live statement about the remote. **This filing's edits are
+  in no commit.**
+- **That CI is green, that `v0.2.0` was released, or that any gate has run.**
+  ★ **`tools/check-suite-name-absent.py` was NOT executed** — this role has no
+  shell. It was **read in full** and its two rules applied by hand to every
+  line written here.
+- **That any figure in the untracked document is correct**, withdrawn or
+  surviving. ★★★ This role opened no image, ran no sampler, computed no
+  distance.
+- **That the request channel was polled.** ★★★ Instructed a third time not to
+  arm a monitor: **no file under `D:\Dev\FeatureRequests\` was listed, opened
+  or written at this filing.**
+
+---
+
+### 7.33 Status re-checked 2026-08-28 at the **Tier-A-sweep** filing — the **fourth** filing of this date. ★★★ **PARTIAL again — the fourth consecutive partial. It SUPERSEDES one shipped row, CORRECTS a dispatch's premise against live source, and opens three. A number entered this document at none of the four filings**
+
+★★ **Scope, before the items.** This filing carried a **methodological
+result**, a **reading of live source**, and a **pointer**; it carried **no
+apparatus run, no commit, and no measurement taken by this role.** Per
+**`DL-062`** every item not re-read is recorded as **not checked**, never as
+*unmoved*. ★ The §7 series' full sweep was **not** run — **four consecutive
+partial re-checks now**, and the debt at §7.29/§7.30 is unchanged by any of
+them. ★★ Labelling the partials *partial* is not a substitute for the sweep;
+it is only what keeps the debt visible.
+
+#### 1. What this filing changed, in full
+
+| document | change |
+|---|---|
+| `ARCHITECTURE.md` §5 | **`DL-077`** — new, dated 2026-08-28. Cross-references `DL-059` and `DL-074` **explicitly**, as the generalisation both were instances of. ★ **No existing entry's body is edited and no flag is appended to any** |
+| `ROADMAP.md` | a new section — **the rendering-intent tag-selection fixture gap**, with a **done-when written in advance** and the dispatch's premise **corrected against live source** in its first sub-section |
+| `NUMERIC_CLAIMS.md` §1 | one dated **scope question** on `derived-expectation`, raised and **deliberately not answered**. **No class added, none removed, no definition rewritten** |
+| `NUMERIC_CLAIMS.md` §3.30.11 | ★★★ **`NC-193` superseded** — as **staleness**, not error. **No row above it is edited; no count, proportion or figure is reproduced** |
+| `NUMERIC_CLAIMS.md` §3.41 | the pointer section for the sweep, in §3.40's established form |
+| `NUMERIC_CLAIMS.md` §7.33 | this section |
+| `SESSION_LOG.md` | a **third same-day block appended to the thirty-seventh entry**. ★ **No thirty-eighth entry was opened** — one session, one date, one entry |
+
+**Untouched:** every file under `crates/`, every file under `tools/`,
+`FEATURES.md`, `README.md`, `NEXT_SESSION.md`,
+**`TOLERANCES.md`** *(★★★ deliberately — see §3.41.4; the sweep's four figures
+are **ungraded** and fixing them as constants would be the tuned tolerance
+rule 5 forbids)*, and **`docs/SUITE_COMPATIBILITY.md`** *(**not read at this
+filing**; `icc-engineer` is its writer, and this filing's pointers to §12
+are `[REPORTED]` by the dispatch — ★ **stated because the three preceding
+filings today DID read it at source and this one did not**)*.
+
+#### 2. ★★★ SUPERSEDED — `NC-193`, and it is staleness rather than error
+
+**§3.30.11.** The row's `malformations: 0` half no longer holds across the
+whole of its corpus. **Nothing degraded**: the files are unchanged, and what
+moved is **our parser's disclosure**, widened correctly by the edition-gating
+fix recorded at **`ARCHITECTURE.md` `DL-067`** and `ROADMAP.md`'s Pass L
+retrospective §6. **A non-conformance that was always present and always
+unreported is now reported** — `CLAUDE.md` rule 6 working, not failing.
+
+- ★★ **No figure is carried into this document** and none may be quoted from
+  §3.30.11: no count, no proportion, no file name, no profile identity, no
+  byte value and no digest. **Rule 11.**
+- ★ **The judgement that a supersession NOTE is inside rule 11 is recorded in
+  §3.30.11 itself, with the reversal instruction**, rather than made silently.
+- ★★★ **A caution travels with it**: bytes in a **v2** profile's `84..100`
+  that match the v4 `profileID` computation are **not "a valid `profileID`"** —
+  v2 defines no such field for them to be valid *as*. **Naming the field
+  rather than the computation re-commits in prose the exact defect `DL-067`
+  fixed in code**, and that defect's whole finding is that a plausible
+  identifier **invites verification** and is therefore worse than a false
+  accusation.
+
+#### 3. ★★★ A DISPATCH PREMISE CORRECTED AT SOURCE — and it was the load-bearing half of a proposed Pass
+
+The dispatch stated, as *"verified against `fixtures/synthetic/` at this
+filing"*, that **no committed fixture carries an `A2B1` or a `B2A1` tag at
+all**, that every LUT fixture stops at `A2B0`/`B2A0`, and therefore that
+**intent→tag selection has zero regression coverage and a change silently
+using `A2B0` at media-relative would pass CI green.**
+
+★★★ **Checked against live source at this filing: the first two are FALSE and
+the third does not follow.** Four committed fixtures carry `A2B1`; two carry
+`B2A1`; and `crates/iccce-cli/tests/header_rendering_intent_not_consumed.rs`
+carries a **control with a separation floor**, asserted at both the library
+and the CLI surface, which **fails with a zero-separation message** under
+precisely the named defect — and which was **proved capable of failing by
+injection** roughly ten days ago. `ROADMAP.md`'s new section holds the table.
+
+★★ **Why this is recorded in the ledger and not only in the roadmap.** An
+**overstated gap** is expensive in a way an understated one is not: it buys
+fixtures duplicating coverage that exists, under a done-when that reads as
+urgent. ★ **The real gap survives and is sharper** — the **destination** side
+(`B2A0`/`B2A1`), where the only two fixtures carrying `B2A1` hold **byte-identical
+copies** and can separate nothing; **saturation** (`A2B2`/`B2A2`), which **no
+synthetic fixture carries at all**; and the **v4 element pipeline**, where the
+one separating pair is legacy `mft2`.
+
+⇒ **This is `DL-077` §2's own enumeration returning a real answer on material
+this project authored**, at the first attempt. **The rule paid for itself
+inside the filing that created it.**
+
+#### 4. Newly owed by this filing
+
+1. ★★★ **The `derived-expectation` scope question.** §1's definition requires
+   *"a synthetic fixture **this project authored**"*, and two of the sweep's
+   expectations run on a file we did not author. **Owed to `icc-conformance`**,
+   who owns the definition at `TOLERANCES.md` §3.4.4.1. ★ **Not blocking any
+   row here** — rule 11 keeps both rows out of this document entirely — which
+   is exactly why it is the cheapest moment to settle it. §7.18 newly-owed 6
+   is the precedent for what happens if it is left.
+2. ★★ **`DL-077` §2's enumeration has not been applied to this project's own
+   differential tests**, beyond the two fixture pairs named in `DL-077` §5.
+   ★ A sweep's yield — **including a yield of zero** — is the first
+   measurement of the rule's own value and belongs in the entry.
+   **Owed to `icc-conformance`.**
+3. ★ **The type-3 parametric-curve check is not in CI.** The fixture
+   `fixtures/synthetic/v4-rgb-para-type3.icc` exists *(**VERIFIED** — present
+   in `fixtures/synthetic/` and documented in `MANIFEST.md`)*, but **grep at
+   this filing finds its name in no file under `crates/` or
+   `tools/difftest/`** — so nothing in `cargo test` and nothing in the
+   differential harness consumes it. The agreement figure `icc-engineer`
+   reports for it is **`[REPORTED]`, unverified here, and carries no `NC-`
+   identifier.** ★★ **When the check lands it is owed an `NC-` row** with its
+   class and its runner named (`DL-031`). `ROADMAP.md`'s done-when item 4.
+
+#### 5. Owed items carried forward — **NOT re-checked at this filing**
+
+- **§7.32 item 1 — the withdrawal sweep's three remaining passages** —
+  ★★ **NOT CHECKED.** The untracked document was **not read at this filing**,
+  so nothing is claimed about whether they were repaired.
+- **`TOLERANCES.md` §1's four-kind table** still does not enumerate
+  `derived-expectation` or `intra-run-fixture-invariant` — **carried from
+  §7.30 item 4, §7.31 item 3 and §7.32, unchanged and not re-read.**
+  ★ Item 1 above **adds to** this debt rather than replacing it.
+- **`NC-268`'s two corrections** — **NOT CHECKED.**
+- **§7.28 item 6 / the operator decision on already-present licensed text** —
+  **STILL OPEN**, untouched. ★★ **`CLAUDE.md` rule 11 says in terms that it did
+  not answer this**, and §3.30.11's judgement call sits adjacent to it without
+  presuming it.
+- **§7.20's clause audit of the Tier-A table** — **OPEN for all five surviving
+  rows**, not re-checked.
+- **§7.30 item 4 (the §3.39.3 observation)** — **OPEN**, unmoved.
+- **§7.26 item 1, §7.26 item 3, §7.24 items 1–2, §7.23 items 4–7** — **NOT
+  CHECKED.**
+- **The standing debt** — **NOT MOVED.** No `published-ground-truth` row for
+  any transform; `IEC 61966-2-1` remains paywalled and unobtained, and
+  **CIE 15 is now a second instance of the same shape** (§3.41.4).
+
+#### 6. ★★★ What this filing does NOT claim about the repository
+
+- **That anything was committed by it.** ★★ **`.git/refs/heads/master` and
+  `.git/refs/remotes/origin/master` both read
+  `3af2d87fd46115a5f9283508785c86ad3c95fdc7`** *(★ **VERIFIED** — both are
+  plain text files, read at this filing; **unchanged across all four readings
+  today**)*. Per **`DL-068`** the two hashes are carried and **no push count is
+  derived from them**; the remote ref is a **dated local reading**, not a live
+  statement about the remote. **This filing's edits are in no commit.**
+- **That CI is green, that `v0.2.0` was released, or that any gate has run.**
+  ★ **`tools/check-suite-name-absent.py` was NOT executed** — this role has no
+  shell. It was **read in full** at this filing and its two rules — contents
+  and file names — applied by hand to every line written here.
+- **That the test counts recorded in `SESSION_LOG.md` for this date were
+  measured by this role.** ★★★ They are **`[REPORTED]`** by `icc-engineer`,
+  are `apparatus-census` in character, and **carry no `NC-` identifier** —
+  §1's census class requires the command, and a count is not an inventory
+  (`DL-031`).
+- **That any figure in the untracked document is correct.** ★★★ This role
+  opened no image, ran no sampler, computed no distance, and **did not read
+  that document at this filing at all.**
+- **That the request channel was polled.** ★★★ Instructed a **fourth** time not
+  to arm a monitor: **no file under `D:\Dev\FeatureRequests\` was listed,
+  opened or written at this filing.**
+- **That anything was pushed, published or tagged.** ★ **This filing publishes
+  nothing and authorises nothing** (rule 9).
+
+**Next free ids after this filing: `NC-308`, `NA-013`, ~~`DL-077`~~ **`DL-078`**.**
+
+> ★★★ **CORRECTED 2026-08-29 by `icc-librarian`, at the handoff refresh.**
+> This line read *"next free … `DL-077`"* — and **`DL-077` was filed BY THIS
+> FILING.** *(**[VERIFIED]** — `ARCHITECTURE.md`'s `DL-077` header block reads
+> *"Fourth filing of this date"*, which is this one.)* The strike-through is
+> left standing rather than the line being silently rewritten, because the
+> **shape** is the record.
+>
+> ★★ **It is `DL-062`/`DL-068` again, in the tightest form the mechanism has
+> taken here: a status field that was already false at the instant it was
+> written**, by the hand that had just consumed the id, in the sentence whose
+> only job is to say which ids are free. Every previous instance decayed over
+> hours or days; this one had no true interval at all.
+>
+> ★ **Why nothing else moves.** A "next free id" pointer is not a measurement:
+> no `NC-` row is added, no number changes, no tolerance moves, and **no §7
+> status pass is opened** for this correction — per `DL-058`, opening one would
+> inflate an integer §7 itself tracks. **The cost of the error was bounded**
+> because the ids are also derivable from the two live documents; the cost of
+> *not* correcting it is that the next filing takes `DL-077` a second time.
+
+### 7.34 Status re-checked 2026-09-01 at the **`--bpc` no-op** filing. ★★★ **The first filing in five to add NUMBERS to this document — twelve rows — and the first since 2026-08-25 whose subject is this project's own code rather than somebody else's corpus. Also PARTIAL: the §7 series' full sweep was NOT run**
+
+**Filed by `icc-librarian`** from `icc-engineer`'s dispatch. **Twelve rows,
+`NC-308` … `NC-319`, in the new §3.42.** ★★ **No tolerance was minted and
+`TOLERANCES.md` was NOT touched** — every one of the twelve is
+`REPORTED, NOT GRADED` or behavioural, and inventing a bound for a
+729-operand ink distance nobody has a budget for would be a **tuned
+tolerance**, which `CLAUDE.md` rule 5 forbids by name.
+
+#### 1. ★★★ Discharged, or moved
+
+| item | status |
+|---|---|
+| **§7.23's *"no `--bpc` + preservation row anywhere"*** | ★ **NOT discharged, and deliberately not narrowed by this filing.** §3.42 measures `--bpc` **alone**; **no row here combines it with `--preserve-black`**, at any layer. The item stands exactly as written. |
+| **The `README.md` Pass 4 status row** | ★★ **DISCHARGED — verified at source.** `README.md:143` now reads **`Done`** with the four-intent coverage spelled out *(read 2026-09-01)*, and `ROADMAP.md:3556` justifies it — *"★ MET AT LAST, and this was the clause that failed"*. ★★★ **The dispatch records that `pdfce` had flagged this staleness TWICE across two files.** That is instance **#7** of `DL-062`/`DL-068`, and the first found by **the consumer** rather than by anyone here. |
+| **`Chain::with_bpc()`'s silent-no-op hole** | ★★★ **CLOSED at the API** — `Chain::bpc_disclosure()` *(verified — `transform.rs:1128`)*, `BpcScale::{source_black, destination_black, is_identity}` *(verified — `bpc.rs:448/459/474`)*, and a **stderr** disclosure in the CLI *(verified — `main.rs:500`–`:527`)*. Decision recorded as `ARCHITECTURE.md` **`DL-078`**. |
+
+#### 2. ★★★ Newly owed at this filing
+
+1. **★★★ `NC-319` has no pin, and `oracle-behaviour-at-pin` requires one.**
+   The lcms2 v4-gating statement (register `M7`) arrived as a source-read
+   with **no commit hash**. §1's definition ends *"every such row is scoped
+   to one pin, and the pin moving invalidates it."* **Owed:
+   `icc-spec-librarian` or `icc-engineer` supplies the hash the reading was
+   taken at.** ★ **Do not repair it by assuming `DL-012`'s pin** — that
+   would be asserting an unmeasured fact about another repository, which is
+   the one thing this role may never do.
+2. **★★★ `NC-308` … `NC-318` are protected by nothing.** No test, no
+   difftest record and no CI job asserts any of the eleven; the two unit
+   tests added this session assert the **identity predicate on synthetic
+   black points**, not the SWOP measurement. **Owed: either a difftest row
+   for the `--bpc` identity on this pair, or a written statement that the
+   figures are permanently `[REPORTED]`.** ★ `icc-conformance`'s synthetic
+   `B2A2` fixture, which the dispatch says is being built in parallel, is
+   the obvious carrier — but **a fixture that is not this pair does not
+   protect these rows**, it replaces them with different ones.
+3. **★★ `NC-315` … `NC-317` cannot be re-derived from the tree.** The
+   instrumentation was reverted. **Owed: a decision on whether the
+   estimator should carry a permanent, feature-gated disclosure of its exit
+   and its fitted root**, so that the next reader does not have to
+   re-instrument to answer the same question. ★ This is `DL-037`'s move
+   (*a disclosure that gates nothing*) applied one layer down, and `DL-049`
+   is the precedent for it paying off.
+4. **★★ `docs/FEATURES.md` enumerates TWO outcomes for `--bpc` where there
+   are THREE.** `FEATURES.md:70`–`72` reads *"black point compensation.
+   **Opt-in and never forced**; refused **by name** at absolute intent and
+   outside the estimation subset, rather than silently ignored"* *(verified
+   — read 2026-09-01)*. ★★★ **Nothing there is false**, which is why it
+   survives a sweep for wrong statements — but a user reading it concludes
+   that a call which is not refused *does something*, and `NC-313` measures
+   two intents where it does not. **Owed to `icc-engineer`** (this role does
+   not edit that file): a third bullet, or a clause naming the identity
+   case. ★ **This is the closest thing to a `--bpc` overclaim in any tracked
+   document**, and the sweep that found it is item 6 below.
+5. **★★★ `README.md:127` states the wrong version, and it is `DL-062`
+   instance #8.** It reads *"Version `0.1.0` — read from the workspace
+   manifest on 2026-08-21, **which is the authoritative source**"*. The
+   manifest now reads **`version = "0.2.0"`** *(★ **VERIFIED** —
+   `Cargo.toml:40`, read 2026-09-01)*. ★★★ **The sentence names its own
+   verification method AND its own date and still went stale**, which is the
+   sharpest available demonstration that `DL-062`'s *"re-verify at commit
+   time"* is not sufficient — the thing that invalidated it was the `0.2.0`
+   version bump, in somebody else's commit, exactly as `DL-062` predicts.
+   **Owed to `icc-engineer`.** ★ It is worse than an ordinary stale number
+   because a **version** is what a reader uses to decide which docs apply.
+6. **★ The `--bpc` overclaim sweep is COMPLETE for tracked documents and
+   its result is recorded here so it is not re-run blind.** 101 occurrences
+   of `--bpc` across 16 files were enumerated; the tracked prose in
+   `CHANGELOG.md`, `README.md`, `docs/FEATURES.md`, `docs/ARCHITECTURE.md`,
+   `docs/ROADMAP.md`, `docs/NEXT_SESSION.md` and this document was read at
+   every hit. ★★ **No document claims `--bpc` changes any value.** What
+   exists is item 4's *incompleteness*, and `ROADMAP.md:3779`'s
+   *"`Chain::with_bpc()` **applies** it"*, which is a statement about
+   **wiring** inside a verified-in-tree block and is **not** repaired here —
+   the block is a dated reading and editing it would falsify its date.
+   ★★★ **`docs/SUITE_COMPATIBILITY.md` was searched BY NAME** (7 hits),
+   because it is gitignored and a gitignore-respecting search under-counts
+   this project's citations — the 9-of-13 lesson from the apparatus-split
+   filing.
+
+#### 3. Carried unchanged, and NOT re-checked at this filing
+
+★★★ **This is a PARTIAL status pass — the fifth consecutive one — and the
+list below is carried, not verified.**
+
+- **§7.33 items 1–3, §7.32 item 1, §7.30 item 4, §7.28 item 6, §7.26 items
+  1 and 3, §7.24 items 1–2, §7.23 items 4–7** — **NOT CHECKED.**
+- **`TOLERANCES.md` §1's four-kind table** still does not enumerate
+  `derived-expectation` or `intra-run-fixture-invariant` — **carried,
+  not re-read.**
+- **§7.20's clause audit of the Tier-A table** — **OPEN for all five
+  surviving rows**, not re-checked.
+- **The standing debt** — ★★ **NOT MOVED, and this filing makes the gap
+  larger rather than smaller.** Twelve new rows and **not one
+  `published-ground-truth`** among them; there is still **no
+  `published-ground-truth` row for any transform**. ★ For this subject none
+  is available: **ISO/CD 18619 is a committee draft**, no published black
+  point exists for `USWebCoatedSWOP`, and `IEC 61966-2-1` remains paywalled
+  and unobtained.
+
+#### 4. ★★★ What this filing does NOT claim about the repository
+
+- **That anything was committed by it.** ★★ **`.git/refs/heads/master` and
+  `.git/refs/remotes/origin/master` both read
+  `3af2d87fd46115a5f9283508785c86ad3c95fdc7`** *(★ **VERIFIED** — both
+  loose ref files read as plain text at this filing)*. Per **`DL-068`** the
+  two hashes are carried and **no push count is derived from them**; the
+  remote ref is a **dated local reading**, never a statement about the
+  remote's present contents. **This filing's edits, and the code changes it
+  files, are in no commit.**
+- **That any gate ran.** ★★★ The dispatch reports `cargo test --workspace`
+  green and `cargo clippy --release --all-targets` clean apart from the
+  pre-existing `license`/`license-file` manifest warnings. **Both are
+  `[REPORTED]`; this role has no shell and ran neither.** ★ **No count was
+  carried** — per `DL-031` a bare census integer is ambiguous from birth,
+  and the dispatch supplied none, which is the right shape.
+- **That the instrumented figures were observed by anyone but their
+  author.** ★★★ `NC-315` … `NC-317` came from a build that no longer
+  exists.
+- **That the request channel was polled.** ★★★ Instructed a **fifth** time
+  not to arm a monitor: **no file under `D:\Dev\FeatureRequests\` was
+  listed, opened or written at this filing.** The reply named in the
+  dispatch is `icc-engineer`'s act, not this role's.
+- **That anything was pushed, published or tagged.** ★ **This filing
+  publishes nothing and authorises nothing** (rule 9).
+
+**Next free ids after this filing: `NC-320`, `NA-013`, `DL-079`.**
+
+> ★ **Derived by reading the two live documents at the END of this filing**,
+> per `DL-068`'s 2026-08-29 clause — **not** by incrementing what §7.33
+> said. `NC-319` is the highest row minted above; `ARCHITECTURE.md`'s
+> highest `### DL-0` heading after this filing is **`DL-078`**, which **this
+> filing consumed**; **`NA-013` was NOT consumed** — §3.42 registers no new
+> approximation, because the `--bpc` identity is a *conforming outcome of a
+> clause*, not a departure from one.
 
 ---
 

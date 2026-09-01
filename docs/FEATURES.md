@@ -67,9 +67,23 @@ set per line at 6 decimals.
 
 - `--intent` — `media-relative` (default), `perceptual`, `saturation`,
   `absolute`.
-- `--bpc` — black point compensation. **Opt-in and never forced**;
-  refused **by name** at absolute intent and outside the estimation
-  subset, rather than silently ignored.
+- `--bpc` — black point compensation. **Opt-in and never forced**, with
+  **three** outcomes, not two:
+  1. **Refused by name** — at absolute intent, or outside the estimation
+     subset. Never silently ignored.
+  2. **Applied**, changing output values.
+  3. ★ **Accepted and resolved to the IDENTITY**, changing nothing. This
+     is a real, conforming outcome, and it is the one a reader of the
+     first two bullets alone would not expect: MEASURED 2026-09-01 on
+     sRGB → U.S. Web Coated (SWOP) v2 at perceptual and saturation,
+     **0 of 729 grid operands changed** (media-relative changed 727, by
+     up to 0.244 ink). ISO/CD 18619:2013 4.2.5.5's `max(0, ·)` clamp
+     takes the fitted root to `L* = 0`, which equals the matrix/TRC
+     source black, so the 4.2.6 map is `a = 1, b = 0`.
+     **The CLI says so on stderr** rather than leaving a user to
+     conclude the flag was ignored; a library caller reads
+     `Chain::bpc_disclosure()`. See `NUMERIC_CLAIMS.md` §3.42 and
+     `ARCHITECTURE.md` `DL-078`.
 - `--preserve-black <policy>` — **required argument, no default.** See
   §3.
 
@@ -390,7 +404,7 @@ wrong.
 
 ## 6. Status and stability
 
-**Version `0.2.0` in `Cargo.toml`**, released 2026-08-25. ★ Check
+**Version `0.3.0` in `Cargo.toml`**, released 2026-09-01. ★ Check
 `README.md` §Status against it: the two disagreed between 2026-08-18 and
 2026-08-25 (`0.0.1` there against `0.1.0` here), and **the manifest is
 authoritative**. ★★ The version literal also appears in the root
