@@ -1,6 +1,6 @@
 ---
 name: iccce-stale-status-decays-faster-than-a-number
-description: DL-062 (2026-08-18) — a document said "not fixed here, deliberately" about a defect fixed 28 s earlier; a stale STATUS decays faster than a stale number because the fix lands in someone else's commit. NOW EIGHT INSTANCES: #4/#5 are consecutive handoffs carrying a wrong PUSH COUNT ⇒ DL-068 rules the field itself wrong (carry the two REF HASHES); #6 is a "next free ids" line naming a DL its OWN filing had just consumed — FALSE AT THE INSTANT OF WRITING; ★★★ #7/#8 (2026-09-01) both came from OUTSIDE — pdfce flagged a README "In progress" row TWICE across two files, and #8 is a version line that NAMES ITS OWN VERIFICATION METHOD AND DATE and went stale anyway, which is why "re-verify harder" is not the fix. ★★★ AND THE REVERSE FAILURE (2026-09-01, later): DL-068's run-id form was discharged BY REQUEST and the VERY NEXT CI observation omitted the databaseId — a field fixed by asking is not a field enforced
+description: DL-062 (2026-08-18) — a document said "not fixed here, deliberately" about a defect fixed 28 s earlier; a stale STATUS decays faster than a stale number because the fix lands in someone else's commit. NOW EIGHT INSTANCES: #4/#5 are consecutive handoffs carrying a wrong PUSH COUNT ⇒ DL-068 rules the field itself wrong (carry the two REF HASHES); #6 is a "next free ids" line naming a DL its OWN filing had just consumed — FALSE AT THE INSTANT OF WRITING; ★★★ #7/#8 (2026-09-01) both came from OUTSIDE — pdfce flagged a README "In progress" row TWICE across two files, and #8 is a version line that NAMES ITS OWN VERIFICATION METHOD AND DATE and went stale anyway, which is why "re-verify harder" is not the fix. ★★★ AND THE REVERSE FAILURE (2026-09-01, later): DL-068's run-id form was discharged BY REQUEST and the VERY NEXT CI observation omitted the databaseId — a field fixed by asking is not a field enforced; then asking again returned SIX rows including the project's ONLY observed CI FAILURE (767233d, run 32863604742)
 metadata:
   type: project
 ---
@@ -287,7 +287,36 @@ is a month old***, the way `4` and `0` did. A follow-up dispatch supplied
   `v0.1.0`/`v0.2.0` **can never get an id retroactively**, which is the
   concrete cost of the years the field went uncarried.
 
+**★★★ UPDATED 2026-09-01 (last filing of the day) — THE SKIPPED
+`databaseId` WAS SUPPLIED, AND ASKING FOR THE RIGHT FIELD PAID OUT FIVE
+ROWS BEYOND THE QUESTION.** `gh run list --limit 6 --json
+databaseId,headSha,name,conclusion` returned the tip run —
+`CI` **`33489701770`** on **`d328b95`**, `success` — and with it four
+older runs nobody had asked about.
+
+- ★★★ **One of them is RED.** `767233d` (the scrub commit) → run
+  **`32863604742`** → **`failure`**, corroborated **by a different
+  instrument**: `19b5383`'s commit message reads *"fix(ci): the name gate
+  could not see the commit it was gating"*. **It is the only evidence in
+  this project's entire record that CI can go red** — every other row is
+  `success`, and a gate observed only green is indistinguishable from one
+  that **cannot fail** ([[iccce-unfailable-row-protected-only-by-siblings]]).
+  **Worth more than the five greens beside it.**
+- ★★ **The cost of the omitted field was never "one missing id."** It was
+  **five runs' worth of history no filing could see**, invisible for as
+  long as nobody named the field. ⇒ **the argument for putting the field
+  in the release checklist rather than in a status item**, still owed.
+- ★ **Do not over-read the red row.** No job breakdown, no log; the causal
+  link to the name gate is **a reading**, and `DL-073` rules out a commit
+  message as the instrument for a scope claim. Say ***run `32863604742`
+  concluded `failure`***.
+- ★ **`--limit 6` still truncates.** It supports nothing about runs older
+  than `767233d`, and no count
+  ([[iccce-count-from-a-sample-is-not-the-population]]).
+
 Related: [[provenance-is-a-different-axis-from-evidence-class]],
+[[source-read-does-not-overturn-a-run]] (the same day's other pin: a
+hash buys **re-checkability, not rank**),
 [[iccce-pass-status]],
 [[iccce-artifact-existence-is-not-obligation-status]] (an artifact's
 existence is not the obligation's status — this is its twin: a

@@ -4295,6 +4295,29 @@ its forced BPC **and** its fixed perceptual black on the destination being
 that is not a defence.** Filed as `NC-319`, **without a pin**, which is
 owed.
 
+> ★★★ **DATED ADDENDUM, 2026-09-01 — PIN SUPPLIED; PROPOSED WORDING
+> CORRECTION REFUSED.** The pin is
+> **`21c582a594fe5279f90c0b93437c398f93bf62b0`** (tag `lcms2.19.1`) —
+> `[REPORTED]` from a clone, **[VERIFIED]** to match
+> `tools/difftest/lcms2.pin:18`. ★★ **"the destination being v4" above is
+> deliberately NOT edited.** The re-read that supplied the pin cited
+> `cmscnvrt.c:1132` setting `BPC[i]` **per profile** and concluded that a
+> **v4 source into a v2 destination** would force BPC. **`NC-078`
+> measured that pairing at this pin and got `0,0`, bit-identical** — the
+> shorthand is right for a two-profile chain, because
+> `ComputeConversion` consumes `BPC[i]` for the leg *into* `hProfiles[i]`.
+> ⇒ ★★★ **A source-read does not overturn a run** (`DL-082`). ★ **Still
+> owed:** a **two-profile scope clause**; a chain of three has never been
+> measured (`DL-021`). Full working at `NUMERIC_CLAIMS.md` **§3.42.5's
+> addendum** and **§7.37**.
+>
+> ★ **A second, smaller thing the pinned read settles**, relevant to
+> item 1 of the block above: the forced-BPC gate's home is now cited to a
+> line — **`cmscnvrt.c:1132`** — where that item could say only *"this
+> one lives in `cmscnvrt.c`"*. **The corpus row is still owed**; it is
+> `icc-spec-librarian`'s file, not this one's, and a `file:line` in a
+> dispatch is not a corpus entry.
+
 #### ★★ What this block does NOT add to Pass 5
 
 - ★★★ **It does not strengthen Pass 5's grade.** No tolerance was minted,

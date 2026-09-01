@@ -2028,3 +2028,39 @@ crates.io** and the operator **still has not answered**; **no
 `NC-320` / `NA-013` / `DL-082`.** Instructed an **eighth** time not to
 poll the channel — **nothing under `D:\Dev\FeatureRequests\` was
 touched.**
+
+**★★★ 2026-09-01, LAST FILING OF THE DAY — §7.37, the EIGHTH consecutive
+PARTIAL status pass, and `DL-082`. Two owed items named as closed; one
+closed cleanly, one closed by half.**
+
+| item | outcome |
+|---|---|
+| **the tip run's `databaseId`** (§7.36.6b item 1) | ★★★ **DISCHARGED.** `CI` **`33489701770`** on **`d328b95`**, `success`. Four more rows arrived unasked, one of them **`767233d` → `32863604742` → `failure`** — **the project's only observed CI failure, ever** |
+| **`NC-319`'s missing lcms2 pin** (owed since §7.34) | ★★ **PIN DISCHARGED** at **`21c582a594fe5279f90c0b93437c398f93bf62b0`** (tag `lcms2.19.1`), `[REPORTED]` from a clone and **[VERIFIED]** to match `tools/difftest/lcms2.pin:18`. ★★★ **The CORRECTION that came with it is REFUSED** — see below |
+| **class movement** | ★★★ **NONE.** `NC-319` is still `oracle-behaviour-at-pin`, **source-read, never executed**, a **cross-check, not ground truth**. **A pin buys re-checkability, not rank** |
+
+★★★ **The refusal, and it is the day's real finding.** The pinned re-read
+cited `cmscnvrt.c:1132` (`BPC[i]` set **per profile**) and concluded that
+*"destination v4"* was wrong — *"pair a v4 source with a v2 destination
+and the sentence would have been wrong."* **`NC-078` measured that exact
+pairing, at that exact pin, twenty days earlier: `0,0`, bit-identical.**
+§3.11.6 had already recorded both the setting site *and* the consumption
+site (`ComputeConversion` builds the leg **into** `hProfiles[i]`). The
+dispatch re-found **half** a mechanism. Correction refused; **no tracked
+wording edited**; a **two-profile scope clause** owed instead.
+Full entry: [[source-read-does-not-overturn-a-run]].
+
+**★★★ TOP OF THE OWED LIST NOW, above crates.io in urgency:** the wrong
+correction **already went to `pdfce` in the channel reply, edited in
+place, with the correct original named as withdrawn** — so the consumer
+holds the wrong one **last**. A re-correction is owed by `icc-engineer`.
+`[REPORTED]` — nothing under `D:\Dev\FeatureRequests\` was read.
+
+**Also unmoved:** `NC-308`…`NC-318` still **asserted by nothing**;
+`NC-315`…`NC-317` still not re-derivable; **`v0.2.0` still has no release
+record** (★ and now demonstrably cheap to have had — `19b5383`'s and
+`767233d`'s run ids exist); the release-checklist run-id column still
+owed; **nothing published to crates.io**, operator still unanswered; **no
+`published-ground-truth` row for any transform**. **Next free
+`NC-320` / `NA-013` / `DL-083`.** Instructed a **ninth** time not to poll
+the channel — **nothing under `D:\Dev\FeatureRequests\` was touched.**

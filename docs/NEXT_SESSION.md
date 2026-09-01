@@ -86,10 +86,11 @@ is unchanged.
 | tip | **`d328b95`**, working tree **clean** [REPORTED] |
 | the four commits | `0e9c62c` (BPC disclosure) · `f4ca7c0` (the `B2A2` fixture + test) · `9562654` (the filings) · `a4d9003` (bump + CHANGELOG), then `d328b95` (agent memory) — **all five corroborated in `.git/logs/refs/heads/master`** [VERIFIED] |
 | pushed | **[VERIFIED]** — `update by push` at `a4d9003` and again at `d328b95` in `.git/logs/refs/remotes/origin/master` |
-| CI | **three runs, all `success`, all [REPORTED]** by `icc-engineer` from `gh run list` — `CI` **`33489492338`** on **`a4d9003`**, `Release` **`33489492467`** on the tag (same commit), and a **third `CI` run on the tip `d328b95`**. ★ **Each id and verdict came from ONE observation**, so an id is a re-checkable **address**, not a corroboration (`DL-077`) |
+| CI | **three runs bearing on the release, all `success`, all [REPORTED]** by `icc-engineer` from `gh run list` — `CI` **`33489492338`** on **`a4d9003`**, `Release` **`33489492467`** on the tag (same commit), and `CI` **`33489701770`** on the tip **`d328b95`** *(id supplied 2026-09-01, §7.37)*. ★ **Each id and verdict came from ONE observation**, so an id is a re-checkable **address**, not a corroboration (`DL-077`) |
 | ★★★ CI **coverage** | **`success` on `a4d9003` AND on the tip `d328b95`** *(narrowed 2026-09-01, `NUMERIC_CLAIMS.md` §7.36.6b)*. ★ The earlier line *"the tip is unevidenced"* is **retired** — but it was **correct when written**, and what closed it is a **fourth observation of the same kind**, not a stronger one. **Still say "[REPORTED]", never "verified"** |
-| ★★ the tip run has **no id** | ★★★ **Owed, and cheap.** That listing requested `headSha`, **not `databaseId`** — so the one run covering the tip is the one with no re-checkable address, which is `DL-068`'s complaint from the other side. **Owed by `icc-engineer`: one `gh run list --json databaseId,headSha`.** ★ Do **not** guess it from the two ids above |
-| ★ what the run listing does **not** support | it was `--limit 4` — **truncated, not an inventory**. It supports *"the most recent `CI` run has head `d328b95`"*, **not** *"there are three CI runs"*. And `createdAt` was requested but **no value was carried**, so the tip run **cannot** be time-correlated to its push |
+| ★★ the tip run's id | ★★★ **DISCHARGED 2026-09-01** (`NUMERIC_CLAIMS.md` §7.37 item 2). `CI` **`33489701770`** on the tip **`d328b95`**, `success`. **Every CI-green statement this project carries now has a re-checkable address** — and none of them is verified, which the id does not change |
+| ★★★ **CI CAN GO RED — and this is the only evidence of it** | ★★ `767233d` (the scrub commit) → run **`32863604742`** → **`failure`**, arriving unasked in the same listing. Corroborated **by a different instrument**: `19b5383`'s message reads *"fix(ci): the name gate could not see the commit it was gating"* [VERIFIED]. ★★★ Every other CI row in this project is `success`, and a gate observed only green is indistinguishable from one that **cannot fail** (`DL-066`). ★ **Do not write "the name gate failed on `767233d`"** — no job breakdown, no log; the causal story is a **reading**. Say ***run `32863604742` concluded `failure`*** |
+| ★ what the run listing does **not** support | it was `--limit 6` — **truncated, not an inventory**. It supports *"the most recent `CI` run has head `d328b95`"*, **not** any count and **nothing** about runs older than `767233d`. And `createdAt` was **not** requested this time either, so the tip run still **cannot** be time-correlated to its push |
 | crates.io | ★★★ **nothing published.** See the box above |
 | ★★★ the twelve figures | **RE-RUN against a from-scratch build and all twelve reproduce exactly** — added 2026-09-01, `NUMERIC_CLAIMS.md` §3.42.1's second addendum. ★ **The build was `d328b95`, one commit past the tag** (`git describe` = `v0.3.0-1-gd328b95`) |
 | ★★★ …and the one-commit gap is now **DIFF-EVIDENCED** | `git diff --name-only a4d9003 d328b95` returns **two paths, both under `.claude/agent-memory/icc-engineer/`** *(complete output, [REPORTED])*. ★★ **The class did not move — the INSTRUMENT did**, from the commit message `DL-073` rules out to the diff `DL-073` prescribes. §3.42.1's **third** addendum. ★ Residual: two Markdown files still differ, and *"Markdown under `.claude/` is not a build input"* is **a reading** |
@@ -161,6 +162,35 @@ on and no other**.
 
 ## ★★ The open items, ranked
 
+> ★★★ **RANKED ABOVE ITEM 1, AND PLACED IN A BOX RATHER THAN AS AN ITEM
+> "0" SO THAT NOTHING BELOW RENUMBERS** — the same reasoning `CLAUDE.md`
+> rule 11 gives for its own placement.
+>
+> ★★★ **THE CHANNEL REPLY TO `pdfce` NOW CARRIES A CLAIM THIS PROJECT'S
+> LEDGER CONTRADICTS, AND IT WAS SENT AS A CORRECTION.**
+> **[REPORTED]** — no file under `D:\Dev\FeatureRequests\` was read at
+> the filing that raised this. On 2026-09-01
+> `open/reply_all_four_asks_measured_and_your_bpc_would_have_done_nothing.md`
+> was **edited in place**: the wording *"lcms2 gates forced BPC on the
+> **destination** being v4"* was **named as withdrawn** and replaced with
+> a **per-profile** reading whose stated consequence is that *a v4 source
+> into a v2 destination would force BPC*.
+>
+> ★★★ **`NC-078` measured that exact pairing, at that exact lcms2 pin,
+> and got `0,0` — bit-identical. No forcing.** The withdrawn wording was
+> **correct** for a two-profile chain; the replacement's consequence is
+> **falsified**. Full working: `NUMERIC_CLAIMS.md` **§3.42.5's addendum**
+> and **§7.37 newly-owed 1**; the rule is **`DL-082`**.
+>
+> **Owed by `icc-engineer`:** a further correction to that file carrying
+> `NC-078`'s **two measured directions** and the **two-profile scope
+> clause**, and stating plainly that the intervening correction is
+> withdrawn. ★★ **Urgent for a reason that is not pedantry:** the
+> consumer read the original **first** and the wrong correction
+> **second**, so the last thing they hold is the wrong one — and a
+> correction **authenticates itself**, which makes it the hardest form to
+> undo (`DL-057`, `DL-080`).
+
 1. ★★★ **The crates.io question** — operator's, see the box at the top.
    **Do not decide it, do not act on it, and re-ask rather than infer.**
 2. ★★ **`NC-308` … `NC-318` are protected by nothing** — no test, no
@@ -170,10 +200,27 @@ on and no other**.
    this** — `NUMERIC_CLAIMS.md` §7.34 predicted exactly that in writing
    (*"a fixture that is not this pair does not protect these rows, it
    replaces them with different ones"*) and the prediction held.
-3. ★★ **`NC-319` has no pin.** An `oracle-behaviour-at-pin` row without a
-   pin is now inside a tagged release. **Owed: the lcms2 commit hash the
-   reading was taken at.** ★ Do **not** repair it by assuming `DL-012`'s
-   pin.
+3. ★★★ **`NC-319`'s pin — DISCHARGED 2026-09-01.**
+   **`21c582a594fe5279f90c0b93437c398f93bf62b0`** (tag `lcms2.19.1`),
+   `[REPORTED]` from a clone and **[VERIFIED]** to match
+   `tools/difftest/lcms2.pin:18`. ★ The refusal above — *"do not repair
+   it by assuming `DL-012`'s pin"* — **was honoured**: the pin was
+   obtained, not assumed, and it turned out to be the one that would have
+   been assumed. **That it would have been right is not a reason the
+   assumption would have been sound** (`DL-081`).
+   ★★ **The class did NOT move.** Still `oracle-behaviour-at-pin`, still
+   **source-read, never executed**, still a **cross-check against another
+   implementation, not ground truth**. **A pin buys a re-checkable
+   address, not rank.**
+   ★★★ **What replaces this item, and it is smaller:** the *"keyed by the
+   destination"* shorthand needs a **two-profile scope clause**. It has
+   never been measured on a chain of three, where an intermediate profile
+   is the destination of one leg and the source of the next; `DL-021`
+   forbids the extrapolation. **Owed** across §3.11.6/`NC-078`, the
+   `NC-319` row, `ARCHITECTURE.md`'s `M7`, `TOLERANCES.md`'s
+   `_cmsLinkProfiles` line and `ROADMAP.md`'s two — a five-document
+   sweep, deliberately **not** done in the same filing that did the last
+   one, so that the last one gets reviewed first.
 4. ★ **The type-3 parametric-curve check is still free and still not in
    CI.** The fixture exists; nothing under `crates/` or `tools/difftest/`
    consumed it as of the 2026-08-28 grep. **Split it out; do not block it

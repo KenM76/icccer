@@ -10,6 +10,7 @@
 - [An inferred environment constraint is a READING](project_inferred_environment_constraint_is_a_reading.md) — DL-060, now VERIFIED: pypdfium2 renders; and engines' silence about a FIGURE reads as absence of the fact.
 - [A number labelled with its source](project_source_labelled_number.md) — DL-061: "the suite publisher's own patch value" printed into a report for a value the patch lacks; the label is the untested half.
 - [A stale STATUS decays faster than a number](project_stale_status_decays_faster_than_a_number.md) — DL-062 ⇒ DL-068: carry ref HASHES and CI RUN IDS. #6 false at the INSTANT of writing; and the run-id form was skipped by the VERY NEXT observation.
+- [A source-read does not overturn a run](project_source_read_does_not_overturn_a_run.md) — DL-082: the pinned, file:line-cited CORRECTION was wrong and NC-078 falsified it. Every provenance signal favoured the wrong answer.
 - [Provenance is a different axis from evidence class](project_provenance_is_a_different_axis_from_evidence_class.md) — DL-080: discharged by RE-MEASURING; then the diff settled the last link — better INSTRUMENT, same `[REPORTED]` class.
 - [Words are read by humans, the COUNT by code](project_words_are_read_by_humans_count_by_code.md) — DL-063: `malformations: N` counts DISCLOSURES; two files, same bytes, same count, one conformant.
 - [A fabricated value is a forged credential](project_fabricated_value_is_a_forged_credential.md) — DL-067: a v2 `profileID` invented from reserved bytes, `malformations: 0`. Worse than a false accusation — it invites verification.
@@ -30,7 +31,7 @@
 - [A count from a sample is not the population](project_count_from_a_sample_is_not_the_population.md) — DL-053: "two iccMAX" was TEN; [VERIFIED] certifies the measurement happened, never what it ranged over.
 
 - [ICC.1 PDF blocker — cleared](project_icc1_pdf_operator_blocker.md) — resolved 2026-08-11; the lasting lesson is that "free download" never implies "automated retrieval permitted" (ITU-R is next).
-- [iccce Pass status](project_iccce_pass_status.md) — to the 2026-09-01 **`v0.3.0` release** filing: both refs d328b95, DL-079, crates.io OPEN with the operator; next free NC-320/NA-013/DL-080.
+- [iccce Pass status](project_iccce_pass_status.md) — to §7.37 (2026-09-01, 8th PARTIAL): NC-319 pinned, correction refused, tip run id in; next free NC-320/NA-013/DL-083.
 - [A release range is not the dispatch's list](project_release_range_is_not_the_dispatch_list.md) — Pass G/H were named as 0.2.0 content and shipped in 0.1.0; and a tag ref is an ANNOTATED TAG OBJECT, not the commit.
 - [An unowned refusal is a slow deletion](project_unowned_refusal_is_a_slow_deletion.md) — DL-079: v0.2.0 got NO release record because two correct refusals were never re-asked. Name the owner in the same paragraph.
 - [A tool that quotes licensed material gets SPLIT](project_licensed_tool_split_outside_the_tree.md) — DL-071: the case file lives OUTSIDE the repo, not gitignored inside it; and the deleted predecessor took the only auditor of its own numbers.

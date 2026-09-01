@@ -9456,6 +9456,136 @@ which is an incomplete row and is filed as such. **§7.34 carries it as
 owed.** Do not repair it by assuming the pin `DL-012` names; that would be
 asserting an unmeasured fact about somebody else's repository.
 
+> ★★★ **DATED ADDENDUM, 2026-09-01 (later still) — THE PIN ARRIVED AND
+> `NC-319` SPLITS IN TWO. The PIN half is DISCHARGED. The CLAIM half is
+> REFUSED, because the re-read that came with the pin proposed a
+> correction that `NC-078` — a MEASURED row in this ledger, on exactly
+> the profile pairing the correction turns on — CONTRADICTS.**
+>
+> **Filed by `icc-librarian`** from `icc-engineer`'s dispatch. This role
+> has no shell, cloned nothing, and read no lcms2 source. Everything
+> attributed to the clone below is **`[REPORTED]`**.
+>
+> ##### (a) The pin — DISCHARGED, and by REPLACEMENT rather than backfill
+>
+> | field | value |
+> |---|---|
+> | **method** | shallow clone of `https://github.com/mm2/Little-CMS.git` at tag **`lcms2.19.1`** into `%TEMP%`, `git rev-parse HEAD`, source read, clone deleted — `icc-engineer`, 2026-09-01 |
+> | **commit** | **`21c582a594fe5279f90c0b93437c398f93bf62b0`** |
+> | **★ corroborated HERE, without a shell** | **[VERIFIED]** — `tools/difftest/lcms2.pin` line 18 reads `LCMS2_COMMIT=21c582a594fe5279f90c0b93437c398f93bf62b0`, **byte-identical**, read as plain text at this filing. ★★ That corroborates **the two values match**. It does **not** corroborate that `git rev-parse` returned it — the pin file is a file in this repository, not an observation of GitHub |
+> | **why the match is worth stating anyway** | `lcms2.pin`'s own header warns the tag is the mutable half. A tag resolving today to the commit the pin recorded on **2026-08-11** (`LCMS2_LICENCE_VERIFIED`) is a **dated non-observation of tag drift**, which is the thing that would have silently invalidated every `21c582a` citation in this project |
+> | **★ NOT a licence event** | `lcms2.pin` was **not edited** and the pin **did not move**. The header's re-verification obligation is **not** triggered. **`LEGAL.md` §4 needs nothing from this filing** |
+>
+> ★★★ **What the discharge actually is, stated so nobody records it as
+> retroactive pinning.** `NC-319`'s reading was taken by
+> `icc-spec-librarian` as register `M7` **at an unrecorded time against an
+> unrecorded commit**. Supplying a pin now cannot reach backwards and
+> scope that reading. What happened instead is that **a fresh read was
+> taken at a verified commit and it reproduced the claim** — so `NC-319`
+> is **replaced by a pinned re-read**, not repaired. That is `DL-080`'s
+> shape exactly: *discharged by re-measuring, never by argument.* ★ The
+> refusal at the top of this section — *"do not repair it by assuming the
+> pin `DL-012` names"* — was **correct and was honoured**; the pin was
+> obtained, not assumed, and it happens to be the one that would have been
+> assumed. **That it would have been right is not a reason the assumption
+> would have been sound** (`DL-081`).
+>
+> ##### (b) ★★★ The proposed correction — **REFUSED, and the falsifier is `NC-078`**
+>
+> The dispatch reports that `cmscnvrt.c:1132` at the pin reads
+> `if (cmsGetEncodedICCversion(hProfiles[i]) >= 0x4000000) BPC[i] = TRUE;`
+> — **per profile in the chain, not "the destination"** — and concludes:
+> ***"Pair a v4 source with a v2 destination and the sentence would have
+> been wrong."***
+>
+> **That conclusion is contradicted by a row already in this document.**
+>
+> | | |
+> |---|---|
+> | **the falsifier** | **`NC-078`** (§3.11.6, Pass 4b, 2026-08-11, **at the same pin `21c582a`**) — *forced BPC measured in BOTH directions on one pair, lcms2 against itself* |
+> | **v4 source → v2 destination** | ★★★ **`0,0` — bit-identical.** The forcing **did not happen**, which is what the dispatch says it should have |
+> | **v2 source → v4 destination** | **`3,137 3×10⁻²`** device. The forcing **did** happen |
+> | **the mechanism §3.11.6 already recorded** | `_cmsLinkProfiles` sets **`BPC[i]` per profile** — *the dispatch's line 1132, already on file* — **but** `DefaultICCintents` consumes it as `ComputeConversion(i, hProfiles, Intent, BPC[i], …)`, which builds the conversion **from `hProfiles[i−1]` into `hProfiles[i]`**. ⇒ **for a two-profile chain the only flag ever read is the destination's**, and *"a v4 source into a v2 destination sets a flag nothing reads"* |
+>
+> ★★ **The dispatch and this ledger AGREE about the code and DISAGREE
+> about the behaviour, and the reason is which site each read.** The
+> dispatch read the **setting** site and inferred a consequence. §3.11.6
+> read the setting site **and the consumption site**, and then **ran the
+> experiment in both directions**. ⇒ The dispatch has re-found **half** of
+> an already-filed mechanism and drawn from that half a conclusion the
+> other half forbids.
+>
+> ★★★ **THE RULE THIS SETTLES, and it is the reason the refusal is
+> filed rather than the correction: A SOURCE-READ DOES NOT OVERTURN A RUN.**
+> `NC-319` is `oracle-behaviour-at-pin` **by source-read, never executed**
+> — this section's own header calls it *"the weakest kind this ledger
+> carries."* `NC-078` is the same class **executed**. When the two
+> conflict on a behavioural question, **the executed one holds and the
+> read one yields**, and pinning the read does not change that ordering.
+> **A pin buys re-checkability. It does not buy rank.**
+>
+> ##### (c) What the correction IS right about, salvaged rather than discarded
+>
+> ★ **The per-profile observation is real and `NC-078` does not cover it.**
+> `NC-078` measured a **two-profile** chain. In a chain of **three or
+> more** — a devicelink leg, a proofing chain, any `ComputeConversion`
+> where `i` is neither first nor last — an intermediate profile is the
+> **destination of leg `i`** and the **source of leg `i+1`**, and the
+> "destination" shorthand has no obvious meaning. **Nobody in this project
+> has measured that**, and `DL-021` (*a measured implementation behaviour
+> is a fact about the direction and path it was measured in*) says in
+> terms that it must not be extrapolated. ⇒ **Newly owed** at §7.37: the
+> shorthand *"keyed by the destination"* is **scoped to a two-profile
+> chain**, and every passage that uses it should say so.
+>
+> ##### (d) ★★★ The wording is in THREE TRACKED FILES, not only the channel
+>
+> The dispatch places the erroneous wording *"in the channel reply and in
+> the dispatch that produced `NC-319`."* **A sweep of live source at this
+> filing finds it in three tracked documents as well** — **[VERIFIED]**,
+> each read:
+>
+> | file:line | text |
+> |---|---|
+> | `NUMERIC_CLAIMS.md:9442` | the `NC-319` row itself — *"on the **destination being v4**"* |
+> | `ARCHITECTURE.md:9736` | `M7` — *"gates … on the **destination being v4**"* |
+> | `SESSION_LOG.md:8382` | *"perceptual black on the destination being **v4**"* |
+>
+> ★★ **None of the three is edited by this filing**, because on `NC-078`'s
+> evidence **the wording they carry is the right one for the chain length
+> this project has measured.** What they are owed is the **scope clause**
+> from (c), not a correction. ★ Recorded because a dispatch's account of
+> where its own words live is a claim like any other, and this one
+> under-counted by three — the same shape as the gitignored-file sweep
+> that read 9 where 13 existed.
+>
+> ##### (e) The "also worth a line" finding was already filed, in more detail
+>
+> The dispatch offers, as a spare observation, that at v4
+> perceptual/saturation lcms2 takes
+> `BlackPointAsDarkerColorant(hProfile, INTENT_RELATIVE_COLORIMETRIC, …)`
+> for a matrix shaper rather than the fixed black — *"recorded so the next
+> reader does not have to re-clone."* ★★ **The next reader did not have to
+> re-clone.** That branch is on file at `ARCHITECTURE.md` (`cmssamp.c`
+> L370–374, with the full branch table), `ROADMAP.md` §…'s
+> `BlackPointUsingPerceptualBlack` / `BlackPointAsDarkerColorant` pair, and
+> `TOLERANCES.md` (L432–446 and the L370–374 quote) — **all at pin
+> `21c582a`**, and **`NC-102` measured its cost at exactly `0,0`** as
+> *"lcms2 via guard 3's matrix-shaper escape."* *(★ **[VERIFIED]** — all
+> four locations grepped and read at this filing.)* ⇒ **Not new, and the
+> re-clone was not needed for it.** Filed anyway because *"I checked and it
+> was already known"* is a cheaper sentence than the re-derivation, and
+> because a corroborating independent read of an existing claim is worth
+> exactly what it is worth: **the two readings agree, and they share
+> nothing but the pin** (`DL-077`).
+>
+> ⇒ **`NC-319` STATUS AFTER THIS ADDENDUM:** **pin CLOSED** at
+> `21c582a594fe5279f90c0b93437c398f93bf62b0`; **class UNCHANGED** —
+> `oracle-behaviour-at-pin`, **source-read, never executed**, a
+> **cross-check against another implementation and not ground truth**;
+> **claim wording UNCHANGED and now defended by `NC-078`**; **scope clause
+> owed**. ★★★ **Pinning did not promote it and was never going to.**
+
 #### 3.42.6 ★★ What this section does NOT claim
 
 - **Not an accuracy result of any kind.** ★★★ **There is no oracle in
@@ -14558,6 +14688,226 @@ the ground that the thing it distrusted keeps turning out to be true.**
 - **That anything was published to crates.io.** ★★ **Nothing was**, and
   this addendum authorises nothing (rule 9).
 - **That the request channel was touched.** ★★★ Instructed an **eighth**
+  time not to arm a monitor and not to poll: **no file under
+  `D:\Dev\FeatureRequests\` was listed, opened or written.**
+
+---
+
+### 7.37 Status re-checked 2026-09-01 (last filing of the day), at the **pinned-re-read** dispatch. ★★★ **`NC-319`'s pin — the oldest unpaid item in a shipped release — is DISCHARGED. The re-read that discharged it also proposed a CORRECTION, and the correction is REFUSED: a MEASURED row on exactly the pairing it turns on contradicts it. No row is minted, no number moved, and no evidence class was promoted**
+
+**Filed by `icc-librarian`** from `icc-engineer`'s dispatch.
+**Next free ids after this filing: `NC-320`, `NA-013`, `DL-083`** — this
+filing consumes **`DL-082`** and mints no row.
+
+★★ **This IS a status pass and it opens §7.37, unlike §7.36.6 which
+deliberately did not.** The distinction is the one §7.36.6 itself drew:
+that addendum *"re-checked nothing"* and only filled two named holes.
+**This filing re-checked a claim across five documents and found a
+conflict.** A sweep is a check. ⇒ **This is the EIGHTH consecutive
+PARTIAL status pass** — everything under §7.35's and §7.33's "carried,
+not verified" is **still not checked**, now for a fourth filing.
+
+#### 1. ★★★ §7.34 / §7.36.3's `NC-319` item — **the PIN half DISCHARGED, the CLAIM half REFUSED**
+
+Written up in full at **§3.42.5's dated addendum**. The status-pass
+summary:
+
+| | |
+|---|---|
+| **the item, as it stood** | *"An `oracle-behaviour-at-pin` row **with no pin**, now inside a tagged release."* Carried since §7.34, restated at §7.35, §7.36.3 and §7.36.6e |
+| **what arrived** | A shallow clone at tag **`lcms2.19.1`**, `git rev-parse HEAD` = **`21c582a594fe5279f90c0b93437c398f93bf62b0`**, a fresh source read, clone deleted. `[REPORTED]` |
+| **corroborated here** | ★ **[VERIFIED]** that `tools/difftest/lcms2.pin:18` carries the **same 40 hex characters**. That is a match between two values, **not** an observation of GitHub |
+| **the discharge is by REPLACEMENT** | `NC-319`'s original `M7` reading was taken at an **unrecorded commit**. A pin supplied later cannot scope a reading taken earlier. What discharges the item is that **a fresh read at a verified commit reproduced the claim** — `DL-080`'s shape |
+| **★★★ the class did NOT move** | Still `oracle-behaviour-at-pin`, still **BY SOURCE-READ, NEVER EXECUTED**, still a **cross-check against another implementation, not ground truth**. **A pin buys a re-checkable address; it buys no rank** — precisely the `DL-068` property a run id buys for a CI claim, and precisely as limited |
+| **★★★ the correction is REFUSED** | The dispatch's *"pair a v4 source with a v2 destination and the sentence would have been wrong"* is **contradicted by `NC-078`**, which **measured that exact pairing at the same pin** and got **`0,0` bit-identical**. See §3.42.5(b) |
+| **no tracked wording is edited** | On `NC-078`'s evidence the three tracked passages carrying *"the destination being v4"* are **right for the chain length this project has measured**. They are owed a **scope clause**, not a correction |
+
+> ★★★ **THE SHAPE, STATED ONCE SO IT IS NOT RE-LEARNED: A CORRECTION
+> ARRIVED WITH BETTER PROVENANCE THAN THE THING IT CORRECTED, AND WAS
+> STILL WRONG.** The original `NC-319` wording was an **unpinned**
+> source-read. The correction was a **pinned** source-read, with a
+> `file:line` citation and a verbatim quotation of the line. **Every
+> visible provenance signal favoured the correction.** What settled it was
+> none of those: it was that **the question is behavioural and somebody
+> had already run the experiment.** ⇒ **When a source-read and a run
+> disagree about behaviour, the run holds** — and a reader comparing only
+> the provenance decorations would have concluded the opposite.
+
+#### 2. §7.36.6b item 1 — **the tip run's `databaseId` — DISCHARGED**
+
+`gh run list --limit 6 --json databaseId,headSha,name,conclusion`, run by
+`icc-engineer`, 2026-09-01, six rows returned:
+
+| workflow | `headSha` | run id | conclusion |
+|---|---|---|---|
+| **`CI`** | **`d328b95`** (the tip) | **`33489701770`** | **`success`** |
+| `Release` | `a4d9003` | `33489492467` | `success` |
+| `CI` | `a4d9003` | `33489492338` | `success` |
+| `CI` | `3af2d87` | `32865182164` | `success` |
+| `CI` | `19b5383` | `32863891580` | `success` |
+| `CI` | **`767233d`** | `32863604742` | ★★ **`failure`** |
+
+⇒ **Every CI-green statement this project carries now has a re-checkable
+address.** The item asked for one `databaseId`; it returned six rows.
+
+| field | value |
+|---|---|
+| **provenance class** | ★★★ **`[REPORTED]`, unchanged.** No `gh` was run here, no run page opened, no HTTP request made. **`DL-077`:** all six rows share one listing, one reading, one reporter — **an id is an address, never a corroboration of the conclusion beside it** |
+| **★ the two ids we already held are REPRODUCED** | `33489492338` on `a4d9003` and `33489492467` on the `Release` run appear again, unchanged, from a **different listing with a different `--json` field set**. ★★ That is **not** an independent confirmation — same tool, same reporter, same repository — but it **is** a check that the earlier transcription was not a typo, which is a real and separable failure mode |
+| **★★ §7.36.6b item 4 is now moot** | That item warned against "correcting" §7.36.1's **ref-name** table against §7.36.6b's **`headSha`** table. This listing carries `headSha` for **all six**, including the `Release` run at `a4d9003`, so **the two tables are now reconciled by a third that spans them.** The warning stands as history; the ambiguity is gone |
+
+★★★ **`767233d` FAILED, and the failure is the most valuable row in the
+table.** The dispatch supplies it unasked and flags it as such. Two
+reasons it is kept:
+
+1. **It is corroborated by something already in this repository.**
+   `19b5383`'s commit message reads ***"fix(ci): the name gate could not
+   see the commit it was gating"*** *(★ **[VERIFIED]** — read at this
+   filing, from the recent-commits record; the commit exists between
+   `767233d` and `3af2d87`)*. A **red** run on `767233d` followed by a
+   **fix commit** naming the gate, followed by a **green** run on
+   `19b5383`, is **a consistent story from two independent sources** —
+   the run listing and the commit log. ★★ It is `DL-077`'s test passing
+   rather than failing for once: these two arms share the **reporter**
+   but not the **instrument**, and they agree.
+2. ★★★ **It is the only evidence in this project's entire record that CI
+   CAN GO RED.** Every prior CI row here is `success`. A gate that has
+   only ever been observed green is, on the evidence, indistinguishable
+   from a gate that cannot fail (`DL-066` — *a row that cannot fail*).
+   **One observed `failure` retires that doubt for the workflow as a
+   whole**, and it is worth more than the five greens beside it.
+
+> ★★ **What the red run does NOT establish.** Not *which job* failed, not
+> *why*, and not that the fix in `19b5383` is what turned it green — the
+> listing carries **no job breakdown and no log**. The causal story above
+> is **a reading built from a conclusion and a commit message**, and
+> `DL-073` is explicit that a commit message is the wrong instrument for
+> a scope claim. ⇒ **Do not write "the name gate failed on `767233d`."**
+> The supportable sentence is: ***run `32863604742`, on `767233d`,
+> concluded `failure`.***
+
+★ **The count trap, stated because `--limit 6` invites it.** This listing
+is **the six most recent runs, not an inventory** (§7.36.6b item 2,
+unchanged and now applying to a bigger number). It supports *"the most
+recent `CI` run has head `d328b95`"*. It does **not** support *"there
+have been six runs"*, *"there have been five `CI` runs"*, or **any**
+statement about runs older than `767233d`. **A count from a sample is not
+the population**, and this is a truncated sample of unknown depth.
+
+#### 3. ★★ §7.36.4 item 2 — the release-checklist column — **still owed, and this filing is its second worked example**
+
+The item asked that `ROADMAP.md`'s release table make the run id a
+**required column**, so a CI-green claim's durable form does not depend
+on a librarian asking for it. **Nothing here builds that column.**
+
+★★★ **But note what just happened, because it is the argument for the
+column in miniature.** §7.36.6b's item 1 asked for **one** `databaseId`.
+It was answered with a listing that carries `databaseId` for **six** runs
+— including a **failure** nobody had asked about and which no prior
+filing knew existed. ⇒ **The right field, requested once, paid out five
+rows beyond the question.** The cost of the omission was never *"one
+missing id"*; it was **five runs' worth of history that no filing could
+see**, and it went unnoticed for as long as nobody asked for the field by
+name. **That is the case for enumerating the field in the checklist
+rather than in a status item.**
+
+#### 4. Explicitly carried forward, unmoved by this filing
+
+| item | status |
+|---|---|
+| **`NC-308` … `NC-318` are asserted by nothing** | ★★★ **STILL OWED** (§7.35 item 2). No test, no difftest row, no CI job. ★★ **`NC-078` defending `NC-319`'s wording does not defend these** — different rows, different pair, different question |
+| **`NC-315` … `NC-317` cannot be re-derived from the tree** | **STILL OWED** (§7.35 item 3) |
+| **crates.io** | **OPEN with the operator, unanswered.** `DL-079`. Nothing published; this filing authorises nothing (rule 9) |
+| **`v0.2.0` has no release record** | **STILL OWED** (§7.35 newly-owed 1). ★ **And now measurably cheaper to have avoided:** `19b5383`'s and `767233d`'s run ids exist and are in hand, so a `v0.2.0` record could carry a CI address today — the omission was never that the evidence was unobtainable |
+| **the release-checklist run-id column** | **STILL OWED** (§7.36.4 item 2) — see item 3 above |
+| **the DL-080 question** (may a figure leave the repository before its provenance is settled) | ★★★ **STILL OPEN, and this filing makes it URGENT.** See newly-owed 1 |
+| **the standing debt** | **NOT MOVED.** Still **no `published-ground-truth` row for any transform** |
+| **§7.28 item 6** — may published numbers from other licensed sources live here | **STILL OPEN**, still not answered by rule 11 |
+| **everything under §7.35's and §7.33's "carried, not verified"** | ★ **STILL NOT CHECKED.** **EIGHTH consecutive PARTIAL** |
+
+#### 5. ★★★ Newly owed at this filing
+
+1. ★★★ **THE CHANNEL REPLY NOW CARRIES A CLAIM THIS LEDGER CONTRADICTS,
+   AND IT WAS SENT AS A CORRECTION — WHICH IS THE FORM HARDEST TO
+   UNDO.** The dispatch states that
+   `open/reply_all_four_asks_measured_and_your_bpc_would_have_done_nothing.md`
+   **has been edited in place**, with the old *"destination v4"* wording
+   **named as withdrawn** and the per-profile reading put in its place.
+   On §3.42.5(b)'s evidence **the withdrawn wording was correct for a
+   two-profile chain and the replacement's stated consequence is
+   falsified by `NC-078`.**
+   ★★ **Why this is worse than the original error would have been.** A
+   first statement invites checking. **A correction authenticates
+   itself** — it arrives having visibly done the work, with a pin and a
+   `file:line`, and it explicitly retires the alternative. `DL-057`
+   already holds that *a wrong clause is worse than no clause* and that
+   *a correct citation on the wrong subject invites acceptance*; this is
+   both at once, plus `DL-080`'s shape — **the consumer had the original
+   first and the correction second**, so the last thing they read is the
+   wrong one.
+   **Owed, and it is the most urgent item in this document:** a further
+   correction to that channel file, carrying **`NC-078`'s two measured
+   directions** and the **two-profile scope clause**, and stating plainly
+   that the intervening correction was withdrawn. **Owed by
+   `icc-engineer`** *(named in the same paragraph as the gap, per
+   `DL-079` §3)*. ★ **No file under `D:\Dev\FeatureRequests\` was read,
+   listed or written at this filing** — the reply's existence, name,
+   contents and edit history are **`[REPORTED]`** entirely.
+2. ★★ **The "keyed by the destination" shorthand needs a SCOPE CLAUSE —
+   two profiles.** `NC-078` measured a **two-profile** chain. For a chain
+   of three or more, an intermediate profile is the destination of one
+   leg and the source of the next, and the shorthand has no clear
+   referent. **`DL-021` forbids the extrapolation in terms.** **Owed:**
+   the clause added wherever the shorthand appears — `NC-078`/§3.11.6,
+   the `NC-319` row, `ARCHITECTURE.md`'s `M7` and `DL-013`/`DL-021`
+   entries, `TOLERANCES.md`'s `_cmsLinkProfiles` line, and `ROADMAP.md`'s
+   two. ★ **Not done here**, because it is a sweep across five documents
+   and this filing has already made one; doing both would mean the sweep
+   was never reviewed. **Owed to the next `icc-librarian` filing.**
+3. ★ **A three-profile forced-BPC measurement does not exist.** The
+   dispatch's per-profile reading is genuinely uncovered by `NC-078`
+   there. **Owed, if anyone wants the shorthand retired rather than
+   scoped:** a devicelink or proofing chain measured at perceptual, both
+   arms. **Nobody is obliged to build it** — the scope clause in item 2
+   is the cheap discharge and is sufficient.
+4. ★ **`767233d`'s failure has no cause on record.** The run is red, the
+   next commit's message names a gate, and **nothing connects them but a
+   reading.** **Owed, cheaply, and only if anyone cares:** the failing
+   job name from that run. ★ **Explicitly NOT owed:** a log. The
+   conclusion is enough for the one thing the row is load-bearing for —
+   *that this workflow can go red*.
+
+#### 6. ★★★ What this filing does NOT claim
+
+- **That any command was run here.** ★★★ **None was.** No `gh`, no
+  `git`, no `cargo`, no clone, no HTTP request. Every run id, every
+  conclusion, the commit hash and both `file:line` citations are
+  **transcribed from the dispatch**.
+- **That the lcms2 clone happened, or that `git rev-parse` returned that
+  hash.** `[REPORTED]`. ★★ What is **[VERIFIED]** is narrower and
+  entirely local: **`tools/difftest/lcms2.pin` contains that hash**, and
+  the two strings match.
+- **That `NC-078` is right and the dispatch is wrong.** ★★★ **That is
+  not the claim.** `NC-078` is itself `oracle-behaviour-at-pin`,
+  **REPORTED, NOT GRADED**, one pair, one pin, and this role did not run
+  it either. The claim is that **a run and a read conflict, and the
+  project's rule is that the read yields** — which decides what gets
+  written, not what is true. **Settling it needs a re-run, not a
+  re-read.**
+- **That the correction was propagated anywhere beyond the channel
+  file.** ★★ Three tracked documents carry the original wording and
+  **none was edited by the dispatch or by this filing.**
+- **That the class of `NC-319` moved.** ★★★ **It did not.** It gained a
+  pin and kept every limitation it had.
+- **That any tolerance moved.** ★★ **`TOLERANCES.md` was READ at this
+  filing** (the `_cmsLinkProfiles` and `cmssamp.c` passages, for the
+  sweep) **and NOT edited.** Nothing here mints or moves a bound.
+- **That CI ran, or passed, or failed.** All six verdicts are
+  `[REPORTED]`. **This role has never observed a CI run in this
+  project**, and that sentence is now more than twenty filings old.
+- **That anything was published to crates.io.** ★★ **Nothing was**, and
+  this filing authorises nothing (rule 9).
+- **That the request channel was touched.** ★★★ Instructed a **ninth**
   time not to arm a monitor and not to poll: **no file under
   `D:\Dev\FeatureRequests\` was listed, opened or written.**
 

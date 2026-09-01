@@ -9740,6 +9740,22 @@ implementation, not the standard.* It is filed as `NC-319` with the
 weakest class this ledger carries, and **without a pin**, which §7.34
 records as owed.
 
+> ★★★ **DATED ADDENDUM, 2026-09-01 — THE PIN IS SUPPLIED, AND A
+> CORRECTION TO THIS PARAGRAPH'S WORDING WAS PROPOSED AND REFUSED.**
+> The pin is **`21c582a594fe5279f90c0b93437c398f93bf62b0`** (tag
+> `lcms2.19.1`; `[REPORTED]` from a clone, and **[VERIFIED]** to match
+> `tools/difftest/lcms2.pin`). ★★ **The phrase "the destination being
+> v4" above is NOT edited**, because the re-read that supplied the pin
+> proposed replacing it with a **per-profile** reading whose stated
+> consequence — *that a v4 source into a v2 destination would force BPC*
+> — is **falsified by `NC-078`**, which **measured that exact pairing at
+> this exact pin** and got **`0,0`, bit-identical**. ⇒ **A source-read
+> does not overturn a run.** Full working at `NUMERIC_CLAIMS.md`
+> **§3.42.5's addendum** and **§7.37**; the rule is **`DL-082`**.
+> ★ **What this paragraph IS owed** is a scope clause — the shorthand
+> holds for a **two-profile chain**, and no chain of three has ever been
+> measured (`DL-021`). **Still owed; not written here.**
+
 #### 4. ★★★ THE FINDING THAT IS NOT ABOUT COLOUR: **the API hole was found by a CONSUMER'S QUESTION, and this project's own testing had never noticed it**
 
 `Chain::with_bpc()` has existed since Pass 5. It has unit tests, a
@@ -10244,3 +10260,135 @@ before it is filed; **or** `DL-073` is ever applied and the prescribed
 diff is **unavailable** (a rewritten history, a lost remote), which is
 the case neither entry has faced and where the honest answer may be that
 the link simply cannot be closed.
+
+---
+
+### DL-082 — ★★★ **PINNING A SOURCE-READ IS NOT BOOKKEEPING: IT FORCES A RE-READ, AND A RE-READ CAN RETURN A CORRECTION THAT IS ITSELF WRONG. A pinned citation with a `file:line` carries every visible mark of good provenance and NONE of them decide a behavioural question — when a source-read and a RUN disagree about behaviour, the run holds. `NC-319`'s pin arrived, the re-read that brought it proposed a correction, and `NC-078` — measured at the same pin, on exactly the pairing the correction turns on — falsifies it**
+
+**Date:** 2026-09-01 · **Occasioned by:** the discharge of `NC-319`'s
+missing lcms2 pin, and the correction that arrived with it ·
+**Filed by:** `icc-librarian`, from `icc-engineer`'s pinned-re-read
+dispatch · **Rows affected:** **`NC-319`** gains a pin and keeps its
+class; **`NC-078`** is promoted to nothing but is now load-bearing in a
+second place; **no number moved, no tolerance moved, no evidence class
+was promoted** · **Instance recorded in full:** `NUMERIC_CLAIMS.md`
+**§3.42.5's dated addendum** and **§7.37**, and `SESSION_LOG.md`
+2026-09-01, forty-second entry · **Relates to** `DL-080` (discharged by
+re-measuring, not by argument), `DL-057` (a wrong clause is worse than
+no clause), `DL-081` (a distrust rule's invisible payout), `DL-068`
+(carry the hash), `DL-021` (a behaviour is a fact about the direction
+and path it was measured in), `DL-077` (enumerate what the arms share)
+
+#### The decision, in two parts
+
+> ★★★ **PART ONE — the reason to pin, and it is not reproducibility.**
+> **An unpinned citation cannot be checked, and therefore cannot be found
+> wrong.** That is the real cost of leaving one, and it is strictly
+> higher than *"a future reader might not reproduce it."* A claim nobody
+> can check does not sit at low confidence; **it sits outside the
+> apparatus entirely**, accruing citations, until something unrelated
+> disturbs it. Pinning drags it back inside — and the first thing that
+> happens inside is that somebody re-reads it.
+>
+> ★★★ **PART TWO — and the re-read is not automatically right. WHEN A
+> SOURCE-READ AND AN EXECUTED MEASUREMENT DISAGREE ABOUT BEHAVIOUR, THE
+> MEASUREMENT HOLDS AND THE READ YIELDS — regardless of which one carries
+> the better-looking provenance.** A pin, a `file:line` and a verbatim
+> quotation are marks of **re-checkability**. They are not marks of
+> **rank**. A read tells you what the code says at one site; a run tells
+> you what the program does across all of them.
+
+#### What happened, because the entry is worth nothing as an abstraction
+
+| step | what |
+|---|---|
+| **1. the debt** | `NC-319` — *"lcms2 gates both its forced BPC and its fixed perceptual black on the destination being v4"* — was filed as `oracle-behaviour-at-pin` **with no pin**, and carried as owed through five status passes and into a tagged release |
+| **2. the pin arrives** | Clone at tag `lcms2.19.1`, `git rev-parse HEAD` = **`21c582a…`**, matching `tools/difftest/lcms2.pin` |
+| **3. ★ the pin forces a re-read** | Obtaining the pin **required opening the source again**. That is the mechanism of this entry: **you cannot pin a reading without re-taking it** |
+| **4. the re-read returns a correction** | `cmscnvrt.c:1132` reads `hProfiles[i]` — **per profile**, not "the destination". Conclusion offered: *"pair a v4 source with a v2 destination and the sentence would have been wrong"* |
+| **5. ★★★ the correction is falsified by our own ledger** | **`NC-078`**, Pass 4b, **the same pin**, measured **both directions on one pair**: v4 source → v2 destination = **`0,0` bit-identical**; v2 source → v4 destination = **`3,137 3×10⁻²`**. The pairing the correction turns on **was run, and it came out the other way** |
+| **6. why the read went wrong** | It read the **setting** site and not the **consumption** site. `§3.11.6` had already recorded both: `_cmsLinkProfiles` does set `BPC[i]` per profile — *the correction's own line* — **but** `ComputeConversion(i, hProfiles, …, BPC[i], …)` builds the leg **into `hProfiles[i]`**, so in a two-profile chain the only flag ever read is the destination's |
+| **7. the outcome** | Pin **accepted**. Correction **refused**. Tracked wording **unchanged**. A **two-profile scope clause** newly owed |
+
+#### ★★★ The asymmetry that makes this a decision rather than a war story
+
+**Every visible provenance signal favoured the wrong answer.**
+
+| | the original claim | the correction |
+|---|---|---|
+| pin | **none** | **`21c582a…`, verified against `lcms2.pin`** |
+| citation | none | **two `file:line`, quoted verbatim** |
+| method disclosed | no | **yes — clone, `rev-parse`, read, delete** |
+| self-critical framing | no | **yes — it corrects its own author, by name** |
+| **★★★ correct?** | ★★★ **YES**, for the chain length measured | ★★★ **NO** |
+
+⇒ **A reader ranking these two on their decorations gets the wrong one,
+and gets it confidently.** The only thing that separated them was that
+**somebody had already run the experiment** — and that fact was in this
+repository the whole time, in a row filed twenty days earlier.
+
+★★ **The corollary, and it is the operational half of this entry:**
+**before accepting a correction to an lcms2 behavioural claim, grep this
+ledger for a row that MEASURED it.** Not for a row that *states* it — for
+one that ran it. `NC-078`, `NC-093`, `NC-095`, `NC-100`, `NC-101` and
+`NC-102` are all executed forced-BPC observations, and
+`NUMERIC_CLAIMS.md` §10's invalidation table lists them together under
+*"iccce ever forcing BPC, or lcms2 ceasing to"* — **which is exactly the
+index this check needs, already built for another purpose.**
+
+#### ★★ The second-order failure: a correction reached the consumer before it was checked here
+
+The corrected wording went into the request-channel reply **in place**,
+with the original **named as withdrawn** — and it went before this ledger
+had seen it. `DL-080` recorded the same shape and forgave it, because
+there the figures **reproduced**: the reply had been sent at a provenance
+strength this document had refused, but *"that is an outcome, not a
+method."* ★★★ **This is the run where the outcome went the other way, and
+it is therefore the entry `DL-080` was waiting for.**
+
+★★★ **And a correction is the worst possible carrier for an error.** A
+first statement invites scrutiny; **a correction supplies its own.** It
+arrives having visibly done work, retires the alternative by name, and
+tells the reader the checking is finished. `DL-057` — *a wrong clause is
+worse than no clause; a correct citation on the wrong subject invites
+acceptance* — applies with the citation-correctness intact: **both
+`file:line` references are, so far as anyone here can tell, accurate.**
+It is the **inference** that is wrong, and the accurate citations
+underwrite it.
+
+#### What this entry does NOT decide
+
+1. **Not that the correction's code reading is wrong.** ★★ It almost
+   certainly is not. `cmscnvrt.c:1132` setting `BPC[i]` per profile is
+   **already on file** at §3.11.6 in the same words. **What is refused is
+   the behavioural consequence drawn from half a mechanism**, not the
+   half.
+2. **Not that `NC-078` is true.** ★★★ It is `oracle-behaviour-at-pin`,
+   **REPORTED NOT GRADED**, one pair, one pin, and **this role ran it no
+   more than it ran the clone.** The decision is about **which of two
+   `[REPORTED]` statements the project writes down when they conflict**,
+   and the answer is the executed one. **Settling the underlying question
+   needs a re-run, not a third read.**
+3. **Not that the "destination" shorthand is safe.** ★★ It is scoped to
+   **two-profile chains** and has never been measured on three. `DL-021`
+   forbids the extrapolation; the scope clause is owed
+   (`NUMERIC_CLAIMS.md` §7.37 newly-owed 2).
+4. **Not that pinning is optional.** ★★★ The opposite. **Pinning is what
+   surfaced all of this.** Had `NC-319` stayed unpinned, the wrong
+   correction would never have been drafted — and neither would the check
+   that caught it, and the row would still be uncheckable. **A process
+   that produces a wrong draft and catches it is working; one that
+   produces nothing to check is not.**
+5. **Not anything about `NC-308` … `NC-318`.** They remain **asserted by
+   no test, no difftest record and no CI job.**
+
+**Revisit if:** a three-or-more-profile chain is ever measured for forced
+BPC, which would either retire the "destination" shorthand or scope it on
+evidence rather than by caution; **or** a correction is ever proposed to
+an lcms2 behavioural claim **without** the ledger being grepped for an
+executed row on the same question, at which point the corollary above is
+the step that was skipped; **or** a source-read and a run in this project
+disagree and the **read** turns out to have been right — which would not
+overturn this entry (the ordering is a rule about what to write under
+uncertainty, not a prediction) but **would** be worth an entry of its
+own.
