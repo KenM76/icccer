@@ -1066,6 +1066,43 @@ impl Chain {
     ///   its media-relative device-black; anything else —
     ///   notably v2 LUT sources, where lcms2 runs an unattributed Lab
     ///   ridge search — is [`ChainError::BpcEstimationUnsupported`].
+    ///
+    /// # ★ Success does not mean the output will change
+    ///
+    /// This returning `Ok` means a black-point pair was obtained and a
+    /// map was built. It does **not** mean the map moves anything:
+    /// when the two estimated black points coincide, the map is the
+    /// identity and every converted value is bit-identical to the
+    /// same chain without BPC.
+    ///
+    /// **MEASURED 2026-09-01**, sRGB (v2 matrix/TRC) -> U.S. Web
+    /// Coated (SWOP) v2, 9^3 = 729 grid operands, ink units:
+    ///
+    /// | intent | operands changed by `--bpc` | max change |
+    /// |---|---:|---:|
+    /// | media-relative | 727 / 729 | 0.2440 |
+    /// | perceptual | **0 / 729** | 0 |
+    /// | saturation | **0 / 729** | 0 |
+    /// | absolute | refused — [`ChainError::BpcNotApplicable`] | — |
+    ///
+    /// The two zeros are a **conforming outcome of ISO/CD 18619:2013
+    /// 4.2.5.5**, verified by instrumenting the estimator rather than
+    /// inferred: `|SP| = 72` shadow points were found, the quadratic
+    /// was fitted, and its root came out at `L* = -1.274`
+    /// (perceptual) / `-1.249` (saturation), which the clause's
+    /// `max(0, min(50, .))` takes to `0`. The sRGB source black is
+    /// also `L* = 0`, so the map is the identity. Media-relative
+    /// differs because 4.2.5.4's mid-range straightness short-circuit
+    /// — which runs *only* at relative colorimetric, 4.2.5.1 — returns
+    /// `InitialLab` at `L* = 11.7724` instead.
+    ///
+    /// ★ **This is why [`Chain::bpc_disclosure`] exists.** Four of
+    /// ISO/CD 18619 4.2.5's exits return `(0,0,0)` and 4.2.6 then
+    /// erases the difference between them (`ICC_Spec` **A63**), so a
+    /// caller cannot recover from the output whether BPC was computed
+    /// to nothing or could not be computed. A CMM that lets those two
+    /// look alike is the "refusing and being wrong look identical"
+    /// failure this project names in its own request channel.
     pub fn with_bpc(mut self) -> Result<Chain, ChainError> {
         if self.intent == Intent::Absolute {
             return Err(ChainError::BpcNotApplicable);
@@ -1077,6 +1114,19 @@ impl Chain {
                 .ok_or(ChainError::BpcEstimationUnsupported)?,
         );
         Ok(self)
+    }
+
+    /// What [`Chain::with_bpc`] actually resolved to — `None` when BPC
+    /// was never opted in.
+    ///
+    /// Returns the two estimated black points and whether the
+    /// resulting map is the identity. **A caller that opts in to BPC
+    /// and reports it to a user should read this**, because
+    /// `with_bpc()` returning `Ok` is not a claim that any pixel
+    /// moves; see that method's measured table.
+    #[must_use]
+    pub fn bpc_disclosure(&self) -> Option<crate::bpc::BpcScale> {
+        self.bpc
     }
 
     /// Opt in to **K-only black preservation** under a named policy.

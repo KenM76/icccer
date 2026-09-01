@@ -479,7 +479,52 @@ fn cmd_transform(args: &[String]) -> ExitCode {
     };
     let chain = if bpc {
         match chain.with_bpc() {
-            Ok(c) => c,
+            Ok(c) => {
+                // ★ Disclose a BPC that resolved to the IDENTITY.
+                //
+                // `with_bpc()` succeeding is not a claim that any
+                // output value moves. MEASURED 2026-09-01, sRGB ->
+                // U.S. Web Coated (SWOP) v2 over 729 grid operands:
+                // media-relative changed 727 of them (max 0.2440
+                // ink), perceptual and saturation changed NONE,
+                // because ISO/CD 18619:2013 4.2.5.5's `max(0, .)`
+                // clamp takes the fitted root (L* = -1.274 there) to
+                // zero, which equals the matrix/TRC source black.
+                //
+                // Conforming, and invisible: without this line a user
+                // who passed `--bpc` sees an exit code of 0 and
+                // unchanged numbers, and cannot tell "computed to
+                // nothing" from "silently ignored my flag". Written
+                // to STDERR so a pipeline reading stdout is
+                // unaffected (the same reasoning as USAGE).
+                if let Some(d) = c.bpc_disclosure() {
+                    if d.is_identity() {
+                        let (sb, db) = (d.source_black(), d.destination_black());
+                        eprintln!(
+                            "iccce transform: --bpc resolved to the IDENTITY - no output value will change."
+                        );
+                        eprintln!(
+                            "  source black XYZ      = ({:.6}, {:.6}, {:.6})",
+                            sb.x, sb.y, sb.z
+                        );
+                        eprintln!(
+                            "  destination black XYZ = ({:.6}, {:.6}, {:.6})",
+                            db.x, db.y, db.z
+                        );
+                        eprintln!(
+                            "  The two estimated black points coincide, so the ISO/CD 18619:2013"
+                        );
+                        eprintln!(
+                            "  4.2.6 map is the identity. This is a conforming outcome, not a"
+                        );
+                        eprintln!(
+                            "  failure - but note clause 4.2.5 has four exits that all return"
+                        );
+                        eprintln!("  (0,0,0) and they are not distinguishable from the output.");
+                    }
+                }
+                c
+            }
             Err(e) => {
                 // A refusal (absolute intent; estimation outside the
                 // named subset) is the deliverable, not a crash.

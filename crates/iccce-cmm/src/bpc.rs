@@ -382,8 +382,35 @@ fn det3(m: &[[f64; 3]; 3]) -> f64 {
 
 /// The per-component linear map. Built once per (src, dst) black
 /// pair; applied to media-relative PCSXYZ.
+///
+/// # ★ Why this carries the two black points it was built from
+///
+/// A BPC map can be the **identity** — and when it is, an opted-in
+/// BPC conversion produces bit-identical output to one without it.
+/// MEASURED 2026-09-01 on sRGB (v2 matrix/TRC) -> U.S. Web Coated
+/// (SWOP) v2 at perceptual and saturation: 0 of 729 grid operands
+/// changed, because ISO/CD 18619:2013 4.2.5.5's `max(0, ...)` clamp
+/// took a fitted root of `-1.274` to `L* = 0`, which equals the sRGB
+/// source black, whose scale is `a = 1, b = 0` per component.
+///
+/// That is a **conforming outcome**, not a failure — but at the API
+/// it looks exactly like a failure, and this project's standing rule
+/// is that a call which did nothing and a call which could not do
+/// anything must be distinguishable by the caller rather than by
+/// reading the source. [`BpcScale::is_identity`] and
+/// [`crate::transform::Chain::bpc_disclosure`] are how a caller tells
+/// them apart. See `ICC_Spec` register **A63**: ISO/CD 18619 4.2.5
+/// has four distinct exits that all return `(0,0,0)`, and 4.2.6 then
+/// erases the difference between them, so no downstream observation
+/// can recover which one fired.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct BpcScale {
+    /// The source black point this map was built from, retained for
+    /// disclosure only — never read by [`BpcScale::apply`].
+    src_black: Xyz,
+    /// The destination black point this map was built from, retained
+    /// for disclosure only — never read by [`BpcScale::apply`].
+    dst_black: Xyz,
     a: [f64; 3],
     b: [f64; 3],
 }
@@ -394,6 +421,7 @@ impl BpcScale {
     /// white point is not a black point; refused, not clamped).
     #[must_use]
     pub fn new(black_src: Xyz, black_dst: Xyz) -> Option<BpcScale> {
+        let (src_black, dst_black) = (black_src, black_dst);
         let w = [D50.x, D50.y, D50.z];
         let s = [black_src.x, black_src.y, black_src.z];
         let d = [black_dst.x, black_dst.y, black_dst.z];
@@ -407,7 +435,44 @@ impl BpcScale {
             a[i] = (w[i] - d[i]) / den;
             b[i] = w[i] * (d[i] - s[i]) / den;
         }
-        Some(BpcScale { a, b })
+        Some(BpcScale {
+            src_black,
+            dst_black,
+            a,
+            b,
+        })
+    }
+
+    /// The source black point the map was built from (disclosure).
+    #[must_use]
+    pub fn source_black(&self) -> Xyz {
+        self.src_black
+    }
+
+    /// The destination black point the map was built from
+    /// (disclosure). ★ A value of `(0,0,0)` here is ambiguous by the
+    /// standard's own construction and NOT by ours: ISO/CD 18619
+    /// 4.2.5's invalid-ramp exit (4.2.5.3), its `|SP| < 3` exit, its
+    /// non-positive-discriminant exit and its clamped-root path all
+    /// return the same triple. `ICC_Spec` **A63**.
+    #[must_use]
+    pub fn destination_black(&self) -> Xyz {
+        self.dst_black
+    }
+
+    /// Whether this map is the identity — i.e. whether opting in to
+    /// BPC will change any output value at all.
+    ///
+    /// Exactly `a == 1` and `b == 0` in every component, tested
+    /// bit-exactly rather than with a tolerance: the identity arises
+    /// when the two black points are *equal*, which makes
+    /// `a = (W-d)/(W-s)` an exact `1.0` in binary floating point
+    /// because numerator and denominator are the same expression, not
+    /// merely close. A tolerance here would report "identity" for a
+    /// map that is merely weak, which is a different claim.
+    #[must_use]
+    pub fn is_identity(&self) -> bool {
+        self.a == [1.0, 1.0, 1.0] && self.b == [0.0, 0.0, 0.0]
     }
 
     /// Apply: `out = a·in + b`, per component.
@@ -424,6 +489,71 @@ impl BpcScale {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// A map built from two EQUAL black points is the identity, and
+    /// says so — the disclosure that keeps "BPC computed to nothing"
+    /// distinguishable from "BPC did not run".
+    ///
+    /// Asserted on the map's OUTPUT (an arbitrary interior colour
+    /// comes back bit-identical), not merely on the `is_identity`
+    /// flag, so the flag cannot drift away from the behaviour it
+    /// claims. The bit-exact comparison is deliberate and is
+    /// justified in [`BpcScale::is_identity`].
+    ///
+    /// This reproduces the case MEASURED 2026-09-01 on sRGB -> U.S.
+    /// Web Coated (SWOP) v2 at perceptual and saturation, where
+    /// ISO/CD 18619:2013 4.2.5.5's clamp puts the destination black
+    /// at `L* = 0` and the matrix/TRC source black is already there.
+    #[test]
+    fn equal_black_points_give_a_disclosed_identity() {
+        let black = Xyz {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        };
+        let scale = BpcScale::new(black, black).unwrap();
+        assert!(
+            scale.is_identity(),
+            "equal black points must disclose identity"
+        );
+        let probe = Xyz {
+            x: 0.312_7,
+            y: 0.329_0,
+            z: 0.358_3,
+        };
+        let out = scale.apply(probe);
+        assert_eq!(out.x, probe.x);
+        assert_eq!(out.y, probe.y);
+        assert_eq!(out.z, probe.z);
+        assert_eq!(scale.source_black(), black);
+        assert_eq!(scale.destination_black(), black);
+    }
+
+    /// A map built from two DIFFERENT black points is not the
+    /// identity and moves an interior value — the negative half,
+    /// without which the test above would pass for a `is_identity`
+    /// that always returned `true`. (A rival that enters twice can
+    /// cancel; a predicate with no negative case certifies nothing.)
+    #[test]
+    fn differing_black_points_are_not_an_identity() {
+        let src = Xyz {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        };
+        let scale = BpcScale::new(src, PERCEPTUAL_BLACK).unwrap();
+        assert!(!scale.is_identity());
+        let probe = Xyz {
+            x: 0.05,
+            y: 0.05,
+            z: 0.05,
+        };
+        let out = scale.apply(probe);
+        assert!(
+            (out.y - probe.y).abs() > 1.0e-4,
+            "a real black-point pair must move a dark value: {out:?}"
+        );
+    }
 
     /// D50 is a fixed point of the map by construction — the first
     /// constraint, exactly (arithmetic identity: a·W + b =
