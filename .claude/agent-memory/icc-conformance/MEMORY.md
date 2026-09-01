@@ -1,9 +1,10 @@
 # icc-conformance — memory index
 
 - [A guard's floor is a FREE PARAMETER](project_a_guards_floor_is_a_free_parameter.md) — the response RISES as ink falls; probe ink that underflows to 0.0 reds a CORRECT engine; an injection can be modelled on the shipped binary.
+- [The intent-selection fixture, and the two holes injection found in MY OWN rows](project_intent_selection_fixture_and_its_two_holes.md) — a CONSTANT per node is exact under any interpolation; a downstream CLIP annihilates a differential; grading a SUBSET of the pairs stayed green.
 - [Pass L — which sRGB does lcms2 implement?](project_passl_which_srgb_lcms2_implements.md) — C0, measured; the interior max moves with the OUTPUT SPACE; the oracle can't rule a destination; "0 of 256 codes" is false end-to-end.
 - [The four-cell gate, and what each injection reds](project_the_four_cell_gate_and_its_injections.md) — two conditions = FOUR cells and the corpus held one; the four are not equally licensed; a string equality can't tell a vanished report from a cited one.
-- [`Malformation` is the wrong channel for a non-violation](project_malformation_channel_overclaims.md) — a v2 file that violates nothing prints `malformations: 1`; ★ 2026-08-21 it reached a GRADED row — `passh/B` is red at 5 and no profile is defective.
+- [`Malformation` is the wrong channel for a non-violation](project_malformation_channel_overclaims.md) — RESOLVED 2026-08-28: `violations:` counter shipped, `passh/B` re-derived not re-bounded; the disclosure is the ordinary case on real v2 files.
 - [A third fixture category: DISPUTED](project_a_third_fixture_category_disputed.md) — well-formed/malformed are both CLAIMS; the category EMPTIED the same day it was created, and what does NOT belong in it.
 - [The header renderingIntent field](project_header_rendering_intent_finding.md) — lcms2 reads it in ONE place (DeviceLink); the two engines ignore it while defaulting DIFFERENTLY; the library API has no "unspecified", so only the CLI arm could fail.
 - [Pass K — GRADING the landed feature](project_passk_grading_the_landed_feature.md) — the repointing named the PREDICATE rows and missed the GUARD; `blind` was a typed NOUN that went false; ★ the compiled-path defect I filed as OPEN was already FIXED one commit earlier.
@@ -12,6 +13,8 @@
 - [Pass K — black preservation, measured before the feature](project_passk_black_preservation_baseline.md) — ΔE is BLIND to it (0.705 ink at 0.136 ΔE00); the saturation shortcut works on 2 of 6 vendors; a rival CORPUS is not a rival candidate.
 - [Pass K §F — the fixture that SEPARATES](project_passk_f_separating_fixture.md) — a ZERO-SEPARATION fixture doesn't just fail to inform, it turns the red row GREEN; a symmetric misreading cancels, so it can't be a rival.
 - [ICC.1 is SILENT on black preservation](project_passk_icc1_is_silent_on_black.md) — closed negative (A51); ICC's only black tag disclaims itself; the gray→CMYK rule is ISO 32000-1 §10.3.3 and is pdfce's; "PCS 23.0" is not a the suite's publisher id.
+
+- [A document's design contract outranks the oracle](project_the_artworks_design_contract_as_evidence.md) - read the RESOURCE DICTIONARY first: two arms sharing one colour-space object cancel the CMM exactly.
 
 - [Pass I — ICC's published chad](project_passi_published_chad_findings.md) — the commissioned bound would have failed at 7.4x; a one-sided ground-truth row is not a gate; clippy's fix can BE the defect.
 

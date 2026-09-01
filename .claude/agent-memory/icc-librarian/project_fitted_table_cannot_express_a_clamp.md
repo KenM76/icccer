@@ -1,6 +1,6 @@
 ---
 name: iccce-fitted-table-cannot-express-a-clamp
-description: DL-069/DL-070 (2026-08-25, PCS010) — two rival tables missing in OPPOSITE directions is the signature of a DISCONTINUITY, not bad fitting; and the reference was a screen capture, the weakest evidence class this ledger has ever admitted.
+description: DL-069/DL-070 (2026-08-25, PCS010) — two rival tables missing in OPPOSITE directions is the signature of a DISCONTINUITY, not bad fitting; and the reference was a screen capture, the weakest evidence class this ledger has ever admitted. ★ DL-070's boundary moved 2026-08-28: DL-074 put a ΔE WITHIN one capture outside it, then DL-075 ruled that BETWEEN TWO captures is INSIDE it — the rule attaches to the artifact — and left the two in tension.
 metadata:
   type: project
 ---
@@ -51,6 +51,31 @@ at perceptual intent the value is clamped, so a ΔE in sRGB would be
 measuring the clamp.** ★ Filed as a **prohibition rather than a caveat**
 so that adding the number later means **reversing a decision**, not
 filling a gap.
+
+**★★★ DL-070's BOUNDARY MOVED 2026-08-28 — read this before quoting the
+prohibition.** `DL-074` establishes that a ΔE taken **between two objects
+of ONE capture** is **outside** it: the class DL-070 names has **iccce's
+output on one side and capture pixels on the other**, whereas an
+intra-render differential has **neither side iccce and both sides from the
+same capture**, so the unknown display leg is common-mode and cancels.
+★★★ **DECIDED LATER THE SAME DAY — `DL-075`: DL-070 DOES reach a ΔE between
+TWO DIFFERENT captures.** The prohibition attaches to the **ARTIFACT**, not
+to what sits opposite it (§1's class names *pixels read out of a capture* in
+its **head clause**; the iccce side is only the *"Here:"* instance). Two
+unknown legs, nothing cancels, reason 1 applies *harder*. **Nothing widened,
+nothing exempted.** ★★ And it puts the sentence above under tension: the
+same-day withdrawal withdrew the **intra-render** ΔE too, so `DL-074`'s
+carve-out **paragraph** may be too strong even though its **class** is
+untouched — `DL-075` §7 recommends reading reason 1 as being about the
+**UNIT** and leaves the choice open. **Do not state any capture-derived
+distance in ΔE; 8-bit counts only.**
+[[iccce-prohibition-buys-nameability-not-prevention]] carries the ruling and
+the bigger finding (the prohibition did **not** prevent the number — its
+author re-derived it, disclosed it as his own limit, and computed it anyway).
+★ And DL-070's **reason 2 survives intact** and becomes
+`DL-074`'s one-sidedness: **a near-zero agreement may be the clamp
+collapsing two different colours together.** Full entry:
+[[iccce-intra-run-differential-outranks-cross-renderer]].
 
 **How to apply:**
 - Never let this be retold as an accuracy gain over `pdfce`'s tables —

@@ -1,6 +1,6 @@
 ---
 name: project-malformation-channel-overclaims
-description: 2026-08-18 measured — iccce prints "malformations: 1" for a v2 profile that violates nothing, while the CLI's separate intent line correctly prints UNKNOWN with "malformations: 0" for another. Interpretation-failure and conformance-failure are two claims sharing one channel; the CLI separates them by accident, the parser conflates them by design.
+description: Interpretation-failure and conformance-failure were two claims sharing one channel; a v2 profile that violates nothing printed "malformations: 1" and that reached a graded row. RESOLVED — a separate violations: counter shipped and the graded row was re-derived to grade violations, not disclosures.
 metadata:
   type: project
 ---
@@ -67,7 +67,10 @@ disclosure would vanish with a green suite. One test in
 scoped the task to "tell me which you think it is", and asserting an unnamed
 choice would have decided it.
 
-## 5. ★★★ It reached a GRADED ROW, 2026-08-21 — `passh/B` is now RED and no profile is defective
+## 5. ★★★ It reached a GRADED ROW, 2026-08-21 — `passh/B` was RED and no profile was defective
+
+> **SUPERSEDED 2026-08-28 — see §6. The row is green and the channel is split.**
+> Kept verbatim because the reasoning that produced the fix is the record.
 
 At tip `0a88ad6` the difftest suite is **`pass=372 fail=1`** in the main tree
 (and `371/1` in a worktree, which lacks `vendor/` and skips one `passl` row).
@@ -107,3 +110,37 @@ direction reversed — here the DOC was corrected and the TEST went stale.
 
 Related: [[project-the-four-cell-gate-and-its-injections]],
 [[project-header-rendering-intent-finding]].
+
+
+## 6. ★★★ RESOLVED, and the remedy was the one §5 named — re-verified 2026-08-28 at tip `3af2d87`
+
+The channel was split. `iccce inspect` now prints **`violations: N` beside
+`malformations: N`**, and `passh/B` was **re-derived rather than re-bounded**:
+
+| row | grading | observed |
+|---|---|---|
+| `passh/B/acceptance/no-VIOLATION-is-disclosed-on-any-accepted-file` | tolerance **0** | **0** |
+| `passh/B/acceptance/lawful-disclosures-on-accepted-files` | **ungraded (`inf`)** | **5** |
+
+So the five disclosures are still counted and still visible — they were moved
+out of the *conformance* row and into an ungraded observation, which is what
+§5 asked for. **The bound was not widened.** Whole suite `pass=374 fail=0
+skip=9 error=0`.
+
+★ The same disclosure fires on **real producer profiles**, not only on
+fixtures: `HeaderReservedNonZero` is what a **v2.4** file carrying a valid ICC
+profile-ID MD5 at bytes 84..99 (with 100..127 zero) looks like to an
+edition-aware parser. I verified the MD5s recompute correctly under the ICC
+rule (flags, header rendering intent and the ID field zeroed) — **the files are
+not defective and the parser is not wrong.** This is now the ordinary case, not
+a curiosity, so any future doc sentence of the form *"N of N profiles, zero
+malformations"* is a **dated observation that will go stale the next time the
+disclosure set widens** — write the count with its date and its tip, or write
+`violations` instead.
+
+**How to apply:** grade `violations`. Report `malformations` as an ungraded
+observation with its date. Never write a bare "zero malformations" claim about
+a corpus without the tip it was measured at.
+
+
+Related: [[the-artworks-design-contract-as-evidence]].

@@ -9,7 +9,7 @@
 - [A patch is named for what it LOOKS at](project_patch_named_for_what_it_looks_at.md) — DL-059: PCS 23.0 was ours and is pdfce's; corroborated 2026-08-18 by the artwork's own numbers.
 - [An inferred environment constraint is a READING](project_inferred_environment_constraint_is_a_reading.md) — DL-060, now VERIFIED: pypdfium2 renders; and engines' silence about a FIGURE reads as absence of the fact.
 - [A number labelled with its source](project_source_labelled_number.md) — DL-061: "the suite publisher's own patch value" printed into a report for a value the patch lacks; the label is the untested half.
-- [A stale STATUS decays faster than a number](project_stale_status_decays_faster_than_a_number.md) — DL-062, now FIVE instances ⇒ DL-068: carry the two ref HASHES, not a push count. The field itself is wrong.
+- [A stale STATUS decays faster than a number](project_stale_status_decays_faster_than_a_number.md) — DL-062 ⇒ DL-068: carry ref HASHES. #6 false at the INSTANT of writing; #8 named its own method AND date and still decayed.
 - [Words are read by humans, the COUNT by code](project_words_are_read_by_humans_count_by_code.md) — DL-063: `malformations: N` counts DISCLOSURES; two files, same bytes, same count, one conformant.
 - [A fabricated value is a forged credential](project_fabricated_value_is_a_forged_credential.md) — DL-067: a v2 `profileID` invented from reserved bytes, `malformations: 0`. Worse than a false accusation — it invites verification.
 - [A claim in a UNIT is scoped to that unit](project_claim_in_a_unit_is_scoped_to_that_unit.md) — Pass L falsified two of our own doc-comment claims; and §C is SELF-comparison because the oracle was MEASURED blind to it.
@@ -18,6 +18,9 @@
 - [A producer census is not a consumer fact](project_producer_census_is_not_a_consumer_fact.md) — NC-307's measurer honours none of what it counted; and rule 11 is about the MATERIAL, not the MEASURER.
 - [A commit message claims the INDEX, not your work](project_commit_message_claims_the_index.md) — DL-073: `git add -A` after a whole-tree pass; check `git diff --cached --stat`, and after a push correct the LOG, never the ref.
 - [A gate catches only ENUMERATED failures](project_gate_catches_only_enumerated_failures.md) — wasm32 cannot see a thread spawn; invariant 7, not a better gate. And a byte-grep over PDFs reads zero and is believed.
+- [Enumerate what the two arms SHARE](project_intra_run_differential_outranks_cross_renderer.md) — DL-077 generalises DL-074+DL-059: shared path = the whole value; shared MECHANISM = a test that cannot fail for its own reason.
+- [A prohibition buys NAMEABILITY, not prevention](project_prohibition_buys_nameability_not_prevention.md) — DL-075: its author re-derived it and did it anyway; a ratio of two planes is not a number; a correction does not sweep its own block.
+- [A consumer exercises the paths the code is IN](project_consumer_exercises_paths_the_code_is_in.md) — DL-078: `Ok` from `with_bpc()` meant "did nothing" and four Passes of our tests never noticed. Ask whose ambiguity it is before repairing.
 
 - [Documented is not tested](project_documented_is_not_tested.md) — DL-051: five injections, the BEST-documented constant caught by NONE; the doc comment's length is what hid it. Injection, never inspection.
 - [An injection measures ONE magnitude](project_injection_measures_one_magnitude.md) — DL-064: the red runs discharge the debt, the GREEN run is the floor; rival named with `1e-9`, guard claimed without a number.
@@ -26,7 +29,7 @@
 - [A count from a sample is not the population](project_count_from_a_sample_is_not_the_population.md) — DL-053: "two iccMAX" was TEN; [VERIFIED] certifies the measurement happened, never what it ranged over.
 
 - [ICC.1 PDF blocker — cleared](project_icc1_pdf_operator_blocker.md) — resolved 2026-08-11; the lasting lesson is that "free download" never implies "automated retrieval permitted" (ITU-R is next).
-- [iccce Pass status](project_iccce_pass_status.md) — to the 2026-08-25 **consumer-requirements** filing: tip `b5d0ccb`, NC-307 + DL-072; next free NC-308/NA-013/DL-073.
+- [iccce Pass status](project_iccce_pass_status.md) — to the 2026-09-01 **`--bpc`-no-op** filing: NC-308…NC-319, DL-078; both refs still 3af2d87; next free NC-320/NA-013/DL-079.
 - [A release range is not the dispatch's list](project_release_range_is_not_the_dispatch_list.md) — Pass G/H were named as 0.2.0 content and shipped in 0.1.0; and a tag ref is an ANNOTATED TAG OBJECT, not the commit.
 - [A tool that quotes licensed material gets SPLIT](project_licensed_tool_split_outside_the_tree.md) — DL-071: the case file lives OUTSIDE the repo, not gitignored inside it; and the deleted predecessor took the only auditor of its own numbers.
 - [A gitignored file is invisible to a citation sweep](project_gitignored_file_invisible_to_citation_sweep.md) — 9 reported where 13 existed; it under-counts toward a FALSE ALL-CLEAR. Search `SUITE_COMPATIBILITY.md` by name.

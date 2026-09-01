@@ -15,6 +15,119 @@ Versioning is [SemVer](https://semver.org/); while the major version is
 
 ---
 
+## [0.3.0] — 2026-09-01
+
+**A one-day release, and the whole of it came from a consumer asking a
+question this project had never asked itself.** `pdfce` — the PDF engine
+this library names first in its own README — filed a request on
+2026-09-01 about the `sRGB → DeviceCMYK` direction with a selectable
+rendering intent. Answering its four questions with measurements rather
+than code readings turned up a hole in this library's API that no test
+here would ever have found, because the behaviour was **correct** and
+**invisible at the same time**.
+
+★ **The shape of the release, stated up front: nothing here changes a
+single converted colour value.** Every conversion in `0.3.0` produces
+bit-identical output to `0.2.0`. What changed is what the library is able
+to *tell you* about what it did.
+
+### Added
+
+- **`Chain::bpc_disclosure()`**, and on `BpcScale`: `is_identity()`,
+  `source_black()`, `destination_black()`.
+
+  ★ **Why this exists, and it is the most useful paragraph in this
+  entry.** `Chain::with_bpc()` returning `Ok` was never a claim that any
+  pixel moves — but nothing said so, and nothing could be asked. MEASURED
+  2026-09-01, sRGB IEC61966-2.1 (v2 matrix/TRC) → U.S. Web Coated (SWOP)
+  v2, 9³ = 729 grid operands, ink units:
+
+  | intent | `--bpc` | operands changed | max change |
+  |---|---|---:|---:|
+  | media-relative | succeeds | 727 / 729 | 0.244 |
+  | perceptual | succeeds | **0 / 729** | **0** |
+  | saturation | succeeds | **0 / 729** | **0** |
+  | ICC-absolute | refused, `BpcNotApplicable` | — | — |
+
+  At perceptual and saturation black point compensation was **accepted,
+  computed, and bit-identically a no-op**. That is a *conforming* outcome
+  of ISO/CD 18619:2013 4.2.5.5 — its `max(0, ·)` clamp takes a fitted
+  root of `L* = −1.274` to zero, which equals the matrix/TRC source
+  black, so the 4.2.6 map is the identity. Verified by instrumenting the
+  estimator, with predictions registered before the run: `|SP| = 72`
+  shadow points, exit 4.2.5.5, `MinL = 16.571474` reproducing an
+  independent earlier measurement to six significant figures.
+
+  **What made it worth an API rather than a comment:** ISO/CD 18619 4.2.5
+  has **four exits that all return `(0,0,0)`**, and 4.2.6 then erases the
+  difference between them. So *"BPC computed to nothing"* and *"BPC could
+  not be computed"* are the **same observable event** — the ambiguity is
+  the standard's, not this implementation's. Rule 6 (*the parser reports,
+  it does not repair*) applied one layer up: the honest response to a
+  specification ambiguity is to disclose it, never to pick a side quietly.
+
+- **`iccce transform --bpc` now says so on stderr** when the map resolved
+  to the identity, naming both black points. Stdout is untouched, so a
+  pipeline reading converted values is unaffected.
+
+- **A committed synthetic fixture with a genuinely distinct `B2A2`** —
+  `fixtures/synthetic/v2-cmyk-intent-separated-b2a.icc` (29,732 bytes,
+  v2.4 `prtr` CMYK / Lab PCS), carrying all three `A2Bx` **and** all
+  three `B2Ax` as six `mft2` tags at six distinct offsets.
+
+  MEASURED separation over 125 probes: `K(Saturation) − K(MediaRelative)`
+  and `K(MediaRelative) − K(Perceptual)` are both **0.200000000000000**
+  ink, worst deviation from the authored constant `1.665×10⁻¹⁶`, with
+  `C`, `M`, `Y` **bit-identical** across the three. The separation is
+  exact rather than merely large because a constant added at every CLUT
+  node survives every interpolation scheme, and `0.20 × 65535 = 13107` is
+  an integer so the node quantisation cancels.
+
+  ★ **What this fixture is NOT.** It is a **structural** fixture proving
+  the tag-selection path reaches the output. It is **not colorimetric
+  truth about any press** and must never be cited as accuracy evidence.
+  Before it, the only evidence that saturation selected a different table
+  came from a profile that happened to be installed on one machine.
+
+  Six tests in `crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs`.
+
+### Fixed — documentation that was true and still misled
+
+- **`docs/FEATURES.md` enumerated two `--bpc` outcomes where there are
+  three.** *"Opt-in and never forced; refused by name…"* — nothing in it
+  false, which is exactly why it survived every sweep for wrong
+  statements, and a reader still concluded that a call which is not
+  refused does something. The third outcome is now written down with its
+  measurement.
+
+- **`README.md`'s Pass 4 row said "In progress"** for work
+  `ROADMAP.md:3556` recorded as closed and measured. ★ It was found by
+  **`pdfce`, twice, across two of its files** — not by anyone here. A
+  status row decays faster than a number, and the consumer reading the
+  README is the one who pays for it.
+
+- **`README.md`'s version line said `0.1.0` against a manifest reading
+  `0.2.0`** — the second time that line has been stale, *despite naming
+  its own verification method and date*, because a version bump lands in
+  a commit with no reason to touch that file. Noted in place: a third
+  occurrence should delete the restatement rather than correct it.
+
+### What this release does NOT claim
+
+- **No conversion accuracy improved.** No transform's output changed at
+  all. The accuracy claim for `sRGB → SWOP` at saturation remains
+  `1.55 × 10⁻⁴` device against lcms2 over 213 RGB points (`NC-114`) — a
+  **cross-check against another implementation, not ground truth**, and
+  the same claim it was in `0.2.0`.
+- **The intent-separation figures are separation, not accuracy.** A CMM
+  wrong by 20 ΔE2000 would separate identically. Eleven of the twelve new
+  ledger rows (`NC-308` … `NC-319`) have **no oracle** and are filed that
+  way.
+- **The lcms2 statements here are source-reads, never runs**, and one of
+  them (`NC-319`) is recorded as owing a version pin it does not yet
+  carry.
+- **Still nothing published to crates.io.**
+
 ## [0.2.0] — 2026-08-25
 
 Thirty-seven commits since `v0.1.0`, plus the working tree of the release
@@ -618,5 +731,6 @@ Numbers a reader may quote, each with its evidence class:
 - Above four input channels there is **no ΔE claim of any kind** for the
   compiled path.
 
+[0.3.0]: https://github.com/KenM76/iccce/releases/tag/v0.3.0
 [0.2.0]: https://github.com/KenM76/iccce/releases/tag/v0.2.0
 [0.1.0]: https://github.com/KenM76/iccce/releases/tag/v0.1.0

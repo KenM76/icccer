@@ -1,6 +1,6 @@
 ---
 name: icc-bpc-sourcing-state
-description: BPC is now SOURCED — Adobe 2006 and ISO/CD 18619:2013 are in _sources/. The forcing verdict is NO (neither document keys BPC to a profile version, so iccce's DL-022 never-force policy is corroborated); lcms2's estimation constants turn out to be ISO/CD 18619's verbatim; and a faithful ISO implementation will diverge from lcms2 at black by the black point's own chroma (2-6 dE76, LOUD)
+description: BPC is SOURCED (Adobe 2006 + ISO/CD 18619:2013 in `_sources/`). ★★ 2026-09-01: at PERCEPTUAL/SATURATION the mid-range short-circuit is UNREACHABLE and FOUR exits of 4.2.5 all return (0,0,0) — so a bit-identical BPC no-op proves NOTHING (A63). `Saturation` occurs ONCE in the whole ISO document ⇒ the perceptual-or-saturation pairing is the DOCUMENTS' shape. BOTH lcms2 version gates switch off for a v2 destination ⇒ M2 does NOT apply there (M7). The v4 fixed-black short-circuit is the UNSOURCED half of a version-gated estimator, not the v2 path (A64). Earlier: forcing verdict NO; 4.2.5.4 returns InitialLab not outRamp[first]; root not vertex
 metadata:
   type: reference
 ---
@@ -10,6 +10,60 @@ metadata:
 **`icc\icc__s__bpc_algorithm.md`** (the two documents transcribed side by side).
 **Do not re-do the sourcing sweep. Do not re-open §7.1/§7.2/§7.3 — they are
 closed.**
+
+## ★★★ 12th pass, 2026-09-01 — PERCEPTUAL / SATURATION on a v2 destination
+
+**Dispatch: a `Chain::with_bpc()` that succeeds and changes nothing.**
+Entry points: **`icc__ref__bpc.md` §21** (verdicts + the discriminating run's
+pre-registered predictions at §21.7) and **`icc__s__bpc_algorithm.md` §9**
+(clause trace, verbatim, exhaustive counts). New: **`A63`**, **`A64`**, **`M7`**,
+**`D11b`**. **Do not re-derive any of the five below.**
+
+1. **★★★ `(0,0,0)` IS FOUR STATEMENTS WEARING ONE VALUE (`A63`).** 4.2.5 exits to
+   `(0,0,0)` at **4.2.5.3** (invalid ramp), **4.2.5.5** (`<3` shadow points),
+   **4.2.5.5** (`d ≤ 0`), and **4.2.5.5's fitted root clamped by `max(0,…)`** —
+   the last a *computed result*. **4.2.6 then erases the difference**: against a
+   source black of `L*=0` all four make the map the identity. ⇒ **"BPC was not
+   needed" and "BPC could not be computed" are the same observable event**, so a
+   bit-identical no-op is **not evidence the procedure ran**. Test power, not
+   magnitude (`C8`). The instrument must be inside the estimator.
+2. **The mid-range short-circuit is UNREACHABLE at perceptual/saturation.**
+   4.2.5.4's opening sentence and 4.2.5.1 both gate it on `RelativeColorimetric`.
+   `InitialLab = (0,0,0)` there is an **input to the ramp**, never the answer —
+   so the 11th pass's `InitialLab`-vs-`outRamp[first]` question **does not arise**
+   at these intents. **4.2.5.2.1 VERBATIM: *"If RenderingIntent is not
+   RelativeColorimetric, then InitialLab shall be set to (0,0,0), else…"* — and
+   EVERYTHING after that (CMYK `LocalBlack`, `D()`, chroma zeroing, `L*>50` clip)
+   is inside the `else`, i.e. relative-only.**
+3. **★ EXHAUSTIVE, two engines: `Saturation` occurs ONCE in the whole of
+   ISO/CD 18619** (4.1's allow-list) and **`Perceptual` three times, never as a
+   condition** (twice as a fixed forward intent inside `T(…)`). `RelativeColorimetric`
+   ×6. **The control flow is binary.** Adobe pairs them positively twice
+   (`"Else if (UserIntent is Perceptual or Saturation)"`). ⇒ **a two-variant
+   estimation-intent type is the DOCUMENTS' shape and needs no justification;
+   the arm that does is ICC-absolute, which 4.1 excludes outright.**
+4. **★★ `M2`/`DL-013` DO NOT APPLY TO A v2 DESTINATION (`M7`).** Both lcms2
+   `cmsGetEncodedICCversion(...) >= 0x4000000` gates switch off — the fixed
+   `cmsPERCEPTUAL_BLACK` short-circuit (`cmssamp.c` L433) **and** forced BPC
+   (`cmscnvrt.c` L1127-1134). lcms2 then runs the same 4.2.5 procedure. **Any
+   unqualified "lcms2 forces BPC at perceptual" is false of the commonest real
+   case.** Also `M7`: **both detectors return a `cmsBool` that `ComputeConversion`
+   DISCARDS** — the same conflation as `A63`, by a second route.
+5. **★★ THE SOURCING RUNS OPPOSITE TO THE APPEARANCE (`A64`, `D11b`).** In
+   `if (v4 && perceptual) → fixed PRM black; else → 4.2.5`, the **v2 path is the
+   SOURCED half** (`shall` end to end) and the **v4 short-circuit is the
+   IMPROVISED half** — no BPC document contains any version-keyed rule (`A45`).
+   ICC.1:2001-04 defines **no perceptual black at all**; 6.3.4.3's *"frequently
+   use zero"* is descriptive and hedged. ⇒ **`(0,0,0)` at a v2 perceptual
+   destination is defensible as an OUTCOME and NOT SOURCED as an ASSUMPTION.**
+   Behavioural consequence (`D11b`): **on v4 BPC can never be a no-op; on v2 it
+   usually is.** lcms2 gates on perceptual **or saturation**, iccce on perceptual
+   **only** — unmeasured divergence at a v4 saturation destination.
+
+**Already held, do not re-measure:** `outRamp[0]` of the *perceptual* ramp on
+`USWebCoatedSWOP.icc` is **`L* 16,571 474`** (= Pass 5c's `bt_perc`, = lcms2's
+`BlackPointUsingPerceptualBlack` before its clip) ⇒ the ramp is **valid**, exit A
+does not fire in a correct implementation there.
 
 ## ★★★ 11th pass, 2026-08-12 (later) — the short-circuit return value
 

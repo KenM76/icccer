@@ -1,6 +1,6 @@
 ---
 name: iccce-stale-status-decays-faster-than-a-number
-description: DL-062 (2026-08-18) — a document said "not fixed here, deliberately" about a defect fixed 28 s earlier; a stale STATUS decays faster than a stale number because the fix lands in someone else's commit. NOW FIVE INSTANCES: #4 and #5 are consecutive handoffs carrying a wrong PUSH COUNT, #5 written directly below #5's own warning ⇒ DL-068 (2026-08-20) rules the field itself wrong — carry the two REF HASHES, not the derived integer
+description: DL-062 (2026-08-18) — a document said "not fixed here, deliberately" about a defect fixed 28 s earlier; a stale STATUS decays faster than a stale number because the fix lands in someone else's commit. NOW EIGHT INSTANCES: #4/#5 are consecutive handoffs carrying a wrong PUSH COUNT ⇒ DL-068 rules the field itself wrong (carry the two REF HASHES); #6 is a "next free ids" line naming a DL its OWN filing had just consumed — FALSE AT THE INSTANT OF WRITING; ★★★ #7/#8 (2026-09-01) both came from OUTSIDE — pdfce flagged a README "In progress" row TWICE across two files, and #8 is a version line that NAMES ITS OWN VERIFICATION METHOD AND DATE and went stale anyway, which is why "re-verify harder" is not the fix
 metadata:
   type: project
 ---
@@ -164,6 +164,76 @@ it supports **no** claim about publication (rule 9).
 removes **one recurring carrier** by changing what gets written. A
 pre-commit phrase-grep for cross-role status claims is still unbuilt and
 unowned, and must not be read as done.
+
+**★★★ UPDATED 2026-08-29 — A SIXTH INSTANCE, AND IT HAD NO TRUE INTERVAL
+AT ALL.** Found at a `NEXT_SESSION.md` handoff refresh, by verifying the
+id counters against live source rather than taking them from the
+dispatch.
+
+| # | date | the claim | how it went stale |
+|---|---|---|---|
+| **6** | 2026-08-28 | `NUMERIC_CLAIMS.md` §7.33's closing *"Next free ids after this filing: `NC-308`, `NA-013`, **`DL-077`**"* | **`DL-077` was filed BY that filing** — `ARCHITECTURE.md`'s `DL-077` header block reads *"Fourth filing of this date"*. Next free was `DL-078` before the ink dried |
+
+★★★ **Every earlier instance was true when written and decayed.** This one
+was **false at the instant of writing**, by the hand that had just consumed
+the id, in the sentence whose only job is to say which ids are free. **The
+interval it had to survive was zero and it still failed.** That is the
+tightest form the mechanism has taken here, and it means DL-062's
+constructive clause (*"re-verify at commit time"*) would not have caught
+it either — nothing decayed.
+
+**The carrier is the same shape as the push count:** a **derived counter
+written at the END of a filing**, about state the filing itself moved.
+
+**How to apply — cheap and mechanical:**
+
+- ★ **Write the "next free ids" line LAST, and derive it by reading the two
+  live documents**, never by incrementing what the previous filing said.
+  `grep '^### DL-0' ARCHITECTURE.md | tail -1` is the check, and this role
+  can do it without a shell.
+- ★★ **A filing that adds a `DL-` must move the `DL-` counter.** If a filing
+  claims *"no `NC-` row added"* — true and common — that is **not** a
+  licence to copy the whole id line forward; the three counters move
+  independently.
+- **Add to the grep list:** `Next free ids`, `next free`, `is last; next`.
+- ★ **Correct in place with a strike-through and a dated note, not a silent
+  rewrite** — the shape is the record, and the cost of *not* correcting it
+  is that the next filing takes the same id twice. **No `NC-` row, no §7
+  status pass** (`DL-058`: opening one inflates an integer §7 tracks).
+
+**★★★ UPDATED 2026-09-01 — INSTANCES #7 AND #8, AND BOTH CAME FROM OUTSIDE
+THIS PROJECT.** Found at the `--bpc` no-op filing.
+
+| # | date | the claim | how it went stale |
+|---|---|---|---|
+| **7** | ≤2026-09-01 | `README.md`'s Pass 4 row — *"**In progress** — saturation in B2A, and the ICC-absolute intent, remain"* | the work finished at Pass 4c; `ROADMAP.md:3556` had said *"★ MET AT LAST"* for weeks. ★★★ **`pdfce` flagged it TWICE, across two files**, before anyone here corrected it. Now reads `Done` *(verified)* |
+| **★★★ 8** | 2026-09-01 | `README.md:127` — *"Version **`0.1.0`** — read from the workspace manifest on 2026-08-21, **which is the authoritative source**"* | the `0.2.0` bump. `Cargo.toml:40` reads **`version = "0.2.0"`** *(verified)*. **Still wrong at this filing**; owed to `icc-engineer` |
+
+★★★ **Instance 8 is the sharpest demonstration this entry has produced that
+`DL-062`'s constructive clause is insufficient. The sentence NAMES ITS OWN
+VERIFICATION METHOD AND ITS OWN DATE and still went stale** — because what
+invalidated it was a version bump in **somebody else's commit**, which is
+exactly the mechanism the entry describes. *"I checked this, on this day,
+against the authoritative source"* is **not** a defence; it is a **dated
+reading**, and the fix is to say so, not to re-check harder.
+
+★★ **A version line is a WORSE carrier than an ordinary stale number**,
+because a version is what a reader uses to decide **which documents apply
+at all**. A wrong ΔE misleads about one claim; a wrong version misleads
+about the whole document set.
+
+★★★ **Instance 7's real content is WHO FOUND IT.** Two of this project's
+own roles read `README.md` regularly; **the consumer found it, and had to
+say so twice.** ⇒ **add the consumer's flags to the currency check**: if an
+outside reader has reported a staleness, treat the *class* of claim as
+suspect across the whole document, not just the line reported. (Had that
+been done at the first flag, instance 8 was three lines away and would have
+been caught in the same pass.) Related:
+[[iccce-consumer-exercises-paths-the-code-is-in]].
+
+★ **New carrier phrases for the grep list**, both from this pair: `which is
+the authoritative source`, `read from the ... on 2026-`, `Version \`0.`,
+and any status cell containing `In progress`.
 
 Related: [[iccce-pass-status]],
 [[iccce-artifact-existence-is-not-obligation-status]] (an artifact's
