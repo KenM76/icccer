@@ -206,6 +206,86 @@ indicator rows, whose candidate observations are `0` and `1` and are therefore
 always one apart); the hazard is now recorded on `Separation::against`'s own doc
 comment, which is where the next person will meet it.
 
+### 1.2 ★★★ When the comparison can be made INSIDE one run, make it there — and write the reason into the test, added 2026-08-28
+
+§1 ranks claims by **where the expectation came from**. §1.1 adds **how far
+the rival answer sits**. This section adds a third question, and it is asked
+**before** either of those, because it is answered when the *fixture* is
+chosen rather than when the row is graded:
+
+> ★★★ **Can the two things being compared be observed in a SINGLE run of a
+> SINGLE implementation?** If they can, do it there — and **state in the
+> test why that construction was chosen**, or the next person will
+> "simplify" it into a comparison against an external reference and delete
+> the property without moving a number.
+
+**Why it matters, in one sentence:** a comparison between two runs carries
+every uncontrolled stage of both — build, platform, scaling, quantisation,
+display path, and whatever the other application does to a value on its way
+to being observable — whereas a comparison **inside** one run has all of
+that as a **common term that cancels**, leaving only the variable under test.
+
+**The strongest form**, and the one that earns an evidence class of its own:
+when the **test material's own documentation asserts that two objects must
+resolve to the same colour**, the distance between them is a measurement
+against a contract **its author** stated, with no oracle in it at all.
+`NUMERIC_CLAIMS.md` §1 carries that class as
+**`intra-run-fixture-invariant`**; `ARCHITECTURE.md` **`DL-074`** is the
+decision.
+
+> ★★★ **CANCELLATION LICENSES THE COMPARISON, NOT THE UNIT — added
+> 2026-08-28, `ARCHITECTURE.md` `DL-076`. No number and no bound is added by
+> this note.** The paragraph above says the uncontrolled stages are a
+> *common term that cancels*, and that is true of **attribution**: a
+> difference taken inside one run cannot be an artifact of the path, so the
+> discrepancy belongs to the thing under test. ★★ **It is NOT true of
+> magnitude.** An observation path — a display transform above all — is
+> **non-linear**, and a non-linear map does not preserve distances even when
+> it is applied to both operands. ⇒ **Where any stage of the observation is a
+> screen capture, the result is stated in 8-bit channel counts and in no
+> other unit**, `DL-070` as `DL-076` reads it. ★ **Where every stage is one
+> this project runs and can pin, both sides are colours and a colorimetric
+> unit is lawful** — which is the construction the bound below already
+> demands for any result in the *satisfied* direction.
+
+★★★ **THE BOUND, and it is not optional.** The construction is
+**one-sided**. A **large** divergence is robust — no common observation
+path manufactures a big separation out of two inputs that entered it equal.
+A **near-zero** agreement is **not** robust, because a common path can
+collapse two genuinely different colours onto one value by clamping,
+saturating or quantising them. ⇒ **A check of this shape may assert that
+the declared relation FAILED. It may not, on its own, certify that the
+relation HOLDS.** That is `DL-069`/`DL-070`'s clamp argument arriving inside
+a single run, and it is the same shape as `DL-065`: **agreement measured in
+the wrong place is not evidence of agreement.**
+
+**How this relates to the two sections above it:**
+
+| | asks | answered when |
+|---|---|---|
+| §1 | where did the expectation come from? | the row is written |
+| §1.1 | how far away is the rival answer? | the row is graded |
+| **§1.2** | **can the check be made internal at all?** | ★ **the fixture is chosen** |
+
+★★ **Which is why it belongs in this document rather than in a review
+checklist.** `DL-036`/`GP-002` and `DL-065` both end at the same place — **a
+defect that no tolerance can express is answered by a different fixture, not
+by a different number.** This section is that remedy stated *before* the
+failure instead of after it.
+
+★ **What this section does NOT do.** It sets no bound, licenses no
+tolerance, and does not make an internal check *sufficient*: where the
+expectation is **ours on both sides** — we authored both objects — the class
+is `self-consistency` and nothing here promotes it. **The promotion comes
+entirely from the assertion being a third party's.**
+
+> ★★ **The §1 table above still enumerates four kinds and remains
+> incomplete**: it does not carry `derived-expectation` (owed since
+> 2026-08-11 by the note under it) and it does not carry this class either.
+> **Extending it is still owed**, and adding §1.2 beside it does not
+> discharge that — recorded in `NUMERIC_CLAIMS.md` §7.30 newly-owed 4 so the
+> debt has a home.
+
 ---
 
 ## 2. The perceptual anchor
@@ -4268,6 +4348,179 @@ covered, and not claimed: DeviceLink (`link`) profiles, where lcms2's own
 behaviour differs; saturation and absolute as *header* values; any real vendor
 profile; and the B2A direction. Nothing here is a colorimetric claim — the
 fixtures' numbers are an arbitrary hand-checkable split and describe no device.
+
+---
+
+### 3.12 ★★★ Destination-side intent → tag selection, on a COMMITTED fixture — the machine-local dependency removed
+
+**Filed 2026-09-01 by `icc-conformance`,** on `pdfce`'s request
+`request_srgb_to_cmyk_with_an_intent_and_why_saturation_is_load_bearing.md`
+ask 4. Apparatus:
+`crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs` — an
+integration test of the **shipping crate**, in `cargo test`, not in
+`tools/difftest`. Fixture:
+`fixtures/synthetic/v2-cmyk-intent-separated-b2a.icc`, recipe
+`v2-cmyk-intent-separated-b2a`, `tools/gen-profiles/src/recipes.rs` §(c4).
+
+#### 3.12.0 ★★★ What was wrong before, and it was not a wrong number
+
+`docs/NEXT_SESSION.md` recorded the gap: **no synthetic fixture carried
+`A2B2` or `B2A2` at all**, and the two committed fixtures carrying `B2A1`
+push **byte-identical payloads** into `B2A0` and `B2A1`. The only
+evidence anywhere in the tree that `Chain::new(.., Intent::Saturation)`
+reaches a *different destination table* than `Intent::MediaRelative` was
+`transform.rs`'s `swop_perceptual_equals_saturation_shared_tag`, which
+reads `C:\Windows\System32\spool\drivers\color\USWebCoatedSWOP.icc`
+and **returns success when that file is absent.**
+
+> ★★★ **A skipped test and a passing test print the same colour.** On
+> every CI runner this project has, that row was green and the claim was
+> unmeasured. This is not a tolerance that was too loose; it is a row
+> that never ran. **`docs/TOLERANCES.md` §6's rule — say the scope or say
+> nothing — has a corollary this section is the first to write down:
+> a row whose apparatus can VANISH must state what happens when it does,
+> and "returns green" is not an acceptable answer.**
+
+★ The consumer-facing half of why this mattered: `pdfce` was about to
+build a saturation-vs-media-relative regression and would have inherited
+the same machine-local dependency, in a repository whose CI has no
+Windows colour directory at all.
+
+#### 3.12.1 The fixture, and the single property every row rests on
+
+Six `mft2` tags at six **distinct** offsets — `A2B0`/`A2B1`/`A2B2`
+(4→3, 5⁴ grid) and `B2A0`/`B2A1`/`B2A2` (3→4, 9³ grid), no clause-7.3.1
+aliasing. The three `B2Ax` are `v2-cmyk-chromatic-neutral`'s separation
+with **one scalar changed** — a per-intent **black floor** added to `K`
+at every node, `IS_K_FLOOR = [0,00, 0,20, 0,40]` — with `C`, `M` and `Y`
+held **identical** across all three.
+
+★★★ **A constant added to every CLUT node survives every interpolation
+scheme exactly.** Multilinear, tetrahedral, prism and nearest are each an
+affine combination of the enclosing cell's corners with weights summing
+to one, so a constant present at every corner arrives undiminished.
+**Consequence: the `K` separation between two intents is the constant
+itself — at every PCS point, for every probe, under any conformant CMM,
+independent of the source profile and of the interpolation geometry.**
+That is why the rows below assert equalities rather than bounds, and it
+is the property `NA-006`'s interpolation envelope would otherwise have
+had to be allowed for.
+
+★★ **And the offsets are exact 16-bit codes, so the quantisation cancels
+rather than being bounded.** `65 535 = 3 × 5 × 17 × 257`, so
+`0,20 × 65 535 = 13 107` and `0,40 × 65 535 = 26 214` are integers; node
+values are `IS_K_FLOOR[x] + 0,05 j`, and `round(v + n) = round(v) + n`
+for integral `n`, so the encoded difference is **exactly 13 107 codes at
+every one of the 729 nodes**.
+
+★ **`K` never clamps** (`0 … 0,80` over the whole table), which is what
+makes the argument hold at the extremes rather than only where the test
+probes. The `C M Y` channels do clamp outside the dead band, and are
+irrelevant for it: they are identical across the three tags.
+
+#### 3.12.2 The rows
+
+| Row | Kind | Metric | Tolerance | Justification | Measured 2026-09-01 |
+|---|---|---|---|---|---|
+| **A0. The six LUT tags occupy six distinct offsets** — `the_six_lut_tags_occupy_six_distinct_offsets` | **derived-expectation** | count of shared offsets | **0 — exact** | The **precondition for reading every other row as a measurement**, and the row Pass 4b §A0 taught this project to write first. Clause 7.3.1 permits aliasing and real files use it — the Windows system SWOP profile aliases `A2B0` and `A2B2` onto **one** offset. Had this fixture been laid out that way, every row below would have read one table three times and reported green. The comparison is of integers with no arithmetic in it, so `0` is honestly available. | **0.** Offsets 500 / 4 332 / 8 164 (`A2Bx`, 3 830 B each) and 11 996 / 17 908 / 23 820 (`B2Ax`, 5 912 B each). 0 malformations. |
+| **A1. `K(Saturation) − K(MediaRelative)`** — `saturation_and_media_relative_select_different_b2a_tables` | **derived-expectation** | signed difference, device 0..1 | **`0,20 ± 1×10⁻¹²`** (`EXACT`) | Derived, and **not a colour tolerance**. The graded quantity is the difference of two affine interpolations over *identical* weights on nodes differing by exactly 13 107 integer codes; the only departure available is IEEE-754 rounding (each node forms `code / 65 535`, ≤ ½ ulp ≈ 1,1×10⁻¹⁶, over a few dozen combined terms ⇒ order 10⁻¹⁵). `1×10⁻¹²` is **three orders of headroom** over that and **eleven orders below the quantity**. §2's perceptibility anchor has nothing to do with it and must not be cited for it. **Signed, not absolute:** a CMM that swapped `B2A1` and `B2A2` satisfies an absolute-value assertion and fails this one. | **`0,200 000 000 000 000`** at all 125 probes; worst deviation **`1,665×10⁻¹⁶`** (`sat−rel`) and **`1,388×10⁻¹⁶`** (`rel−per`). **`6,0×10³` inside the bound** (`1×10⁻¹² / 1,665×10⁻¹⁶`). |
+| **A1b. The same, as a floor** — same test | **derived-expectation** | min over probes, device 0..1 | **`≥ 4×10⁻²`** (`MINIMUM_USEFUL_SEPARATION`) | **Reused, not minted:** Pass K §F's declared device-separation floor (§3.10.11 row `F3`), itself `10×` §3.7's `SWEEP_DEVICE` — the loosest device bound this project has justified. The two rows floor the same kind of quantity for the same reason, and a second constant would be a second thing to defend. **Why a floor as well as an equality:** the equality alone still passes if the fixture is re-authored with a smaller offset and the constant updated in step — green suite, de-powered instrument. Injection **I6b** below is that scenario, run. | **`0,20`** — 5× the floor. |
+| **A2. `C`, `M`, `Y` bit-identical across the three intents** — `cmy_is_bit_identical_across_the_three_intents` | **self-consistency** | equality | **exact `==`, no tolerance** | ★★ **This is what makes A1's `K` difference ATTRIBUTABLE.** `Chain::new` today applies neither BPC nor K-only preservation — both opt-in, by an explicit documented choice. If either ever became intent-conditional by default it would move `C M Y` and redden *this* row, instead of quietly becoming the source of the difference A1 reads as proof of tag selection. The three arms run the same arithmetic on the same bytes in the same order, so a tolerance would be a place for a structural difference to hide. | **bit-identical**, 125 probes × 3 channels × 3 intents. |
+| **A3. The zero-separation control** — `the_sibling_fixture_is_the_zero_separation_control` | **derived-expectation** | equality | **exact `==`** | ★★★ **The named rival, RUN rather than argued.** `v2-cmyk-chromatic-neutral.icc` carries only `B2A0`, so clause 8.10.2's step-3 fallback must send all three intents to one table. It regresses the fallback limb **and** measures A1's rival hypothesis (*"the CMM ignored the intent"*) **in the same run**, so A1's candidate separation is a measured `0,20 − 0,0` rather than an assumed one. The standing lesson it discharges: *a zero-separation fixture does not merely fail to inform, it MANUFACTURES A FALSE PASS* (§3.10.11). | **`0,0` exactly**, all probes, all three intents. |
+| **A4. ICC-absolute selects the same `B2A` as media-relative** — `icc_absolute_selects_the_same_b2a_as_media_relative` | **derived-expectation** | abs-max, device 0..1 | **`1×10⁻¹²`** (`EXACT`) | Clause 8.10.2 gives ICC-absolute the same table as media-relative (`B2A1`); the two differ by the white-point scaling ahead of it, not by the table. On **this pair** that scaling is the identity — source and destination both carry the corpus's D50 `wtpt` — which turns a hard-to-bound claim into an equality. **Load-bearing, not decorative:** injection I3 (absolute → `B2A2`) fails it by eleven orders. | **`0,0`** — exactly zero at all 125 probes × 4 channels. |
+| **A5. The three `A2Bx` are reached as a chain's SOURCE** — `the_three_a2b_tables_are_reached_as_the_source_side_of_a_chain` | **derived-expectation** (predicate) / **REPORTED, NOT GRADED** (magnitude) | min pairwise device spread | **`≥ 1×10⁻⁶`** (`DISTINCT_FLOOR`), all **three** pairs | The `A2Bx` constant is added in the **PCS** and the destination is a matrix/TRC with a non-linear `curv`, so the device difference at the far end has no closed form this file may write without minting colour maths (rule 2). So the **graded** predicate is the derivable one — *the three intents did not read the same table* — whose rival produces **bit-identical** output, i.e. exactly `0,0`. Any positive floor refutes it; `1×10⁻⁶` sits six orders above the noise of a deterministically identical computation (which is *zero*, not small) and is **not** derived from what was measured. The **magnitude has no derived bound and therefore gets no assertion.** | Graded: passes. Reported spreads — `sat−rel` min **`2,568 190×10⁻³`** max **`1,606 760×10⁻¹`** (80 unclipped); `rel−per` min **`2,568 190×10⁻³`** max **`1,728 911×10⁻¹`** (79 unclipped); `sat−per` min **`5,136 379×10⁻³`** max **`3,319 586×10⁻¹`** (80 unclipped). |
+
+#### 3.12.3 ★★★ Proof of power — NINE injection runs, each in a detached worktree, and TWO of them found defects in the rows themselves
+
+`DL-064`: a green run is the floor; the red runs are what discharge the
+debt. Every injection below was applied to a pristine copy of the tree in
+`git worktree add --detach`, built, run, and reverted.
+
+| # | Injection | Expected | Observed |
+|---|---|---|---|
+| **I1** | `transform.rs`: destination `Intent::Saturation => tag::B2A1` (off-by-one) | A1 red | **A1 red**, `K(sat)−K(rel) = 0`. 5 passed, 1 failed. |
+| **I2** | destination `Intent::Saturation => tag::B2A0` (the intent ignored — the named rival) | A1 red | **A1 red**, `−0,200 000 000 000 000 12`. The **sign** is what identifies it, which is why the row is not on an absolute value. |
+| **I3** | destination `Intent::Absolute => tag::B2A2` | A4 red | **A4 red**, absolute `0,799 9…` vs media-relative `0,600 0…`, differing by `0,199 999 999 999 999 84`. |
+| **I4** | source `Intent::Saturation => tag::A2B0` | A5 red | ★★★ **A5 GREEN — the row had a hole, and the injection is the only thing that found it.** A5 graded only two pairs; with saturation aliased onto perceptual, `A2B0` and `A2B1` still differ, so both graded pairs still separated. **A distinctness predicate over a SUBSET of the pairs cannot see a collapse onto the pair it does not look at.** Fixed by grading all three pairs. |
+| **I4′** | I4 re-run against the fixed row | A5 red | **A5 red.** |
+| **I5** | `recipes.rs`: `IS_K_FLOOR = [0, 0, 0]` — the three `B2Ax` collapse to one payload, i.e. exactly the state the other two committed fixtures are in | A1 red | **A1 red**, `0`. The fixture-side counterpart of I2, and the demonstration that the corpus's *existing* fixtures could not have carried this row. |
+| **I6** | `IS_K_FLOOR = [0, 0,001, 0,002]` with the equality constants updated to match | A1b (floor) red | **A1 red — but on the EQUALITY, not the floor**, at `0,000 991 836 4` against an expected `0,001`. ★ **The exactness argument is itself load-bearing:** `0,001 × 65 535 = 65,535` is *not* an integer, so the rounding stops cancelling. Instructive, but it did not isolate the floor. |
+| **I6b** | `IS_K_FLOOR = [0, 655/65 535, 1310/65 535]` — exact codes, equality constants updated | A1b red, A1 green | **Exactly that.** The equality **passed**; only the floor failed, at `9,994 659×10⁻³`. **The floor is not redundant with the equality.** |
+| **I7** | `recipes.rs`: `C` also varies with the intent (the fixture stops holding `C M Y` equal) | A2 red, A1 green | **Exactly that.** A2 is load-bearing, so A1's attribution argument has a live guard rather than a comment. |
+
+★★ **Two of the nine runs changed the apparatus.** I4 exposed a subset
+predicate that could not see the collapse it was written for; I6
+demonstrated that the exactness the whole section rests on comes from
+choosing offsets that are exact 16-bit codes, not from the arithmetic
+being simple. Neither would have been visible from a green run.
+
+#### 3.12.4 ★★ What A5's first run found — a downstream CLIP annihilates a differential
+
+A5's first version asserted the floor at **every** probe and **failed at
+two of eighty-one**: device CMYK `(0, 1, 0, 0)` and `(1, 1, 0, 0)`. Both
+are saturated inks the destination RGB profile cannot reproduce. Both arms
+return a cube corner *exactly* — `(1, 0, 1)` and `(0, 0, 1)` respectively,
+which is the signature of a clip and not an inference about anybody's gamut
+— so a real, correctly-selected 8-unit `b*` difference arrives as **exactly
+zero**.
+
+> ★★★ **`DL-077` says list what the arms SHARE. This adds: also list what
+> the pipeline DESTROYS after they diverge.** Clipping is idempotent and
+> many-to-one; so is a gamut-mapping step, a quantiser, and any
+> saturating encode. A differential that is sound where it is injected
+> can be annihilated downstream, and the result is a green row measuring
+> nothing.
+
+The destination-side rows are immune **for a stated reason** — the
+fixture's `K` column spans `0 … 0,80` and never reaches a clip — which is
+why the design put the label on the device side of the `B2A` rather than
+in the PCS.
+
+**How the exclusion is handled, and it is not by deleting two probes:** a
+probe is exempt from A5's floor only if **every channel of both arms is
+pinned at a cube boundary**, a *checked* criterion rather than a chosen
+list, and a probe that collapses for any other reason still fails. The
+clipped count is asserted to stay under a quarter of the probe set and is
+printed, so a change that quietly starts clipping everything shows up as
+a count rather than as continued green.
+
+#### 3.12.5 ★★★ Evidence class and scope — read before quoting any number above
+
+**Class: `derived-expectation`.** Every expectation is arithmetic on the
+fixture's own authored constants plus clause 8.10.2's stated selection
+order. **No implementation's output is in any expectation** — not
+lcms2's, not iccce's. Stronger than a cross-check (which is defeated when
+two implementations share a misreading); **weaker than ground truth,
+which this is not and must never be called.**
+
+★★★ **AND IT IS NOT COLORIMETRY.** A saturation table that differs from a
+media-relative table by a flat 20 % black floor is **not** what a
+saturation intent does. ICC.1 says nothing that would make it so, no
+instrument produced these numbers, and the profile describes no press
+that exists. Exactly one claim is asserted, and it is **structural**:
+*the byte block the CMM read for the saturation intent is the one clause
+8.10.2 names, and not another one.* **Anybody citing `0,20` as a fact
+about rendering intents, black generation or ink has misread this
+section.**
+
+**Coverage, stated (§6's rule).** One source profile
+(`v2-rgb-matrix-trc-curv.icc`, matrix/TRC, XYZ PCS — chosen because a
+matrix/TRC source is **intent-blind**, so every difference is
+attributable to the destination half), one destination
+(`v2-cmyk-intent-separated-b2a.icc`, `mft2` `lut16`, Lab PCS, 9³ grid),
+**125** RGB probes and **81** CMYK probes, **four** intents,
+`Chain::new` only. **Not covered and not claimed:** the compiled path
+(`CompiledTransform`), `mAB`/`mBA` v4 element pipelines (no v4 fixture
+carries three `B2Ax` either — the gap is closed for `mft2` only), any
+real vendor profile, DeviceLink profiles, and whether iccce's *colour* is
+right anywhere in this chain.
+
+**What this does NOT retire.** The machine-local
+`swop_perceptual_equals_saturation_shared_tag` is **kept**, deliberately:
+it is the *aliased* arm (one payload, two intents, answers must be
+identical) and this fixture is the *separated* arm. Neither layout is a
+defect; a test that cannot tell them apart is. What has changed is that
+the tree no longer depends on the machine-local one for the claim.
 
 ---
 

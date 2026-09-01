@@ -1334,6 +1334,361 @@ fn v2_cmyk_warm_black() -> Vec<u8> {
 }
 
 // ===========================================================================
+// (c4) Well-formed: the CMYK destination whose THREE B2A TABLES ARE DISTINCT
+//      — the fixture an intent-selection regression can be built on
+// ===========================================================================
+//
+// ★★★ WHY THIS EXISTS. `docs/NEXT_SESSION.md` records the gap in its own
+// words: **no synthetic fixture carries `A2B2` or `B2A2` at all**, and the two
+// committed fixtures that carry `B2A1` push **byte-identical payloads** into
+// `B2A0` and `B2A1`. So the whole tree's evidence that
+// `Chain::new(.., Intent::Saturation)` reaches a *different destination table*
+// than `Intent::MediaRelative` rested on one machine-local file — the Windows
+// system SWOP profile — which is present on the authoring box and on no CI
+// runner, and which `transform.rs`'s own test for it skips when absent.
+//
+// ★★★ AND A SKIPPED TEST AND A PASSING TEST PRINT THE SAME COLOUR. That is
+// the whole hazard: `swop_perceptual_equals_saturation_shared_tag` writes
+// `eprintln!("skipped: system profiles absent")` and **returns success**. On
+// any machine without the profile the suite is green and the claim is
+// unmeasured.
+//
+// ★★★ THE STANDING LESSON THIS RECIPE IS BUILT AGAINST: **a ZERO-SEPARATION
+// fixture does not merely fail to inform, it MANUFACTURES A FALSE PASS.** Pass
+// K §F proved that by injection — collapsing a fixture's separation turned the
+// headline red row *green* at `0,000000`. Applied here: authoring three `B2A`
+// tags is worthless unless the three tables **differ in a quantity that
+// survives to the output**, and unless something **asserts a floor** on that
+// difference. Care taken while authoring does not survive a regeneration; an
+// asserted lower bound does.
+//
+// ## THE CONSTRUCTION, and why it is the one that can be checked by hand
+//
+// The three `B2Ax` tables are the sibling [`chromatic_neutral_b2a`] separation
+// with **one scalar changed**: a per-intent **black floor** added to the `K`
+// channel of **every node**.
+//
+// ```text
+// B2Ax(li, ai, bi).K  =  IS_K_FLOOR[x]  +  0,40 · d          (d = 1 − li/(N−1))
+// B2Ax(li, ai, bi).C  =  the sibling's, UNCHANGED
+// B2Ax(li, ai, bi).M  =  the sibling's, UNCHANGED
+// B2Ax(li, ai, bi).Y  =  the sibling's, UNCHANGED
+//
+// IS_K_FLOOR = [0,00,  0,20,  0,40]   for x = 0, 1, 2
+// ```
+//
+// ★★★ **A constant added to every node survives every interpolation scheme
+// EXACTLY.** Multilinear, tetrahedral, prism, nearest — every candidate is an
+// affine combination of the enclosing cell's corners whose weights sum to one,
+// so a constant offset present at all eight (or four, or one) corners appears
+// at the interpolated point undiminished. **The separation between two arms is
+// therefore the constant itself, at every PCS point in the cube, under any
+// conformant CMM, with no dependence whatever on the source profile, the
+// probe, the PCS connection, or the interpolation geometry.** That is a much
+// stronger property than "the tables differ", and it is what lets the test
+// assert an *equality* to nine decimal places rather than a hopeful floor.
+//
+// ★★ **The offsets are EXACT 16-bit codes, so no rounding survives either.**
+// `65 535 = 3 × 5 × 17 × 257`, so a fifth is exact: `0,20 × 65 535 = 13 107`
+// and `0,40 × 65 535 = 26 214`, both integers. Node `K` values are
+// `IS_K_FLOOR[x] + 0,05 j` for `j = 0..8`; `0,05 × 65 535 = 3 276,75` is *not*
+// an integer, but `round(v + n) = round(v) + n` for integral `n`, so the
+// encoded difference between two arms is **exactly `13 107` codes at every one
+// of the 729 nodes** and the fractional part cancels rather than being bounded.
+//
+// ★★ **The graded quantity is invariant under every other constant in this
+// file.** Change `CN_GRAY_SLOPE`, `CN_K_DARKNESS`, `CN_CHROMA`, the dead band,
+// the grid sizes — the measured saturation-minus-media-relative `K` separation
+// is still `0,20`. Only [`IS_K_FLOOR`] can move it. A fixture whose asserted
+// number depends on one named constant and nothing else is a fixture whose
+// failures are diagnosable, which is this corpus's stated preference.
+//
+// ★ **`K` NEVER CLAMPS**, so the "no rounding, no clamping" argument holds at
+// every node rather than only where a test happens to probe: the largest value
+// any node takes is `0,40 + 0,40 = 0,80`, the smallest is `0,00`. The `C M Y`
+// channels are the sibling's and clamp exactly where the sibling's do, outside
+// the dead band — which is irrelevant here, because `C M Y` are **identical
+// across the three tags** and the test asserts that identity as a second,
+// independent statement (see below).
+//
+// ## WHY `C M Y` ARE HELD IDENTICAL ACROSS THE THREE TAGS
+//
+// **`DL-077`: a differential tests only what DIFFERS between its arms — so
+// list what the arms SHARE before trusting it.** Here the arms share
+// *everything* except the tag signature and one scalar. That is deliberate and
+// it buys two separate assertions from one fixture:
+//
+// 1. `K_sat − K_rel = 0,20` — the tag actually selected was `B2A2`, not
+//    `B2A1` and not `B2A0`. **Signed**, so a swapped pair fails rather than
+//    passing on an absolute value.
+// 2. `C, M, Y` equal across all three intents — **nothing else in the chain
+//    moved.** If a future default (black point compensation, K-only
+//    preservation, a gamut-mapping step) ever begins firing on an intent
+//    basis, it will disturb `C M Y` and this assertion goes red *instead of*
+//    silently supplying the `K` difference that assertion 1 reads as proof of
+//    tag selection. **Assertion 2 is what keeps assertion 1 honest**, and it is
+//    the reason the label was not simply put in a channel nobody else looks at.
+//
+// ## THE `A2Bx` SIDE — the same trick, in the PCS
+//
+// Three `A2Bx` tags, the sibling [`chromatic_neutral_a2b`] model with a
+// per-intent constant added to `b*`:
+//
+// ```text
+// IS_B_OFFSET = [0,0,  +8,0,  +16,0]    b* units, for x = 0, 1, 2
+// ```
+//
+// Legacy PCSLAB encodes `a*`/`b*` as `(v + 128) × 256`, so an **integer** `b*`
+// offset is an exact whole number of codes (`8 × 256 = 2 048`) and the same
+// "constant survives interpolation exactly, and rounding cancels" argument
+// applies verbatim. The base model's `b*` spans `−95 … +90`; `+16` takes it to
+// `−95 … +106`, inside the legacy range `−128 … +127,996`, so nothing clamps.
+//
+// ★ It is in `b*` rather than `L*` because `L*` is the one axis with a hard
+// clamp at both ends (`0 … 100`), and a constant that clamps is not a constant.
+//
+// ## WHAT THIS FIXTURE IS NOT — and this is the sentence that must travel
+//
+// ★★★ **NOTHING HERE IS A CLAIM ABOUT ANY PRESS, ANY INK, OR ANY RENDERING
+// INTENT'S MEANING.** A saturation table that differs from a media-relative
+// table by a flat 20 % black floor is not what a saturation intent does; ICC.1
+// says nothing that would make it so, and no instrument produced these
+// numbers. What this fixture supports is exactly one claim, and it is
+// **structural**: *the byte block a consumer reads for the saturation intent is
+// the one clause 8.10.2's selection names, and not another one*. Read as
+// colorimetry it is nonsense; read as an instrument it is exact.
+// `fixtures/synthetic/README.md` makes the same statement about the whole
+// corpus and it is repeated here because this is the fixture most likely to be
+// mistaken for a press model, being the one that names an intent.
+//
+// ## Conformance note — the same A34 scope statement the siblings carry
+//
+// Clause 8.5.2 requires an N-component LUT-based Output profile to carry all
+// six `A2Bx`/`B2Ax` **plus `gamt`**. This fixture carries the six and not
+// `gamt` — closer to 8.5.2 than either sibling (which carry two), and still
+// short of it. Corpus finding **A34** applies unchanged: ICC.1:2022 states
+// requirements for 4.4.0.0 profiles and does not restate v2's, so a validator
+// must not declare a v2 profile non-conformant against clause 8. `gamt` is
+// omitted rather than authored because a gamut tag would be a *seventh* thing
+// this fixture asserts nothing about, and the corpus's rule is one fixture, one
+// job.
+
+/// The per-intent **black floor** of the `B2Ax` tables, indexed by the intent
+/// number in the tag signature: `B2A0` → `0,00`, `B2A1` → `0,20`,
+/// `B2A2` → `0,40`.
+///
+/// ★★★ **THIS IS THE FIXTURE'S ENTIRE MEASURED QUANTITY.** The difference
+/// between two arms of the intent-selection test is exactly the difference of
+/// two entries of this array — `0,20` for saturation-minus-media-relative,
+/// `0,40` for saturation-minus-perceptual, `0,20` for
+/// media-relative-minus-perceptual — at **every** PCS point, under **every**
+/// interpolation scheme, because a constant added to every CLUT node is
+/// reproduced exactly by any weights that sum to one.
+///
+/// **Fifths, so the encoding is exact.** `65 535 = 3 × 5 × 17 × 257`;
+/// `0,20 × 65 535 = 13 107` and `0,40 × 65 535 = 26 214` are integers, so the
+/// offsets cost no rounding at all.
+///
+/// ★ **Do not change these without re-deriving
+/// `crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs`**, which
+/// asserts the differences as exact equalities and cites this constant by name,
+/// and `docs/TOLERANCES.md` §3.12.
+const IS_K_FLOOR: [f64; 3] = [0.0, 0.20, 0.40];
+
+/// The per-intent `b*` offset of the `A2Bx` tables, in CIELAB units, indexed
+/// the same way: `A2B0` → `0`, `A2B1` → `+8`, `A2B2` → `+16`.
+///
+/// Integers, because legacy PCSLAB scales `a*`/`b*` by exactly 256, so an
+/// integer offset is an exact whole number of 16-bit codes and the same
+/// "rounding cancels" argument holds as for [`IS_K_FLOOR`].
+///
+/// ★ `+8` is not a perceptibility claim. It is simply large enough that no
+/// interpolation, quantisation or PCS-conversion term in this project's
+/// tolerance budget is within three orders of magnitude of it, so a row that
+/// reads it cannot be reading noise.
+const IS_B_OFFSET: [f64; 3] = [0.0, 8.0, 16.0];
+
+/// The `A2Bx` model: the sibling [`chromatic_neutral_a2b`] with the intent's
+/// own constant added to `b*`.
+///
+/// `x` is the intent number, `0..=2`; indexing the array is what makes an
+/// out-of-range intent a panic rather than a silent fallback.
+fn intent_separated_a2b(x: usize, c: f64, m: f64, y: f64, k: f64) -> (f64, f64, f64) {
+    let (l, a_star, b_star) = chromatic_neutral_a2b(c, m, y, k);
+    (l, a_star, b_star + IS_B_OFFSET[x])
+}
+
+/// The `B2Ax` model: the sibling [`chromatic_neutral_b2a`] with the intent's
+/// own black floor added to `K`, and `C M Y` untouched.
+///
+/// ★ The floor is added **after** the sibling's own clamp and is not clamped
+/// again, because it cannot need to be: the sibling's `K` column is
+/// `0,40 · d ∈ 0 … 0,40` and the largest floor is `0,40`, so the sum is at most
+/// `0,80`. A `clamp` here would be dead code that *looks* like it is protecting
+/// something, which is worse than none — it would hide the day somebody raises
+/// a floor past `0,60`. The `debug_assert` states the invariant instead.
+fn intent_separated_b2a(x: usize, li: usize, ai: usize, bi: usize, n: usize) -> [f64; 4] {
+    let mut v = chromatic_neutral_b2a(li, ai, bi, n);
+    v[3] += IS_K_FLOOR[x];
+    debug_assert!(
+        (0.0..=1.0).contains(&v[3]),
+        "IS_K_FLOOR[{x}] pushed K out of 0..1: {}",
+        v[3]
+    );
+    v
+}
+
+/// Build the `mft2` for one `A2Bx` of [`v2_cmyk_intent_separated_b2a`].
+fn intent_separated_a2b_tag(x: usize) -> Mft2 {
+    let na = CN_A2B_NODES;
+    let mut clut = Vec::with_capacity(na * na * na * na * 3);
+    // Clause 10.10's index order: first input channel varies least rapidly.
+    for ci in 0..na {
+        for mi in 0..na {
+            for yi in 0..na {
+                for ki in 0..na {
+                    let (l, a_star, b_star) = intent_separated_a2b(
+                        x,
+                        frac(ci, na),
+                        frac(mi, na),
+                        frac(yi, na),
+                        frac(ki, na),
+                    );
+                    clut.push(legacy_lab_l(l));
+                    clut.push(legacy_lab_ab(a_star));
+                    clut.push(legacy_lab_ab(b_star));
+                }
+            }
+        }
+    }
+    #[expect(
+        clippy::cast_possible_truncation,
+        reason = "CN_A2B_NODES is the compile-time constant 5"
+    )]
+    let na8 = na as u8;
+    Mft2 {
+        input_chan: 4,
+        output_chan: 3,
+        clut_points: na8,
+        pad: 0,
+        matrix: Mft2::IDENTITY,
+        input_ent: 2,
+        output_ent: 2,
+        input_tables: [0x0000u16, 0xFFFF].repeat(4),
+        clut,
+        output_tables: [0x0000u16, 0xFFFF].repeat(3),
+    }
+}
+
+/// Build the `mft2` for one `B2Ax` of [`v2_cmyk_intent_separated_b2a`].
+fn intent_separated_b2a_tag(x: usize) -> Mft2 {
+    let nb = CN_B2A_NODES;
+    let mut clut = Vec::with_capacity(nb * nb * nb * 4);
+    for li in 0..nb {
+        for ai in 0..nb {
+            for bi in 0..nb {
+                for v in intent_separated_b2a(x, li, ai, bi, nb) {
+                    #[expect(
+                        clippy::cast_possible_truncation,
+                        clippy::cast_sign_loss,
+                        reason = "0..=0.80 by the floor argument in intent_separated_b2a"
+                    )]
+                    let enc = (v * 65_535.0).round() as u16;
+                    clut.push(enc);
+                }
+            }
+        }
+    }
+    #[expect(
+        clippy::cast_possible_truncation,
+        reason = "CN_B2A_NODES is the compile-time constant 9"
+    )]
+    let nb8 = nb as u8;
+    Mft2 {
+        input_chan: 3,
+        output_chan: 4,
+        clut_points: nb8,
+        pad: 0,
+        matrix: Mft2::IDENTITY,
+        input_ent: 2,
+        output_ent: 2,
+        input_tables: [0x0000u16, 0xFFFF].repeat(3),
+        clut,
+        output_tables: [0x0000u16, 0xFFFF].repeat(4),
+    }
+}
+
+/// v2.4 CMYK Output profile carrying **all three `A2Bx` and all three `B2Ax`
+/// as six distinct, non-aliased tag data elements** — the fixture that lets
+/// intent→tag selection be regressed on the **destination** side with no
+/// machine-local profile anywhere in the test.
+///
+/// See the section header above for the construction and for the single claim
+/// this fixture supports.
+///
+/// ## What a conformant consumer must produce
+///
+/// Writing `d` for the encoded darkness the `B2A` CLUT's `L*` axis reaches at
+/// the probe point, and holding the source and the probe fixed:
+///
+/// * `B2A0(P).K = 0,40 d`, `B2A1(P).K = 0,20 + 0,40 d`,
+///   `B2A2(P).K = 0,40 + 0,40 d` — **at every PCS point `P`**, because the
+///   floors are added to every node.
+/// * Therefore, for a chain into this profile as **destination**:
+///   * `K(Saturation) − K(MediaRelative) = 0,20` **exactly**
+///   * `K(Saturation) − K(Perceptual)    = 0,40` **exactly**
+///   * `K(MediaRelative) − K(Perceptual) = 0,20` **exactly**
+///   * `C`, `M` and `Y` are **bit-identical** across the three intents.
+/// * ICC-absolute selects `B2A1`, the same tag as media-relative (clause
+///   8.10.2), so its `K` floor is `0,20` too — the two differ only by the
+///   white-point scaling applied ahead of the table, not by the table.
+/// * For a chain out of this profile as **source**, the `b*` the `A2Bx` emits
+///   carries `+0`, `+8`, `+16` for perceptual, media-relative and saturation.
+///
+/// ## Tag aliasing — deliberately absent
+///
+/// All six tags are `Tag::own`, so all six occupy **distinct data elements at
+/// distinct offsets**. Clause 7.3.1 permits two tags to share one element and
+/// real profiles use it — the Windows system SWOP profile aliases `A2B0` and
+/// `A2B2` onto one offset, which is why a test written against *that* file
+/// asserts the two intents give **identical** answers. This fixture is the
+/// opposite arm on purpose. Neither layout is a defect; a test that cannot tell
+/// them apart is.
+///
+/// ## `mft2` shapes
+///
+/// Each `A2Bx` is `inputChan = 4`, `outputChan = 3`, `clutPoints = 5`; each
+/// `B2Ax` is `inputChan = 3`, `outputChan = 4`, `clutPoints = 9`. All six
+/// matrices are the identity — clause 10.10 permits a non-identity matrix only
+/// for a PCSXYZ input, and no tag here has one. **Every** input and output curve
+/// table is the 2-entry identity — forty-two of them, `3 × (4 + 3)` on the `A2Bx`
+/// side and `3 × (3 + 4)` on the `B2Ax` side — two entries being the minimum
+/// clause 10.10 allows and the only count that contributes no approximation.
+///
+/// Both directions use the **legacy** 16-bit PCSLAB encoding, unconditionally:
+/// clause 10.10, *"this tag uses the legacy 16-bit PCSLAB encoding … not the
+/// 16-bit PCSLAB encoding defined in 6.3.4.2"*, with no version test.
+fn v2_cmyk_intent_separated_b2a() -> Vec<u8> {
+    let mut tags_ = v2_meta("iccce synthetic v2 CMYK, three DISTINCT A2Bx and B2Ax tables");
+    tags_.push(wtpt());
+    for (x, sig) in [b"A2B0", b"A2B1", b"A2B2"].into_iter().enumerate() {
+        tags_.push(Tag::own(sig, intent_separated_a2b_tag(x).encode()));
+    }
+    for (x, sig) in [b"B2A0", b"B2A1", b"B2A2"].into_iter().enumerate() {
+        tags_.push(Tag::own(sig, intent_separated_b2a_tag(x).encode()));
+    }
+    ProfileSpec {
+        version: 0x0240_0000,
+        class: *b"prtr",
+        color_space: *b"CMYK",
+        pcs: *b"Lab ",
+        rendering_intent: 1,
+        tags: tags_,
+    }
+    .assemble()
+}
+
+// ===========================================================================
 // (d) Well-formed: the D2 discriminator pair — mft2 Lab in v4 and in v2
 // ===========================================================================
 
@@ -3191,6 +3546,46 @@ pub fn all() -> Vec<Recipe> {
                      \u{2605} DO NOT change WB_K_A, WB_K_B, WB_GCR or the darkness coefficients: \
                      Pass K \u{a7}G grades the measured cost against a closed form derived from them.",
             build: v2_cmyk_warm_black,
+        },
+        Recipe {
+            name: "v2-cmyk-intent-separated-b2a",
+            category: WellFormed,
+            covers: "all three A2Bx AND all three B2Ax as six DISTINCT, non-aliased mft2 tags \
+                     \u{2014} intent \u{2192} tag selection (clause 8.10.2) on the DESTINATION side",
+            what: "v2.4.0.0 prtr CMYK, Lab PCS. Six mft2 tags: A2B0/A2B1/A2B2 (4->3, 5^4 grid) and \
+                   B2A0/B2A1/B2A2 (3->4, 9^3 grid), every one at its own offset (no clause 7.3.1 \
+                   aliasing). The three B2Ax are v2-cmyk-chromatic-neutral's separation with ONE \
+                   scalar changed - a per-intent BLACK FLOOR added to K at every node, \
+                   IS_K_FLOOR = [0.00, 0.20, 0.40] - and C, M, Y held IDENTICAL across the three. \
+                   The three A2Bx are that fixture's forward model with a per-intent b* offset, \
+                   IS_B_OFFSET = [0, +8, +16] CIELAB units",
+            expect: "parses; 0 malformations; 9 tags (desc, cprt, wtpt and the six LUTs); \
+                     six lut16 tags, three in=4 out=3 \
+                     clutPoints=5 and three in=3 out=4 clutPoints=9; matrixIdentity=true on all \
+                     six; the six tag-table entries report six DISTINCT offsets. \
+                     \u{2605}\u{2605}\u{2605} THE POINT OF THE FIXTURE: through a chain whose \
+                     DESTINATION is this profile, \
+                     K(Saturation) - K(MediaRelative) = 0.20 EXACTLY, \
+                     K(Saturation) - K(Perceptual) = 0.40 EXACTLY, and C, M, Y are BIT-IDENTICAL \
+                     across the three intents. The separations are exact at EVERY PCS point and \
+                     under EVERY interpolation scheme, because a constant added to every CLUT node \
+                     is reproduced undiminished by any weights that sum to one, and because \
+                     0.20 * 65535 = 13107 and 0.40 * 65535 = 26214 are integers so no rounding \
+                     survives. On v2-cmyk-chromatic-neutral and v2-cmyk-warm-black the same three \
+                     intents give the SAME ANSWER (each carries only B2A0, so all three intents \
+                     fall back to it) - that is the ZERO-SEPARATION arm, and it is why this recipe \
+                     exists. \
+                     \u{2605}\u{2605} NOTHING HERE IS A CLAIM ABOUT ANY PRESS OR ABOUT WHAT A \
+                     SATURATION INTENT MEANS. A flat 20 % black floor is not what a saturation \
+                     table does; ICC.1 says nothing that would make it so and no instrument \
+                     produced these numbers. The fixture is STRUCTURAL: it shows which byte block \
+                     a consumer read, and nothing else. \
+                     \u{2605} DO NOT change IS_K_FLOOR or IS_B_OFFSET: \
+                     crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs asserts these \
+                     differences as EXACT equalities and TOLERANCES.md \u{a7}3.12 derives its \
+                     bound from them. Every OTHER constant in this file may move without \
+                     disturbing the graded quantity, which is the design.",
+            build: v2_cmyk_intent_separated_b2a,
         },
         Recipe {
             name: "v2-cmyk-mft1-lab",

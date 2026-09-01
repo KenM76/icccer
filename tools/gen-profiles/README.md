@@ -394,6 +394,92 @@ again.
 
 ---
 
+### 4.3 ★★★ The fixture built to SEPARATE THE INTENTS — `v2-cmyk-intent-separated-b2a`, and the row it retires from a machine-local file
+
+**Added 2026-09-01 by `icc-conformance`,** on `pdfce`'s request
+`request_srgb_to_cmyk_with_an_intent_and_why_saturation_is_load_bearing.md`
+ask 4. §4.2 is the same lesson on a different subject; this one closes the
+**intent → tag selection** hole on the **destination** side.
+
+#### The defect it closes
+
+`docs/NEXT_SESSION.md` records it in its own words: **no synthetic fixture
+carried `A2B2` or `B2A2` at all**, and the two committed fixtures that carry
+`B2A1` push **byte-identical payloads** into `B2A0` and `B2A1` — deliberately,
+and for a stated, sound reason. So every claim that
+`Chain::new(.., Intent::Saturation)` reaches a *different destination table*
+than `Intent::MediaRelative` rested on the Windows system SWOP profile, in a
+test that **returns success when the file is absent**.
+
+> ★★★ **A skipped test and a passing test print the same colour.** On every CI
+> runner this project has, that row was green and the claim was unmeasured.
+
+#### The construction — six tags, one changed scalar
+
+Six `mft2` tags at six **distinct** offsets (no clause-7.3.1 aliasing):
+`A2B0`/`A2B1`/`A2B2` (4→3, 5⁴ grid) and `B2A0`/`B2A1`/`B2A2` (3→4, 9³ grid).
+The three `B2Ax` are §4.2's separation with **one scalar changed** — a
+per-intent **black floor** added to `K` at every node — and `C`, `M`, `Y` held
+**identical** across all three:
+
+```
+B2Ax.K  =  IS_K_FLOOR[x] + 0.40·d        IS_K_FLOOR = [0.00, 0.20, 0.40]
+B2Ax.C  =  §4.2's,  UNCHANGED
+B2Ax.M  =  §4.2's,  UNCHANGED
+B2Ax.Y  =  §4.2's,  UNCHANGED
+```
+
+| choice | what it buys |
+|---|---|
+| the difference is a **constant added to every node** | every interpolation scheme is an affine combination of the cell's corners with weights summing to one, so a constant present at all corners arrives **undiminished**. The separation is the constant itself — at every PCS point, for any probe, under any conformant CMM, independent of the source profile and of the interpolation geometry. That is what lets the test assert an **equality** rather than hope for an inequality |
+| offsets are **exact 16-bit codes** | `65 535 = 3 × 5 × 17 × 257`, so `0.20 × 65 535 = 13 107` and `0.40 × 65 535 = 26 214` are integers, and `round(v + n) = round(v) + n` for integral `n`. The node quantisation **cancels** rather than being bounded: the encoded difference is exactly 13 107 codes at all 729 nodes. Injection I6 proved this is load-bearing — a floor of `0.001` (`× 65 535 = 65.535`, not an integer) breaks the equality at the fifth decimal |
+| `K` **never clamps** (`0 … 0.80` over the whole table) | the argument holds at the table's extremes, not only where a test happens to probe |
+| the label is on the **device** side of the `B2A`, not in the PCS | a downstream clip annihilates a PCS-side differential — measured, `docs/TOLERANCES.md` §3.12.4 |
+| `C`, `M`, `Y` held **identical** across the three tags | a second, independent assertion: if any future default (BPC, K-only preservation, gamut mapping) ever becomes intent-conditional it disturbs `C M Y` and reddens *that* row, instead of quietly becoming the source of the `K` difference the headline row reads as proof of tag selection |
+| the `A2Bx` carry a **`b*` offset** `[0, +8, +16]` | integer CIELAB units, and legacy PCSLAB scales `a*`/`b*` by exactly 256, so the same exactness argument holds. `b*` rather than `L*` because `L*` is the axis with a hard clamp at both ends, and a constant that clamps is not a constant |
+
+#### ★★ What it costs, stated as prominently as what it buys
+
+★★★ **NOTHING HERE IS A CLAIM ABOUT ANY PRESS, ANY INK, OR WHAT A RENDERING
+INTENT MEANS.** A saturation table that differs from a media-relative table by
+a flat 20 % black floor is not what a saturation intent does; ICC.1 says
+nothing that would make it so, no instrument produced these numbers, and the
+profile describes no press. This is the fixture in the corpus **most likely to
+be mistaken for a press model**, because it is the only one that names an
+intent — which is why the warning is repeated in the recipe's section header,
+in the recipe's `expect` string, in `MANIFEST.md`, and in the test's own module
+doc. What it supports is exactly one claim, and it is **structural**: *the byte
+block a consumer read for the saturation intent is the one clause 8.10.2 names,
+and not another one.*
+
+#### ★ Do not "simplify" these constants
+
+`crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs` asserts
+`K(Saturation) − K(MediaRelative) = 0.20` and
+`K(MediaRelative) − K(Perceptual) = 0.20` as **exact equalities** within
+`1×10⁻¹²`, and `docs/TOLERANCES.md` §3.12 derives its bounds from
+`IS_K_FLOOR`. **Every other constant in `recipes.rs` may move without
+disturbing the graded quantity** — `CN_GRAY_SLOPE`, `CN_K_DARKNESS`,
+`CN_CHROMA`, the dead band, the grid sizes. Only `IS_K_FLOOR` and
+`IS_B_OFFSET` can. That is the design, not a coincidence: a fixture whose
+asserted number depends on one named constant and nothing else is a fixture
+whose failures are diagnosable.
+
+#### ★ Neither sibling is superseded, and the SWOP test stays
+
+`v2-cmyk-chromatic-neutral` and `v2-cmyk-warm-black` each carry only `B2A0`, so
+all three intents fall back to it and the measured separation is **exactly
+zero**. That is not a defect — it is the `ZERO-SEPARATION` **control**, asserted
+as a test in the same file, and it is what turns the headline row's candidate
+separation into a measured `0.20 − 0.0` rather than an assumed one.
+
+The machine-local `swop_perceptual_equals_saturation_shared_tag` also stays: it
+is the **aliased** arm (one payload, two intents, answers must be *identical*)
+where this fixture is the **separated** arm. Neither profile layout is a defect;
+a test that cannot tell them apart is.
+
+---
+
 ## 5. ★ FINDING GP-001 — `mBA ` curve counts: iccce disagrees with ICC.1:2022 and with lcms2
 
 **Status: FIXED same day — commit `2e98cfd` (2026-08-11): the profile
@@ -649,11 +735,23 @@ Legal full tag aliasing.
 **both `A2B0` and `A2B1`**, with deliberately different tables, so clause
 8.10.2 b)'s choice between them is observable rather than inferred. Before
 this pair no fixture carried a second A2B tag at all, and a consumer that
-selected the wrong one could not have been caught here. **`A2B2` is still
-absent**, so the saturation arm of that selection remains uncovered, as does
-the `link` (DeviceLink) class — which matters more than it looks, because
-DeviceLink is the one class where lcms2 *does* read the header's rendering
-intent (§6.4).
+selected the wrong one could not have been caught here.
+
+> ★★ **CORRECTED 2026-09-01.** This paragraph used to end *"`A2B2` is still
+> absent, so the saturation arm of that selection remains uncovered"*, and
+> that is **no longer true**: `v2-cmyk-intent-separated-b2a` (§4.3) carries
+> **all three `A2Bx` and all three `B2Ax`** at six distinct offsets, and
+> `crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs` grades the
+> selection in both directions. ★ The half that mattered more was never the
+> `A2Bx` one: the **destination** side (`B2Ax`) had no separating fixture
+> anywhere in the tree, in either direction, under any implementation —
+> `docs/NEXT_SESSION.md` calls that the fifth instance of `DL-077`'s theorem
+> inside this repository. Both halves are now covered **for `mft2` only**; no
+> v4 `mAB `/`mBA ` fixture carries three of anything.
+
+Still absent, and named rather than implied: the `link` (DeviceLink) class —
+which matters more than it looks, because DeviceLink is the one class where
+lcms2 *does* read the header's rendering intent (§6.4).
 
 **Not covered, and named rather than implied:**
 
@@ -711,6 +809,23 @@ iccce and lcms2 agree to `1.4×10⁻⁵` and iccce matches the byte-level deriva
 to `5.0×10⁻⁷`. That is a **cross-check plus a derived expectation**, not ground
 truth: no standards body printed `0.420 7`, and the derivation and the fixture
 are both this project's reading of clause 10.10.
+
+★ **Dated verification of the next fixture added** (`icc-conformance`,
+2026-09-01, Windows/MSVC, iccce at working tip):
+`v2-cmyk-intent-separated-b2a` — `gen-profiles verify` reports **48
+identical, 0 not identical**; `Profile::parse` reports **0 malformations**;
+the six `A2Bx`/`B2Ax` entries report six distinct offsets (500 / 4 332 /
+8 164, 3 830 B each; 11 996 / 17 908 / 23 820, 5 912 B each). Through
+`Chain::new` with `v2-rgb-matrix-trc-curv.icc` as source, over 125 RGB probes:
+`K(Saturation) − K(MediaRelative) = 0.200 000 000 000 000` with a worst
+deviation from the authored `0.20` of **`1.665×10⁻¹⁶`**, and
+`K(MediaRelative) − K(Perceptual)` the same to **`1.388×10⁻¹⁶`**;
+`C`, `M`, `Y` **bit-identical** across the three intents; ICC-absolute
+identical to media-relative to **`0.0`**. **That is a `derived-expectation`,
+not a cross-check and not ground truth** — lcms2 was not consulted for any
+number in it, and no standards body printed `0.20`. Nine injection runs, each
+in a detached worktree, are recorded in `docs/TOLERANCES.md` §3.12.3; **two of
+them found defects in the assertions rather than in the code.**
 
 ---
 

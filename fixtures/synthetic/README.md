@@ -114,6 +114,47 @@ the two defect injections that prove the test can fail are in
 `crates/iccce-cli/tests/header_rendering_intent_not_consumed.rs` and
 `docs/TOLERANCES.md` §3.11.
 
+★★ **A third instrument, added 2026-09-01, and this one is the DESTINATION
+side.** `v2-cmyk-intent-separated-b2a.icc` carries **all three `A2Bx` and all
+three `B2Ax`** as six distinct, non-aliased `mft2` tags. Until it existed, no
+committed fixture carried `A2B2` or `B2A2` at all, and the only two carrying
+`B2A1` pushed **byte-identical payloads** into `B2A0` and `B2A1` — so the whole
+tree's evidence that a saturation request reaches a *different destination
+table* than a media-relative one rested on the Windows system SWOP profile, in
+a test that returns **success** when that file is absent. **A skipped test and
+a passing test print the same colour.**
+
+The three `B2Ax` are `v2-cmyk-chromatic-neutral`'s separation with **one scalar
+changed** — a per-intent black floor added to `K` at every node, `0,00` /
+`0,20` / `0,40` — with `C`, `M` and `Y` held **identical** across all three. A
+constant added to every CLUT node survives every interpolation scheme exactly
+(each is an affine combination of the cell's corners with weights summing to
+one), and the offsets are exact 16-bit codes (`0,20 × 65 535 = 13 107`), so the
+quantisation cancels rather than being bounded. **The measured separation is
+therefore the constant itself, at every PCS point, under any conformant CMM.**
+`crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs` asserts it as an
+*equality*; `docs/TOLERANCES.md` §3.12 carries the rows, the scope and nine
+injection runs.
+
+★★★ **It is the fixture in this corpus most likely to be mistaken for a press
+model, because it is the only one that names an intent.** A saturation table
+that differs from a media-relative table by a flat 20 % black floor is **not**
+what a saturation intent does; ICC.1 says nothing that would make it so and no
+instrument produced these numbers. It supports exactly one claim, and the claim
+is structural: *which byte block the consumer read*.
+
+★ **What it got wrong that the pair above got right, recorded because the rule
+was already written here and was still missed.** The paragraph above says of
+the header-intent pair: *"every table entry is well inside the sRGB gamut, so
+the separation cannot be erased by clipping at a destination."* This fixture's
+**`A2Bx`** offsets (`b*` `+0` / `+8` / `+16`) do **not** honour that, and on
+first run two of eighty-one CMYK probes clipped to the same cube corner at the
+destination and reported a real difference as **exactly zero**. Its **`B2Ax`**
+offsets do honour it — `K` spans `0 … 0,80` and never reaches a clip — which is
+why the graded rows are on the destination side. **Clipping is idempotent and
+many-to-one; so is a gamut-mapping step and any saturating encode. A
+differential that is sound where it is injected can be annihilated downstream.**
+
 The verification record (what the shipped `iccce` binary and lcms2's `transicc`
 do with each fixture, dated and scoped), the coverage statement, and the open
 finding **GP-001** are in `tools/gen-profiles/README.md` §§5–7.
