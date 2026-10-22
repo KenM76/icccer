@@ -68,7 +68,7 @@ written permission. The ICC profiles inside the patches carry their own
 separate licences (Adobe's, ECI's, the ICC's). **Neither the patches nor
 the extracted profiles may be committed to this MIT repository.** The
 default output directory is therefore inside
-`D:\Dev\iccce-private-fixtures\`, alongside the other three
+`D:\Dev\icccer-private-fixtures\`, alongside the other three
 differently-licensed corpora, exactly as `docs/NEXT_SESSION.md` §4
 requires.
 

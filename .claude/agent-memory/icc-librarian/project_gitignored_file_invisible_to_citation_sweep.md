@@ -32,7 +32,7 @@ every filing. The failure mode is a clean sweep that missed a whole file
 
 - **Any** sweep, audit, or "confirm the count is zero" task: run the
   directory sweep **and** a second search naming
-  `D:\Dev\iccce\docs\SUITE_COMPATIBILITY.md` explicitly. A sweep that did
+  `D:\Dev\icccer\docs\SUITE_COMPATIBILITY.md` explicitly. A sweep that did
   not name it is **incomplete**, and say so if you cannot run both.
 - The same applies to anything else `.gitignore` covers that still holds
   prose — check `.gitignore` before trusting a repo-wide count.

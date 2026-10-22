@@ -19,7 +19,7 @@ measurement hardware**. See [[feedback-compatibility-not-compliance]].
 **How to apply:**
 
 - The suite's location is NOT recorded here. Resolve it through
-  `ICCCER_PRIVATE_FIXTURES` (default `D:\Dev\iccce-private-fixtures`,
+  `ICCCER_PRIVATE_FIXTURES` (default `D:\Dev\icccer-private-fixtures`,
   subdirectory `suite-v50\`), or ask the operator. The literal path
   was removed 2026-08-25: the vendor's own directory name spells the
   suite out, so recording the path is itself a mention. Its three
@@ -31,7 +31,7 @@ measurement hardware**. See [[feedback-compatibility-not-compliance]].
   without the suite publisher's written permission**, and the ICC profiles embedded in it
   carry Adobe's / ECI's / X-Rite's own separate terms. **Nothing derived
   from it may enter the MIT repository.** Extracted profiles live in
-  `D:\Dev\iccce-private-fixtures\suite-v50\` with the project's other
+  `D:\Dev\icccer-private-fixtures\suite-v50\` with the project's other
   restricted corpora, resolved by tests through `$ICCCER_PRIVATE_FIXTURES`
   and skipped when absent.
 - The suite's own pass/fail signal is **visual** — a red X at 0.5 m

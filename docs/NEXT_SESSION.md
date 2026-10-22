@@ -2,15 +2,14 @@
 
 ---
 
-# HANDOFF — 2026-10-22 (later). Renamed to `icccer`, `v0.4.0`; four renames outside the tree await Ken
+# HANDOFF — 2026-10-22 (later). Renamed to `icccer`; work from `D:\Dev\icccer`
 
-See `ARCHITECTURE.md` `DL-084`. Crates, binary and prose are `icccer`. Still
-named `iccce`, on purpose, until Ken OKs each: the GitHub repo, the
-`D:\Dev\iccce` folder, `D:\Dev\iccce-private-fixtures`, and the channel folder
-`iccce_FeatureRequests`. When one moves, replace its remaining path strings
-(`git grep -n "Dev.iccce\|KenM76/iccce\|iccce_FeatureRequests"`). Fixture
-byte-strings saying "iccce" stay forever. pdfcer was sent migration steps in
-the channel. crates.io: still unpublished, still Ken's call.
+See `ARCHITECTURE.md` `DL-084`. Everything is `icccer` now: crates, binary,
+GitHub repo `KenM76/icccer`, checkout `D:\Dev\icccer`, `D:\Dev\icccer-private-fixtures`,
+channel `D:\Dev\FeatureRequests\icccer_FeatureRequests`. The old `D:\Dev\iccce`
+is a stale copy Ken is deleting; never work there. Fixture byte-strings saying
+"iccce" stay forever. pdfcer was sent migration steps in the channel.
+crates.io: still unpublished, still Ken's call.
 
 ---
 
@@ -69,7 +68,7 @@ way until he rules.**
 
 ## Do this first, exactly as every previous block says
 
-1. **List `D:\Dev\FeatureRequests\iccce_FeatureRequests\open\`**
+1. **List `D:\Dev\FeatureRequests\icccer_FeatureRequests\open\`**
    (`CLAUDE.md` rule 10). **Read `INDEX.md` before `open/`** — it is the
    memory, and a row there is cheaper than a file.
    ★ **Channel state, ALL [REPORTED] by `icc-engineer`, none of it
@@ -320,7 +319,7 @@ matters below it is stated; do not assume one date for the lot.
 
 ## Do this first, exactly as every previous block says
 
-1. **List `D:\Dev\FeatureRequests\iccce_FeatureRequests\open\`.**
+1. **List `D:\Dev\FeatureRequests\icccer_FeatureRequests\open\`.**
    ★ **It is 22 files** *(**[VERIFIED]** — listed at this filing)*, up from 8
    at the last handoff. **Read `INDEX.md` before `open/`** — it is the memory,
    and a row there is cheaper than reading a file in `open/`.
@@ -576,7 +575,7 @@ superseded here.
 
 ## Do this first, exactly as every previous block says
 
-1. **List `D:\Dev\FeatureRequests\iccce_FeatureRequests\open\`.**
+1. **List `D:\Dev\FeatureRequests\icccer_FeatureRequests\open\`.**
    ★★ **It is now 8 files, down from 20, and `INDEX.md` finally has rows.**
    Nothing is owed inbound. Three outbound notes await an optional reply.
    **Read `INDEX.md` before `open/`** — it is the memory, it was empty for four
@@ -841,7 +840,7 @@ is clean, the suite is green, and nothing is half-applied.
 
 ## If the operator types only "continue"
 
-1. **List `D:\Dev\FeatureRequests\iccce_FeatureRequests\open\`** (§0's
+1. **List `D:\Dev\FeatureRequests\icccer_FeatureRequests\open\`** (§0's
    standing rule). **Nothing was owed by us when work paused.**
 2. **Re-arm the 15-minute channel poll.** Monitors die with the session,
    so this is gone and must be re-armed *every* session. Persistent
@@ -1050,7 +1049,7 @@ left half-applied.
 
 ## If the operator types only "continue"
 
-1. **List `D:\Dev\FeatureRequests\iccce_FeatureRequests\open\`** (§0's
+1. **List `D:\Dev\FeatureRequests\icccer_FeatureRequests\open\`** (§0's
    standing rule). **Nothing is owed by us as of 2026-08-18 02:00.**
 2. **Re-arm the 15-minute channel poll.** Monitors die with the session,
    so this is gone and must be re-armed *every* session. Persistent
@@ -1207,7 +1206,7 @@ at any point, and no build of ours was running when it happened).
 
 ## If the operator typed only "continue", do these three, in order
 
-1. **List `D:\Dev\FeatureRequests\iccce_FeatureRequests\open\`** (§0's
+1. **List `D:\Dev\FeatureRequests\icccer_FeatureRequests\open\`** (§0's
    standing rule).
 2. **Re-arm the 15-minute channel poll.** The operator asked on
    2026-08-17 for the channel to be polled *throughout* a session, not
@@ -1237,7 +1236,7 @@ Tip is still **`e21154c`**. Files touched this session:
 | `tools/difftest/src/passg.rs`, `src/bin/suite_probe.rs`, `lib.rs`, `main.rs` | **NEW/edited** by `icc-conformance`. Pass G. |
 | `docs/NUMERIC_CLAIMS.md`, `ARCHITECTURE.md`, `ROADMAP.md`, `SESSION_LOG.md`, `NEXT_SESSION.md`, `TOLERANCES.md`, `tools/difftest/README.md` | filed by `icc-librarian` / `icc-conformance` |
 | `.claude/agent-memory/icc-engineer/*` | 3 new memories + index |
-| `D:\Dev\iccce-private-fixtures\README.md` | 4th corpus's terms |
+| `D:\Dev\icccer-private-fixtures\README.md` | 4th corpus's terms |
 
 ## What landed, in one line each
 
@@ -1246,7 +1245,7 @@ Tip is still **`e21154c`**. Files touched this session:
   a press and is organisationally closed to a library anyway. See
   `docs/SUITE_COMPATIBILITY.md`.
 - **20 real-world ICC profiles extracted** from 98 PDFs / 121 embeddings
-  into `D:\Dev\iccce-private-fixtures\suite-v50\`. **20/20 parse, 0
+  into `D:\Dev\icccer-private-fixtures\suite-v50\`. **20/20 parse, 0
   malformations.** ★ Doubly licence-encumbered; **never commit, never
   copy a value into the repo.**
 - **Pass G** built by `icc-conformance`: suite `pass=157` → **`pass=229
@@ -1422,7 +1421,7 @@ consecutive filing.
 
 **1. Rescue the color.org downloads out of `Downloads`.** They are the
 most valuable artifacts in the session and they are sitting in a folder
-people empty. Move to `D:\Dev\iccce-private-fixtures\` (new subfolder),
+people empty. Move to `D:\Dev\icccer-private-fixtures\` (new subfolder),
 **write the terms subsection FIRST** — that folder's own rule 3, which I
 broke once this session and recorded rather than tidied. Contents
 include: `sRGB2014.icc` (ICC's own, `wtpt` **D50** + `chad` present,
@@ -1571,7 +1570,7 @@ block → `tools/difftest/README.md` §20–§21.
 ## 0. ★★ FIRST, EVERY SESSION: CHECK THE REQUEST CHANNEL
 
 ```text
-D:\Dev\FeatureRequests\iccce_FeatureRequests\open\
+D:\Dev\FeatureRequests\icccer_FeatureRequests\open\
 ```
 
 **List that directory before anything else. Empty means nothing is
@@ -1760,7 +1759,7 @@ them.
 **Already decided, do not re-litigate:**
 
 - **Published third-party numbers stay OUT of this MIT repository.** They
-  live in `D:\Dev\iccce-private-fixtures\` and tests read them at run
+  live in `D:\Dev\icccer-private-fixtures\` and tests read them at run
   time. Decided 2026-08-12. See §4.
 - **`D:\Dev` is a Google Drive mirrored sync root** (`.tmp.driveupload` /
   `.tmp.drivedownload`, `GoogleDriveFS` active). This was measured,
@@ -1902,11 +1901,11 @@ class described in §5.2.
 
 | what | where | note |
 |---|---|---|
-| the repository | `D:\Dev\iccce\` | MIT. Contains **no** third-party numbers. |
-| private fixtures | `D:\Dev\iccce-private-fixtures\` | ★ **Never commit. Never copy a value out of it into the repo.** Read its `README.md` first — three items, three *different* licensing postures. |
+| the repository | `D:\Dev\icccer\` | MIT. Contains **no** third-party numbers. |
+| private fixtures | `D:\Dev\icccer-private-fixtures\` | ★ **Never commit. Never copy a value out of it into the repo.** Read its `README.md` first — three items, three *different* licensing postures. |
 | standards corpus | `D:\Dev\Rag-Specialized\ICC_Spec\` | Private dev reference. Never shipped, never committed, **never on `R:\`** (Dropbox). |
 | the oracle | `tools/difftest/vendor/` | git-ignored; pinned by commit hash in `lcms2.pin`, not by tag. |
-| **the request channel** | `D:\Dev\FeatureRequests\iccce_FeatureRequests\` | ★ **In NO git repository, deliberately** — transient coordination, not a record. **Nothing may exist only there.** `open/` is the working set (empty = nothing owed); `INDEX.md` is the memory; `archive/` is never read unless a row points at it. See §0 and `CLAUDE.md` rule 10. |
+| **the request channel** | `D:\Dev\FeatureRequests\icccer_FeatureRequests\` | ★ **In NO git repository, deliberately** — transient coordination, not a record. **Nothing may exist only there.** `open/` is the working set (empty = nothing owed); `INDEX.md` is the memory; `archive/` is never read unless a row points at it. See §0 and `CLAUDE.md` rule 10. |
 | the consumer | `D:\Dev\pdfce\` | The `pdfce` session's own tree. **Read-only from here** — this project does not edit it; it writes into the channel instead. |
 
 **The private fixtures hold:** ICC.1:2022 Annex D.6.3's values (ICC ©,

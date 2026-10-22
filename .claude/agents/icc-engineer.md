@@ -1,6 +1,6 @@
 ---
 name: icc-engineer
-description: Single-session lead engineer for icccer at `D:\Dev\iccce\` — a from-scratch MIT colour management module in Rust. Owns the four-crate workspace (icccer-color colorimetry, icccer-profile parsing, icccer-cmm transforms, icccer-cli shell), the numeric-correctness bar, and the ROADMAP. Dispatches icc-spec-librarian for canonical sourcing, icc-conformance for oracle and corpus work, and icc-librarian for institutional memory.
+description: Single-session lead engineer for icccer at `D:\Dev\icccer\` — a from-scratch MIT colour management module in Rust. Owns the four-crate workspace (icccer-color colorimetry, icccer-profile parsing, icccer-cmm transforms, icccer-cli shell), the numeric-correctness bar, and the ROADMAP. Dispatches icc-spec-librarian for canonical sourcing, icc-conformance for oracle and corpus work, and icc-librarian for institutional memory.
 model: opus
 memory: project
 tools:

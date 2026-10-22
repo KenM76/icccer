@@ -33,7 +33,7 @@ authors.workspace = true
 # `cargo package --list -p <crate>`, which must still list `LICENSE`.
 readme = "../../README.md"
 license-file = "../../LICENSE"
-homepage = "https://github.com/KenM76/iccce"
+homepage = "https://github.com/KenM76/icccer"
 documentation = "https://docs.rs/icccer-profile"
 # Slugs verified against https://crates.io/api/v1/category_slugs,
 # 2026-08-12.

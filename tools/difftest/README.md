@@ -285,7 +285,7 @@ An oracle that fails its own test suite is not an oracle. Run once at pin
 time:
 
 ```
-D:\Dev\iccce\tools\difftest\vendor\build-msvc\testbed> .\testcms.exe
+D:\Dev\icccer\tools\difftest\vendor\build-msvc\testbed> .\testcms.exe
 ```
 
 ```
@@ -1268,7 +1268,7 @@ a tolerance grepped out of a log always arrives with its justification
 attached.
 
 ```
-note	oracle: D:\Dev\iccce\tools\difftest\vendor/build-msvc/transicc.exe
+note	oracle: D:\Dev\icccer\tools\difftest\vendor/build-msvc/transicc.exe
 note	banner: LittleCMS ColorSpace conversion calculator - 5.1 [LittleCMS 2.19]
 note	pass3: icccer=.../target/release/icccer.exe (release) grid=133 points clipped=25
 check	smoke/srgb-white-to-lab	PASS	oracle-reproducibility	abs-max-component	0.0001	0.000000e0	...
@@ -4180,7 +4180,7 @@ X-Rite's separate licences. Therefore:
 
 ```text
 # the corpus (licensed, not in any repository)
-set ICCCER_PRIVATE_FIXTURES=D:\Dev\iccce-private-fixtures
+set ICCCER_PRIVATE_FIXTURES=D:\Dev\icccer-private-fixtures
 
 cargo build --release -p icccer-cli          # from the repo root
 cd tools/difftest
@@ -4292,13 +4292,13 @@ cd tools/difftest && cargo run --release --bin passh_probe   # the instrument
 ```
 
 The corpus resolves from `$ICCCER_PRIVATE_FIXTURES` (default
-`D:\Dev\iccce-private-fixtures`), subfolder `color-org\`. **Every row SKIPs with
+`D:\Dev\icccer-private-fixtures`), subfolder `color-org\`. **Every row SKIPs with
 a reason when it is absent**, which is CI's permanent state by design. ★ A green
 CI line is evidence that nothing in this section ran.
 
 ★★ **Licensing, and it binds anyone editing `passh.rs`.** 23 distinct `cprt`
 strings across the loose files, six licensing postures, restrictive reading
-applies to the whole folder (`D:\Dev\iccce-private-fixtures\README.md`,
+applies to the whole folder (`D:\Dev\icccer-private-fixtures\README.md`,
 `### color-org/`). **No file may be committed and no value read out of one may
 be copied into this repository.** Every number Pass H reports is computed at run
 time from the operator's disk. The only identifiers `passh.rs` holds are **file

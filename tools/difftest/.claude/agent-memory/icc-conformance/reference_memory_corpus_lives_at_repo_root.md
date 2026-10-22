@@ -1,6 +1,6 @@
 ---
 name: reference-memory-corpus-lives-at-repo-root
-description: The icc-conformance memory corpus for icccer lives at the REPOSITORY ROOT (D:\Dev\iccce\.claude\agent-memory\icc-conformance\), not under tools\difftest — 25+ files with a maintained MEMORY.md index; read that one first whatever path this session was handed.
+description: The icc-conformance memory corpus for icccer lives at the REPOSITORY ROOT (D:\Dev\icccer\.claude\agent-memory\icc-conformance\), not under tools\difftest — 25+ files with a maintained MEMORY.md index; read that one first whatever path this session was handed.
 metadata:
   type: reference
 ---
@@ -9,12 +9,12 @@ metadata:
 
 | path | state |
 |---|---|
-| `D:\Dev\iccce\.claude\agent-memory\icc-conformance\` | ★ **THE CORPUS.** 25+ memories, `MEMORY.md` index actively maintained, in git, shared with the team |
-| `D:\Dev\iccce\tools\difftest\.claude\agent-memory\icc-conformance\` | created empty by a session whose cwd was `tools\difftest`; holds this pointer and nothing else |
+| `D:\Dev\icccer\.claude\agent-memory\icc-conformance\` | ★ **THE CORPUS.** 25+ memories, `MEMORY.md` index actively maintained, in git, shared with the team |
+| `D:\Dev\icccer\tools\difftest\.claude\agent-memory\icc-conformance\` | created empty by a session whose cwd was `tools\difftest`; holds this pointer and nothing else |
 
 **How to apply.** At session start, regardless of which path the harness names
 as "your memory", **read
-`D:\Dev\iccce\.claude\agent-memory\icc-conformance\MEMORY.md` first** and write
+`D:\Dev\icccer\.claude\agent-memory\icc-conformance\MEMORY.md` first** and write
 new memories alongside it. Splitting the corpus across two directories is the
 one outcome to avoid: the value of these files is that they are read together,
 and an index that lists half of them is worse than no index.

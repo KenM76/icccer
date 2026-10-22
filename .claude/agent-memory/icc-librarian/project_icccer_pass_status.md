@@ -197,7 +197,7 @@ use `Separation::against`**; and `.github/workflows/ci.yml`'s prose
 filed; 43 decision-log entries. `SESSION_LOG.md` has 18 entries.**
 
 **★★ UPDATED 2026-08-17, NINETEENTH FILING (tip `e21154c`) — a REQUEST
-CHANNEL to `pdfce` exists** (`D:\Dev\FeatureRequests\iccce_FeatureRequests\`,
+CHANNEL to `pdfce` exists** (`D:\Dev\FeatureRequests\icccer_FeatureRequests\`,
 in **no git repo** — nothing may exist only there). **DL-044**: `pdfce`
 is a **named external consumer**; its three CI gates (wasm32, no
 copyleft, no network client) are now **inputs to rule 9**. ★★ **pdfce

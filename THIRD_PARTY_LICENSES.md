@@ -43,11 +43,11 @@ not the whole licence story.
 
 Used by:
 
-- [icccer-cli 0.3.0](https://github.com/KenM76/iccce)
-- [icccer-cmm 0.3.0](https://github.com/KenM76/iccce)
-- [icccer-color 0.3.0](https://github.com/KenM76/iccce)
-- [icccer-measure 0.3.0](https://github.com/KenM76/iccce)
-- [icccer-profile 0.3.0](https://github.com/KenM76/iccce)
+- [icccer-cli 0.3.0](https://github.com/KenM76/icccer)
+- [icccer-cmm 0.3.0](https://github.com/KenM76/icccer)
+- [icccer-color 0.3.0](https://github.com/KenM76/icccer)
+- [icccer-measure 0.3.0](https://github.com/KenM76/icccer)
+- [icccer-profile 0.3.0](https://github.com/KenM76/icccer)
 
 ```text
 MIT License

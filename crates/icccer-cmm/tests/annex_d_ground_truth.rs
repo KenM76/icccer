@@ -43,7 +43,7 @@
 //! the test read them at run time, so the repository stays unambiguously MIT.
 //!
 //! Resolution order: `$ICCCER_PRIVATE_FIXTURES`, then
-//! `D:\Dev\iccce-private-fixtures`, then **skip**.
+//! `D:\Dev\icccer-private-fixtures`, then **skip**.
 //!
 //! ★ **A green run on a machine without that folder is NOT evidence that this
 //! check passed — it is evidence that it did not run.** CI holds no such data
@@ -64,7 +64,7 @@ use icccer_color::{Lab, Xyz};
 /// Locate the private fixture store, or `None` if it is simply absent.
 fn fixture_dir() -> Option<PathBuf> {
     let p = std::env::var_os("ICCCER_PRIVATE_FIXTURES").map_or_else(
-        || PathBuf::from(r"D:\Dev\iccce-private-fixtures"),
+        || PathBuf::from(r"D:\Dev\icccer-private-fixtures"),
         PathBuf::from,
     );
     p.is_dir().then_some(p)
@@ -126,7 +126,7 @@ fn annex_d_6_3_pcs_encodings_match_the_published_integers() {
         eprintln!(
             "\n★ SKIPPED: annex_d_6_3_pcs_encodings_match_the_published_integers\n\
              No private fixture store found (set $ICCCER_PRIVATE_FIXTURES, or place it\n\
-             at D:\\Dev\\iccce-private-fixtures). THIS TEST ASSERTED NOTHING.\n\
+             at D:\\Dev\\icccer-private-fixtures). THIS TEST ASSERTED NOTHING.\n\
              A green run without that data is not evidence about Annex D.\n"
         );
         return;

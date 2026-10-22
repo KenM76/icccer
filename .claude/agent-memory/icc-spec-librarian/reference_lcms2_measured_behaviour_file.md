@@ -7,7 +7,7 @@ metadata:
 
 **`D:\Dev\Rag-Specialized\ICC_Spec\icc\icc__ref__lcms2_measured_behaviour.md`** — the only place in the corpus where "lcms2 does X" may be stated as behaviour. Created 2026-08-11 after [[reading-source-is-not-observing-behaviour]] (C3). Id namespace **`M<n>`**; evidence tier `measured_impl_behaviour` (`LEGAL_NOTE.md` §3).
 
-**Everything in it is pinned to lcms2 `21c582a594fe5279f90c0b93437c398f93bf62b0` (tag `lcms2.19.1`, 2.19), Windows/MSVC, 2026-08-11. Moving the pin invalidates every row until re-measured** — the tag is a mutable lightweight pointer, so the hash is the identity. Harness: `D:\Dev\iccce\tools\difftest` (README §12 is the run record; commit `bfd6b1e`); the pinned tree is on disk at `tools\difftest\vendor\lcms2` and can be re-grepped directly.
+**Everything in it is pinned to lcms2 `21c582a594fe5279f90c0b93437c398f93bf62b0` (tag `lcms2.19.1`, 2.19), Windows/MSVC, 2026-08-11. Moving the pin invalidates every row until re-measured** — the tag is a mutable lightweight pointer, so the hash is the identity. Harness: `D:\Dev\icccer\tools\difftest` (README §12 is the run record; commit `bfd6b1e`); the pinned tree is on disk at `tools\difftest\vendor\lcms2` and can be re-grepped directly.
 
 Rows as of 2026-08-11 (**six**, added over passes 3–6 plus the Pass 5 differential; **M1–M5 measured, M6 source-read**):
 

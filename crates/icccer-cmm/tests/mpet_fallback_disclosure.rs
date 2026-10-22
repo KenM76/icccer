@@ -47,7 +47,7 @@ use icccer_profile::Profile;
 
 fn corpus_root() -> std::path::PathBuf {
     let root = std::env::var("ICCCER_PRIVATE_FIXTURES")
-        .unwrap_or_else(|_| r"D:\Dev\iccce-private-fixtures".to_string());
+        .unwrap_or_else(|_| r"D:\Dev\icccer-private-fixtures".to_string());
     std::path::Path::new(&root).join("color-org")
 }
 

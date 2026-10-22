@@ -239,7 +239,7 @@ fn a_v2_reserved_block_discloses_without_accusing_and_a_v4_one_accuses() {
 /// contents changed makes this **skip** rather than silently select some
 /// other file and assert against it.
 fn licensed_v2_with_reserved_bytes() -> Option<PathBuf> {
-    const ROOT: &str = r"D:\Dev\iccce-private-fixtures";
+    const ROOT: &str = r"D:\Dev\icccer-private-fixtures";
     const NAMES: [&str; 5] = [
         "sRGB2014.icc",
         "ITU-RBT709ReferenceDisplay.icc",

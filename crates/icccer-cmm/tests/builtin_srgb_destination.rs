@@ -89,7 +89,7 @@ fn shipped_srgb() -> Option<(std::path::PathBuf, Vec<u8>)> {
         candidates.push(std::path::Path::new(&root).join("color-org/sRGB2014.icc"));
     }
     candidates.push(std::path::PathBuf::from(
-        r"D:\Dev\iccce-private-fixtures\color-org\sRGB2014.icc",
+        r"D:\Dev\icccer-private-fixtures\color-org\sRGB2014.icc",
     ));
     candidates.push(std::path::PathBuf::from(
         r"C:\Windows\System32\spool\drivers\color\sRGB Color Space Profile.icm",

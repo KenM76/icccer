@@ -37,11 +37,11 @@ members = [
 ]
 
 [workspace.package]
-version = "0.4.0"
+version = "0.4.1"
 edition = "2024"
 rust-version = "1.85"
 license = "MIT"
-repository = "https://github.com/KenM76/iccce"
+repository = "https://github.com/KenM76/icccer"
 authors = ["Ken Mantle"]
 
 # ------------------------------------------------------------------------
@@ -70,9 +70,9 @@ authors = ["Ken Mantle"]
 # BOTH numbers in this file change, and nothing outside this file does.
 # ------------------------------------------------------------------------
 [workspace.dependencies]
-icccer-color = { path = "crates/icccer-color", version = "0.4.0" }
-icccer-profile = { path = "crates/icccer-profile", version = "0.4.0" }
-icccer-cmm = { path = "crates/icccer-cmm", version = "0.4.0" }
+icccer-color = { path = "crates/icccer-color", version = "0.4.1" }
+icccer-profile = { path = "crates/icccer-profile", version = "0.4.1" }
+icccer-cmm = { path = "crates/icccer-cmm", version = "0.4.1" }
 
 [workspace.lints.rust]
 # ARCHITECTURE.md §3.4: no `unsafe` without a written justification and a

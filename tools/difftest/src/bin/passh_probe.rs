@@ -25,7 +25,7 @@
 //!    count, and the accept/refuse verdict of the shipped binary on every file.
 //!
 //! ★ **No number printed here is stored in this repository.** The corpus is
-//! licensed (`D:\Dev\iccce-private-fixtures\README.md` § `color-org/`) and Pass
+//! licensed (`D:\Dev\icccer-private-fixtures\README.md` § `color-org/`) and Pass
 //! H recomputes everything it grades at run time.
 
 use std::collections::BTreeMap;

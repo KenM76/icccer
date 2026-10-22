@@ -8,7 +8,7 @@
 //!
 //! ## The corpus
 //!
-//! `D:\Dev\iccce-private-fixtures\color-org\` — 50 `.icc` files downloaded by
+//! `D:\Dev\icccer-private-fixtures\color-org\` — 50 `.icc` files downloaded by
 //! the operator from `color.org` on 2026-08-17, catalogued in that folder's
 //! `README.md` under `### color-org/`. **Read those terms before touching
 //! anything here.** 23 distinct `cprt` strings across the loose files and six
@@ -149,7 +149,7 @@ use crate::{Kind, Metric, Record, SepUnits, Separation, Tolerance};
 pub fn corpus_dir() -> PathBuf {
     std::env::var_os("ICCCER_PRIVATE_FIXTURES")
         .map(PathBuf::from)
-        .unwrap_or_else(|| PathBuf::from(r"D:\Dev\iccce-private-fixtures"))
+        .unwrap_or_else(|| PathBuf::from(r"D:\Dev\icccer-private-fixtures"))
         .join("color-org")
 }
 
@@ -1267,7 +1267,7 @@ fn skip_everything(_dir: &Path, reason: impl Into<String>) -> Vec<Record> {
                 kind,
                 Metric::AbsMaxComponent,
                 tol,
-                "the private color.org corpus (see D:\\Dev\\iccce-private-fixtures\\README.md \
+                "the private color.org corpus (see D:\\Dev\\icccer-private-fixtures\\README.md \
                  section `color-org/`) and the ICC's published `Probe2 Profile Readme \
                  June 1, 2007`",
                 reason.clone(),

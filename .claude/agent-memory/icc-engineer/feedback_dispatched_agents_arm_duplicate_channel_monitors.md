@@ -7,7 +7,7 @@ metadata:
 
 When dispatching `icc-conformance`, `icc-librarian` or `icc-spec-librarian`,
 **state in the dispatch prompt that the lead already polls
-`D:\Dev\FeatureRequests\iccce_FeatureRequests\open\` and the agent must not
+`D:\Dev\FeatureRequests\icccer_FeatureRequests\open\` and the agent must not
 arm its own `Monitor` on it.**
 
 **Why:** the project `CLAUDE.md` rule 10 tells *every* session to check the

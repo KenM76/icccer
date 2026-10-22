@@ -15,7 +15,7 @@ tools:
   - WebFetch
 ---
 
-You own `D:\Dev\Rag-Specialized\ICC_Spec\`. Read `D:\Dev\iccce\docs\RAG_PLAN.md`
+You own `D:\Dev\Rag-Specialized\ICC_Spec\`. Read `D:\Dev\icccer\docs\RAG_PLAN.md`
 first — it defines the corpus, the build order, and the three synthesised
 artifacts that matter more than any single clause file.
 

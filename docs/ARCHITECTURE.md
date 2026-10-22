@@ -844,7 +844,7 @@ done.** Recorded in `ROADMAP.md` under *Publication*; the substance:
 - **Manifest metadata** — `description`, `license = "MIT"`, `repository`,
   `keywords`, `categories`, `readme`, `rust-version` — must be complete
   and *true* on every publishable crate. The `repository` field currently
-  declares `https://github.com/KenM76/iccce`; **whether that remote
+  declares `https://github.com/KenM76/icccer`; **whether that remote
   exists has still never been checked** (see the (a) annotation in
   `ROADMAP.md`), and publishing a manifest that points at a 404 is a
   small, avoidable embarrassment.
@@ -2582,7 +2582,7 @@ point Pass 5's negative result becomes a **measurable** question and
 
 ---
 
-### DL-024 — ★ **the project is published: `master` was pushed to `github.com/KenM76/iccce` on the operator's explicit go-ahead.** The event, the evidence for it, the pre-publication checks, and the sharp line between what was verified and what is the operator's word
+### DL-024 — ★ **the project is published: `master` was pushed to `github.com/KenM76/icccer` on the operator's explicit go-ahead.** The event, the evidence for it, the pre-publication checks, and the sharp line between what was verified and what is the operator's word
 
 **Date:** 2026-08-12 · **Authorised by:** the operator (Ken), explicit
 current go-ahead *(reported by the dispatching engineer)* · **Performed
@@ -2613,12 +2613,12 @@ recorded at that strength and no higher.
 **This is the first time in the project's history that any statement
 about its own repository rests on something other than a report.**
 `icc-librarian` has no shell and ran no git command; the following was
-read out of plain-text files under `D:\Dev\iccce\.git\` with the ordinary
+read out of plain-text files under `D:\Dev\icccer\.git\` with the ordinary
 file reader, which is a different act from running `git`:
 
 | What was read | What it says |
 |---|---|
-| `.git/config` | `[remote "origin"]` · `url = https://github.com/KenM76/iccce.git` — so the declared `repository` in the workspace manifest and the configured remote are the same URL. *(verified — read)* |
+| `.git/config` | `[remote "origin"]` · `url = https://github.com/KenM76/icccer.git` — so the declared `repository` in the workspace manifest and the configured remote are the same URL. *(verified — read)* |
 | `.git/logs/refs/remotes/origin/master` | **Exactly two lines, both `update by push`.** (1) `0000000…` → **`3502cb70…`** at epoch **`1786531877 -0400`** = **2026-08-12 06:51:17 −04:00**. The all-zero left-hand side means **the branch did not exist on the remote before this line** — *this line is the publication event*, and it carried the whole history up to and including Pass 6. (2) **`3502cb70…` → `f6203b8d…`** at epoch **`1786532090 -0400`** = **2026-08-12 06:54:50 −04:00** — Pass 7, pushed three seconds after it was committed. *(verified — read)* |
 | `.git/refs/heads/master` and `.git/refs/remotes/origin/master` | Both hold **`f6203b8df878f5af3a9bd9f8269e9bc3a2cac8aa`** — local and remote-tracking tips are the same commit, so nothing local is unpushed as of this reading. *(verified — read)* |
 | `.git/logs/HEAD` | **45 lines**: one `commit (initial)` (`f976a0e…`, epoch `1786458320 -0400` = 2026-08-11 10:25:20 −04:00) and 44 further `commit` lines. **No `reset`, `rebase`, `amend`, `checkout` or `merge` entry appears anywhere in the file.** *(verified — read end to end)* |
@@ -2631,7 +2631,7 @@ moments, and that the remote branch was created by the first of them.
 **Does NOT establish that the repository is public.** Repository
 visibility is a setting on GitHub's servers. **No file in this working
 tree records it**, and a push to a private repository produces exactly
-the same reflog. **That `github.com/KenM76/iccce` is public is the
+the same reflog. **That `github.com/KenM76/icccer` is public is the
 operator's report** and is carried at that strength everywhere in this
 filing. Anyone who needs it settled must open the URL in a browser
 while signed out.
@@ -4671,7 +4671,7 @@ should be factored rather than copied.
 ### DL-044 — ★★ **icccer has a NAMED EXTERNAL CONSUMER and a standing bidirectional channel to it. Rule 9's dependency classification gains a SECOND AXIS — a consumer's CI gates — and the adoption case for that consumer is CONFORMANCE, never accuracy**
 
 **Date:** 2026-08-17 · **Occasioned by:** the operator creating
-`D:\Dev\FeatureRequests\iccce_FeatureRequests\` on 2026-08-17 as a
+`D:\Dev\FeatureRequests\icccer_FeatureRequests\` on 2026-08-17 as a
 bidirectional request channel to the `pdfce` session at `D:\Dev\pdfce\`,
 and `pdfce` filing three items into it the same day · **Assessed by:**
 `icc-engineer` · **Filed by:** a **general-purpose agent standing in for
@@ -4897,7 +4897,7 @@ suite-certified; and suite supplies no numeric criterion by which
 - **It does not scope a Pass.** `ROADMAP.md` gains a **standing
   workstream** block, not a numbered Pass, and no done-when is asserted.
 - **It does not admit the suite into this repository.** The bytes stay in
-  `D:\Dev\iccce-private-fixtures\suite-v50\`; the licence's affirmative
+  `D:\Dev\icccer-private-fixtures\suite-v50\`; the licence's affirmative
   notice condition and its no-commercial-use clause would both follow
   them into an MIT tree.
 - **It does not weaken DL-020.** Refusing what the corpus cannot supply
@@ -6028,7 +6028,7 @@ The queried list is **verbatim DL-009's list of 2026-08-11**, written
   crates.io item, and opening a status pass for one would have moved an
   integer that section itself tracks.
 - **It says nothing about the GitHub remote.** DL-009's separate note —
-  that whether `https://github.com/KenM76/iccce` exists has never been
+  that whether `https://github.com/KenM76/icccer` exists has never been
   checked *by that route* — is **not** touched by a crates.io query.
 
 **Revisit if:** any of the five names is found taken (the rename that
@@ -10450,8 +10450,13 @@ permanent and this rename would then have left five orphans behind.
   old name in mind. In particular `DL-083`'s "all five names free" was
   measured for the `iccce-*` names; the `icccer`, `icccer-color` and
   `icccer-cmm` names were checked free on 2026-10-22 as well.
-- **Pending the operator's go-ahead, deliberately not yet changed:** the
-  GitHub repository name, the `D:\Dev\iccce` checkout folder, the private
-  fixtures folder `D:\Dev\iccce-private-fixtures` and the request-channel
-  folder `iccce_FeatureRequests`. Text pointing at those still says
-  `iccce` until each one moves, so no path in the tree is broken today.
+- **Outside the tree, done the same day on the operator's go-ahead:** the
+  GitHub repository is `KenM76/icccer` (GitHub redirects the old URL); the
+  private fixtures folder and the request-channel folder were renamed to
+  `icccer-private-fixtures` and `icccer_FeatureRequests`; the checkout was
+  **copied** to `D:\Dev\icccer`, and the operator removes the old
+  `D:\Dev\iccce` himself. Path strings in the tree point at the new names.
+  The old channel path is left as a **junction** to the new one, because
+  pdfcer's `tools/check-requests-scoped.py` reads it by name; it goes when
+  pdfcer has moved (asked in the channel). Nothing in pdfcer reads the old
+  checkout at build time.

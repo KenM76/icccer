@@ -51,7 +51,7 @@ CSS Color 4 publishes FOUR**; `srgb.xalter` / `registry.color.org` unfetched
 (expectation LOW). **NEW: `COR1:2014` exists and is unobtained.**
 → [[iec-srgb-primary-sourcing-state]]
 
-**Where the binaries are:** `D:\Dev\iccce-private-fixtures\color-org\` — the
+**Where the binaries are:** `D:\Dev\icccer-private-fixtures\color-org\` — the
 operator's private ICC profile fixture tree. `sRGB2014.icc` colorants are
 byte-identical to HP 1998's (that measurement stands) — **and are NOT ICC's own
 published numbers**, which is sharper than the old note.

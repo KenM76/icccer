@@ -44,7 +44,7 @@ use icccer_profile::Profile;
 /// file surviving a corpus reshuffle.
 fn corpus() -> Option<(Vec<u8>, Vec<u8>, String)> {
     let root = std::env::var("ICCCER_PRIVATE_FIXTURES")
-        .unwrap_or_else(|_| r"D:\Dev\iccce-private-fixtures".to_string());
+        .unwrap_or_else(|_| r"D:\Dev\icccer-private-fixtures".to_string());
     let base = std::path::Path::new(&root).join("color-org");
     let srgb_path = base.join("sRGB2014.icc");
     if !srgb_path.is_file() {

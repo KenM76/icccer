@@ -2351,7 +2351,7 @@ call to it, `white_point_note`, and `bpc.rs`'s ISO/CD 18619 header.
 
 ### ★★ Publication — the event, and the line between evidence and report
 
-`master` was pushed to **`https://github.com/KenM76/iccce`** on the
+`master` was pushed to **`https://github.com/KenM76/icccer`** on the
 operator's explicit go-ahead *(the go-ahead itself is **reported**; no
 agent here holds its wording)*. Filed as **DL-024**.
 
@@ -2359,7 +2359,7 @@ agent here holds its wording)*. Filed as **DL-024**.
 
 | File | What it says |
 |---|---|
-| `.git/config` | `origin` = `https://github.com/KenM76/iccce.git` |
+| `.git/config` | `origin` = `https://github.com/KenM76/icccer.git` |
 | `.git/logs/refs/remotes/origin/master` | **Two lines, both `update by push`.** `0000000…` → **`3502cb7`** at **06:51:17 −04:00** — the all-zero left side means **the remote branch did not exist before it**, so *this line is the publication event* and it carried the entire history through Pass 6. Then → **`f6203b8`** at **06:54:50 −04:00**, three seconds after Pass 7 was committed |
 | `.git/refs/heads/master` · `.git/refs/remotes/origin/master` | Both **`f6203b8d…`** — nothing local is unpushed |
 
@@ -3934,7 +3934,7 @@ mid-filing correcting one of its own framings.
 ### What happened: a communication channel now exists, and it has a consumer at the other end
 
 The operator created
-**`D:\Dev\FeatureRequests\iccce_FeatureRequests\`** on 2026-08-17 as an
+**`D:\Dev\FeatureRequests\icccer_FeatureRequests\`** on 2026-08-17 as an
 asynchronous request channel between this session and the **`pdfce`**
 session at `D:\Dev\pdfce\` — a PDF engine with **no colour management at
 all**, and the consumer this project's own `README.md` names first. The
@@ -4335,7 +4335,7 @@ recorded correctly in §3.30.7 either way.
 ### What was corroborated without a shell, and what was not
 
 **Corroborated** *(verified — read, enumerated or grepped)*:
-`D:\Dev\iccce-private-fixtures\suite-v50\` holds **exactly 20 `.icc`
+`D:\Dev\icccer-private-fixtures\suite-v50\` holds **exactly 20 `.icc`
 files plus `manifest.json`**; `tools/suite/extract_icc.py` exists;
 `docs/SUITE_COMPATIBILITY.md` exists with the nine sections claimed; the
 **three** request-channel files exist; the private-fixtures `README.md`
@@ -4789,7 +4789,7 @@ it now rests on two failed routes instead of one.
 
 ### ★★ The corpus terms were written BEFORE the files landed — the rule working
 
-`D:\Dev\iccce-private-fixtures\color-org\`'s `README.md` terms subsection
+`D:\Dev\icccer-private-fixtures\color-org\`'s `README.md` terms subsection
 was written **before** the 50 files were moved in, discharging that
 folder's own rule 3. **The lapse recorded against `suite-v50/` earlier the
 same day was not repeated.** ★ Recorded because **a rule that works leaves
@@ -7442,7 +7442,7 @@ and **the specifics are not reproduced anywhere in this repository.**
 1. **★★★ Measure whether `cargo build` for `wasm32` differs from `cargo check` for a thread spawn.** One command; closes the difference between a *measured* blind spot and an *assumed* one.
 2. **★★ Re-derive ISO 32000-2 §8.6.5.8** from `PDF_Spec\_sources\` before anything is built on `DL-072`. This project has been caught by an attractive wrong clause number twice (`DL-057`).
 3. **★ Amend `.github/workflows/ci.yml`'s comment block** to name the threading hole. `icc-engineer`'s file; the durable statement is already in `ARCHITECTURE.md` §3.1, but **a reader forms the wrong belief at the comment.**
-4. **★ Escalate both hazards to the cross-project RAGs** — `D:\dev\rag\rust\` and `C:\personal_rag\pdf\`. **Not done at this filing**; this role wrote no file outside `D:\Dev\iccce\docs\`.
+4. **★ Escalate both hazards to the cross-project RAGs** — `D:\dev\rag\rust\` and `C:\personal_rag\pdf\`. **Not done at this filing**; this role wrote no file outside `D:\Dev\icccer\docs\`.
 5. **★★ Audit whether anything retains a profile byte slice**, per requirement 1. **Never checked.**
 6. **`NC-268`'s two corrections** — **third** consecutive filing at which they are owed and no provenance was carried.
 7. **The 2026-08-21 `SESSION_LOG` entry** — ★ its two findings are safe in `DL-059` and `NEXT_SESSION.md`; **the session's own record is not.** The log still jumps 2026-08-20 → 2026-08-25.

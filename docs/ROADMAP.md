@@ -173,7 +173,7 @@ the ICC-absolute intent, blocked on an operator download.
 
 **★★ Updated 2026-08-12 — a SECOND calendar day, and the project's
 original scope is essentially complete. ★ THE PROJECT IS PUBLIC.**
-`master` was pushed to `https://github.com/KenM76/iccce` on the
+`master` was pushed to `https://github.com/KenM76/icccer` on the
 operator's explicit go-ahead; `ARCHITECTURE.md` gains **DL-024**, which
 records the event, the file-level evidence for it (two `update by push`
 lines in `.git/logs/refs/remotes/origin/master`, at 06:51:17 and
@@ -5773,7 +5773,7 @@ Practical consequences, cheapest if done early:
 - **Manifest metadata must be complete and true** on every publishable
   crate: `description`, `license = "MIT"`, `repository`, `keywords`,
   `categories`, `readme`, `rust-version`. The declared `repository`
-  is `https://github.com/KenM76/iccce`; **whether that remote exists has
+  is `https://github.com/KenM76/icccer`; **whether that remote exists has
   never been checked by anyone** (see question (a) below).
 - **`THIRD_PARTY_LICENSES.md` via `cargo-about`, before the first
   publish.** It matters more here than usual: DL-001 means lcms2 is in
@@ -6087,7 +6087,7 @@ handed over with the suite itself.
 | The measured rows, their evidence classes, and what they do not claim | **`docs/NUMERIC_CLAIMS.md` §3.30**, rows **NC-192 … NC-199** |
 | The two new evidence classes | **`docs/NUMERIC_CLAIMS.md` §1** — `fixture-declared-categorical`, `acceptance` |
 | The posture, the promotion rule, and the no-numeric-expectation bound | **`ARCHITECTURE.md` §5 — DL-045, DL-046, DL-047** |
-| The profiles themselves | `D:\Dev\iccce-private-fixtures\suite-v50\` — **20 `.icc` files plus a manifest** *(verified — enumerated)*. **They must never enter this repository** |
+| The profiles themselves | `D:\Dev\icccer-private-fixtures\suite-v50\` — **20 `.icc` files plus a manifest** *(verified — enumerated)*. **They must never enter this repository** |
 | The extractor | `tools/suite/extract_icc.py` *(verified — exists)* |
 | The outbound asks | `open/note_suite_output.md`, `open/request_suite_render_harness.md`, `open/request_profile_population_census.md` in the request channel *(verified — all three exist)*. ★ **The channel is in no git repository: nothing may exist only there** (DL-044) |
 
@@ -6406,9 +6406,9 @@ to him anywhere in these documents.
 - **(a)** Is a separate repository wanted, or does this live alongside
   `pdfce` in one? Affects whether it is published independently.
   — *Annotation, 2026-08-11 (`icc-librarian`): **de facto answered, not
-  formally decided.** `D:\Dev\iccce` is its own git working tree, and the
+  formally decided.** `D:\Dev\icccer` is its own git working tree, and the
   workspace manifest declares
-  `repository = "https://github.com/KenM76/iccce"`. That is a declaration
+  `repository = "https://github.com/KenM76/icccer"`. That is a declaration
   in a file, not evidence that the remote exists or that anything has
   been pushed — neither was checked, and publishing remains the
   operator's act (rule 9). What still needs an operator answer is whether

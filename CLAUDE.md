@@ -76,7 +76,7 @@ without an explicit current go-ahead.
 
 ### 10. ★ FIRST, EVERY SESSION: check the request channel
 
-**`D:\Dev\FeatureRequests\iccce_FeatureRequests\open\`**
+**`D:\Dev\FeatureRequests\icccer_FeatureRequests\open\`**
 
 List that directory at the start of every session, before anything else.
 It is the communication channel between this session and the **`pdfce`**

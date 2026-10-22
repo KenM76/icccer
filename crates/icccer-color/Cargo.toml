@@ -38,7 +38,7 @@ authors.workspace = true
 # `cargo package --list -p icccer-color`, which must show `LICENSE`.
 readme = "../../README.md"
 license-file = "../../LICENSE"
-homepage = "https://github.com/KenM76/iccce"
+homepage = "https://github.com/KenM76/icccer"
 documentation = "https://docs.rs/icccer-color"
 # Category slugs are a closed set; these were verified against
 # https://crates.io/api/v1/category_slugs on 2026-08-12. crates.io

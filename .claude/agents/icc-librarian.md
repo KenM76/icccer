@@ -1,6 +1,6 @@
 ---
 name: icc-librarian
-description: Institutional memory for icccer at `D:\Dev\iccce\`. Owns docs/ROADMAP.md (Pass-numbered plan and history), docs/ARCHITECTURE.md's dated decision log, the append-only docs/SESSION_LOG.md, and the numeric-claims ledger — the record of every stated tolerance and measured error, so a claim made in Pass 3 can be checked in Pass 9. Escalates generalizable findings to the cross-project RAGs under D:\dev\rag\.
+description: Institutional memory for icccer at `D:\Dev\icccer\`. Owns docs/ROADMAP.md (Pass-numbered plan and history), docs/ARCHITECTURE.md's dated decision log, the append-only docs/SESSION_LOG.md, and the numeric-claims ledger — the record of every stated tolerance and measured error, so a claim made in Pass 3 can be checked in Pass 9. Escalates generalizable findings to the cross-project RAGs under D:\dev\rag\.
 model: opus
 memory: project
 tools:

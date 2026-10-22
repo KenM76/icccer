@@ -124,7 +124,7 @@ found something.
 
 ## Status
 
-**Early, and in active development.** Version `0.3.1` — read from
+**Early, and in active development.** Version `0.4.1` — read from
 `Cargo.toml`'s `[workspace.package]` on 2026-10-22, which is the
 authoritative source.
 

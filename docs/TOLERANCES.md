@@ -1702,7 +1702,7 @@ truth, of which Pass G has **none**.
 
 ★★ **The corpus is licensed and uncommittable.** The suite's licence
 forbids redistribution, and the profiles carry Adobe's, ECI's and X-Rite's
-separate licences. It lives in `D:\Dev\iccce-private-fixtures\suite-v50\`,
+separate licences. It lives in `D:\Dev\icccer-private-fixtures\suite-v50\`,
 is resolved through `$ICCCER_PRIVATE_FIXTURES`, and **every row SKIPs with a
 reason when it is absent**, which is the permanent state in CI. A green CI line
 for these rows says they **did not run**. No value from that directory appears
@@ -2048,7 +2048,7 @@ than anything else this project holds, because a **refusal population** and an
 in them was authored by somebody else, for their own purposes, before this
 repository existed.
 
-**Corpus:** `D:\Dev\iccce-private-fixtures\color-org\` — **50 `.icc` files**
+**Corpus:** `D:\Dev\icccer-private-fixtures\color-org\` — **50 `.icc` files**
 downloaded by the operator from `color.org` on 2026-08-17, terms in that
 folder's own `README.md` under `### color-org/`. 23 distinct `cprt` strings,
 six licensing postures, **restrictive reading applies to the whole folder**.

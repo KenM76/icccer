@@ -127,7 +127,7 @@ use crate::{
 pub fn corpus_dir() -> PathBuf {
     std::env::var_os("ICCCER_PRIVATE_FIXTURES")
         .map(PathBuf::from)
-        .unwrap_or_else(|| PathBuf::from(r"D:\Dev\iccce-private-fixtures"))
+        .unwrap_or_else(|| PathBuf::from(r"D:\Dev\icccer-private-fixtures"))
         .join("suite-v50")
 }
 

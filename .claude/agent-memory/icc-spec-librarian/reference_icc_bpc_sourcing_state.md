@@ -87,7 +87,7 @@ row** (the two candidates are not two readings — one has no textual support).
 2. **§17.3's chroma prediction is INERT on CMYK** (4.2.5.2.1 zeroes `a*`/`b*`,
    and lcms2's `BlackPointUsingPerceptualBlack` does the same). It needs a
    **Gray/RGB LUT** destination. The scope line was right; a paraphrase of it in
-   `D:\Dev\iccce\docs\TOLERANCES.md` was not — **the sentence "precisely lcms2's
+   `D:\Dev\icccer\docs\TOLERANCES.md` was not — **the sentence "precisely lcms2's
    method-4 (quadratic-fit) territory", attributed there to §17.3, does not
    exist in this corpus** (grepped three tokens, zero hits).
 3. **New ISO defect (`§4.6`): 4.2.5.4's opening sentence sends an *invalid*
@@ -171,7 +171,7 @@ triple stays `derived-expectation`. **Two halves of one file, two tiers — sayi
   **PDF 2.0 binds `UseBlackPtComp` to ISO 18619:2015 by name**, and its default
   value `Default` means *"up to the PDF processor"* — a third corroboration of
   `A45`.
-- Per-document provenance and terms: `D:\Dev\iccce\docs\LEGAL.md` **§2.5**.
+- Per-document provenance and terms: `D:\Dev\icccer\docs\LEGAL.md` **§2.5**.
 
 ## Extraction
 

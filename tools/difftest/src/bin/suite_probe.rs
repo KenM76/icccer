@@ -7,7 +7,7 @@
 //!
 //! ## What it needs
 //!
-//! - `$ICCCER_PRIVATE_FIXTURES` (or the default `D:\Dev\iccce-private-fixtures`)
+//! - `$ICCCER_PRIVATE_FIXTURES` (or the default `D:\Dev\icccer-private-fixtures`)
 //!   containing `suite-v50\`. **Nothing from that directory may be committed to
 //!   this repository and no value may be copied out of it into the repo** —
 //!   the print-conformance suite licence forbids redistribution, and the profiles inside
@@ -27,7 +27,7 @@ use icccer_difftest::{Bpc, Icccer, Intent, Oracle, Precalc, Request, Space};
 fn corpus() -> Option<PathBuf> {
     let root = std::env::var_os("ICCCER_PRIVATE_FIXTURES")
         .map(PathBuf::from)
-        .unwrap_or_else(|| PathBuf::from(r"D:\Dev\iccce-private-fixtures"));
+        .unwrap_or_else(|| PathBuf::from(r"D:\Dev\icccer-private-fixtures"));
     let g = root.join("suite-v50");
     if g.is_dir() { Some(g) } else { None }
 }

@@ -13,7 +13,7 @@ metadata:
 the defect below (re-measured 2026-08-17; see
 [[project-a-fixed-defect-can-blind-its-own-row]] for why the fix forced a row
 split). Corpus:
-`D:\Dev\iccce-private-fixtures\color-org\`, 50 files, uncommittable,
+`D:\Dev\icccer-private-fixtures\color-org\`, 50 files, uncommittable,
 `$ICCCER_PRIVATE_FIXTURES`-gated, skips everywhere else forever.
 
 **Subject is NOT a colour value** — that corpus publishes transforms, never

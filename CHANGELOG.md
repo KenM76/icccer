@@ -15,6 +15,14 @@ Versioning is [SemVer](https://semver.org/); while the major version is
 
 ---
 
+## [0.4.1] — 2026-10-22
+
+**Metadata only.** The GitHub repository is now `KenM76/icccer`, and every
+manifest's `repository`/`homepage` and every doc link points there. GitHub
+redirects the old URL. No code changed. `ARCHITECTURE.md` `DL-084`.
+
+---
+
 ## [0.4.0] — 2026-10-22
 
 **Renamed: `iccce` is now `icccer`, to match the `-cer` naming of the PDF
@@ -769,6 +777,6 @@ Numbers a reader may quote, each with its evidence class:
 - Above four input channels there is **no ΔE claim of any kind** for the
   compiled path.
 
-[0.3.0]: https://github.com/KenM76/iccce/releases/tag/v0.3.0
-[0.2.0]: https://github.com/KenM76/iccce/releases/tag/v0.2.0
-[0.1.0]: https://github.com/KenM76/iccce/releases/tag/v0.1.0
+[0.3.0]: https://github.com/KenM76/icccer/releases/tag/v0.3.0
+[0.2.0]: https://github.com/KenM76/icccer/releases/tag/v0.2.0
+[0.1.0]: https://github.com/KenM76/icccer/releases/tag/v0.1.0

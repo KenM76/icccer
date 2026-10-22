@@ -6,7 +6,7 @@ metadata:
 ---
 
 The cross-project request channel is
-`D:\Dev\FeatureRequests\iccce_FeatureRequests\` — `open/` is the working
+`D:\Dev\FeatureRequests\icccer_FeatureRequests\` — `open/` is the working
 set, `INDEX.md` the memory, `archive/` read only when a row points there.
 **The contract is `CLAUDE.md` rule 10 and the folder's own `README.md`;
 do not restate it here.** What is *not* in those documents is the
