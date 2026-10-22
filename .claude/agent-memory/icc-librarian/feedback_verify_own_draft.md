@@ -1,5 +1,5 @@
 ---
-name: iccce-verify-own-draft-too
+name: icccer-verify-own-draft-too
 description: The verify-against-live-source rule applies to the librarian's OWN draft text, to totals carried in a dispatch, and to the tree's own shape — 13 recorded incidents, incl. a headline that contradicted its own evidence table three lines below it
 metadata:
   type: feedback
@@ -35,7 +35,7 @@ looking like evidence.**
    `NEXT_SESSION.md` — **both written by this librarian** — said
    *"NA-002's Bradford cost comes due at Pass 3, because sRGB→AdobeRGB
    adapts."* When Pass 3 landed, reading the source showed **it does not
-   adapt at all**: `iccce-cmm` imports only `Mat3` and `Xyz`, never
+   adapt at all**: `icccer-cmm` imports only `Mat3` and `Xyz`, never
    touches `adapt.rs`, never reads `chad`/`wtpt`. The dispatch did not
    contradict the prediction; **the code did.** Left standing as the
    record of what was expected, corrected by a dated note. **A forecast
@@ -45,7 +45,7 @@ looking like evidence.**
 4. **The TREE ITSELF moved mid-filing, and a `Glob` result was a claim
    with a timestamp.** At the Pass 3 closure filing (2026-08-11) an
    enumeration of `crates/**/*.rs` did not list
-   `iccce-cmm/src/lut_transform.rs`; a grep minutes later found it, with
+   `icccer-cmm/src/lut_transform.rs`; a grep minutes later found it, with
    four tests and a module doc reading *"Pass 4 assembly, stage 1"*.
    **The closure dispatch's six-commit list never mentioned it.** Either
    an agent was writing concurrently or the first enumeration was stale
@@ -78,7 +78,7 @@ looking like evidence.**
    2026-08-11).** Drafting the Pass 4b block, this librarian wrote that
    `bpc.rs` and `named_color.rs` were *"referenced by nothing outside
    their own files"*, from a grep run with `head_limit: 40`. **`bpc.rs`
-   is fully wired** — `Chain::with_bpc()` and an `iccce transform
+   is fully wired** — `Chain::with_bpc()` and an `icccer transform
    --bpc` flag — and the `--bpc` matches were **in the truncated tail**.
    Caught before the filing was reported, and recorded in
    `NUMERIC_CLAIMS.md` §7.7 and `SESSION_LOG.md` rather than fixed
@@ -93,7 +93,7 @@ looking like evidence.**
    **NA-008** its first measurement. The differential ran **GRAY→RGB**,
    and NA-008 lives in the gray **destination** path — so it is still
    unmeasured. *"A gray differential"* named a comparison, not a
-   direction. See [[iccce-direction-scoped-behaviour]].
+   direction. See [[icccer-direction-scoped-behaviour]].
 
 8. **★ A COMMIT MESSAGE IS A CLAIM, AND IT CAN BE FALSE (Pass 5
    filing, 2026-08-11).** Two commits in one session shipped with a
@@ -139,7 +139,7 @@ looking like evidence.**
     missing shell are different reasons with different fixes.
 
 11. **★★★ THE DISPATCH NAMED A STRING TO CORRECT THAT DID NOT EXIST —
-    twice in one filing (4.2.5.4 / `iccce-measure` filing,
+    twice in one filing (4.2.5.4 / `icccer-measure` filing,
     2026-08-12).** Three claims in one dispatch failed against live
     source. (a) *"The manifest header still says `Four crates` — flag it
     as an owed correction"*: `Cargo.toml` **already read "Five crates"**
@@ -187,7 +187,7 @@ looking like evidence.**
     quoted here as *"the sentence to carry out of it"*, was **the
     corrected 4.2.5.4 clause is documented but UNDEFENDED on any clean
     machine.** The engineer then injected the defect and measured:
-    `cargo test -p iccce-cmm` **fails** on a full reversion (exit 101,
+    `cargo test -p icccer-cmm` **fails** on a full reversion (exit 101,
     62 passed / 2 failed) — **the clause was defended at unit level all
     along** — and the reversion turned **no conformance row red on ANY
     machine**, so the second half was an *understatement* too. ★ **The
@@ -238,5 +238,5 @@ looking like evidence.**
 - **Never prove a negative with a limited search.** `head_limit` is for
   sampling, never for *"nothing else matches"*.
 
-Related: [[iccce-verification-loop-runs-both-ways]],
-[[iccce-predicted-divergence-must-be-measured]], [[iccce-pass-status]].
+Related: [[icccer-verification-loop-runs-both-ways]],
+[[icccer-predicted-divergence-must-be-measured]], [[icccer-pass-status]].

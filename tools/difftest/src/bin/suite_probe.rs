@@ -7,25 +7,25 @@
 //!
 //! ## What it needs
 //!
-//! - `$ICCCE_PRIVATE_FIXTURES` (or the default `D:\Dev\iccce-private-fixtures`)
+//! - `$ICCCER_PRIVATE_FIXTURES` (or the default `D:\Dev\iccce-private-fixtures`)
 //!   containing `suite-v50\`. **Nothing from that directory may be committed to
 //!   this repository and no value may be copied out of it into the repo** —
 //!   the print-conformance suite licence forbids redistribution, and the profiles inside
 //!   carry Adobe's / ECI's / X-Rite's separate licences. See `LEGAL.md` §3 and
 //!   `docs/NEXT_SESSION.md` §4.
-//! - the pinned oracle (`ICCCE_TRANSICC` or `vendor/build-msvc/transicc.exe`);
-//! - `target/release/iccce`.
+//! - the pinned oracle (`ICCCER_TRANSICC` or `vendor/build-msvc/transicc.exe`);
+//! - `target/release/icccer`.
 //!
 //! Absent any of them it prints a reason and exits 0 — an instrument that
 //! cannot take a reading has not found a defect.
 
 use std::path::{Path, PathBuf};
 
-use iccce_color::{Lab, delta_e_2000};
-use iccce_difftest::{Bpc, Iccce, Intent, Oracle, Precalc, Request, Space};
+use icccer_color::{Lab, delta_e_2000};
+use icccer_difftest::{Bpc, Icccer, Intent, Oracle, Precalc, Request, Space};
 
 fn corpus() -> Option<PathBuf> {
-    let root = std::env::var_os("ICCCE_PRIVATE_FIXTURES")
+    let root = std::env::var_os("ICCCER_PRIVATE_FIXTURES")
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from(r"D:\Dev\iccce-private-fixtures"));
     let g = root.join("suite-v50");
@@ -79,7 +79,7 @@ fn scale_for(components: usize, is_rgb_or_gray: bool) -> f64 {
 #[allow(clippy::too_many_arguments)]
 fn end_to_end(
     oracle: &Oracle,
-    iccce: &Iccce,
+    icccer: &Icccer,
     label: &str,
     src: &Path,
     dst: &Path,
@@ -114,7 +114,7 @@ fn end_to_end(
                     continue;
                 }
             };
-            let mine = match iccce.transform_rows_shaped_bpc(
+            let mine = match icccer.transform_rows_shaped_bpc(
                 src,
                 dst,
                 intent,
@@ -127,7 +127,7 @@ fn end_to_end(
                     let s = format!("{e}");
                     let first = s.lines().next().unwrap_or("").to_string();
                     println!(
-                        "{label}\t{}\tbpc={}\tICCCE-REFUSED\t{first}",
+                        "{label}\t{}\tbpc={}\tICCCER-REFUSED\t{first}",
                         intent.name(),
                         bpc.name()
                     );
@@ -163,7 +163,7 @@ fn end_to_end(
 
 fn main() {
     let Some(g) = corpus() else {
-        println!("suite-v50 corpus not present: set ICCCE_PRIVATE_FIXTURES");
+        println!("suite-v50 corpus not present: set ICCCER_PRIVATE_FIXTURES");
         return;
     };
     let oracle = match Oracle::locate() {
@@ -177,29 +177,29 @@ fn main() {
             return;
         }
     };
-    let iccce = match Iccce::locate() {
+    let icccer = match Icccer::locate() {
         Ok(Some(i)) => i,
         Ok(None) => {
-            println!("no iccce binary");
+            println!("no icccer binary");
             return;
         }
         Err(e) => {
-            println!("iccce error: {e}");
+            println!("icccer error: {e}");
             return;
         }
     };
     println!("# oracle {}", oracle.path().display());
-    println!("# iccce  {}", iccce.path().display());
+    println!("# icccer  {}", icccer.path().display());
 
-    let rgb: Vec<Vec<f64>> = iccce_difftest::pass4b::rgb_grid()
+    let rgb: Vec<Vec<f64>> = icccer_difftest::pass4b::rgb_grid()
         .into_iter()
         .map(|t| t.to_vec())
         .collect();
-    let cmyk: Vec<Vec<f64>> = iccce_difftest::pass4::grid()
+    let cmyk: Vec<Vec<f64>> = icccer_difftest::pass4::grid()
         .into_iter()
         .map(|t| t.to_vec())
         .collect();
-    let gray: Vec<Vec<f64>> = iccce_difftest::pass4b::gray_axis()
+    let gray: Vec<Vec<f64>> = icccer_difftest::pass4b::gray_axis()
         .into_iter()
         .map(|v| vec![v])
         .collect();
@@ -207,7 +207,7 @@ fn main() {
     println!("\n## end-to-end, device units (0..1), lcms2 output clamped");
     end_to_end(
         &oracle,
-        &iccce,
+        &icccer,
         "srgb->isocoated",
         &g.join(SRGB),
         &g.join(ISOCOATED_V2),
@@ -218,7 +218,7 @@ fn main() {
     );
     end_to_end(
         &oracle,
-        &iccce,
+        &icccer,
         "adobergb->fogra39",
         &g.join(ADOBE),
         &g.join(FOGRA39),
@@ -229,7 +229,7 @@ fn main() {
     );
     end_to_end(
         &oracle,
-        &iccce,
+        &icccer,
         "xrite-v4->srgb",
         &g.join(XRITE_V4),
         &g.join(SRGB),
@@ -240,7 +240,7 @@ fn main() {
     );
     end_to_end(
         &oracle,
-        &iccce,
+        &icccer,
         "ecirgb-v4->isocoated",
         &g.join(ECIRGB_V4),
         &g.join(ISOCOATED_V2),
@@ -251,7 +251,7 @@ fn main() {
     );
     end_to_end(
         &oracle,
-        &iccce,
+        &icccer,
         "gray->isocoated",
         &g.join(GRAY_K),
         &g.join(ISOCOATED_V2),
@@ -261,15 +261,15 @@ fn main() {
         false,
     );
 
-    println!("\n## v2/v4 eciRGB self-consistency (iccce only, both encodings -> ISO Coated v2)");
-    let a = iccce.transform_rows_shaped(
+    println!("\n## v2/v4 eciRGB self-consistency (icccer only, both encodings -> ISO Coated v2)");
+    let a = icccer.transform_rows_shaped(
         &g.join(ECIRGB_V2),
         &g.join(ISOCOATED_V2),
         Intent::RelativeColorimetric,
         &rgb,
         4,
     );
-    let b = iccce.transform_rows_shaped(
+    let b = icccer.transform_rows_shaped(
         &g.join(ECIRGB_V4),
         &g.join(ISOCOATED_V2),
         Intent::RelativeColorimetric,
@@ -290,7 +290,7 @@ fn main() {
                 .collect();
             let s = stat(&d);
             println!(
-                "ecirgb v2 vs v4 (iccce): dev-max={:.6e} mean={:.6e} at={}",
+                "ecirgb v2 vs v4 (icccer): dev-max={:.6e} mean={:.6e} at={}",
                 s.max, s.mean, s.at
             );
         }
@@ -304,7 +304,7 @@ fn main() {
         vec![0.0, 0.0, 1.0],
     ];
     for (name, p) in [("trap-rgb", TRAP_RGB)] {
-        match iccce.transform_rows_shaped(
+        match icccer.transform_rows_shaped(
             &g.join(p),
             &g.join(SRGB),
             Intent::RelativeColorimetric,
@@ -332,7 +332,7 @@ fn main() {
             values: rgb.iter().flatten().map(|v| v * 255.0).collect(),
         };
         let theirs = oracle.convert_batch_shaped(&req, 3, 4).unwrap();
-        let mine = iccce
+        let mine = icccer
             .transform_rows_shaped(
                 &g.join(p),
                 &g.join(ISOCOATED_V2),
@@ -367,12 +367,12 @@ fn main() {
         ("fogra39-v2.1", FOGRA39),
         ("xrite-v4.2", XRITE_V4),
     ] {
-        match iccce_difftest::pass5c::Fixture::open(&g.join(p)) {
+        match icccer_difftest::pass5c::Fixture::open(&g.join(p)) {
             Ok(fx) => {
                 let (_dev, darkest, initial, iso_l) = fx.iso_black();
                 let branch =
-                    iccce_difftest::pass5c::branch_for(fx.is_output_class, fx.is_ink_space);
-                let det = iccce_difftest::pass5c::detect_destination_black_point(
+                    icccer_difftest::pass5c::branch_for(fx.is_output_class, fx.is_ink_space);
+                let det = icccer_difftest::pass5c::detect_destination_black_point(
                     branch,
                     &|l| fx.bt_rel(l),
                     &|l| fx.bt_perc(l),
@@ -406,7 +406,7 @@ fn main() {
 
 /// For every `B2A*` tag: the CLUT's steepest node-to-node step (the "one lsb of
 /// encoded input costs this much device output" quantity) and the difference
-/// between iccce's n-linear geometry and lcms2's *default* tetrahedral one over
+/// between icccer's n-linear geometry and lcms2's *default* tetrahedral one over
 /// the Lab grid. The second number is a **counterfactual**: lcms2 does not take
 /// that path for a Lab-PCS output LUT (`_cmsReadOutputLUT` forces trilinear),
 /// so it is the sensitivity control that says what this comparison could have
@@ -544,7 +544,7 @@ fn b2a_structure(path: &Path, name: &str) {
         let mut a = vec![0.0; outs];
         let mut b = vec![0.0; outs];
         let mut cf = 0.0f64;
-        for l in iccce_difftest::pass4b::lab_grid() {
+        for l in icccer_difftest::pass4b::lab_grid() {
             let enc = [
                 (l.l / 100.0).clamp(0.0, 1.0),
                 ((l.a + 128.0) / 255.0).clamp(0.0, 1.0),
@@ -574,11 +574,11 @@ fn b2a_structure(path: &Path, name: &str) {
 // makes it usable as a tolerance rather than as a fitted residual.
 // ---------------------------------------------------------------------------
 
-use iccce_difftest::pass4b::{HarnessClut, Scheme};
-use iccce_profile::Profile;
-use iccce_profile::lut::{ClutSamples, CurveElement, LutAB};
-use iccce_profile::num::Signature;
-use iccce_profile::tag_types::{Curve, TagData};
+use icccer_difftest::pass4b::{HarnessClut, Scheme};
+use icccer_profile::Profile;
+use icccer_profile::lut::{ClutSamples, CurveElement, LutAB};
+use icccer_profile::num::Signature;
+use icccer_profile::tag_types::{Curve, TagData};
 
 /// Evaluate a `curv` element. Only the shapes this corpus actually uses are
 /// handled; anything else aborts loudly rather than returning a plausible
@@ -660,7 +660,7 @@ fn xrite_envelope(path: &Path, oracle: &Oracle) {
             }
         };
 
-        let grid = iccce_difftest::pass4::grid();
+        let grid = icccer_difftest::pass4::grid();
         let mut env = Vec::with_capacity(grid.len());
         for q in &grid {
             let n = eval(q, Scheme::NLinear);
@@ -701,7 +701,7 @@ fn xrite_envelope(path: &Path, oracle: &Oracle) {
             curve_eval(&a[0], 1.0)
         );
 
-        // iccce (in process) and the harness, both n-linear: the apparatus row.
+        // icccer (in process) and the harness, both n-linear: the apparatus row.
         // Then the harness under lcms2's geometry against the oracle: the row
         // that would claim agreement.
         for (pcs_name, pcs) in [("*Lab4", Space::lab_v4()), ("*Lab2", Space::lab_v2())] {

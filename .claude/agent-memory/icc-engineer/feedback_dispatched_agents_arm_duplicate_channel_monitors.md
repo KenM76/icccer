@@ -1,6 +1,6 @@
 ---
 name: dispatched-agents-arm-duplicate-channel-monitors
-description: Tell dispatched iccce subagents NOT to arm their own request-channel Monitor — each one duplicates the lead's poll and multiplies notifications
+description: Tell dispatched icccer subagents NOT to arm their own request-channel Monitor — each one duplicates the lead's poll and multiplies notifications
 metadata:
   type: feedback
 ---

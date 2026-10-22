@@ -7,7 +7,7 @@
 #   and refuse to proceed if what arrived is not what the pin names.
 #
 # WHY THIS EXISTS AT ALL
-#   lcms2 is the differential oracle for iccce. An oracle whose version
+#   lcms2 is the differential oracle for icccer. An oracle whose version
 #   drifts is worse than no oracle: a test that "passed against lcms2"
 #   without recording WHICH lcms2 is an unfalsifiable claim, because the
 #   next person cannot reproduce the comparison. So the version is pinned

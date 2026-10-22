@@ -18,7 +18,7 @@ currently EMPTY.** A **disputed** fixture is one whose *required consumer
 behaviour cannot yet be written down* — the specification has not been read on
 the exact point the fixture probes, so neither “this must report” nor “this must
 be silent” can be recorded without inventing the answer. Its `MANIFEST.md` row
-therefore carries a **dated measurement of what iccce does today**, not a
+therefore carries a **dated measurement of what icccer does today**, not a
 requirement on a consumer.
 
 ★★ **The category emptied on the day it was created, and that is it working.**
@@ -28,7 +28,7 @@ field to 0..3?”* was outstanding. `icc-spec-librarian` returned the clause tex
 the same day: 6.1.11 defines four values, contains **no `shall`**, and never
 uses the *“other values are reserved”* formula the same document uses elsewhere
 when it means to close a set. The fixture moved to **well-formed** and its row
-now asserts a **silence** — a report iccce must not make. Nothing about the
+now asserts a **silence** — a report icccer must not make. Nothing about the
 bytes changed; only what could truthfully be claimed about them. That
 transition is the entire purpose of the category, and the empty state is the
 record that it completed.
@@ -37,14 +37,14 @@ record that it completed.
 never about the *code*: the bytes exercise a rule whose text has not been read
 on the exact point at issue, so a dispatch to `icc-spec-librarian` is
 outstanding and its answer would change which real category the fixture belongs
-to. **What does not**: (a) *iccce’s behaviour is believed wrong* — that is a
+to. **What does not**: (a) *icccer’s behaviour is believed wrong* — that is a
 defect, and the fixture is filed under what the **standard** says, which is what
 makes the suite go red; a category is not a place to park a bug. (b) *the text
 has been read and licenses more than one consumer behaviour* — that is settled,
 not disputed; the fixture is filed under what the file **is**, and the project’s
 own choice is recorded in the row **as a choice**.
 `v2-rendering-intent-low-half.icc` is the worked example of (b): it violates
-nothing, and iccce reports it anyway, deliberately.
+nothing, and icccer reports it anyway, deliberately.
 
 **Every fixture in this directory is reproducible from a generator invocation
 recorded alongside it** — a synthetic fixture that cannot be regenerated is just
@@ -111,7 +111,7 @@ Two properties make it able to answer that, and both are choices:
 
 Measured behaviour, the open specification question it does **not** answer, and
 the two defect injections that prove the test can fail are in
-`crates/iccce-cli/tests/header_rendering_intent_not_consumed.rs` and
+`crates/icccer-cli/tests/header_rendering_intent_not_consumed.rs` and
 `docs/TOLERANCES.md` §3.11.
 
 ★★ **A third instrument, added 2026-09-01, and this one is the DESTINATION
@@ -132,7 +132,7 @@ constant added to every CLUT node survives every interpolation scheme exactly
 one), and the offsets are exact 16-bit codes (`0,20 × 65 535 = 13 107`), so the
 quantisation cancels rather than being bounded. **The measured separation is
 therefore the constant itself, at every PCS point, under any conformant CMM.**
-`crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs` asserts it as an
+`crates/icccer-cmm/tests/b2a_intent_selection_is_separated.rs` asserts it as an
 *equality*; `docs/TOLERANCES.md` §3.12 carries the rows, the scope and nine
 injection runs.
 
@@ -155,6 +155,6 @@ why the graded rows are on the destination side. **Clipping is idempotent and
 many-to-one; so is a gamut-mapping step and any saturating encode. A
 differential that is sound where it is injected can be annihilated downstream.**
 
-The verification record (what the shipped `iccce` binary and lcms2's `transicc`
+The verification record (what the shipped `icccer` binary and lcms2's `transicc`
 do with each fixture, dated and scoped), the coverage statement, and the open
 finding **GP-001** are in `tools/gen-profiles/README.md` §§5–7.

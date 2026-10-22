@@ -1,6 +1,6 @@
 ---
 name: shared-layout-is-not-shared-semantics
-description: When two structures share a binary layout (or one C struct), transcribe their semantics separately per clause — the shared struct is an authoring convenience and says nothing about meaning; this is corpus defect C4, which caused iccce GP-001
+description: When two structures share a binary layout (or one C struct), transcribe their semantics separately per clause — the shared struct is an authoring convenience and says nothing about meaning; this is corpus defect C4, which caused icccer GP-001
 metadata:
   type: feedback
 ---
@@ -17,7 +17,7 @@ metadata:
 
 The corpus sentence was 10.12 generalised: **correct for `mAB `, wrong for `mBA ` in all three positions.** The generalisation came from ICC's published C header, where `icLutAtoB` and `icLutBtoA` are **field-identical**. They are identical because 10.12.1's own NOTE says the tag stores elements out of processing order "to allow for simplified reading and writing of profiles" — an *authoring convenience*, read as a statement about meaning.
 
-**Why it hid for two passes:** the two readings coincide whenever `inputChan == outputChan`. Every square LUT agrees; the disagreement appears only on non-square `mBA `, i.e. **every real CMYK `B2A0`** — a population the project's profile sweep was already recorded as thin on. Filed as corpus defect **C4** (`icc__ref__spec_defects.md` §14); it produced iccce finding **GP-001** in `crates/iccce-profile/src/lut.rs`.
+**Why it hid for two passes:** the two readings coincide whenever `inputChan == outputChan`. Every square LUT agrees; the disagreement appears only on non-square `mBA `, i.e. **every real CMYK `B2A0`** — a population the project's profile sweep was already recorded as thin on. Filed as corpus defect **C4** (`icc__ref__spec_defects.md` §14); it produced icccer finding **GP-001** in `crates/icccer-profile/src/lut.rs`.
 
 **The labelling discipline did not catch this one and could not have.** The byte tables around it were correctly marked `icc_secondary_code`, and A23/A24 were correctly open. **The offending sentence carried no marker at all** — unlabelled prose sitting beside correctly-labelled material, which is the shape that makes an unlabelled claim invisible. [[label-the-predicate-not-just-the-payload]] assumed the predicate would be labelled *wrongly*; here it was not labelled.
 

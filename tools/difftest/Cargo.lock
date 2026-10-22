@@ -3,26 +3,26 @@
 version = 4
 
 [[package]]
-name = "iccce-cmm"
-version = "0.2.0"
+name = "icccer-cmm"
+version = "0.4.0"
 dependencies = [
- "iccce-color",
- "iccce-profile",
+ "icccer-color",
+ "icccer-profile",
 ]
 
 [[package]]
-name = "iccce-color"
-version = "0.2.0"
+name = "icccer-color"
+version = "0.4.0"
 
 [[package]]
-name = "iccce-difftest"
+name = "icccer-difftest"
 version = "0.0.1"
 dependencies = [
- "iccce-cmm",
- "iccce-color",
- "iccce-profile",
+ "icccer-cmm",
+ "icccer-color",
+ "icccer-profile",
 ]
 
 [[package]]
-name = "iccce-profile"
-version = "0.2.0"
+name = "icccer-profile"
+version = "0.4.0"

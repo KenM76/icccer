@@ -38,7 +38,7 @@ is narrower than it looks — chiefly `A54c`, whether IEC **fixes** `0.055` /
    staying visible; a reconstruction whose caveats erode becomes a fabrication.
 
 **The payoff to state when this comes up:** the reconstruction is **independent
-of any implementation**, so it can catch an error `iccce` and lcms2 make
+of any implementation**, so it can catch an error `icccer` and lcms2 make
 together — which an lcms2 cross-check structurally cannot. That is the specific
 gap it closes, and the only one.
 

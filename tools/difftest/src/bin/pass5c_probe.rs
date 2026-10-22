@@ -6,11 +6,11 @@
 
 use std::path::Path;
 
-use iccce_difftest::{Oracle, pass5c};
+use icccer_difftest::{Oracle, pass5c};
 
 fn main() {
     let swop = Path::new(r"C:\Windows\System32\spool\drivers\color\USWebCoatedSWOP.icc");
-    let synth = Path::new("D:/Dev/iccce/fixtures/synthetic/v4-rgb-mab-chromatic-black.icc");
+    let synth = Path::new("D:/Dev/icccer/fixtures/synthetic/v4-rgb-mab-chromatic-black.icc");
     for f in [swop, synth] {
         match pass5c::probe(f) {
             Ok(text) => println!("{text}"),
@@ -38,7 +38,7 @@ fn main() {
             println!("observed transicc CMYK    : {:?}", a.observed_device);
             println!("predicted from lcms2 black: {:?}", a.predicted_from_lcms2);
             println!("predicted from ISO   black: {:?}", a.predicted_from_iso);
-            println!("shipped iccce --bpc  CMYK : {:?}", a.shipped_device);
+            println!("shipped icccer --bpc  CMYK : {:?}", a.shipped_device);
             println!("shipped error             : {:?}", a.shipped_error);
             println!(
                 "device residual  lcms2 = {:.9}   ISO = {:.9}",

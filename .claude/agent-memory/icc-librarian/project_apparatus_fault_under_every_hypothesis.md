@@ -1,5 +1,5 @@
 ---
-name: iccce-apparatus-fault-under-every-hypothesis
+name: icccer-apparatus-fault-under-every-hypothesis
 description: DL-028 — a residual that is large under EVERY hypothesis is an apparatus fault, not a finding; and an error bar the same order as its effect may BE the measurement (Pass 5b's 98.3%)
 metadata:
   type: project
@@ -61,6 +61,6 @@ points), **DL-025** (a control is only as good as its fixture), **DL-028**
 (this). In all three, re-reading the code was available and would not
 have worked.
 
-Related: [[iccce-control-only-as-good-as-its-fixture]],
-[[iccce-direction-scoped-behaviour]], [[iccce-pass-status]],
-[[iccce-verify-own-draft-too]], [[iccce-gate-must-not-reward-deletion]].
+Related: [[icccer-control-only-as-good-as-its-fixture]],
+[[icccer-direction-scoped-behaviour]], [[icccer-pass-status]],
+[[icccer-verify-own-draft-too]], [[icccer-gate-must-not-reward-deletion]].

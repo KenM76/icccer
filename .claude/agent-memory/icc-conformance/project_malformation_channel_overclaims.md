@@ -6,7 +6,7 @@ metadata:
 ---
 
 Measured on the four rendering-intent fixtures with the shipped
-`iccce inspect`, 2026-08-18.
+`icccer inspect`, 2026-08-18.
 
 | fixture | `header.intent` line | `malformations:` |
 |---|---|---|
@@ -17,7 +17,7 @@ Measured on the four rendering-intent fixtures with the shipped
 
 ## 1. ★★ Two different questions, one channel
 
-*"Can iccce interpret this value?"* and *"does this file break a rule?"* are
+*"Can icccer interpret this value?"* and *"does this file break a rule?"* are
 different questions with different answers, and ICC.1 answers only the second.
 
 * Row 1 answers them **separately and correctly** — nothing is interpretable,
@@ -53,7 +53,7 @@ inference, and printing `media-relative` would assert that inference in emitted
 output. True, but it rests on the type question.
 
 The second reason does not: **the v2 high half is vendor space**, so a profile
-with `0x0001` up there may be signalling something iccce has not read. Printing
+with `0x0001` up there may be signalling something icccer has not read. Printing
 `media-relative` would claim the field was understood when half of it was
 discarded unexamined. The raw `65537` is printed alongside, so `UNKNOWN` costs a
 reader nothing — `65537 & 0xFFFF` is theirs to compute.
@@ -63,7 +63,7 @@ reader nothing — `65537 & 0xFFFF` is theirs to compute.
 **No test covers the CLI's `header.intent` line.** A later "tidy-up" that masks
 to `h.rendering_intent & 0xFFFF` would print `media-relative` for row 1 and the
 disclosure would vanish with a green suite. One test in
-`crates/iccce-cli/tests/` closes it; not landed 2026-08-18 because the operator
+`crates/icccer-cli/tests/` closes it; not landed 2026-08-18 because the operator
 scoped the task to "tell me which you think it is", and asserting an unnamed
 choice would have decided it.
 
@@ -114,7 +114,7 @@ Related: [[project-the-four-cell-gate-and-its-injections]],
 
 ## 6. ★★★ RESOLVED, and the remedy was the one §5 named — re-verified 2026-08-28 at tip `3af2d87`
 
-The channel was split. `iccce inspect` now prints **`violations: N` beside
+The channel was split. `icccer inspect` now prints **`violations: N` beside
 `malformations: N`**, and `passh/B` was **re-derived rather than re-bounded**:
 
 | row | grading | observed |

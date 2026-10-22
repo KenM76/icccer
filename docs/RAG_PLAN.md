@@ -34,7 +34,7 @@ reader already has. **If a sentence does not add a fact a future lookup
 needs, cut it.**
 
 Each file carries frontmatter with `standard`, `clause`, `keywords`, an
-`evidence` tier, and an `iccce_relevance` line saying what in this
+`evidence` tier, and an `icccer_relevance` line saying what in this
 project depends on it. One finding per file where practical; a file per
 clause where the clause is the unit.
 
@@ -97,7 +97,7 @@ worth more than any single clause file:
    with the symptom each difference produces when got wrong. This is the
    file the engineer will open most.
 2. **`icc__ref__tag_coverage_matrix.md`** — every tag type, whether it is
-   required/optional, which profile classes use it, and iccce's
+   required/optional, which profile classes use it, and icccer's
    implementation status. The same dated-status-table discipline
    `PDF_Spec` arrived at, from the start rather than after three
    corrections.

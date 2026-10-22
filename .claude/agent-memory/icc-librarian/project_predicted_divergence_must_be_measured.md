@@ -1,6 +1,6 @@
 ---
-name: iccce-predicted-divergence-must-be-measured
-description: A predicted disagreement with another implementation is a prediction, not a finding — iccce's DL-011 predicted an lcms2 divergence that DL-012 then measured absent, and the measurement turned up a bigger unrelated one
+name: icccer-predicted-divergence-must-be-measured
+description: A predicted disagreement with another implementation is a prediction, not a finding — icccer's DL-011 predicted an lcms2 divergence that DL-012 then measured absent, and the measurement turned up a bigger unrelated one
 metadata:
   type: project
 ---
@@ -8,7 +8,7 @@ metadata:
 **A disagreement inferred from reading two texts is not a divergence. It
 becomes one only when it is measured — and it may not survive.**
 
-**Why:** on 2026-08-11 `ARCHITECTURE.md` **DL-011** recorded that iccce's
+**Why:** on 2026-08-11 `ARCHITECTURE.md` **DL-011** recorded that icccer's
 tag-type-based legacy-PCSLAB selector put it *"in a live disagreement
 with lcms2"*, on the corpus's claim that lcms2 keys off the profile
 version. DL-011 was careful — it labelled the claim unverified and named
@@ -46,19 +46,19 @@ planned one.
   Keep inconclusive arms in the record too, labelled — a null result from
   arms that differ in more than the variable refutes nothing.
 - **Findings scoped to an oracle pin are invalidated by the pin moving.**
-  In iccce that was already a licence event (DL-001); it is now a
+  In icccer that was already a licence event (DL-001); it is now a
   behavioural one, and the affected ledger rows must be **re-run, not
   re-read**.
 
 **★ Second instance, 2026-08-11 (Pass 4) — and this time the prediction
 was about the oracle's ALGORITHM, not its disagreement.** Three
-documents (NA-006, `NEXT_SESSION.md`, `ROADMAP.md`) carried *"iccce
+documents (NA-006, `NEXT_SESSION.md`, `ROADMAP.md`) carried *"icccer
 interpolates n-linear, **lcms2 tetrahedral**"*, and the Pass 4 blocker
 was filed as *"source lcms2's tetrahedral cube decomposition."*
 `icc-conformance` **read `cmsintrp.c` at the pin** instead of recalling
 it: for **four** inputs lcms2 runs a **hybrid** — linear in C, Sakamoto
 tetrahedral in M/Y/K. Consequences none of which "tetrahedral" implies:
-lcms2's scheme is **not symmetric in the four inks** (iccce's
+lcms2's scheme is **not symmetric in the four inks** (icccer's
 quadrilinear is); it is **not pure tetrahedral**, so **NA-006's ~1 ΔE
 bound — transcribed from the trilinear-vs-tetrahedral literature — was
 not the bound that applied**; and its float path quantises to `u16` at
@@ -72,5 +72,5 @@ from recollection (NA-003's "6.4") was found wrong and had already been
 implementation, or a clause number are the same failure**, and the cost
 of reading the source once is a single lookup.
 
-Related: [[iccce-pass-status]], [[iccce-verification-loop-runs-both-ways]],
-[[iccce-tolerance-cannot-swallow-and-claim]], [[iccce-verify-own-draft-too]].
+Related: [[icccer-pass-status]], [[icccer-verification-loop-runs-both-ways]],
+[[icccer-tolerance-cannot-swallow-and-claim]], [[icccer-verify-own-draft-too]].

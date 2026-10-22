@@ -1,4 +1,4 @@
-# iccce — roadmap
+# icccer — roadmap
 
 Passes, in dependency order. Each is sized to be finishable and
 verifiable; a Pass that cannot be demonstrated is too big.
@@ -39,20 +39,20 @@ due.**
 
 **Updated again 2026-08-11 (same day, latest): ★ Pass 3 is DONE — the
 done-when is MET, and for the first time in this project's history
-`iccce` has been compared to another implementation.** sRGB→AdobeRGB
+`icccer` has been compared to another implementation.** sRGB→AdobeRGB
 agrees with lcms2 to **3.4762×10⁻³ ΔE2000 max** (tolerance 2×10⁻²,
 **implementation-cross-check**) and the sRGB→AdobeRGB→sRGB round trip
 costs **1.8788×10⁻² ΔE2000 max** (tolerance 2.5×10⁻², a **corrected
 derivation**, **self-consistency**). Both numbers are written down in
 `NUMERIC_CLAIMS.md` **§3.8** and `TOLERANCES.md` §3.3.1, with the
 apparatus in `tools/difftest/README.md` §13. **`NUMERIC_CLAIMS.md`
-§5.1's sentence *"iccce has never been compared to anything"* retires
+§5.1's sentence *"icccer has never been compared to anything"* retires
 today** — §5.3 records exactly what replaced it and how narrow the
 replacement is. Pass 3's three remainder items are closed (absolute
 intent sourced **and** implemented; parametric inverses for types 1, 2
 and 4 implemented analytically; the perceptual/saturation policy
 **sourced** to Table 25). `ARCHITECTURE.md` gains **DL-017** (the
-harness may path-depend on iccce's crates — direction and four
+harness may path-depend on icccer's crates — direction and four
 conditions) and **DL-018** (an upper-bound gate on a *deliberate* cost
 must be paired with a prediction pin, or removing the requirement makes
 the gate greener). **Pass 2 is still IN PROGRESS on one scope
@@ -105,7 +105,7 @@ those directions are now MEASURED.** 28 records, **`pass=28 fail=0`**
 end to end, **1,330×10⁻⁴** device against lcms2, the disagreement
 **accounted for to 0,02 %** by an envelope built from lcms2's own
 roundings, residual **2,03 lsb of 1/65535**); the **v4 `mAB `/`mBA `**
-element pipeline, where iccce reproduces a **closed form derived from
+element pipeline, where icccer reproduces a **closed form derived from
 clause text** to **2,8×10⁻¹⁴ `L*` / 2,2×10⁻¹⁶ device** — a **new
 evidence class, `derived-expectation`**, and the strongest LUT claim in
 the ledger; and the **F.2 gray** model, whose residual is not merely
@@ -119,14 +119,14 @@ lcms2's forced BPC is keyed by the **destination** profile's version, so
 DL-013/M2 are half-stated; and an **encoded-PCS overflow** costs
 **0,6117 ΔE2000** on 10 points, **reported not graded** — though the
 corpus's seventh pass has since answered half the clause question, in
-iccce's favour, **verbatim**. `ARCHITECTURE.md` gains **DL-021**: *a
+icccer's favour, **verbatim**. `ARCHITECTURE.md` gains **DL-021**: *a
 measured implementation behaviour is a fact about the direction and path
 it was measured in, until it is measured in the others.* **Pass 4's
 done-when is STILL NOT MET, and its remaining distance is now exactly
 two items — saturation in B2A (cheap), and the ICC-absolute intent,
 which is blocked on a document only the operator can fetch.** Also
 recorded: **Pass 5's sourcing has landed AND its code is wired and
-reachable** (`Chain::with_bpc()`, `iccce transform --bpc`) — what Pass 5
+reachable** (`Chain::with_bpc()`, `icccer transform --bpc`) — what Pass 5
 lacks is **measurement**, so `TOLERANCES.md` §3.5's blanks are now a gap
 and **NA-009/NA-010's costs are owed**; and **Pass 7's
 `named_color.rs` is in the tree too**, reachable from nothing. **Neither
@@ -138,7 +138,7 @@ recorded in `NUMERIC_CLAIMS.md` §7.7.
 done-when is MET on stated terms, and the terms are unusually
 important.** BPC on and off **differ in the documented direction** (a
 sign test with an algebraic proof and no tolerance at all — nothing
-rises in `PB → 0`, no `K` rises in `0 → PB`), and iccce's BPC **matches
+rises in `PB → 0`, no `K` rises in `0 → PB`), and icccer's BPC **matches
 lcms2's within tolerance** (**1,110 588×10⁻⁴** device out of the
 fixture, **4,600×10⁻⁵** into it, against a BPC-off baseline of
 **1,012 157×10⁻⁴** on the same points — comparisons **388×** and
@@ -151,15 +151,15 @@ of the six scenarios was pre-registered from both implementations'
 sources before anything ran, and every prediction was confirmed**
 *(reported)*. **The boundary, which must travel with all of it: the two
 ESTIMATORS were never discriminated.** That negative result was
-*derived in advance* — everywhere iccce will do BPC at all, lcms2's
+*derived in advance* — everywhere icccer will do BPC at all, lcms2's
 estimator reduces to the same two values — so Pass 5 grades **the map,
 the direction and the pipeline**, never the estimation (corpus **A42**);
 the instrument that would close it is **a synthetic v4 LUT fixture with
 a non-zero device black**, which does not exist. Two further boundaries:
 lcms2 **silently performs no BPC at all** below an `IsEmptyLayer`
 discriminant of **0,002** (≈**0,41 `L*`** between the two blacks) —
-**a difference iccce deliberately lacks**, and **solved for, not
-observed**; and **iccce NEVER forces BPC** where lcms2 forces it for a
+**a difference icccer deliberately lacks**, and **solved for, not
+observed**; and **icccer NEVER forces BPC** where lcms2 forces it for a
 v4 destination at perceptual, worth **3,137 348 `L*`** on one pair and
 **REPORTED, NOT GRADED** under DL-019, because no obtainable clause
 settles it. `NUMERIC_CLAIMS.md` gains **§3.12**, rows
@@ -208,7 +208,7 @@ one shared method. An unknown name returns **`None`** — the
 twice is closed**: a test resolves every spot in the committed `ncl2`
 fixture into the real system sRGB profile. Also landed: the **A4c
 disclosure** (`ICC.1:2001-04` **A.3.1.1** resolved **A4b** — the clause
-addresses the profile's **author** and is silent on readers, so iccce
+addresses the profile's **author** and is silent on readers, so icccer
 keeps `wtpt` **as stored** and **discloses** the inconsistency; a sweep
 of this machine found **seven** v2 display profiles with that exact
 shape, making it the authoring **norm**, not an outlier), and the
@@ -290,7 +290,7 @@ failed**, `fmt` and `clippy` clean on the root workspace.
 > invites the next session to redo finished work, which is exactly what
 > it did. **And keep the two saturation items distinct**: this was an
 > **evaluation** gap and it is closed; **Pass 5's is a *capability* gap**
-> in iccce's BPC estimation subset and is untouched.
+> in icccer's BPC estimation subset and is untouched.
 
 **★ A dated correction issued with this filing, because the new evidence
 found it.** The commit *"untrack tools/gen-profiles"* is **`edce48b`**,
@@ -314,7 +314,7 @@ DEVICE CLASS AND COLOUR SPACE** (`cmssamp.c` L370–374: output class +
 ink space → `BlackPointUsingPerceptualBlack`, which **forces the chroma
 to zero**; everything else → `BlackPointAsDarkerColorant`, which **keeps
 it**). Measured on two arms: `USWebCoatedSWOP.icc` (v2 `prtr` CMYK)
-diverges from iccce's ISO/CD 18619 estimate by **8,166 8×10⁻² ΔE76,
+diverges from icccer's ISO/CD 18619 estimate by **8,166 8×10⁻² ΔE76,
 100 % in `L*`, chroma exactly zero**; a **new** synthetic v4 **RGB**
 fixture diverges by **5,000 000 ΔE76, 100 % chroma, `ΔL*` exactly
 zero**. **★★★ The corpus's pre-registered prediction therefore resolves
@@ -353,7 +353,7 @@ on the benchmark's 513 probes and **9,348 6×10⁻²** on Pass 4's 341-point
 grid. **Two things must travel with that**: at grid 33 the two probe
 populations **stop agreeing** (the first is **1,79×** the second), so
 quoting either alone is now a *population claim*; and the green has a
-price — `iccce bench`'s break-even moves from **≈70 000 px to ≈1,19
+price — `icccer bench`'s break-even moves from **≈70 000 px to ≈1,19
 million px**. `NUMERIC_CLAIMS.md` gains **§3.19**, rows
 **NC-145 … NC-152**.
 
@@ -376,29 +376,29 @@ and passed** *(reported by `icc-engineer`; no agent has observed the
 run, and whether it constitutes this project's first Linux execution is
 **unstated** — see `NUMERIC_CLAIMS.md` §7.11)*.
 
-> **★★★ ONE OPEN QUESTION IS DISPATCHED AND UNANSWERED, and iccce may be
+> **★★★ ONE OPEN QUESTION IS DISPATCHED AND UNANSWERED, and icccer may be
 > the one that is wrong.** The entire `swop` divergence above is a single
 > line: at ISO/CD 18619 **4.2.5.4**'s mid-range straightness
 > short-circuit — which **both** implementations take, so **neither fits
-> a quadratic on either fixture** — **iccce returns `outRamp[first]`**
+> a quadratic on either fixture** — **icccer returns `outRamp[first]`**
 > and **lcms2 returns `InitialLab`** (`cmssamp.c` L536). **Dispatched to
 > `icc-spec-librarian` 2026-08-12: which of the two does ISO/CD 18619
-> 4.2.5.4 specify?** **If it names lcms2's, iccce is WRONG rather than
+> 4.2.5.4 specify?** **If it names lcms2's, icccer is WRONG rather than
 > divergent, and the engineer changes the code.** Until it is answered,
 > **no document here may describe this difference as lcms2 departing
 > from the standard** — rule 7 says a disagreement is settled from the
 > specification, not from which implementation is ours.
 
 **Updated again 2026-08-12 (same day, latest): ★★★ THE OPEN QUESTION
-ABOVE IS ANSWERED AND IT WENT AGAINST US. `iccce-measure` lands as a
+ABOVE IS ANSWERED AND IT WENT AGAINST US. `icccer-measure` lands as a
 FIFTH crate. And a test count that looked like a regression turned out
 to be a different instrument.** Three things, and the first is the one
 that changes shipped behaviour.
 
-**★★★ 1. iccce was NON-CONFORMANT at ISO/CD 18619 4.2.5.4; lcms2
+**★★★ 1. icccer was NON-CONFORMANT at ISO/CD 18619 4.2.5.4; lcms2
 conformed. The code is corrected at `fd34a44`.** The clause's final
 paragraph says the `DestinationBlackPoint` *"shall be the same as
-InitialLab"*; `outRamp[first]` — what iccce returned there — appears in
+InitialLab"*; `outRamp[first]` — what icccer returned there — appears in
 the whole of 4.2.5 only as `MinL`, a threshold and a `yRamp` anchor,
 and **is not a candidate for the black point in any branch**. **The
 blockquote above is therefore DISCHARGED, in the direction it named as
@@ -411,17 +411,17 @@ chroma for CMYK only), so a Gray or RGB LUT destination gets one from
 ISO itself. `ARCHITECTURE.md` gains **DL-030**; `NUMERIC_CLAIMS.md`
 gains **§3.24** and **NC-164**. ★ **Rule 7 has now run in the direction
 it was written to be capable of running in**, and the pre-commitment
-that made that cheap — *"rule 7 is not a licence to assume iccce is
+that made that cheap — *"rule 7 is not a licence to assume icccer is
 right"* — was written before the answer existed.
 
-**★★ 2. A FIFTH crate: `iccce-measure`, Pass 10 pre-work.** A
+**★★ 2. A FIFTH crate: `icccer-measure`, Pass 10 pre-work.** A
 CGATS/IT8.7 measurement-file reader, landed at **`2a2d616`** on the
 operator's authorisation of 2026-08-12. **INVARIANT: no ICC and no
 colour maths**, so its tests need no ICC fixture and a future profiler
 and a future measurement tool can share it. Zero dependencies. See the
 **Pass 10** section for the full record and `ARCHITECTURE.md` §1 for the
 crate's place in the layout. ★ **It had been in the build and in no
-document**: at the time of this filing `grep -c iccce-measure` over
+document**: at the time of this filing `grep -c icccer-measure` over
 `ROADMAP.md`, `ARCHITECTURE.md` and `SESSION_LOG.md` returned **0, 0,
 0** *(verified — re-run as a search over `docs/`, which found the crate
 named only in `Cargo.toml`, `Cargo.lock` and its own two files)*.
@@ -467,7 +467,7 @@ opposite:
 
 | | before `fd34a44` | after |
 |---|---|---|
-| ISO 4.2.5 black (iccce) | `L* 16,489 806` | **`L* 11,772 365`** |
+| ISO 4.2.5 black (icccer) | `L* 16,489 806` | **`L* 11,772 365`** |
 | lcms2 (reimplemented, pin `21c582a`) | `L* 16,571 474` | **unmoved** |
 | **the divergence** | `8,166 8×10⁻²` ΔE76 | **`4,799 109` ΔE76** |
 
@@ -579,7 +579,7 @@ one platform never run on is the platform where the detector is absent.
 **★ 5. `skip=3` is enumerated at last**, owed for three filings and
 blocked on a shell each time. **Three rows, one cause** — the Pass 4
 `icc-absolute` PCS-isolation rows, withheld because `transicc` applies
-the D.6/D.7 media-white scale on lcms2's side and iccce's A2Bx is
+the D.6/D.7 media-white scale on lcms2's side and icccer's A2Bx is
 media-relative by construction. **Grading them would mean reproducing
 lcms2's absolute handling, i.e. modelling the oracle rather than
 measuring it.** ★ **A principled refusal to grade, not a concealed
@@ -609,7 +609,7 @@ says *"the corrected 4.2.5.4 clause is documented but UNDEFENDED on any
 clean machine"* and this document filed it as a **RISK**. **Both halves
 are false, and `icc-engineer` measured them before this ledger could
 repeat them.** A full reversion of `fd34a44` makes **`cargo test -p
-iccce-cmm` fail — exit 101, 62 passed / 2 failed**: the clause was
+icccer-cmm` fail — exit 101, 62 passed / 2 failed**: the clause was
 **defended all along, as a function, on a synthetic closure.** And the
 second half was an *understatement* — the same reversion turned **no
 conformance row red on ANY machine**, not merely on machines without a
@@ -677,7 +677,7 @@ reproduce**; **Table 16** is normative and its five pairs reproduce too.
 interpolation method, so two conforming CMMs may legitimately differ and
 **no single value could be published as expected** — corroborated by
 **iccDEV, ICC's own reference implementation, shipping zero expected
-colour values.** ★★★ **NOTHING IN iccce HAS BEEN COMPARED TO ANY OF
+colour values.** ★★★ **NOTHING IN icccer HAS BEEN COMPARED TO ANY OF
 IT.** The ground truth is *available*; the row is *buildable*; **the row
 does not exist**, and **NC-001 remains this project's only
 `published-ground-truth` row.** **DL-041.**
@@ -746,14 +746,14 @@ over this corpus was dispatched the same day and **had not reported**.
 **★★★ 4. The strong result, and it is a shape this project has never had
 before.** the suite's publisher ships two **deliberately corrupted** profiles — a
 red/green-swapped RGB matrix profile and a cyan/magenta-swapped CMYK LUT
-profile — as discriminators. iccce honours both swaps, **and the CMYK arm
+profile — as discriminators. icccer honours both swaps, **and the CMYK arm
 was re-derived with a CONTROL** (the genuine `ISO Coated v2 300% (ECI)`
 from the same patch). The expected answer is a fact about the file's own
 declared content, so there is **no oracle and no instrument in the
 claim**, and the **candidate separation is the full width of the gamut**
 — the named alternative being an engine that drops the source profile
 for ISO 32000-1 Table 66's `/Alternate`, **which is what `pdfce` does
-today**. ★ **What it licenses:** *iccce applies the declared source
+today**. ★ **What it licenses:** *icccer applies the declared source
 profile rather than falling back to a device alternate.* ★★★ **What it
 does NOT license: any sentence containing a number.** A CMM wrong by
 20 ΔE2000 passes it as cleanly as a correct one, provided it swaps.
@@ -765,7 +765,7 @@ and *"A faint X is NOT a failure"*. ★ **And it contradicts itself
 exactly on our topic:** PCS 13.0 signals a rendering-intent failure with
 a **faint green X** — the symbol already declared not to be a failure —
 so **intent handling is untested by the suite's own criterion**, and any
-iccce intent claim must be graded against **ICC.1's** text instead.
+icccer intent claim must be graded against **ICC.1's** text instead.
 
 **★★ 6. A rule about promoting reports — DL-046.** The CMYK swap arrived
 `[REPORTED]` from a byte-level scan and was **re-derived through the
@@ -803,7 +803,7 @@ exit 0**, four labelled SKIP records standing in for all 72 rows. **A
 green CI line means Pass G did not run**, and the corpus-absent pass
 count is **numerically identical to the pre-Pass-G total**.
 
-**★★★ 2. The headline result: the raw iccce-vs-lcms2 disagreement on a
+**★★★ 2. The headline result: the raw icccer-vs-lcms2 disagreement on a
 VENDOR-AUTHORED v4 `mAB ` profile IS the interpolation method and nothing
 else.** With lcms2's own `Eval4Inputs` geometry substituted, the residual
 collapses **179×** (`A2B1`, `0.828 444 → 4.624 5×10⁻³`) and **243×**
@@ -823,7 +823,7 @@ is NOT adapted, and no `chad` tag** — a defect of **authorship** under
 `ICC.1:2001-04` Annex A.3.1.1, which **settles the ICC-absolute divergence
 in lcms2's favour**. `eciRGB v2` is the control that stops it being read
 as *"every v2 display profile in the wild"*. ★ **No `NA` was registered
-and no code changed** — whether iccce should follow lcms2 here is an
+and no code changed** — whether icccer should follow lcms2 here is an
 engineering call with a cost, and it is **newly owed** (`NUMERIC_CLAIMS.md`
 §7.17 newly-owed 4).
 
@@ -867,7 +867,7 @@ observation at `e21154c`; nothing here re-measures it, and a `pass=` line
 must not be quoted on this filing's authority.**
 
 **★★ 1. The built-in sRGB destination is BUILT, and the API question is
-DECIDED.** `crates/iccce-cmm/src/builtin.rs` constructs sRGB from
+DECIDED.** `crates/icccer-cmm/src/builtin.rs` constructs sRGB from
 **ITU-R BT.709-6 items 1.3/1.4** (primaries and white), **W3C CSS Color
 4** (transfer function) and **ICC.1:2022 Annex E.3 Eq. (E.1)**
 (Bradford) — **no I/O, no embedded blob, no dependency, and no lcms2
@@ -884,10 +884,10 @@ reference file's own tags** rather than typed (§3.32.9).
 
 **★★ 2. The `/N` accessor is BUILT, and ICC.1 turns out to be SILENT on
 the thing it would have been natural to assume.**
-`crates/iccce-profile/src/colour_space.rs` exposes `components()`,
+`crates/icccer-profile/src/colour_space.rs` exposes `components()`,
 `channel_agreement()`, `is_valid_pcs()`. **A48: ICC.1:2022 nowhere
 requires a LUT tag's channel count to match the header's data colour
-space, and nowhere states reader behaviour on mismatch** — so iccce
+space, and nowhere states reader behaviour on mismatch** — so icccer
 **discloses** and does **not** call it non-conformant, because *"silent"*
 is a different claim from *"requires agreement"*. **A50: the component
 count is a TWO-TABLE JOIN (Table 19 + Table 41), not a transcription** —
@@ -923,7 +923,7 @@ residual from **12.0 to 5.35 ULP and no further**, so the corpus's
 existing negative conclusion is **strengthened, not overturned.**
 
 **★★ 6. Two owed decisions discharged and one carried figure corrected.**
-**§7.17 newly-owed 4 is DISCHARGED**: iccce **does not** substitute D50
+**§7.17 newly-owed 4 is DISCHARGED**: icccer **does not** substitute D50
 for a mis-authored `wtpt` — it uses `wtpt` as stored and **discloses**
 (A4c / NA-007), verified **in the running thing**, and **6 of 60 profiles
 disclose, all six hand-audited as true positives.** ★★★ **NC-213 the ROW
@@ -938,7 +938,7 @@ name**) is a *stronger* claim than the sample was.
 available consumer, and the only reviewer who has not already learned the
 API's shape.* **Gates:** `cargo test --workspace` **154 passed, exit 0**
 (was 132); clippy, `fmt`, `doc` and **`wasm32` over the 4 library crates**
-all exit 0 — ★ **and iccce still does not GATE `wasm32` in CI**, which is
+all exit 0 — ★ **and icccer still does not GATE `wasm32` in CI**, which is
 a **consumer's** gate (`CLAUDE.md` rule 10.2).
 
 **★★★ Updated again 2026-08-17 (same day, LATEST — the supplementary
@@ -955,9 +955,9 @@ ICC profiles"** (Jack Holm, ICC, 2015-04-27). **§B.2 publishes the
 D50-adapted colorants — and ICC's recommended D65→D50 `chad` — at 15
 decimal places.** The corpus's standing *"NO document publishes them"*
 was **false; it was behind `color.org`'s robot bar.** Measured against
-the published values: **iccce's construction 3.02 ULP worst / 0.90 in
+the published values: **icccer's construction 3.02 ULP worst / 0.90 in
 `bXYZ.Z`; the shipped HP 1998 / `sRGB2014.icc` file 11.13 ULP.** ★★★
-**The ~12 ULP blue-`Z` residual is the FILE's error, not iccce's** —
+**The ~12 ULP blue-`Z` residual is the FILE's error, not icccer's** —
 **NC-230**/**NC-231**, and the Pass 8 retrospective's done-when row is
 corrected in place. ★★ **NC-225 is unaffected**: there is still exactly
 one lineage among the *files*; what changed is that a *document* now sits
@@ -981,7 +981,7 @@ propagated.** ★★ Worse, hours before the fetch the same file **lowered
 its expectation of the unread document** from evidence about a different
 artifact. **Write the SEARCH claim, never the EXISTENCE claim.**
 
-**★★★ 4. A shipped crash: `iccce bench` ABORTED the process** on ICC's
+**★★★ 4. A shipped crash: `icccer bench` ABORTED the process** on ICC's
 published seven-channel `APTEC_CMYKOGV_Coated_LinearCTV_2025.icc` — bare
 `0xC0000409`, *"memory allocation of 1022842631448 bytes failed"*. Two
 causes: a **`_ => 33` catch-all** (`33⁷` ≈ **952.6 GiB**) and a guard
@@ -1007,7 +1007,7 @@ happened.**
 **★★ 6. DL-057 — a refusal that named the WRONG CLAUSE.**
 `Destination::None` on an `A2B`-only profile (four exist in ICC's
 published set) reported *"matrix/TRC model requires PCSXYZ (Annex F.3,
-normative)"* — true, correctly cited, **and about a model iccce was about
+normative)"* — true, correctly cited, **and about a model icccer was about
 to discard**. Fixed by sharing `derive_source_model()` (**NC-237**). ★★★
 **A code path that discards half its result inherits the discarded half's
 failure modes, because that half's error is what the caller sees.**
@@ -1038,14 +1038,14 @@ said *"normal for container-embedded profiles"*, and
 `UnknownRenderingIntent{V2Undefined}`, whose emitted text already said
 ICC.1:2001-04 *"do not forbid others"*. ★★★ **The emitted WORDS were
 careful; the CHANNEL was not** — both arrive through a type named
-`Malformation` and are added into a count that `iccce inspect` prints
+`Malformation` and are added into a count that `icccer inspect` prints
 and a consumer's code reads as a conformance verdict. The four
 rendering-intent fixtures make the point in one table (`[REPORTED]` by
 `icc-engineer`; the branch logic verified at `header.rs:190`–`:202`):
 `v2-…-low-half` and `v4-…-low-half` carry **the same four header bytes
 `0x00000004`** and both print **`malformations: 1`**, and **only one of
 the two files is non-conforming.** ★ **The decision:** `N == 0` means
-iccce found nothing to say and is **not** a conformance certificate;
+icccer found nothing to say and is **not** a conformance certificate;
 `N > 0` means there is something worth reading and does **not** imply
 non-conformance; **a verdict requires matching on variants, not counting
 them.** The alternative — splitting into `Violation` and `Observation` —
@@ -1214,7 +1214,7 @@ and **do not retain it**; the **intent is a per-call argument**, not a
 build-time property; the API **must accept an intent name it does not
 recognise and disclose the substitution**; and an **`f32` evaluation
 surface is load-bearing**, not tidy. ★★★ **The third contradicts
-`iccce transform`'s deliberate exit-`2` refusal, and is filed as
+`icccer transform`'s deliberate exit-`2` refusal, and is filed as
 `ARCHITECTURE.md` `DL-072` — an open design question with both positions
 stated, resolved by nobody.** ★★ **Two things got cheaper:** there is **no
 ICC parser in `pdfce` to be compatible with** *(verified in their live
@@ -1232,7 +1232,7 @@ project.**
 **★★★ Updated 2026-09-01 (the `--bpc` no-op filing) — Pass 5 acquires a
 measured, CONFORMING no-op, an API that discloses it, and TWO
 documentation corrections that were both flagged from outside this
-project.** `iccce transform --bpc`, sRGB (v2 matrix/TRC) → U.S. Web Coated
+project.** `icccer transform --bpc`, sRGB (v2 matrix/TRC) → U.S. Web Coated
 (SWOP) v2, **729 grid operands, ink units**: media-relative changes
 **727/729** (max **`0.243951`**); ★★★ **perceptual and saturation change
 `0` of `729` — bit-identical**; ICC-absolute is refused by name. The zeros
@@ -1264,7 +1264,7 @@ built.
 - CI that builds and tests on Linux as well as Windows. The sibling
   project discovered its `main` had not compiled on Linux for weeks
   because nothing checked; start with the check.
-- `iccce-cli inspect <profile>` printing the header and tag table.
+- `icccer-cli inspect <profile>` printing the header and tag table.
 
 **Done when**: a real profile from the system's colour directory can be
 inspected, and `difftest` can invoke lcms2 on the same file.
@@ -1281,7 +1281,7 @@ lands in the same root commit.
 `icc-engineer` from a run on this machine (Windows 11 Pro 10.0.26200):
 
 ```
-iccce inspect "C:\Windows\System32\spool\drivers\color\sRGB Color Space Profile.icm"
+icccer inspect "C:\Windows\System32\spool\drivers\color\sRGB Color Space Profile.icm"
   → header: CMM 'Lino', version 2.1.0, class 'mntr', RGB → XYZ
   → tags: 17
   → malformations: 0
@@ -1324,10 +1324,10 @@ read wider than it is:
   `cargo test --workspace` 14/14, `fmt` and `clippy` clean, were run by
   `icc-engineer` on this machine. Independently checkable from the tree:
   **14 `#[test]` declarations** exist, in
-  `crates/iccce-profile/src/lib.rs` (8) and `src/num.rs` (6) — which is a
+  `crates/icccer-profile/src/lib.rs` (8) and `src/num.rs` (6) — which is a
   count of tests declared, not a measure of coverage, and not a pass
   result.
-- **No colour maths exists.** `iccce-color` and `iccce-cmm` are stubs;
+- **No colour maths exists.** `icccer-color` and `icccer-cmm` are stubs;
   Pass 0 produced **no measured colour claim**, which is why
   `docs/NUMERIC_CLAIMS.md` was deliberately not created (see
   `SESSION_LOG.md`, 2026-08-11).
@@ -1337,7 +1337,7 @@ read wider than it is:
   librarian's words: **a parser is defensible on this evidence and a
   validator is not.**
 
-## Pass 1 — colorimetry (`iccce-color`)
+## Pass 1 — colorimetry (`icccer-color`)
 
 **STATUS: CORE COMPLETE AND VALIDATED — 2026-08-11**, the same working
 day as Pass 0. **Not "done"** — the plan text below lists four things
@@ -1417,14 +1417,14 @@ place** — each of these is a real evidential gap, not a formality:
 
 #### Delivered
 
-All in `crates/iccce-color/src/`; every file read by this librarian.
+All in `crates/icccer-color/src/`; every file read by this librarian.
 
 | Module | What |
 |---|---|
 | `mat3.rs` | 3×3 `f64` matrix: multiply, apply-to-column-vector, **runtime inverse**. The inverse exists at runtime because the corpus marks published Bradford-inverse digits **NOT SOURCED** and directs numerical inversion of the sourced forward matrix. Singularity is `det == 0.0` exactly — not an epsilon, which would be a tuned number with no citation. |
 | `illuminant.rs` | D50 as the ICC 4-figure triple (0.9642 / 1.0000 / 0.8249), used **everywhere**, per the corpus's mixing-precision warning; D65 as a chromaticity (0.3127 / 0.3290), labelled single-source at the constant. |
 | `xyz.rs` | XYZ ↔ xyY, with divide-by-zero guards **both reference codebases lack** (black has no chromaticity → `None`, not an infinity). |
-| `lab.rs` | XYZ ↔ Lab ↔ LCh. Carries **iccce's first named deviation from normative specification text** — see below. |
+| `lab.rs` | XYZ ↔ Lab ↔ LCh. Carries **icccer's first named deviation from normative specification text** — see below. |
 | `adapt.rs` | von Kries *method* with **Bradford** cones, `M = M_A⁻¹ · D · M_A`. Degenerate whites refused rather than propagated. |
 | `delta_e.rs` | ΔE76; CIEDE2000 with explicit `kL/kC/kH` plus a `k = 1` wrapper. lcms2's `180.000001` branch epsilons preserved verbatim and deliberately — they are what Sharma pairs 9–16 test. |
 
@@ -1436,22 +1436,22 @@ corpus ambiguity **A11** is now resolved-as-delegated — ICC.1 clause 6.4
 says conversions *"shall use the equations of the form specified in
 ISO 13655"* and does not define `f(t)` itself, while writing the decimal
 in its own normative sentence. **ISO 13655 is the authority and is
-paywalled and not obtained.** iccce deviates because the rational form
+paywalled and not obtained.** icccer deviates because the rational form
 makes `f` and `f⁻¹` exact mutual inverses, which the decimal form cannot
 be — ICC's own reference code demonstrates the inconsistency. **Cost:
 ~10⁻⁷ in `f`, ~10⁻⁵ in `L*` — an analytically derived bound from the
-corpus, NOT an iccce measurement**, and it must never be restated as one.
+corpus, NOT an icccer measurement**, and it must never be restated as one.
 Decision record **DL-010**; register entry `NUMERIC_CLAIMS.md` **NA-001**.
 
 #### Gates — the engineer's report, and what is checkable without a shell
 
-`cargo test --workspace` **35 tests green** (21 `iccce-color` +
-14 `iccce-profile`); `cargo fmt` and `cargo clippy` clean.
+`cargo test --workspace` **35 tests green** (21 `icccer-color` +
+14 `icccer-profile`); `cargo fmt` and `cargo clippy` clean.
 *(reported by `icc-engineer`, run on this machine.)*
 
 Independently checkable from the tree: **35 `#[test]` declarations
 exist** — `mat3.rs` 3, `xyz.rs` 4, `lab.rs` 5, `adapt.rs` 5,
-`delta_e.rs` 4, `iccce-profile/src/lib.rs` 8, `num.rs` 6. *(verified —
+`delta_e.rs` 4, `icccer-profile/src/lib.rs` 8, `num.rs` 6. *(verified —
 counted.)* **That is a count of tests declared. It is not a count of
 coverage and it is not a pass result.**
 
@@ -1516,7 +1516,7 @@ closing it did not make the prediction less true.**
 remainder, honestly labelled"* *(hash and subject corroborated by
 `.git/logs/HEAD`, read; contents unverified)*.
 
-**What landed** *(all verified — `crates/iccce-color/src/delta_e.rs`
+**What landed** *(all verified — `crates/icccer-color/src/delta_e.rs`
 read)*:
 
 - **`delta_e_94`** — CIE 1994 with the **graphic-arts** parametric
@@ -1558,7 +1558,7 @@ rather than a *transform*, and a ten-decimal match against another
 implementation is one of the **weakest** kinds of row in this ledger
 while looking like one of the strongest.
 
-## Pass 2 — profile parsing (`iccce-profile`)
+## Pass 2 — profile parsing (`icccer-profile`)
 
 Header, tag table, and the tag types real profiles use: `XYZType`,
 `curveType`, `parametricCurveType`, `textType`/`multiLocalizedUnicode`,
@@ -1598,7 +1598,7 @@ is what was read in the working tree.)*
 
 **Delivered — eight non-LUT tag types decode.** `curv`, `para`, `text`,
 `mluc`, `desc`, `ncl2`, `XYZ `, `sf32`, in
-`crates/iccce-profile/src/tag_types.rs`, whose module doc names itself
+`crates/icccer-profile/src/tag_types.rs`, whose module doc names itself
 *"Pass 2, batch 1 (the non-LUT types)"* and says *"The LUT family
 (`mft1`/`mft2`/`mAB `/`mBA `) is batch 2."* *(verified — the module doc,
 the eight `sig::` constants and the eight arms of `decode()` read.)*
@@ -1607,7 +1607,7 @@ the eight `sig::` constants and the eight arms of `decode()` read.)*
 one-line summary where the type has one, and prints **every
 `TagIssue` unconditionally** — the parser's disclosure surface, per
 invariant §3.2 (*report, do not repair*). *(verified —
-`crates/iccce-cli/src/main.rs`, the decode/summarise/issue loop read.)*
+`crates/icccer-cli/src/main.rs`, the decode/summarise/issue loop read.)*
 
 **The report-don't-repair contract is visible in the type design**, which
 is the part worth recording: a rule violation that leaves the layout
@@ -1622,7 +1622,7 @@ Attacker-controlled counts are bounded against the actual byte length
 system sRGB profile, and `cargo test --workspace` **47 tests green**.
 *(reported by `icc-engineer`.)* Independently checkable from the tree
 without a shell: **47 `#[test]` declarations exist** — `tag_types.rs` 12,
-`iccce-profile/src/lib.rs` 8, `num.rs` 6, `iccce-color` 21 (`mat3` 3,
+`icccer-profile/src/lib.rs` 8, `num.rs` 6, `icccer-color` 21 (`mat3` 3,
 `xyz` 4, `lab` 5, `adapt` 5, `delta_e` 4). *(verified — counted across 8
 files.)* **That is a count of tests declared. It is not a count of
 coverage and not a pass result**, and it is recorded only because it is
@@ -1681,12 +1681,12 @@ tree.)*
 
 #### Delivered — the four LUT tag types decode
 
-`crates/iccce-profile/src/lut.rs`, dispatched from `tag_types.rs`
+`crates/icccer-profile/src/lut.rs`, dispatched from `tag_types.rs`
 (`sig::MFT1`/`MFT2`/`MAB`/`MBA` → `TagData::Lut8` / `Lut16` /
 `LutAToB` / `LutBToA`) and summarised by the CLI. *(verified — the
 module doc, the four `decode_*` functions, the four `decode()` arms at
 `tag_types.rs:489–492`, and the CLI's `lut8` / `lut16` / `lutAToB` /
-`lutBToA` summary arms at `iccce-cli/src/main.rs:229–277` read.)*
+`lutBToA` summary arms at `icccer-cli/src/main.rs:229–277` read.)*
 
 **Four design choices worth recording, because each makes a specific
 known misread *unrepresentable* rather than merely tested against** —
@@ -1749,7 +1749,7 @@ encoding."* It cites **ICC.1:2022 6.3.4.2 NOTE 3, primary_spec** *and*
 DL-011's rule and DL-012's measurement, kept as two separate objects
 rather than merged. It also says *"the consumer decodes; this module
 only repeats the rule so the consumer cannot miss it"*, which keeps
-invariant §3.1 (`iccce-profile` performs no colour maths) intact.
+invariant §3.1 (`icccer-profile` performs no colour maths) intact.
 *(verified — read.)*
 
 **Sourcing honesty is at the site.** The module doc records that the
@@ -1764,15 +1764,15 @@ frontmatter.)*
 **Gates.** `cargo test --workspace` **54 green**, `cargo fmt` and
 `cargo clippy` clean *(reported by `icc-engineer`)*. Checkable without a
 shell: **54 `#[test]` declarations exist** — `tag_types.rs` **19** (12
-at batch 1, so **+7**), `iccce-profile/src/lib.rs` 8, `num.rs` 6,
-`iccce-color` 21. *(verified — counted across 8 files.)* **A count of
+at batch 1, so **+7**), `icccer-profile/src/lib.rs` 8, `num.rs` 6,
+`icccer-color` 21. *(verified — counted across 8 files.)* **A count of
 tests declared is not a count of coverage and not a pass result.**
 
 #### ★ Done-when clause 1 — **met on this machine's 40 profiles**
 
 *"Every profile on the machine parses or is refused with a reason."*
 
-A release build of `iccce-cli` was run over every `*.icc` / `*.icm` in
+A release build of `icccer-cli` was run over every `*.icc` / `*.icm` in
 `C:\Windows\System32\spool\drivers\color\`:
 
 | | |
@@ -1801,7 +1801,7 @@ continued, the issue was reported, **nothing was repaired** — invariant
 
 **What clause 1 now claims, and its exact boundary.** *"Every profile on
 **this** machine, on 2026-08-11, at commit `d40d601`: 40 of 40."* It is
-**not** "iccce parses real profiles" and must never be rounded up to it.
+**not** "icccer parses real profiles" and must never be rounded up to it.
 Forty profiles from one Windows install is a narrow, systematically
 biased corpus: heavy on Microsoft-shipped sRGB/scRGB variants and vendor
 display profiles, **light or empty on the population Pass 4 depends
@@ -1867,7 +1867,7 @@ for the next session, with a recommendation attached to neither side.
    in Pass 0.** `Profile::parse` refuses major version ≥ 5 with
    `ParseError::IccMaxRefused { version_raw }`, whose `Display` names
    iccMAX explicitly, and
-   `iccce-profile/src/lib.rs::tests::iccmax_is_refused_by_name` asserts
+   `icccer-profile/src/lib.rs::tests::iccmax_is_refused_by_name` asserts
    the message **contains the string `"iccMAX"`** with the comment
    *"'refuse it by name' is the requirement."* *(verified — `lib.rs:94–99,
    215–222` and `diag.rs:41–71` read.)* Recorded as a corrected draft
@@ -1939,7 +1939,7 @@ operator ever answers it, the answer changes nothing.
 - **Named gaps remain, and they are named rather than implied**: `para`
   funcTypes 1/2/4, **8-bit (`precision = 1`) `mAB `/`mBA ` CLUTs**,
   multi-record and `count == 0` `mluc`, `ncl2` with `nDeviceCoords == 0`,
-  every tag type iccce does not implement, and — deliberately — **any
+  every tag type icccer does not implement, and — deliberately — **any
   CLUT that stresses interpolation** (every documented probe point lands
   on a node; A16 is a Pass 4/5 question wanting its own fixtures).
 - **No differential record reads a fixture yet**, so **every Pass 3 and
@@ -1993,10 +1993,10 @@ lcms2 within a stated tolerance, with both numbers written down.
 >
 > **1. Its done-when produces the ledger's first
 > `implementation-cross-check` row.** *"Matches lcms2 within a stated
-> tolerance"* requires **iccce on one side of a comparison**, which has
-> never happened — `NUMERIC_CLAIMS.md` §5.1 records that **iccce has
+> tolerance"* requires **icccer on one side of a comparison**, which has
+> never happened — `NUMERIC_CLAIMS.md` §5.1 records that **icccer has
 > never been compared to anything**, and §3.6's rows are
-> `oracle-behaviour-at-pin` with iccce absent. The moment a Pass 3 row
+> `oracle-behaviour-at-pin` with icccer absent. The moment a Pass 3 row
 > lands, that sentence stops being true and the ledger gains a class it
 > has never carried. **The tolerance must be justified before the run,
 > not fitted after it** (rule 5, `TOLERANCES.md` §0), and the
@@ -2021,7 +2021,7 @@ lcms2 within a stated tolerance, with both numbers written down.
 > **3. The sRGB constants are single-source, and Pass 3 is built on
 > them.** The corpus's sRGB file rests on **lcms2 alone** — IEC
 > 61966-2-1 is paywalled and not obtained — and the same gap makes
-> **D65 the weakest constant in `iccce-color`** (NC-018: chromaticity
+> **D65 the weakest constant in `icccer-color`** (NC-018: chromaticity
 > from `cmsvirt.c` alone, *not* cross-verified, unlike D50 and
 > Bradford). The corpus records **ITU-R BT.709 as free from itu.int and
 > NOT FETCHED** as the candidate second source. *(verified —
@@ -2055,8 +2055,8 @@ lcms2 within a stated tolerance, with both numbers written down.
 met by this filing: neither of the two numbers it requires exists yet.**
 The plan text above and the annotation above it are unchanged.
 
-**Commits:** **`c4038eb`** (Pass 3 core — `crates/iccce-cmm/src/curve.rs`,
-`matrix_trc.rs`) and **`051707f`** (`iccce transform`, plus the
+**Commits:** **`c4038eb`** (Pass 3 core — `crates/icccer-cmm/src/curve.rs`,
+`matrix_trc.rs`) and **`051707f`** (`icccer transform`, plus the
 engineer's own agent-memory). *(both **reported** by the dispatching
 engineer. `icc-librarian` has no shell, ran no git command, and has
 verified neither that these commits exist nor that they contain what the
@@ -2078,7 +2078,7 @@ not mistaken for the done-when:
 | The done-when wants | What exists today |
 |---|---|
 | a **round-trip ΔE** across sRGB→AdobeRGB→sRGB | a round trip through **one** profile, in **device units**, bounded at `1×10⁻³` — `NUMERIC_CLAIMS.md` **NC-032**. Source and destination are the **same** profile, so the matrix and its inverse cancel and it prices only the curve stack. **Not the same quantity** |
-| a **stated, justified lcms2 tolerance** | **nothing.** `iccce` has still never been compared to another implementation; the ledger still has **zero** `implementation-cross-check` rows (`NUMERIC_CLAIMS.md` §5.2) |
+| a **stated, justified lcms2 tolerance** | **nothing.** `icccer` has still never been compared to another implementation; the ledger still has **zero** `implementation-cross-check` rows (`NUMERIC_CLAIMS.md` §5.2) |
 
 **Whether the parallel run landed is `unverified` here.** A later
 session must look for the rows rather than assume the dispatch
@@ -2090,15 +2090,15 @@ Passes are no longer completing in order.
 
 | Module | What |
 |---|---|
-| `iccce-cmm/src/curve.rs` | The tone-curve engine. `curveType`'s three cases (identity / gamma / sampled table) and `parametricCurveType`'s five function types; **forward evaluation and inversion**. Sampled-table interpolation is **linear because clause 10.6 says so** (corpus A15, RESOLVED — normative, not a choice); parametric range is **clipped to [0,1] because 10.18 says so** (A19). Inversion follows **Annex F.1, which is NORMATIVE** — both plateau tie-break cases, the F.1(b) out-of-range clamp, and **`constant` kept distinct from `non-monotonic`** exactly as the spec draws them (*"cannot"* be inverted versus the inverse is *"undefined"*). *(verified — module doc, `eval`, `eval_inverse`, `eval_table`, `invert_table`, `eval_parametric`, `invert_parametric` read.)* |
-| `iccce-cmm/src/matrix_trc.rs` | The **Annex F.3** computational model. Forward `TRC → M`; inverse `M⁻¹ → clamp → TRC⁻¹`, with **the clamp BEFORE the inverse TRC** per F.8–F.16 and asserted on measured output. **PCSXYZ only**, per F.3 verbatim — a Lab-PCS profile is **refused by name**, tested against the real `USWebCoatedSWOP.icc`. A source→destination transform is source-forward + destination-inverse, which **is** the media-relative colorimetric conversion for D50-referenced colorants. *(verified — read.)* |
-| `iccce-cli` `transform` | `--src`/`--dst`, triples on stdin, **6 decimals** on stdout, no banner — *"the interface `tools/difftest` diffs against transicc"*, one decimal more than `transicc`'s four **so the comparison is never limited by iccce's print precision**. `--intent` naming anything but `media-relative` is **refused by name** with exit 1, *"refusing rather than substituting"*. *(verified — `cmd_transform` read.)* Smoke-tested as an sRGB→sRGB identity at sample points *(**reported** — there is no test in the repository asserting it)*. |
+| `icccer-cmm/src/curve.rs` | The tone-curve engine. `curveType`'s three cases (identity / gamma / sampled table) and `parametricCurveType`'s five function types; **forward evaluation and inversion**. Sampled-table interpolation is **linear because clause 10.6 says so** (corpus A15, RESOLVED — normative, not a choice); parametric range is **clipped to [0,1] because 10.18 says so** (A19). Inversion follows **Annex F.1, which is NORMATIVE** — both plateau tie-break cases, the F.1(b) out-of-range clamp, and **`constant` kept distinct from `non-monotonic`** exactly as the spec draws them (*"cannot"* be inverted versus the inverse is *"undefined"*). *(verified — module doc, `eval`, `eval_inverse`, `eval_table`, `invert_table`, `eval_parametric`, `invert_parametric` read.)* |
+| `icccer-cmm/src/matrix_trc.rs` | The **Annex F.3** computational model. Forward `TRC → M`; inverse `M⁻¹ → clamp → TRC⁻¹`, with **the clamp BEFORE the inverse TRC** per F.8–F.16 and asserted on measured output. **PCSXYZ only**, per F.3 verbatim — a Lab-PCS profile is **refused by name**, tested against the real `USWebCoatedSWOP.icc`. A source→destination transform is source-forward + destination-inverse, which **is** the media-relative colorimetric conversion for D50-referenced colorants. *(verified — read.)* |
+| `icccer-cli` `transform` | `--src`/`--dst`, triples on stdin, **6 decimals** on stdout, no banner — *"the interface `tools/difftest` diffs against transicc"*, one decimal more than `transicc`'s four **so the comparison is never limited by icccer's print precision**. `--intent` naming anything but `media-relative` is **refused by name** with exit 1, *"refusing rather than substituting"*. *(verified — `cmd_transform` read.)* Smoke-tested as an sRGB→sRGB identity at sample points *(**reported** — there is no test in the repository asserting it)*. |
 
 **Refusal, not approximation, is the pattern throughout** — and it is
 worth naming as a pattern because it recurs four times in one Pass: the
 Lab PCS, the three unimplemented parametric inverses, the three
 unimplemented intents, and the non-monotonic curve whose inverse the
-specification leaves free to be **anything**. In each case iccce reports
+specification leaves free to be **anything**. In each case icccer reports
 by name. A plausible substitute is indistinguishable from a bug, and in
 this domain it is also invisible.
 
@@ -2146,8 +2146,8 @@ and the annotation is left standing as the record of what was expected:
 
 - **NA-002's cost has NOT come due, because Pass 3 does not adapt.** The
   annotation said *"sRGB→AdobeRGB adapts, so Pass 3 is the Pass that
-  owes the measurement."* **`iccce-cmm` performs no chromatic adaptation
-  at all** — it imports only `Mat3` and `Xyz` from `iccce-color`, never
+  owes the measurement."* **`icccer-cmm` performs no chromatic adaptation
+  at all** — it imports only `Mat3` and `Xyz` from `icccer-color`, never
   touches `adapt.rs`, and never reads `wtpt` or `chad`. Colorants as
   stored in a conformant profile are **already** D50-referenced, so
   chaining forward and inverse needs no CAT. *(verified — imports and
@@ -2160,7 +2160,7 @@ and the annotation is left standing as the record of what was expected:
 - **The single-source sRGB/D65 warning stands and is now load-bearing in
   a new way.** Nothing in Pass 3 reads the corpus's sRGB constants — the
   profile supplies its own — but **NC-031's justification quotes D65's
-  `Z` from NC-018**, the weakest constant in `iccce-color`. A tolerance
+  `Z` from NC-018**, the weakest constant in `icccer-color`. A tolerance
   justified against a single-source constant is only as good as that
   constant. It is 26× clear of the bound, so nothing turns on it here.
 - **Curve work being specification-following rather than
@@ -2177,7 +2177,7 @@ and the annotation is left standing as the record of what was expected:
 
 `pow(negative, fractional)` is `NaN`. **lcms2 guards the base; ICC's own
 sample code does not** — a real behavioural difference between the two
-reference implementations. iccce follows lcms2. **This is NOT a
+reference implementations. icccer follows lcms2. **This is NOT a
 deviation from normative text** (clause 10.18 declares those parameter
 combinations *explicitly undefined* — a stated non-requirement, which is
 stronger than silence), and the register now distinguishes that kind of
@@ -2190,8 +2190,8 @@ also records two limits the module doc's own wording does not carry.
 `cargo test --workspace` **68 green**, `cargo fmt` and `cargo clippy`
 clean *(reported by `icc-engineer`)*. Checkable without a shell: **68
 `#[test]` declarations exist** — `curve.rs` **9** and `matrix_trc.rs`
-**5** (the 14 new), `tag_types.rs` 19, `iccce-profile/src/lib.rs` 8,
-`num.rs` 6, `iccce-color` 21. *(verified — counted across 10 files.)*
+**5** (the 14 new), `tag_types.rs` 19, `icccer-profile/src/lib.rs` 8,
+`num.rs` 6, `icccer-color` 21. *(verified — counted across 10 files.)*
 **A count of tests declared is not a count of coverage and not a pass
 result** — and **two of the fourteen skip silently** when
 `C:\Windows\System32\spool\drivers\color\` has no sRGB profile, in which
@@ -2248,8 +2248,8 @@ the **working tree**.)*:
 |---|---|
 | `55772c6` | the four audit items this librarian filed as owed at the last filing, closed by the engineer |
 | `a9618fe` | the last filing itself, committed |
-| `fc5ff58` | `iccce-cmm/src/clut.rs` — the n-linear CLUT evaluator, the **A16 named choice** |
-| `0843094` | `iccce-cmm/src/pcs_encoding.rs` — the 16-bit PCS encodings, exhaustive round trips, the D1 discriminator |
+| `fc5ff58` | `icccer-cmm/src/clut.rs` — the n-linear CLUT evaluator, the **A16 named choice** |
+| `0843094` | `icccer-cmm/src/pcs_encoding.rs` — the 16-bit PCS encodings, exhaustive round trips, the D1 discriminator |
 | `6873df1` | absolute intent per D.6/D.7 + the **sourced** Table 25 intent policy |
 | `986dae6` | the Pass 3 differential results (`tools/difftest` §13, `TOLERANCES.md` §3.3) and the `LEGAL.md` §1 dependency mirror |
 
@@ -2261,7 +2261,7 @@ a stated tolerance, with both numbers written down."*
 | The done-when wants | The number, its class, its tolerance |
 |---|---|
 | **matches lcms2 within a stated tolerance** | **max 3.4762×10⁻³ ΔE2000** (mean 5.1145×10⁻⁴), against a tolerance of **2×10⁻²**. Class: **`implementation-cross-check`** — the first rows of that class in this ledger's history. `NUMERIC_CLAIMS.md` **NC-036** (max) and **NC-037** (mean) |
-| **round-trips within a stated ΔE** | **max 1.8788×10⁻² ΔE2000** (mean 8.674×10⁻⁴), against a tolerance of **2.5×10⁻²**. Class: **`self-consistency`** — both sides are iccce, and it must be labelled so however reassuring it looks. `NUMERIC_CLAIMS.md` **NC-038** |
+| **round-trips within a stated ΔE** | **max 1.8788×10⁻² ΔE2000** (mean 8.674×10⁻⁴), against a tolerance of **2.5×10⁻²**. Class: **`self-consistency`** — both sides are icccer, and it must be labelled so however reassuring it looks. `NUMERIC_CLAIMS.md` **NC-038** |
 
 Both are **sRGB IEC61966-2.1 → Adobe RGB (1998)**, the pair the done-when
 names — **no substitution was invoked**, both files being present on this
@@ -2277,8 +2277,8 @@ decoration** — a device-space cross-check at **6.7059×10⁻⁵** against
 5×10⁻⁴; two means recorded with an **infinite** tolerance so the
 distribution sits next to the max without ever being quoted *as* the max;
 the prediction pin below; and an **instrument check** at 8.7945×10⁻⁵
-holding iccce's own ΔE ruler against `transicc`'s Lab output, because
-records 3–5 grade iccce with a metric built partly out of iccce.
+holding icccer's own ΔE ruler against `transicc`'s Lab output, because
+records 3–5 grade icccer with a metric built partly out of icccer.
 Ledger rows **NC-034 … NC-043**.
 
 #### ★ Why these two numbers are stronger than "a suite went green"
@@ -2288,7 +2288,7 @@ justification is derived from **lcms2's own arithmetic** — `cmsgamma.c`
 quantises a segment-free tone curve's input *and* output to 1/65535, and
 the source profile's TRCs are exactly that case. Rather than leave that
 as a plausible sentence in a `why` string, `pass3_report` **modelled
-lcms2's quantisation inside iccce's model and re-measured**: the
+lcms2's quantisation inside icccer's model and re-measured**: the
 device-space residual collapses from 6.705882×10⁻⁵ to
 **2.311449×10⁻⁷, a factor of ~290, and below `transicc`'s own print
 floor of 3.92×10⁻⁷**. The disagreement is accounted for essentially
@@ -2314,7 +2314,7 @@ justifications are preserved in `TOLERANCES.md` §4. Ledger **NC-038**,
 
 **3. A seventh check exists specifically to stop the round-trip gate
 rewarding a deleted requirement.** Record 5 is an *upper* bound on a
-quantity that is mostly a **deliberate cost**: delete iccce's range
+quantity that is mostly a **deliberate cost**: delete icccer's range
 clamping and the round trip gets *better*, so the gate would go greener
 while a normative requirement had been removed. Record 6 pins
 |predicted − observed| at device white to **5.7392×10⁻⁶** against
@@ -2325,7 +2325,7 @@ experiment. Ledger **NC-039**; the method rule that generalises from it
 is `ARCHITECTURE.md` **DL-018**.
 
 **★ And its scope is stated honestly rather than rounded up.** Record 6
-does **not** make the F.8–F.16 clamp *ordering* falsifiable — iccce
+does **not** make the F.8–F.16 clamp *ordering* falsifiable — icccer
 clamps at **three** independent sites (F.8–F.16's linear clamp, 10.18's
 domain clamp in `Trc::eval`, F.1(b)'s attainable-range clip in
 `invert_table`), so the other two make the first redundant at the shipped
@@ -2337,14 +2337,14 @@ covered.**
 
 **8 of 399 output components (2.01 %) came back from `transicc` outside
 `[0,1]`, up to `1.000120`**, all on grid points whose maximum channel is
-1.0; iccce returns exactly `1.000000`. It appears **only on the analytic
+1.0; icccer returns exactly `1.000000`. It appears **only on the analytic
 inverse path** — measured the same day in the reverse direction, whose
 destination inverse is a *tabulated* reverse curve, lcms2 **saturates**.
 So it tracks which inversion path lcms2 took and looks like an artefact
-rather than a stated position. **Annex F.8–F.16 supports iccce**; clause
+rather than a stated position. **Annex F.8–F.16 supports icccer**; clause
 6.4 requires per-component clipping on **integer** conversion and
 **none** for float32 encodings, which may make lcms2's excursion
-conforming and iccce's clamp merely stricter. **The two clauses need
+conforming and icccer's clamp merely stricter. **The two clauses need
 reading together, and until they are this is a recorded difference, not
 a verdict.** Ledger **NC-043**.
 
@@ -2375,7 +2375,7 @@ tree.
    intermediates"* — with the backwards reading (1.202773) **asserted
    absent** *(verified — the test read)*. A direction error here is the
    canonical quiet defect: every colour still looks like a colour.
-2. **`iccce-cmm/src/lib.rs`'s §Status is stale again, in a new place.**
+2. **`icccer-cmm/src/lib.rs`'s §Status is stale again, in a new place.**
    The old *"Pass 0 scaffold"* line was fixed (one of the four audit
    items), but the replacement still reads *"media-relative colorimetric
    only; the absolute intent awaits its sourced formula"* on a crate
@@ -2427,7 +2427,7 @@ which eight it ran.
 
 #### What "Pass 3 verified" is allowed to mean — the coverage statement, quoted
 
-> iccce's Annex F.3 matrix/TRC model agrees with lcms2 2.19.1 to a
+> icccer's Annex F.3 matrix/TRC model agrees with lcms2 2.19.1 to a
 > maximum of 3.476×10⁻³ ΔE2000 (mean 5.114×10⁻⁴) and 6.706×10⁻⁵ in
 > normalised device units, over **133 deterministic points**, sRGB →
 > Adobe RGB (1998), **media-relative colorimetric**, `-c0`, on Windows 11
@@ -2449,7 +2449,7 @@ constants and D65 both rest on lcms2 alone.
 
 - **The F.8–F.16 clamp ORDERING is owed, not covered** (§13.6.4 above).
   Distinguishing clamp-before from clamp-after needs a TRC whose inverse
-  is defined outside `[0,1]`, which iccce never permits. `TOLERANCES.md`
+  is defined outside `[0,1]`, which icccer never permits. `TOLERANCES.md`
   §3.3.3 carries it as a blank row, correctly.
 - **The lcms2 `>1.0` verdict is pending** a specification reading
   (clause 6.4 integer-vs-float32 clipping, read together with Annex
@@ -2459,7 +2459,7 @@ constants and D65 both rest on lcms2 alone.
   **per-component diagonal scale**, not a chromatic-adaptation
   transform, and the code explicitly does **not** un-apply `chad`
   (6.2.1 NOTE 1 / E.4 — it is a provenance record) *(verified — read)*.
-  **`iccce_color::adapt` is still not called by any transform in this
+  **`icccer_color::adapt` is still not called by any transform in this
   project.** This is the second consecutive filing to check that
   prediction against the code rather than carry it.
 - **The largest evidential hole in Pass 3 is named in `TOLERANCES.md`
@@ -2476,7 +2476,7 @@ constants and D65 both rest on lcms2 alone.
 
 #### ★ Pass 4 work is already in the working tree, and the dispatch did not mention it
 
-`crates/iccce-cmm/src/lut_transform.rs` exists and is declared in the
+`crates/icccer-cmm/src/lut_transform.rs` exists and is declared in the
 crate's `lib.rs`: *"lut16Type evaluation pipeline — **Pass 4 assembly,
 stage 1**"*, evaluating `mft2` as device → input tables → \[3×3 matrix\]
 → CLUT → output tables → PCS decode, citing clause 10.10, applying the
@@ -2513,8 +2513,8 @@ covered.
 > intent"*: **lcms2 forces black point compensation ON for v4 profiles at
 > perceptual and saturation**, whether or not `-b` was passed, on the
 > authority of an Adobe document rather than ICC.1. Against a v4 profile,
-> two of the four intents therefore compare iccce's transform to lcms2's
-> transform **plus a BPC stage iccce has no ICC.1 obligation to run**.
+> two of the four intents therefore compare icccer's transform to lcms2's
+> transform **plus a BPC stage icccer has no ICC.1 obligation to run**.
 >
 > **Pass 4 must choose one of two things and say which**, before any
 > tolerance at those intents means anything:
@@ -2570,10 +2570,10 @@ tree**.)*:
 
 | Module | What it is |
 |---|---|
-| `iccce-cmm/src/lut_transform.rs` | **Stages 1 + 3.** Evaluates `mft2` (`lut16Type`) **and `mft1` (`lut8Type`)** in **both** directions — A2B (device→PCS, decode at the end) and B2A (PCS→device, encode at the start), the stored pipeline being *that* direction and **evaluated forward: no inversion exists anywhere in the LUT path**. Pipeline order per 10.10/10.11; tables interpolate linearly (10.6); the 3×3 applies **only** for PCSXYZ input (A21); CLUT is n-linear (**NA-006**). *(verified — module doc and `from_lut16` read.)* |
+| `icccer-cmm/src/lut_transform.rs` | **Stages 1 + 3.** Evaluates `mft2` (`lut16Type`) **and `mft1` (`lut8Type`)** in **both** directions — A2B (device→PCS, decode at the end) and B2A (PCS→device, encode at the start), the stored pipeline being *that* direction and **evaluated forward: no inversion exists anywhere in the LUT path**. Pipeline order per 10.10/10.11; tables interpolate linearly (10.6); the 3×3 applies **only** for PCSXYZ input (A21); CLUT is n-linear (**NA-006**). *(verified — module doc and `from_lut16` read.)* |
 | ★ `PcsCodec` | The **(tag type × PCS kind)** product as a closed enum: `Lab16Legacy` (6.3.4.2 NOTE 3, the legacy encoding `lut16` mandates), `Lab8` (Tables 12/13 — **corpus A10 resolved**, and `lut8` is explicitly **not** in the legacy set), `Xyz16` (u1Fixed15). **The fourth cell of the product is REFUSED BY NAME**: `lut8` with an XYZ PCS returns `LutModelError::Lut8XyzPcsUnsourced` because *"the 8-bit XYZ form has no verified row"* in the corpus. *(verified — the enum, the error variant and its `Display` read.)* **Refusing an unsourced encoding instead of interpolating a plausible one is rule 2 enforced by the type system**, and it is why the model generalised to `mft1` without anyone having to decide anything at the call site. |
-| `iccce-cmm/src/transform.rs` | **Stage 2 — `Chain`.** Source device→PCS chained into destination PCS→device, with the **sourced 8.10.2 a)–d) fallback** (`icc__s__rendering_intents.md` §4). PCS unified through `Lab::to_xyz` at the ICC 4-figure D50. **`D2Bx`/`B2Dx` (`mpet`) is not implemented and the stage proceeds to step 2 — a DEVIATION from the `shall`-order, and the module doc says so in those words**: *"Skipping silently would be the sin; skipping loudly is the recorded state."* *(verified — read.)* |
-| `iccce-cli` `transform` | `--intent media-relative\|perceptual\|saturation\|absolute`; the per-line arity is **`chain.input_channels()`**, so CMYK is four floats per line and an unknown intent is still refused by name with exit 2. *(verified — `cmd_transform` read.)* **This is what made the Pass 4 differential possible at all**: the closure filing recorded that absolute intent had *zero* cross-check evidence because the CLI refused it. It no longer does. |
+| `icccer-cmm/src/transform.rs` | **Stage 2 — `Chain`.** Source device→PCS chained into destination PCS→device, with the **sourced 8.10.2 a)–d) fallback** (`icc__s__rendering_intents.md` §4). PCS unified through `Lab::to_xyz` at the ICC 4-figure D50. **`D2Bx`/`B2Dx` (`mpet`) is not implemented and the stage proceeds to step 2 — a DEVIATION from the `shall`-order, and the module doc says so in those words**: *"Skipping silently would be the sin; skipping loudly is the recorded state."* *(verified — read.)* |
+| `icccer-cli` `transform` | `--intent media-relative\|perceptual\|saturation\|absolute`; the per-line arity is **`chain.input_channels()`**, so CMYK is four floats per line and an unknown intent is still refused by name with exit 2. *(verified — `cmd_transform` read.)* **This is what made the Pass 4 differential possible at all**: the closure filing recorded that absolute intent had *zero* cross-check evidence because the CLI refused it. It no longer does. |
 
 **A real-file regression test came with stage 2, and it is the right
 shape.** `swop_perceptual_equals_saturation_shared_tag` builds two
@@ -2610,7 +2610,7 @@ filing:**
 | Kind | Records | Tolerance | Observed | What it can claim |
 |---|---|---|---|---|
 | **Interpolation-free control** — the 16 hypercube corners, every one an **exact CLUT node**, where n-linear and lcms2's geometry must agree identically | `…/pcs-lab-corners-interpolation-free` | **1×10⁻³** | **5.9131×10⁻⁵** (media-relative) · **6.6558×10⁻⁵** (perceptual/saturation) | **The strongest cross-check evidence this project has ever produced.** At a node the interpolation cancels *and* lcms2's quantisation terms vanish rather than accumulate; what is left is `transicc`'s 4-decimal Lab print floor (≈1×10⁻⁴ ΔE00). The two `lut16` pipelines are indistinguishable at the print floor |
-| **Arithmetic gate with the method difference switched off** — iccce's pipeline re-run with lcms2's own `Eval4Inputs` geometry substituted | `…/pcs-lab-emulated-geometry` | **2×10⁻²** | **4.5931×10⁻³** (media-relative) · **4.8154×10⁻³** (perceptual/saturation) | **This is where the agreement claim actually lives.** 55× / 326× tighter than the raw comparison. What remains is the oracle's own quantisation (16-bit tables in and out, `u16` at the CLUT stage boundary, s15.16 in `Eval4Inputs`, a 4-decimal print) |
+| **Arithmetic gate with the method difference switched off** — icccer's pipeline re-run with lcms2's own `Eval4Inputs` geometry substituted | `…/pcs-lab-emulated-geometry` | **2×10⁻²** | **4.5931×10⁻³** (media-relative) · **4.8154×10⁻³** (perceptual/saturation) | **This is where the agreement claim actually lives.** 55× / 326× tighter than the raw comparison. What remains is the oracle's own quantisation (16-bit tables in and out, `u16` at the CLUT stage boundary, s15.16 in `Eval4Inputs`, a 4-decimal print) |
 | **Structural gate whose value IS the method envelope** | `…/de2000-vs-lcms2`, `…/pcs-lab-vs-lcms2`, `…/device-vs-lcms2` | **2.0 ΔE00** / **2×10⁻²** device | ΔE00 **1.6590** perceptual · **0.252 94** media-relative; PCS 1.5715 / 0.254 65; device **1.0816×10⁻²** / **3.0045×10⁻³** | **Explicitly unable to claim agreement.** It can catch a wrong index order, a wrong Lab decode, a swapped ink; it cannot say the two implementations agree, because its value *is* a difference nobody has to explain away |
 
 **★ The 6× fact, which is the argument for having run all four intents.**
@@ -2625,7 +2625,7 @@ tables are not equally smooth, and nothing about a smooth colorimetric
 result predicts a rough perceptual one.
 
 **The apparatus was graded before anything was concluded from it.** The
-harness's n-linear arm is held against `iccce_cmm::lut_transform::Lut16Model`
+harness's n-linear arm is held against `icccer_cmm::lut_transform::Lut16Model`
 on every grid point at every intent, tolerance 10⁻⁹ in `L*`/`a*`/`b*`:
 **observed 0.0 exactly, bit-identical.** Without that row the whole
 substitution experiment would be an assertion that the reimplementation
@@ -2638,7 +2638,7 @@ Ledger **NC-052**.
 
 **The cost of the A16 n-linear choice has been measured for the first
 time.** From the Pass 3 closure filing to this one, NA-006's cost was a
-**corpus-derived bound** — *"up to ~1 ΔE, transcribed, iccce has NOT
+**corpus-derived bound** — *"up to ~1 ΔE, transcribed, icccer has NOT
 measured it"* — and three documents said the measurement was blocked on
 sourcing lcms2's tetrahedral decomposition. It is now a **measured
 self-consistency quantity**: **1.5741 ΔE2000 max on the perceptual
@@ -2647,7 +2647,7 @@ table, 0.254 23 on the colorimetric one**, propagating to **1.6639**
 and **an underestimate on one of the two tables**.
 
 **And the mechanism nobody measured was wrong.** `NUMERIC_CLAIMS.md`
-NA-006, `NEXT_SESSION.md` and this ROADMAP all carried *"iccce
+NA-006, `NEXT_SESSION.md` and this ROADMAP all carried *"icccer
 interpolates n-linear, lcms2 tetrahedral"*, and the Pass 4 blocker was
 recorded as *"source lcms2's tetrahedral cube decomposition."* Rather
 than recall it, `icc-conformance` **read `cmsintrp.c` at the pin**, and
@@ -2658,7 +2658,7 @@ first channel's fraction. Consequences, none of which *"tetrahedral"*
 would have implied:
 
 - **It is not symmetric in the four inks.** Reordering the channels
-  changes lcms2's answer. iccce's quadrilinear **is** symmetric.
+  changes lcms2's answer. icccer's quadrilinear **is** symmetric.
 - **It is not pure tetrahedral**, so a bound transcribed from the
   trilinear-vs-tetrahedral literature is **not the bound that applies** —
   which is precisely what NA-006's ~1 ΔE was.
@@ -2679,7 +2679,7 @@ are how it is corrected.
 
 #### ★ A FINDING against lcms2 at the absolute intent — 11.217 ΔE2000, cause identified, authority absent
 
-At `-t3`, iccce and lcms2 differ by **max 11.217 ΔE2000, mean 4.670**
+At `-t3`, icccer and lcms2 differ by **max 11.217 ΔE2000, mean 4.670**
 (device max 0.1580) — **two orders of magnitude more than at any other
 intent**, and far beyond anything the interpolation envelope for the
 table absolute uses (0.2542) could account for. The worst points are the
@@ -2691,7 +2691,7 @@ a profile is **v2 and display-class**. The destination sRGB profile's
 `wtpt` holds **D65** (0.950 455, 1.0, 1.089 050) while its colorants are
 D50-adapted — a common v2-era encoding. So the two implementations
 differ **not in the formula** (both build the D.6/D.7 diagonal) but in
-**what they read for the destination white**: iccce uses `wtpt` **as
+**what they read for the destination white**: icccer uses `wtpt` **as
 stored** (**NA-007**), lcms2 uses **D50**. The ratio is D65/D50 =
 (0.9858, 1.0, 1.3202) — **a 32 % error in `Z`, applied to every colour.**
 Modelling that one substitution (together with the CLUT geometry, so
@@ -2756,7 +2756,7 @@ sentence most likely to be rounded up:
   2**: `tag_types.rs` dispatches `sig::MAB`/`sig::MBA` to
   `lut::decode_lut_ab`, producing `TagData::LutAToB` / `TagData::LutBToA`
   *(verified — read)*. What does not exist is an **evaluator** in
-  `iccce-cmm`: `lut_transform.rs`'s own scope note says *"Still absent:
+  `icccer-cmm`: `lut_transform.rs`'s own scope note says *"Still absent:
   `mAB `/`mBA ` evaluation"*, and `transform::ChainError::SourceTagUnsupported`
   exists precisely to name that case rather than fail generically
   *(verified)*. **That is stage 4, and it is what the v4 half of the
@@ -2764,7 +2764,7 @@ sentence most likely to be rounded up:
 
 #### Reported, not repaired — three prose defects, all in the engineer's files
 
-1. **`iccce-cmm/src/lib.rs`'s §Status is stale AGAIN, for the third
+1. **`icccer-cmm/src/lib.rs`'s §Status is stale AGAIN, for the third
    consecutive filing.** The absolute-intent sentence the last two
    filings reported was fixed; the replacement now reads *"(CMYK→RGB
    live; **B2A/lut8/mAB stages pending**)"* on a crate where `b3f4388`
@@ -2778,7 +2778,7 @@ sentence most likely to be rounded up:
    *"Only media-relative colorimetric exists (Pass 3 scope); an
    `--intent` flag naming anything else is refused by name"* — directly
    above a `match` that accepts `perceptual`, `saturation` and
-   `absolute`. *(verified — `crates/iccce-cli/src/main.rs`, the doc
+   `absolute`. *(verified — `crates/icccer-cli/src/main.rs`, the doc
    comment and the match arms read.)* This one is worse than a stale
    status line: **a reader who trusts it concludes that no differential
    can reach the absolute intent**, which was true this morning and is
@@ -2849,7 +2849,7 @@ recorded rather than absorbed.
 2. **★ Stage 4 — `mAB `/`mBA ` evaluation.** Decoded since Pass 2 batch
    2, evaluated by nothing. It is what the **v4** half of the done-when
    needs, and `v4-cmyk-mab-lab.icc` now exists to point it at.
-3. **A4b**, which decides whether iccce or lcms2 acquires a defect at
+3. **A4b**, which decides whether icccer or lcms2 acquires a defect at
    the absolute intent. Until then neither implementation's
    absolute-intent output can be called right (**DL-019**).
 4. **A ground-truth row. Pass 4 has none at all** — every record is a
@@ -2859,7 +2859,7 @@ recorded rather than absorbed.
    therefore arithmetic rather than an oracle's opinion. `gen-profiles`
    now exists to author it.
 5. **An instrument check for the sRGB destination model.** Pass 3's
-   record 7 bounds iccce's ΔE ruler on **Adobe RGB**; Pass 4 **inherited
+   record 7 bounds icccer's ΔE ruler on **Adobe RGB**; Pass 4 **inherited
    that bound rather than re-measuring it on the profile it used.**
 6. **Corpus rows M4 and M5** for the two lcms2 behaviours read here (the
    4-D hybrid; the v2-display `wtpt` substitution) — `icc-spec-librarian`'s
@@ -2869,7 +2869,7 @@ recorded rather than absorbed.
 
 **Status: STILL IN PROGRESS, and the done-when is still NOT met.** The
 plan text, the annotation and the previous progress block are unchanged.
-What changed is that **iccce can now evaluate every LUT tag type in both
+What changed is that **icccer can now evaluate every LUT tag type in both
 directions, plus monochrome** — and that a **parser bug affecting every
 real CMYK `B2A0`** was found, by the fixture corpus, and fixed.
 
@@ -2889,10 +2889,10 @@ tree**.)*:
 
 | Module | What it is |
 |---|---|
-| `iccce-cmm/src/lut_ab.rs` | **Stage 4.** `mAB ` (A → CLUT → M → Matrix → B, device→PCS) and `mBA ` (the reverse) compiled to an evaluable pipeline, absent elements simply not in it. **PCS side is the v4 encodings, not the legacy ones** — the module doc gives the reason at the site (6.3.4.2 NOTE 3's *"and only those tag types"*) and notes the exactness that follows (`L* = n × 100`, `a*/b* = n × 255 − 128`). The **3×4 matrix applies all twelve terms**, offsets included, with a test asserting their effect on measured output. A `Direction` field fixed at build **makes calling the wrong method a `None`, not a wrong number**. *(verified — module doc, `Direction`, `LutAbModel`, the four tests read.)* |
-| `iccce-cmm/src/gray_trc.rs` | **The F.2 computational model**, both directions. Forward is `t = kTRC[device]` then **multiplication by the FULL PCS white triple** — the corpus's named trap honoured at the site: *"using the scalar directly as `X` or `Z` is wrong by the D50 chromaticity — a monochrome profile renders with a green cast."* Inverse recovers the connection scalar from the **achromatic channel** (`Y/Yn`, or `L*/100` for a Lab-PCS gray profile), clamps to `[0,1]`, and inverts per **F.1**. *(verified — read.)* |
-| `iccce-cmm/src/transform.rs` | Both new models are wired into `Chain` **on both sides**: `TagData::LutBToA` → `DestModel::LutAb` and `TagData::LutAToB` → `SourceModel::LutAb` inside the existing 8.10.2 fallback loops; **grayTRC is step 4's second shape**, tried when `MatrixTrc::from_profile` fails, with the comment recording that *"clause 8's per-class requirements decide which tags exist."* *(verified — the destination loop at 150–211 and the source loop at 213–297 read.)* Consequence worth stating: **a B2A differential is now reachable through the shipped binary**, which is the position the absolute intent was in before `490191b`. |
-| `iccce-profile/src/lut.rs` | **The GP-001 fix** — curve counts are now **per tag type**, with the two clause triples in the comment at the site and the reasoning for why the two readings coincide on square LUTs. *(verified — `decode_lut_ab`, lines 322–345 read.)* |
+| `icccer-cmm/src/lut_ab.rs` | **Stage 4.** `mAB ` (A → CLUT → M → Matrix → B, device→PCS) and `mBA ` (the reverse) compiled to an evaluable pipeline, absent elements simply not in it. **PCS side is the v4 encodings, not the legacy ones** — the module doc gives the reason at the site (6.3.4.2 NOTE 3's *"and only those tag types"*) and notes the exactness that follows (`L* = n × 100`, `a*/b* = n × 255 − 128`). The **3×4 matrix applies all twelve terms**, offsets included, with a test asserting their effect on measured output. A `Direction` field fixed at build **makes calling the wrong method a `None`, not a wrong number**. *(verified — module doc, `Direction`, `LutAbModel`, the four tests read.)* |
+| `icccer-cmm/src/gray_trc.rs` | **The F.2 computational model**, both directions. Forward is `t = kTRC[device]` then **multiplication by the FULL PCS white triple** — the corpus's named trap honoured at the site: *"using the scalar directly as `X` or `Z` is wrong by the D50 chromaticity — a monochrome profile renders with a green cast."* Inverse recovers the connection scalar from the **achromatic channel** (`Y/Yn`, or `L*/100` for a Lab-PCS gray profile), clamps to `[0,1]`, and inverts per **F.1**. *(verified — read.)* |
+| `icccer-cmm/src/transform.rs` | Both new models are wired into `Chain` **on both sides**: `TagData::LutBToA` → `DestModel::LutAb` and `TagData::LutAToB` → `SourceModel::LutAb` inside the existing 8.10.2 fallback loops; **grayTRC is step 4's second shape**, tried when `MatrixTrc::from_profile` fails, with the comment recording that *"clause 8's per-class requirements decide which tags exist."* *(verified — the destination loop at 150–211 and the source loop at 213–297 read.)* Consequence worth stating: **a B2A differential is now reachable through the shipped binary**, which is the position the absolute intent was in before `490191b`. |
+| `icccer-profile/src/lut.rs` | **The GP-001 fix** — curve counts are now **per tag type**, with the two clause triples in the comment at the site and the reasoning for why the two readings coincide on square LUTs. *(verified — `decode_lut_ab`, lines 322–345 read.)* |
 
 #### ★★ GP-001 — the full arc, and why it is the day's richest record
 
@@ -3026,7 +3026,7 @@ exist; it is not verified to work.
    this comment said media-relative only and outlived the code by three
    commits — caught by icc-librarian's live-source audit, 2026-08-11."*
    *(verified — read.)*
-2. **`iccce-cmm/src/lib.rs`'s §Status**, stale for three consecutive
+2. **`icccer-cmm/src/lib.rs`'s §Status**, stale for three consecutive
    filings, now enumerates the modules accurately **and carries a
    standing warning**: *"this block has been stale twice before — if a
    module below contradicts it, trust the module."* *(verified — read.)*
@@ -3051,7 +3051,7 @@ exist; it is not verified to work.
    finding that is fixed in the live source** *(verified — both files
    read)*. `icc-conformance`'s file, and untouched here by instruction.
    Note what this costs: **a reader of that README today would conclude
-   that iccce cannot parse a real CMYK `B2A0`.**
+   that icccer cannot parse a real CMYK `B2A0`.**
 
 #### Gates — and this dispatch carried none
 
@@ -3100,7 +3100,7 @@ the Windows colour directory is absent.
 - **★ ICC's own reference implementation reads `wtpt` AS STORED.**
   `DemoIccMAX` at a named head uses the tag directly with **no version
   test, no class test, no substitution**. So **the two ICC-adjacent
-  implementations disagree with each other**, and **iccce matches ICC's
+  implementations disagree with each other**, and **icccer matches ICC's
   own code**. Labelled precisely in the corpus and repeated here:
   DemoIccMAX targets v4/v5 and simply has no v2 back-compatibility
   layer, so its silence is **not a positive position**. It moves the
@@ -3129,7 +3129,7 @@ the Windows colour directory is absent.
 #### A fixture for a divergence that had none
 
 `transicc` at the pin **accepts** `iccmax-version.icc`: **lcms2 does not
-refuse a major-version-5 profile**, where iccce identifies and refuses
+refuse a major-version-5 profile**, where icccer identifies and refuses
 **iccMAX by name** *(reported — `icc-conformance`'s run, recorded in
 `gen-profiles/README.md` §6.3)*. That divergence has been true since
 Pass 0 and had never been pinned to an artefact. It is **a deliberate
@@ -3197,7 +3197,7 @@ Ledger rows **NC-062 … NC-083** in `NUMERIC_CLAIMS.md` **§3.11**, with
 the record-to-row arithmetic written out there because *a sum that comes
 out right is not evidence that its terms are right*.
 
-#### ★★ The headline: iccce reproduces a closed form derived from clause text to `f64` noise
+#### ★★ The headline: icccer reproduces a closed form derived from clause text to `f64` noise
 
 **§B's four `derived-expectation` rows are the strongest LUT claims this
 repository has ever carried.** Both of the fixture's CLUTs store a
@@ -3205,7 +3205,7 @@ function **affine in one input and constant in the others**, so *every*
 interpolation geometry reproduces them exactly — measured, not asserted
 (**NC-070**, 1,110×10⁻¹⁶) — and the output is then a **closed form in
 the input**, derived from **10.12.1/10.13.1**, **10.12.5/10.13.4** and
-**6.3.4.2 Tables 12/13**. **iccce reproduces it to 2,842×10⁻¹⁴ in `L*`
+**6.3.4.2 Tables 12/13**. **icccer reproduces it to 2,842×10⁻¹⁴ in `L*`
 and 2,220×10⁻¹⁶ in device**, in both directions; lcms2 reproduces it to
 its own quantisation.
 
@@ -3240,7 +3240,7 @@ its own quantisation.
 
 `cmsio1.c`'s `_cmsReadOutputLUT` forces **trilinear** interpolation for
 any Lab-PCS LUT (*"Now it is time for a controversial stuff…"*, its own
-comment), and **trilinear over three inputs is iccce's n-linear**. So:
+comment), and **trilinear over three inputs is icccer's n-linear**. So:
 
 - **NA-006's measured cost — 1,5741 ΔE2000 — is an A2B number. In the
   B2A direction the interpolation-method envelope is exactly ZERO**, for
@@ -3265,7 +3265,7 @@ comment), and **trilinear over three inputs is iccce's n-linear**. So:
 #### ★ Forced BPC is keyed by the **DESTINATION** profile's version — DL-013 and corpus M2 are half-stated
 
 Measured **in both directions on one pair** (**NC-078**, both sides
-lcms2, so it says nothing about iccce): v4 fixture as **source** into a
+lcms2, so it says nothing about icccer): v4 fixture as **source** into a
 v2 destination is **0,0, bit-identical**; v2 source into the v4 fixture
 as **destination** moves `K` at black from **99,6094 % to 96,4721 %**
 (3,137×10⁻² device). `_cmsLinkProfiles` sets `BPC[i]` per profile;
@@ -3280,7 +3280,7 @@ have to say so. A corpus correction to M2 is owed to
 
 At `K = 0` the fixture's `mAB ` CLUT puts `L*` at full scale and the 3×4
 matrix then adds `+1/256`, handing the `B` curves **1,003 906 25**.
-**iccce clamps (`L* = 100`); lcms2 does not (`L* = 100,390 625`,
+**icccer clamps (`L* = 100`); lcms2 does not (`L* = 100,390 625`,
 measured directly through `transicc`). Cost 0,6117 ΔE2000 over 10 of 128
 points** — the largest disagreement anywhere in Pass 4b, and in the
 neighbourhood of the ⚠ provisional 1,0 anchor. Handled exactly as
@@ -3300,8 +3300,8 @@ matrix output, before the next curve set"* *(**verified** —
 `evidence:` line is `primary_spec` for clauses 10.12/10.13, which is what
 **DL-014** requires before the clause may be cited)*. **The fixture's
 overflow arises at exactly that point**, so this instance is governed by
-10.12.5 rather than by 10.18's curve domain, and **iccce's `L* = 100` is
-what the clause requires.** iccce's live code already clamps there and
+10.12.5 rather than by 10.18's curve domain, and **icccer's `L* = 100` is
+what the clause requires.** icccer's live code already clamps there and
 says so — `a0310c7`, verified. **What remains open** is the *second*
 question (must the **final** `B` output be clipped to the encodable PCS
 range?), so the queued dispatch should be **narrowed, not cancelled**;
@@ -3315,11 +3315,11 @@ and per **A39b** the available word for lcms2's behaviour is
 **§C is the cleanest measurement in the project**, because the source
 *cannot* contribute — both implementations evaluate the same analytic
 γ = 2,199 218 75 and multiply by the **same D50 literals** — so what is
-measured is lcms2's sRGB **destination** alone. iccce agrees to
+measured is lcms2's sRGB **destination** alone. icccer agrees to
 **9,686×10⁻⁵ device / 2,169×10⁻² ΔE2000** over 69 points; modelling
 lcms2's `cmsReverseToneCurveEx(4096)` resampling collapses that
 **457×, to 2,121×10⁻⁷ — below `transicc`'s print floor.** Worst point
-`g = 2/255`: iccce `0,000300`, lcms2 `0,000397`, **model `0,000397`.**
+`g = 2/255`: icccer `0,000300`, lcms2 `0,000397`, **model `0,000397`.**
 *The disagreement is not merely explained, it is reproduced.*
 
 **And it did NOT measure NA-008**, which three documents predicted it
@@ -3389,18 +3389,18 @@ today."*
 
 #### ★ Work appeared in the tree that this dispatch did not mention — the fifth consecutive filing at which that is true
 
-**`crates/iccce-cmm/src/bpc.rs` (Pass 5) and
-`crates/iccce-cmm/src/named_color.rs` (Pass 7) both exist and are
+**`crates/icccer-cmm/src/bpc.rs` (Pass 5) and
+`crates/icccer-cmm/src/named_color.rs` (Pass 7) both exist and are
 declared in the crate's `lib.rs`** *(verified — read)*, and the corpus
 carries a matching **`icc__ref__bpc.md`** with new ambiguity rows
 **A41/A42/A43** *(verified — frontmatter and §§2–3 read)*.
 
 **★ And BPC is not merely written — it is WIRED AND REACHABLE.**
 `Chain::with_bpc()` exists, `Chain` carries an `Option<BpcScale>` with
-per-side black estimation keyed on the major versions, and **`iccce
+per-side black estimation keyed on the major versions, and **`icccer
 transform` accepts `--bpc`**, refusing by name (exit 1) at the absolute
 intent and outside the estimation subset *(verified —
-`transform.rs:154–388` and `iccce-cli/src/main.rs:31–39, 195, 223–226,
+`transform.rs:154–388` and `icccer-cli/src/main.rs:31–39, 195, 223–226,
 259–268` read)*. **A first draft of this block said the opposite**, from
 a **head-limited grep** that returned the first N matches and not the
 file's whole story; the correction is recorded in `NUMERIC_CLAIMS.md`
@@ -3411,18 +3411,18 @@ inventory.** **`NamedColors`, by contrast, really is unreachable**
 Two register entries were owed the moment that code existed and are
 filed with this block — **NA-009** (the black-point *estimation* subset,
 corpus **A42**) and **NA-010** (the perceptual-black constant, corpus
-**A41**: iccce follows lcms2 **and ICC's own iccDEV** against ICC.1
+**A41**: icccer follows lcms2 **and ICC's own iccDEV** against ICC.1
 Table 16's printed decimals, at a corpus-derived **0,037 ΔE76** which is
 **exactly zero on any 16-bit PCS path**). **Because the path is
 reachable, both costs are OWED, not merely registered** — and
 `TOLERANCES.md` §3.5's blank rows are now a **gap** rather than a
-correct absence. **A third fact belongs with them: iccce NEVER forces
+correct absence. **A third fact belongs with them: icccer NEVER forces
 BPC** — it is *"an explicit caller act, which is itself a recorded
 policy difference from the oracle"* — and **NC-078 has already priced
 one direction of that difference.** See the dated annotation under
 **Pass 5** below.
 
-**Reported, not repaired — `iccce-cmm/src/lib.rs`'s §Status is stale for
+**Reported, not repaired — `icccer-cmm/src/lib.rs`'s §Status is stale for
 the fourth time**, reading *"Still to come: **BPC (Pass 5)**"* and
 omitting `bpc` from its module list in a crate that wires it into
 `Chain` *(verified — read)*. **What saved it is its own standing
@@ -3480,7 +3480,7 @@ graded records in this suite that survive that machine.**
    points are the first grid in this suite genuinely outside the
    destination gamut, and the count **was not recorded on this run**.
 
-### ★★ Pass 4 addendum — **A4b is RESOLVED by the operator's `ICC.1:2001-04` download, and it resolves in iccce's favour by being SILENT.** The A4c disclosure. Filed 2026-08-12 by `icc-librarian`
+### ★★ Pass 4 addendum — **A4b is RESOLVED by the operator's `ICC.1:2001-04` download, and it resolves in icccer's favour by being SILENT.** The A4c disclosure. Filed 2026-08-12 by `icc-librarian`
 
 **This block belongs to Pass 4, not to Pass 6 or 7**, and is filed with
 them only because that is when the work landed. Commit **`bb5d6b8`**
@@ -3501,17 +3501,17 @@ answer.** Annex **A.3.1.1** of the v2 specification recommends what a
 profile's **AUTHOR** should put in `wtpt` when the viewer is fully
 adapted. **It says nothing whatever about what a READER should do with a
 file whose author did otherwise.** So the clause that was supposed to
-adjudicate an 11.2 ΔE2000 divergence between iccce and lcms2 turns out
-not to address the question at all — and **iccce's position (use `wtpt`
+adjudicate an 11.2 ΔE2000 divergence between icccer and lcms2 turns out
+not to address the question at all — and **icccer's position (use `wtpt`
 as stored) is not contradicted by it.**
 
-**What iccce did about the residue, which is where rule 6 shows up in
+**What icccer did about the residue, which is where rule 6 shows up in
 the CMM.** The parser reports and does not repair; the CMM's version of
 that instinct is **disclose, do not silently pick a side**.
 `MatrixTrc::white_point_note()` returns a note whenever a profile's
 `wtpt` disagrees with its own colorant sum **and** carries no `chad` to
 explain the difference — the exact configuration A.3.1.1 leaves
-undecided — naming the consequence: *"iccce uses wtpt as stored; lcms2
+undecided — naming the consequence: *"icccer uses wtpt as stored; lcms2
 would substitute D50 for a v2 display profile — a difference of up to
 ~11 ΔE2000 at the ICC-absolute intent"* *(verified — read)*. The
 detection is decidable **from the file's own bytes** (in a matrix/TRC
@@ -3528,7 +3528,7 @@ summing to D50 and no `chad`** *(the finding is recorded in the test's
 own doc comment — verified, read)*. **Seven of this machine's v2 display
 profiles.** So the A4c configuration is **the v2 authoring norm, not an
 outlier** — which explains why lcms2 substitutes D50 at all, and means
-**iccce's disclosure will fire constantly and must therefore be worth
+**icccer's disclosure will fire constantly and must therefore be worth
 reading.**
 
 **A4c is SILENT, and it does not clear when A4b clears** — the register
@@ -3547,7 +3547,7 @@ corrected by the header sweep rather than edited here.
 **★★ Commit: THERE IS NONE, and it is the first thing to read.** Every
 previous completion record in this document anchors to a hash.
 `tools/difftest/src/pass4c.rs` is **untracked** and
-`crates/iccce-cli/src/main.rs` is **modified, uncommitted** *(verified —
+`crates/icccer-cli/src/main.rs` is **modified, uncommitted** *(verified —
 `git status --short`; **`HEAD` is `95c04c1`**, and this work is not in
 it)*. **These rows are anchored to a working tree**, which is the weaker
 anchor for the reason it has always been weaker: it can change under the
@@ -3673,7 +3673,7 @@ it.** Full entry: `ARCHITECTURE.md` **DL-026**.
   3,053 984**. **★ That vindicates a hedge** `NUMERIC_CLAIMS.md` NA-003
   wrote from method discipline alone — *"that number must never be
   restated as a bound on the divergence in general"* — by a factor of
-  **~2,5×10⁴**. **Scope: both arms measure lcms2 ALONE; iccce was not
+  **~2,5×10⁴**. **Scope: both arms measure lcms2 ALONE; icccer was not
   run, so no divergence between the implementations was measured.**
 - **NA-008 splits in two.** The **cross-check** half is probed for the
   first time (`sRGB → ewgray22.icm`, 729 points, **3,382 353×10⁻⁵**
@@ -3709,7 +3709,7 @@ row **stays blank**.
 
 #### What Pass 4 does NOT claim
 
-- **Not that iccce is correct at any intent.** Every row is a
+- **Not that icccer is correct at any intent.** Every row is a
   cross-check, a self-consistency control, or a precondition.
 - **Not that lcms2 is non-conforming** — the verdict is unavailable
   (DL-026). **Say *diverges*.**
@@ -3794,13 +3794,13 @@ match lcms2's BPC within tolerance.
 > and the annotation above's warning — *"do not restate the attribution
 > as a citation"* — stands unchanged for everything except the map.
 >
-> **2. ★ `crates/iccce-cmm/src/bpc.rs` exists AND IS WIRED, and Pass 5's
+> **2. ★ `crates/icccer-cmm/src/bpc.rs` exists AND IS WIRED, and Pass 5's
 > code half is therefore largely done.** It carries **4 `#[test]`
 > declarations** and implements the map plus a **subset** of lcms2's
 > black-point *estimation*; **`Chain::with_bpc()`** applies it, with
-> per-side black estimation keyed on the major versions, and **`iccce
+> per-side black estimation keyed on the major versions, and **`icccer
 > transform --bpc`** reaches it through the shipped binary *(verified —
-> `bpc.rs`, `transform.rs:154–388`, `iccce-cli/src/main.rs:31–39, 195,
+> `bpc.rs`, `transform.rs:154–388`, `icccer-cli/src/main.rs:31–39, 195,
 > 223–226, 259–268` read)*. **The refusals are the part to copy**:
 > `BpcNotApplicable` at the **absolute** intent (Maria 2013's sourced
 > exclusion — BPC presupposes both whites already at D50) and
@@ -3809,12 +3809,12 @@ match lcms2's BPC within tolerance.
 > **The unsourced case refuses; it does not estimate something
 > plausible.**
 >
-> **2a. ★★ iccce NEVER forces BPC, and that is a recorded policy
+> **2a. ★★ icccer NEVER forces BPC, and that is a recorded policy
 > difference from the oracle**, stated at the site: lcms2 forces it for
 > v4 perceptual/saturation *"on the authority of an unpublished reading
 > (M2/DL-013, and its 'always' has no published corroboration)"*, while
-> iccce makes it *"an explicit caller act"*. **Every Pass 5 cross-check
-> must account for this explicitly**, or it will measure iccce's policy
+> icccer makes it *"an explicit caller act"*. **Every Pass 5 cross-check
+> must account for this explicitly**, or it will measure icccer's policy
 > and report the result as a tolerance. One direction of the difference
 > is already priced: **NC-078** (3,137×10⁻² device, `K` at black
 > 99,6094 % → 96,4721 %) and **NC-020** (≈3,15 `L*`).
@@ -3831,7 +3831,7 @@ match lcms2's BPC within tolerance.
 > is untrustworthy, lcms2's thresholded ridge search is **not**
 > reproduced and its thresholds are *"unattributed even in its own
 > source"* — corpus **A42, UNVERIFIED**) and **NA-010** (the fixed v4
-> perceptual black: iccce uses **0.00336 / 0.0034731 / 0.00287**, which
+> perceptual black: icccer uses **0.00336 / 0.0034731 / 0.00287**, which
 > is what lcms2 **and ICC's own iccDEV** use and is **not** what ICC.1
 > Table 16 prints; corpus **A41**, cost **0,037 ΔE76** corpus-derived
 > and **exactly zero on any 16-bit PCS path**).
@@ -3861,12 +3861,12 @@ annotations above are unchanged; this block is the record.
 
 **Commits, all reported** *(no agent in this project has ever run a git
 command)*: **`8be1ed3`** (the Pass 4b filing committed, plus the
-`iccce-cmm/src/lib.rs` §Status fix), **`70411dd`** / **`a36abaf`** /
+`icccer-cmm/src/lib.rs` §Status fix), **`70411dd`** / **`a36abaf`** /
 **`6ea1b3d`** / **`812a215`** (the BPC core and **two red commits with
 false green claims in their messages**, both corrected — see the session
 log), **`46f16e8`** (the `--bpc` CLI), **`df3a233`** (the Pass 5
 measurements). **What is verified is the working tree**: `bpc.rs` is
-wired, `iccce transform` accepts `--bpc`, `tools/difftest/src/pass5.rs`
+wired, `icccer transform` accepts `--bpc`, `tools/difftest/src/pass5.rs`
 and `src/bin/pass5_report.rs` exist, `README.md` §16 and
 `TOLERANCES.md` §3.5 are filled, and **`lib.rs`'s §Status is fixed** —
 it now reads *"chains, opt-in [`bpc`] via `with_bpc`), [`bpc`] (Pass 5…)
@@ -3890,7 +3890,7 @@ match lcms2's BPC within tolerance."* Both halves, with their scope:
 against ICC.1:2022 **6.3.4.3**'s printed equation over 1005 PCS values,
 **3,331×10⁻¹⁶** against a Gaussian elimination on **Maria (2013)
 §4.2**'s two published constraints over 20 000 random draws, and the two
-constraints holding under iccce's own map to the same figure
+constraints holding under icccer's own map to the same figure
 (**NC-084 … NC-086**). Three independent statements of one map agreeing
 to ~1,5 ulp.
 
@@ -3901,13 +3901,13 @@ applicability set, an **estimation** method, and a forcing policy. Pass
 5 grades the first and third and **cannot grade the second**, and it
 knew that before it measured:
 
-> **Everywhere iccce will do BPC at all, lcms2's estimator reduces to
+> **Everywhere icccer will do BPC at all, lcms2's estimator reduces to
 > the same two values.** On a matrix/TRC or gray side, lcms2's guard 6
 > darkest-colorant estimate is device black through the profile at a
-> colorimetric intent — exactly iccce's `device_to_pcs(0)` — and on
+> colorimetric intent — exactly icccer's `device_to_pcs(0)` — and on
 > **every profile in reach that is exactly `XYZ (0,0,0)`, because every
 > TRC in the corpus has `trc(0) = 0`**. On a v4 LUT side at perceptual,
-> lcms2's guard 3 returns **the same A41 triple iccce hard-codes.**
+> lcms2's guard 3 returns **the same A41 triple icccer hard-codes.**
 
 **Why that matters more than the six small numbers it explains.** A
 session that had measured first would have found six agreements and read
@@ -3926,7 +3926,7 @@ discharge, discharged by bytes this project authors.
 
 #### ★ Two recorded differences that are NOT defects, and neither may be rounded into the agreement figures
 
-1. **★ lcms2 silently performs NO BPC below a threshold, and iccce
+1. **★ lcms2 silently performs NO BPC below a threshold, and icccer
    deliberately has no such threshold.** `cmscnvrt.c`'s `IsEmptyLayer`
    sums the BPC matrix's deviation from the identity plus its offsets
    and **drops the entire stage below `0,002`** — so lcms2 stops doing
@@ -3938,7 +3938,7 @@ discharge, discharged by bytes this project authors.
    and no higher (**NC-088**). **The constant was not in the corpus** —
    `ICC_Spec` §7.2's list of unattributed constants was drawn from
    `cmssamp.c` and this one lives in `cmscnvrt.c`. A corpus row is owed.
-2. **★★ iccce NEVER forces BPC; lcms2 forces it for a v4 destination at
+2. **★★ icccer NEVER forces BPC; lcms2 forces it for a v4 destination at
    perceptual.** Same pair, same intent, **neither side asked**:
    **3,137 3×10⁻² device = 3,137 348 `L*`**, lcms2 lighter at black.
    **Neither implementation is wrong; the number IS the policy.**
@@ -3957,16 +3957,16 @@ discharge, discharged by bytes this project authors.
 
 - **No black-point ESTIMATOR is tested**, by either side (above).
   **lcms2's methods 3 and 4 — the ink round trip and the least-squares
-  quadratic fit — are untested against anything**, because iccce refuses
+  quadratic fit — are untested against anything**, because icccer refuses
   there instead (**S5**, a **coverage gap, not a bug**: lcms2 answers,
-  iccce does not, so **no comparison exists and Pass 5 claims none**).
-- **The saturation intent.** lcms2 forces BPC there too; iccce's subset
-  admits **only perceptual** for a LUT side, so that arm **has no iccce
+  icccer does not, so **no comparison exists and Pass 5 claims none**).
+- **The saturation intent.** lcms2 forces BPC there too; icccer's subset
+  admits **only perceptual** for a LUT side, so that arm **has no icccer
   half**. This is the *second* Pass in a row whose remainder includes
   saturation, and the two are different items.
 - **Any real v4 LUT profile.** S2 and S3 are **one synthetic fixture**;
   the 40-profile sweep's zero stands.
-- **The gray side of iccce's own subset** — implemented, and no scenario
+- **The gray side of icccer's own subset** — implemented, and no scenario
   exercises it, because every gray profile in reach would be another
   null.
 - **Whether forcing is conformant**, which needs `AdobeBPC.pdf` / ICC
@@ -4011,7 +4011,7 @@ discharge, discharged by bytes this project authors.
 
 The dispatch describes the lcms2 match as *"map 1.11e-16 vs its own
 primary clause 6.3.4.3; **policy arm 4.6e-5**"*. **4,600×10⁻⁵ is not the
-policy arm.** It is **NC-096** — iccce `--bpc` against lcms2, in S3,
+policy arm.** It is **NC-096** — icccer `--bpc` against lcms2, in S3,
 with BPC on. **The policy row is NC-100 at 3,137 3×10⁻², and it is
 REPORTED, NOT GRADED.** The two differ by a factor of ~680 and by their
 *posture*, which is the whole point of DL-019. The ambiguity is
@@ -4034,7 +4034,7 @@ with each other's status.
    budget is stated in).
 4. **Harness unit tests for `pass5.rs`**, and a reported runner result
    for §16.
-5. **The saturation intent**, if iccce's estimation subset is ever
+5. **The saturation intent**, if icccer's estimation subset is ever
    widened to admit it — at which point S3 acquires a second arm and
    lcms2's forcing can be measured in a second place.
 6. **The DL-014 tier question, now load-bearing on a ledger CLASS**:
@@ -4071,7 +4071,7 @@ moves **UNVERIFIED → PARTLY RESOLVED** in the corpus register, and stays
 *partly* on the CD-not-IS technicality alone *(verified — the register's
 movement table read)*.
 
-**What iccce implemented, and the three places ISO corrects Adobe.**
+**What icccer implemented, and the three places ISO corrects Adobe.**
 `estimate_lut_destination_black` follows 4.2.5: the **darkest-colour
 SEARCH** (`darkest_vertex`, over 4.2.2.2's verbatim vertex sets) instead
 of a fixed device black; the **root** instead of the vertex; and the
@@ -4079,7 +4079,7 @@ monotonic and validity guards. `neutralise_and_clip` implements 4.2.3 —
 **always** neutral `(Li, 0, 0)`, where Adobe neutralised for CMYK only
 *(all verified — read)*.
 
-**★ Three constants have NO home in either document, and iccce does not
+**★ Three constants have NO home in either document, and icccer does not
 copy them**: lcms2's `L* > 95 → 0`, its `IsEmptyLayer` `0.002`
 stage-drop (corpus **M6**, the threshold Pass 5 solved for at ≈0.41
 `L*`), and an `n < 4` fitter guard that **contradicts both ISO's `3` and
@@ -4093,7 +4093,7 @@ ignored"*, while **lcms2 retains chroma and propagates it per-channel**.
 At input black the difference should equal exactly the detected
 destination black's `√(a*² + b*²)` — predicted **2–6 ΔE76** for a `b*`
 of −2…−6, decaying to zero at white, **on relative colorimetric with a
-LUT destination**. **iccce follows ISO.** *(verified — read.)*
+LUT destination**. **icccer follows ISO.** *(verified — read.)*
 
 > **★ A predicted divergence is not a finding.** **DL-011** predicted an
 > lcms2 disagreement and **DL-012** measured it **absent**. This
@@ -4103,7 +4103,7 @@ LUT destination**. **iccce follows ISO.** *(verified — read.)*
 > `NUMERIC_CLAIMS.md` row when it has a number, and not before.
 
 **What this does NOT do.** It does **not** discharge **NA-009**'s cost.
-Pass 5's negative result (DL-023) stands unchanged: **everywhere iccce
+Pass 5's negative result (DL-023) stands unchanged: **everywhere icccer
 does BPC at all, lcms2's estimator reduces to the same two values**, so
 **the two estimators still cannot be discriminated** by anything in
 reach. **Sourcing an estimator is not measuring one.** The instrument
@@ -4201,11 +4201,11 @@ number in the band).
   perceptual one is a null by construction.** What the fixture makes
   newly measurable is **how wrong the A41 constant is** (`L* ≈ 3,1`
   against that device's real black of `L* 20`) — **owed, not made.**
-- **★ It does not establish that iccce is right.** The `swop` divergence
-  is **entirely** the 4.2.5.4 short-circuit's return value — **iccce
+- **★ It does not establish that icccer is right.** The `swop` divergence
+  is **entirely** the 4.2.5.4 short-circuit's return value — **icccer
   returns `outRamp[first]`, lcms2 returns `InitialLab`** — and **which
   the standard specifies is dispatched to `icc-spec-librarian` and
-  unanswered.** **If ISO names lcms2's, iccce is wrong and the code
+  unanswered.** **If ISO names lcms2's, icccer is wrong and the code
   changes.**
 - **It does not cover the saturation intent, the `bkpt` tag, any source
   but sRGB, a darkest colorant with chroma above 50, or any platform but
@@ -4468,8 +4468,8 @@ in a Pass record is corroborated by something in this repository rather
 than reported alone**: `.git/logs/HEAD` line 44 records exactly that
 hash and that subject line *(verified — read)*. **What is still not
 verified is the commit's CONTENTS.** What *is* verified is the working
-tree: `crates/iccce-cmm/src/compiled.rs` exists and is the type
-described below, and `crates/iccce-cli/src/main.rs` carries `cmd_bench`
+tree: `crates/icccer-cmm/src/compiled.rs` exists and is the type
+described below, and `crates/icccer-cli/src/main.rs` carries `cmd_bench`
 with the argument parsing, the timing and the twelve output lines quoted
 below *(both verified — read end to end)*.
 
@@ -4482,11 +4482,11 @@ measured and stated."*
 | Clause | Verdict | The measurement, and its scope |
 |---|---|---|
 | **"a 300 DPI A4 CMYK→RGB conversion completes in a stated time"** | **★ MET** | **8 700 867 pixels** (2481 × 3507 — A4 at 300 DPI, and the constant is in `cmd_bench` where a reader can check the arithmetic) in **7.23 s** = **1.20 Mpix/s**, on **this machine**, **release** build. Grid build — **83 521 chain evaluations**, 17 points per axis over 4 input channels — **1.04 s**, paid once. Reference path **0.084 Mpix/s** over the same raster, timed in the same process; **speedup 14.4×**. **NC-105, NC-106, NC-107** |
-| **"the compiled path's error against the uncompiled one is measured and stated"** | **★ MET, and the error is `self-consistency`** | **0.003589 device units**, maximum over **off-node** probes, on **SWOP `A2B1` (`mft2`, 4-D) → sRGB matrix/TRC, media-relative, 17-point grid**. Both arms are iccce, so per `NUMERIC_CLAIMS.md` §1 this is **worthless as correctness evidence however small**, and `cmd_bench` prints that sentence in its own output rather than leaving it to a reader. **NC-108** |
+| **"the compiled path's error against the uncompiled one is measured and stated"** | **★ MET, and the error is `self-consistency`** | **0.003589 device units**, maximum over **off-node** probes, on **SWOP `A2B1` (`mft2`, 4-D) → sRGB matrix/TRC, media-relative, 17-point grid**. Both arms are icccer, so per `NUMERIC_CLAIMS.md` §1 this is **worthless as correctness evidence however small**, and `cmd_bench` prints that sentence in its own output rather than leaving it to a reader. **NC-108** |
 
-**Every figure above is `icc-engineer`'s report of an `iccce bench` run
+**Every figure above is `icc-engineer`'s report of an `icccer bench` run
 on this machine.** `icc-librarian` has no shell and ran nothing. **The
-raw `iccce bench` output block is not on record anywhere** — see the
+raw `icccer bench` output block is not on record anywhere** — see the
 transcription-precision note in `NUMERIC_CLAIMS.md` §3.13.2, which is
 the one place these numbers are weaker than they look.
 
@@ -4528,7 +4528,7 @@ curve, where the self-consistency round trip *would have passed*) and
 
 | Rule | How Pass 6 discharges it |
 |---|---|
-| **DL-023** — say what the two arms were free to disagree about | **At a grid node they were free to disagree about NOTHING** — the node's value *is* a reference evaluation. `tests::identical_at_nodes_by_construction` asserts that identity and is labelled **"STRUCTURAL, NOT EVIDENCE"** in its own doc comment *(verified — read)*; it exists to catch a transposed indexing convention and for no other reason. **Every error number in this Pass is off-node**, in the unit tests and in `iccce bench` alike, and `cmd_bench`'s doc comment says why *(verified — read)*. Filed as **NC-110**, ungraded on purpose |
+| **DL-023** — say what the two arms were free to disagree about | **At a grid node they were free to disagree about NOTHING** — the node's value *is* a reference evaluation. `tests::identical_at_nodes_by_construction` asserts that identity and is labelled **"STRUCTURAL, NOT EVIDENCE"** in its own doc comment *(verified — read)*; it exists to catch a transposed indexing convention and for no other reason. **Every error number in this Pass is off-node**, in the unit tests and in `icccer bench` alike, and `cmd_bench`'s doc comment says why *(verified — read)*. Filed as **NC-110**, ungraded on purpose |
 | **DL-018** — an upper bound on a deliberate cost needs a prediction pin and a sensitivity control | The control is `error_scales_with_grid_spacing` and it is the subject of the section above. **It is the only reason NC-108 is a measurement rather than a decoration**, and its own two failures are the evidence that it can fail. **NC-109** |
 | **DL-021** — a behaviour is a fact about one direction and one path | **Named in every row.** NC-108 is **SWOP `A2B1`, `mft2`, 4-D → sRGB matrix/TRC, media-relative**; NC-109 is **sRGB → AdobeRGB matrix/TRC**. **Neither says anything about the B2A direction of either pair**, and the module header states that in as many words *(verified — read)* |
 
@@ -4555,7 +4555,7 @@ transform.
   **No timing has ever been taken on any other machine, on any other
   platform, or in a debug build**, and a throughput figure is a fact
   about hardware, allocator and build flags before it is a fact about
-  iccce. **Still no Linux run of anything, by anyone, ever.**
+  icccer. **Still no Linux run of anything, by anyone, ever.**
 - **One run.** No repetition, no variance, no confidence interval, no
   warm-up policy stated. **A single wall-clock sample.**
 - **One direction, one tag-type pair, one intent, one grid density.**
@@ -4566,7 +4566,7 @@ transform.
   (LEGAL §3), so **every Pass 6 measurement skips on a machine without
   them**, exactly as the unit tests do.
 - **No comparison against any other implementation.** **lcms2 was not
-  timed.** Nothing here says iccce is fast *relative to anything except
+  timed.** Nothing here says icccer is fast *relative to anything except
   its own reference path*, and no row may be quoted as if it did.
 - **BPC is not in the compiled chain that was benchmarked** (the bench
   builds a plain `Chain` at media-relative). A compiled path *can* fold
@@ -4576,14 +4576,14 @@ transform.
 #### What this Pass does NOT claim
 
 - **Not that the compiled path is correct.** `self-consistency` compares
-  iccce to iccce. **A grid built by sampling a wrong reference path
+  icccer to icccer. **A grid built by sampling a wrong reference path
   reproduces the wrong answer to 0.003589 device units.**
 - **Not that 0.003589 is a perceptual quantity.** It is device units,
   and **no ΔE2000 translation of it has been measured.** Converting it
   by intuition would be exactly the move DL-004 exists to forbid.
 - **Not that the 0.02 gate in the unit test is the measurement.** The
   gate is a bound chosen to survive the CLUT's curvature while failing
-  on a grid-indexing error; **the reported number is `iccce bench`'s.**
+  on a grid-indexing error; **the reported number is `icccer bench`'s.**
 - **Not that any test passed.** **No `cargo test --workspace` outcome
   has been reported at any of the last seven filings.** 116 `#[test]`
   declarations now exist across 19 files under `crates/` *(verified —
@@ -4598,7 +4598,7 @@ transform.
    its call)*, and its two rows are stated in **ΔE2000**, which is a
    unit **nothing in Pass 6 has measured**. Either the rows get a ΔE
    translation of NC-108 or they get re-stated in device units.
-2. **★ The raw `iccce bench` output block, pasted somewhere.** Three
+2. **★ The raw `icccer bench` output block, pasted somewhere.** Three
    figures were transcribed at three precisions and their ratio does not
    quite reproduce (§3.13.2). The evidence is twelve lines of text and
    nobody has filed them.
@@ -4643,7 +4643,7 @@ comment**)*.
 
 #### ★★ The tolerance, and why it could not be moved
 
-**`2,5×10⁻¹` ΔE2000 — which is Pass 4's measured iccce-vs-lcms2 figure
+**`2,5×10⁻¹` ΔE2000 — which is Pass 4's measured icccer-vs-lcms2 figure
 on this exact pair (0,252 94) to one significant figure.** Derivation:
 **compiling must not move the result further than the two
 implementations already differ on the same transform.** **No headroom,
@@ -4676,7 +4676,7 @@ derived from a total already exceeded.
    **Both are inside the line; quoting either alone is now a POPULATION
    CLAIM.**
 3. **★★ The green has a price and it is reported nowhere else:
-   `iccce bench`'s break-even moves from ≈70 000 px to ≈1,19 million
+   `icccer bench`'s break-even moves from ≈70 000 px to ≈1,19 million
    px** — a **17×** increase. **Compiling now pays for itself only on
    large rasters**, and a speedup quoted without its build cost is a
    materially incomplete claim.
@@ -4714,7 +4714,7 @@ makes `Separation` and `DeviceN` colorimetric rather than approximated.
 > this Pass's core is ALREADY IN THE TREE, undispatched and unmeasured.**
 > Plan text unchanged.
 >
-> `crates/iccce-cmm/src/named_color.rs` exists, is declared in the
+> `crates/icccer-cmm/src/named_color.rs` exists, is declared in the
 > crate's `lib.rs`, and carries **2 `#[test]` declarations** *(verified —
 > read and counted 2026-08-11)*. It builds a `NamedColors` table from an
 > `ncl2` tag and decodes its PCS coordinates through
@@ -4836,9 +4836,9 @@ parses the **real system sRGB profile** as the destination, and resolves
 NC-112.**
 
 **What that test is and is not.** It is a **behavioural
-`self-consistency`** check: nothing outside iccce supplied an expected
+`self-consistency`** check: nothing outside icccer supplied an expected
 value. **It is not a cross-check** — `transicc` was not run on a spot
-colour, and no ledger row compares iccce's spot resolution to anything.
+colour, and no ledger row compares icccer's spot resolution to anything.
 **It is not a ΔE claim**; it asserts range, not colour. **What it does
 establish** is the thing that was missing: the path executes end to end
 on real bytes and produces device values a caller could use.
@@ -4859,7 +4859,7 @@ on real bytes and produces device values a caller could use.
   branch is exercised** by the fixture.
 - **No `nDeviceCoords` comparison.** An `ncl2` entry carries the
   vendor's *own* device values alongside its PCS coordinates. **Nothing
-  compares iccce's resolved device values against a profile's stored
+  compares icccer's resolved device values against a profile's stored
   ones** — which, on a profile whose own device space is the
   destination, would be a genuine cross-check and is the cheapest one
   available.
@@ -4874,7 +4874,7 @@ on real bytes and produces device values a caller could use.
 1. **★ A cross-check that has an outside expectation in it.** The
    cheapest: resolve a spot into **the spot's own profile** and compare
    against the entry's **stored `nDeviceCoords`** — an expectation
-   written by whoever authored the file, not by iccce.
+   written by whoever authored the file, not by icccer.
 2. **★ A spot resolved into a LUT destination and into a gray
    destination**, which are reachable today and unexercised.
 3. **A PCSXYZ `ncl2` fixture**, so the second permitted encoding is not
@@ -4912,7 +4912,7 @@ and none of them mean "verified against ground truth")*:
 | **7** named colours and spot | **DONE** (2026-08-12) |
 | **8** the pdfce bridge | **NOT STARTED, and it is built in `pdfce`, not here** |
 | **9** HDR (BT.2100) | **NOT STARTED.** Blocked on ITU-R documents entering the corpus, and *before that* on `icc-spec-librarian` establishing that `itu.int`'s terms permit retrieval (DL-007). **"The file is free" has never implied "automated retrieval is permitted"** — DL-002 exists because that exact inference was available and wrong |
-| **10** profile creation | **NOT STARTED, far-future, and its precondition is unsolved**: nothing has been chosen as a ground truth that is not iccce |
+| **10** profile creation | **NOT STARTED, far-future, and its precondition is unsolved**: nothing has been chosen as a ground truth that is not icccer |
 
 #### ★ Pass 4 is the only original Pass still open, and its shape changed today
 
@@ -4921,7 +4921,7 @@ Its done-when needs two things Pass 4b left unmeasured:
 1. **Saturation in the B2A direction** (`B2A2` is a distinct third
    table). **Cheap, unblocked, and nobody has run it.** Not the same
    item as Pass 5's saturation gap, which is a *capability* gap in
-   iccce's BPC estimation subset.
+   icccer's BPC estimation subset.
 2. **The ICC-absolute intent through a LUT destination.** **★ This item
    is no longer operator-blocked.** `A4b` is **RESOLVED** by the
    operator's `ICC.1:2001-04` download (Pass 4 addendum above), and it
@@ -4937,8 +4937,8 @@ Its done-when needs two things Pass 4b left unmeasured:
 #### ★ Pass 8 is the real next step, and it is not this repository's work
 
 `ARCHITECTURE.md` §4 fixes the boundary and it does not move: **a thin
-bridge crate *in `pdfce`*, and `iccce` must not know what a PDF is.**
-The bridge maps `/ICCBased` streams to `iccce_profile::Profile`,
+bridge crate *in `pdfce`*, and `icccer` must not know what a PDF is.**
+The bridge maps `/ICCBased` streams to `icccer_profile::Profile`,
 `/Separation` and `/DeviceN` tint transforms to named-colour lookups,
 and PDF/X `/OutputIntent` to a destination profile.
 
@@ -4951,7 +4951,7 @@ is the normal `/OutputIntent`, and it is a LUT profile), and any
 cross-check at all on the spot path.
 
 **One consequence worth stating before the bridge is written:** a PDF
-consumer will hand iccce **real-world profiles at scale**, including
+consumer will hand icccer **real-world profiles at scale**, including
 malformed ones. Rule 6 — *the parser reports, it does not repair* — has
 never been exercised by a caller that must keep going. **Nothing here
 knows what `pdfce` will do with a reported malformation**, and that is a
@@ -5015,8 +5015,8 @@ are the two largest holes in the project**:
    not a pass result.** **NC-057 … NC-061 still have no reported
    outcome at all.** And this project has already shipped **two commits
    whose messages claimed a green suite while a test was red**.
-3. **The DL-014 citation audit**, never swept for `iccce-color` or
-   `iccce-profile`, which now **decides a ledger class** (NC-084) *and*
+3. **The DL-014 citation audit**, never swept for `icccer-color` or
+   `icccer-profile`, which now **decides a ledger class** (NC-084) *and*
    underwrites a **published** compliance claim (DL-024's third
    pre-publication check).
 4. **A Linux run of anything at all.** Still nothing, by anyone, ever —
@@ -5099,9 +5099,9 @@ claim.
 
 | Kind | What is in it | Why it is not merely unfinished work here |
 |---|---|---|
-| **1. In another repository** | **Pass 8**, the `pdfce` bridge | `ARCHITECTURE.md` §4 fixes the boundary and it does not move: **a thin bridge crate *in `pdfce`*, and `iccce` must not know what a PDF is.** No amount of work in this repository advances it past what Pass 7 already handed it |
+| **1. In another repository** | **Pass 8**, the `pdfce` bridge | `ARCHITECTURE.md` §4 fixes the boundary and it does not move: **a thin bridge crate *in `pdfce`*, and `icccer` must not know what a PDF is.** No amount of work in this repository advances it past what Pass 7 already handed it |
 | **2. Blocked on something nobody here can produce** | **A `published-ground-truth` row for any transform** (needs **IEC 61966-2-1**, purchased or licensed); **A31** (needs `ICC.1:2010-12` v4.3); **the adaptation ground truth** (needs ICC's published D65→D50 `chad` values); **Pass 9's precondition** (ITU-R terms, then the documents) | These are **acquisitions, not tasks**. ★ **A31 is now the register's only UNVERIFIED row**, and no amount of reading the corpus resolves it — *the document does not exist in reach* |
-| **3. Operator scope calls already answered but not yet started** | **Pass 9** (HDR — in scope by DL-007) and **Pass 10** (profile creation — in scope by DL-008) | Both were **added by operator decision** and neither has been sized. **Pass 10's precondition is unsolved and is not an engineering backlog item**: nothing has been chosen as a ground truth that is not iccce, and *"round-tripping a profile through its own inverse is the canonical test whose expected value came from the code under test"* |
+| **3. Operator scope calls already answered but not yet started** | **Pass 9** (HDR — in scope by DL-007) and **Pass 10** (profile creation — in scope by DL-008) | Both were **added by operator decision** and neither has been sized. **Pass 10's precondition is unsolved and is not an engineering backlog item**: nothing has been chosen as a ground truth that is not icccer, and *"round-tripping a profile through its own inverse is the canonical test whose expected value came from the code under test"* |
 | **4. Standing debts of the work already done** | The tail-debt list above, as re-scored below | These are the ones a session **can** act on today |
 
 **Where the tail debts stand at this filing** *(the seven-row table two
@@ -5154,15 +5154,15 @@ blocks up is not edited; this is its successor)*:
 
 **★★★ And one question is open, dispatched, and capable of making a
 shipped behaviour wrong:** does **ISO/CD 18619 4.2.5.4**'s mid-range
-short-circuit return **`outRamp[first]`** (iccce) or **`InitialLab`**
+short-circuit return **`outRamp[first]`** (icccer) or **`InitialLab`**
 (lcms2, `cmssamp.c` L536)? **Dispatched to `icc-spec-librarian`
 2026-08-12.** It is the whole of the `swop` arm's 8,167×10⁻² ΔE76.
-**If ISO names lcms2's, iccce is wrong — not divergent — and the
+**If ISO names lcms2's, icccer is wrong — not divergent — and the
 engineer changes the code.**
 
 > **★★★ ANSWERED the same day, and it was capable of making a shipped
 > behaviour wrong because it DID.** ISO/CD 18619 4.2.5.4's final
-> paragraph specifies **`InitialLab`**; **lcms2 conformed and iccce did
+> paragraph specifies **`InitialLab`**; **lcms2 conformed and icccer did
 > not**; the code is corrected at commit **`fd34a44`** *(verified —
 > `bpc.rs` read at the tip: the straightness branch now returns
 > `initial_lab` unchanged, with the clause quoted verbatim beside it)*.
@@ -5174,12 +5174,12 @@ engineer changes the code.**
 > **Two dated corrections to the four-kinds list above**, neither of
 > which edits it:
 > - **The remainder is smaller by one dispatched question and larger by
->   one crate.** `iccce-measure` (commit `2a2d616`) is a **fifth**
+>   one crate.** `icccer-measure` (commit `2a2d616`) is a **fifth**
 >   workspace member and Pass 10 pre-work — see the Pass 10 section.
 > - **★ Every bare test count in the block above is unusable as
 >   written.** The *"121 `#[test]` declarations across 19 files"* figure
 >   is superseded by **129 across 20 files** *(verified — re-counted in
->   `crates/`, the increase being `iccce-measure`'s eight)*, and the
+>   `crates/`, the increase being `icccer-measure`'s eight)*, and the
 >   `cargo test --workspace` outcome that had no result is now **129
 >   passed, 0 failed, exit 0**. ★ **The declaration count and the pass
 >   count agree exactly, per crate** (cmm 63, profile 33, color 25,
@@ -5204,7 +5204,7 @@ full correction is in *Publication — crates.io* below**; decision record
 - **Name availability: LOOKED AT, 2026-08-17.** Five names each returned
   *"does not exist"* from the crates.io API. ★ **A dated observation with
   an expiry, not a reservation, and it authorises no publish** — and
-  ★★ **it covered five of six candidate names.** `iccce-measure` was not
+  ★★ **it covered five of six candidate names.** `icccer-measure` was not
   queried, because the query used the name list written **before that
   crate existed**.
 - **`THIRD_PARTY_LICENSES.md`: no longer *"still owed"*, and NOT
@@ -5228,7 +5228,7 @@ they were planned would be worse than both.
 ★★ **Both are properly Pass 8 material even though Pass 8 is built in
 `pdfce`**, because both are things **this repository owes the bridge**.
 Neither is the bridge. `ARCHITECTURE.md` §4's boundary is untouched:
-**iccce still does not know what a PDF is.**
+**icccer still does not know what a PDF is.**
 
 ★★★ **Both were requested, in substance, by the consumer.** They came out
 of `pdfce`'s `open/request_iccbased_colour_spaces.md` and the `/N`
@@ -5238,9 +5238,9 @@ evidence that a bidirectional channel is worth its overhead.
 
 #### ★★ Retrospective 1 — the built-in sRGB destination. **DONE 2026-08-17 (uncommitted)**
 
-**What it is:** `iccce_cmm::builtin::srgb()` plus
+**What it is:** `icccer_cmm::builtin::srgb()` plus
 `Destination` / `DestinationProvenance` / `Chain::with_destination` /
-`Chain::destination_provenance` in `crates/iccce-cmm/src/transform.rs`.
+`Chain::destination_provenance` in `crates/icccer-cmm/src/transform.rs`.
 **Contract, conditions and build order are in
 `docs/DEFAULT_DESTINATION.md`**, whose **STATUS: BUILT** block records
 the four things measurement changed.
@@ -5260,9 +5260,9 @@ the four things measurement changed.
 > row immediately above is WRONG IN BOTH HALVES and is left standing as
 > the record of what was judged.**
 >
-> 1. **The ~12 ULP residual is the FILE's, not iccce's.** ICC's own
+> 1. **The ~12 ULP residual is the FILE's, not icccer's.** ICC's own
 >    published D50-adapted colorants (Holm/ICC 2015 §B.2, 15 dp) put
->    **iccce's construction at 3.02 ULP worst / 0.90 in `bXYZ.Z`** and
+>    **icccer's construction at 3.02 ULP worst / 0.90 in `bXYZ.Z`** and
 >    **the shipped HP 1998 / `sRGB2014.icc` file at 11.13 ULP**
 >    (`NUMERIC_CLAIMS.md` §3.33, **NC-230**/**NC-231**; **DL-054**).
 > 2. **The `11.0..13.0` assertion no longer exists.** It was replaced by
@@ -5280,7 +5280,7 @@ the four things measurement changed.
 >    registered as NA-011**, with the measured 3.02 ULP, its cause, and
 >    what it is not. ★ **A doc comment explains an approximation; the
 >    register is what makes it findable**, and only the register can
->    answer *"what does iccce approximate?"*
+>    answer *"what does icccer approximate?"*
 >
 > **Judged MET on the corrected terms**, with the evidence class
 > **improved**: the clause is now discharged against
@@ -5300,17 +5300,17 @@ TRC path only. No LUT destination, no CMYK, no non-default intent, no
 `f32` path.** DL-021 binds every sentence about it.
 
 **What it does NOT deliver, and what a consumer must not infer:** it does
-**not** make adopting iccce an *accuracy* gain for `pdfce` (DL-044/DL-047
+**not** make adopting icccer an *accuracy* gain for `pdfce` (DL-044/DL-047
 — the case is **conformance**, and this changes nothing about that), and
 it does **not** supply a destination for the CMYK output-intent path,
 which is a LUT profile.
 
 #### ★★ Retrospective 2 — the colour-space signature accessor (`/N`). **DONE 2026-08-17 (uncommitted)**
 
-**What it is:** `crates/iccce-profile/src/colour_space.rs` —
+**What it is:** `crates/icccer-profile/src/colour_space.rs` —
 `components()`, `channel_agreement()`, `is_valid_pcs()`, with
 `ComponentCount` and `ChannelAgreement`; exported from the crate root and
-surfaced by `iccce inspect` as `colorspace.components:`.
+surfaced by `icccer inspect` as `colorspace.components:`.
 
 **Why it is not the same as `Chain::input_channels()`**, which already
 existed: that reports the **tag's** count and needs a **built chain**.
@@ -5333,7 +5333,7 @@ worth disclosing** — hence `channel_agreement()`.
   only `shall`-level count agreements in the document are
   `colorantOrderType` (10.4) and `colorantTableType` (10.5). ★★
   ***"Silent" is a different claim from "requires agreement"*, and the
-  distinction was asked for explicitly** — so iccce **discloses** rather
+  distinction was asked for explicitly** — so icccer **discloses** rather
   than declaring non-conformance. That is **DL-020's discipline applied
   to a SEVERITY** rather than to a rule.
 - **A50 — the count is a TWO-TABLE JOIN, not a transcription.** Table 19
@@ -5348,7 +5348,7 @@ worth disclosing** — hence `channel_agreement()`.
   space from Table 19. Tested.
 
 ★★ **A deliberate divergence from lcms2, asserted so it cannot regress:
-`cmsChannelsOf()` returns `3` for an UNRECOGNISED signature; iccce returns
+`cmsChannelsOf()` returns `3` for an UNRECOGNISED signature; icccer returns
 `Unknown(sig)` and refuses to guess.** ★★★ **Evidence class, and it must
 travel with the claim: this was READ FROM lcms2 SOURCE at the pinned
 commit and NOT EXECUTED** — `impl_crosscheck` **by inspection**, weaker
@@ -5408,8 +5408,8 @@ Pass number at all.
 
 | | |
 |---|---|
-| **The policy** | `crates/iccce-cmm/src/black_preserve.rs` — `KPreserve`, `KMapping`, `Side`. Opt-in, **five named refusals**, applied at `Chain::convert` and, since `a05476c`, **outside the grid** in `CompiledTransform::convert` |
-| **The CLI** | `iccce transform --preserve-black <policy>`, ★ **with NO default** — the two published definitions disagree by up to `4.889900e-2`, so a default would be iccce choosing one and reporting it under a name that means both |
+| **The policy** | `crates/icccer-cmm/src/black_preserve.rs` — `KPreserve`, `KMapping`, `Side`. Opt-in, **five named refusals**, applied at `Chain::convert` and, since `a05476c`, **outside the grid** in `CompiledTransform::convert` |
+| **The CLI** | `icccer transform --preserve-black <policy>`, ★ **with NO default** — the two published definitions disagree by up to `4.889900e-2`, so a default would be icccer choosing one and reporting it under a name that means both |
 | **The qualifying test** | `C = M = Y = 0` **exactly**. A discontinuity, deliberately — which is why the compiled path had to carry the policy outside the interpolation |
 | **The grading** | Pass K, **44 rows**, §A–§F; **§F's 8 rows run in CI** on a committed synthetic fixture, the other 36 need the licensed corpus. ★ *(2026-08-19: **§G adds 16 more** — 60 in total — of which **7 run in CI** and 9 need the licence; **ten of the sixteen are graded**, six carry `REPORTED`.)* |
 | **The ledger** | `NUMERIC_CLAIMS.md` **§3.34** (`NC-243 … NC-266`), **NA-012**, five new §6 dependency rows, **§7.23** — and, from 2026-08-19, **§3.35** (`NC-267`, `NC-268`) and **§7.24**, the injection proof of the leak guards **and its floor**; and, later the same day, **§3.36** (`NC-269 … NC-280`), five further §6 rows and **§7.25**, **the perceptual cost** |
@@ -5439,7 +5439,7 @@ CONVERGENCE, not a bound** — *a wrong constant passes a threshold test;
 nothing passes a convergence test by luck* — and its **control assertion
 is a precondition**, without which the real assertion would pass
 vacuously. ★★★ **Still no difftest row for the combination**: the only
-detector is a `crates` test, and `iccce bench` cannot reach it, so **a
+detector is a `crates` test, and `icccer bench` cannot reach it, so **a
 regression here is invisible to the conformance suite and reachable only
 from the library** — which is exactly where a per-pixel consumer lives.
 
@@ -5621,7 +5621,7 @@ not make it false:
 
 **Before any profile-creation work is called correct, the project must
 state how its output is validated, naming a ground truth that is not
-iccce.** Candidates, none chosen and none investigated: published
+icccer.** Candidates, none chosen and none investigated: published
 characterisation datasets carrying both measurement data and a reference
 profile; an actual spectrophotometer; or a deliberately reduced scope.
 
@@ -5632,14 +5632,14 @@ already implies, for fixtures — needs no measurement and was never out of
 scope. The thing that was refused is **profile creation from measurement
 data**. Pass 10 should be sized against that distinction.
 
-### ★★ Pass 10 PRE-WORK landed 2026-08-12: `iccce-measure`, the CGATS/IT8.7 reader. Filed by `icc-librarian`
+### ★★ Pass 10 PRE-WORK landed 2026-08-12: `icccer-measure`, the CGATS/IT8.7 reader. Filed by `icc-librarian`
 
-**Commit `2a2d616`** — *"iccce-measure: CGATS/IT8.7 reader — Pass 10
+**Commit `2a2d616`** — *"icccer-measure: CGATS/IT8.7 reader — Pass 10
 pre-work, no hardware needed"*, **authorised by the operator on
 2026-08-12** *(reported by `icc-engineer`; the authorisation is the
 operator's word and this librarian did not observe it)*. **The crate
 exists in the build** *(verified — `Cargo.toml`'s `[workspace] members`
-lists `crates/iccce-measure`, and the crate's own manifest and
+lists `crates/icccer-measure`, and the crate's own manifest and
 `src/lib.rs` were read at the tip)*.
 
 #### Why pre-work is available at all, when the Pass itself is blocked
@@ -5652,8 +5652,8 @@ cleanly:
 
 | Half | Needs hardware? | Status |
 |---|---|---|
-| **Read the measurement file** | **No.** Text in, structure out. | **`iccce-measure`, landed 2026-08-12.** |
-| **Turn measurements into a profile, and validate it** | **Yes**, or a named ground truth that is not iccce. | **Still blocked**, on exactly the terms above. **Nothing here weakens that.** |
+| **Read the measurement file** | **No.** Text in, structure out. | **`icccer-measure`, landed 2026-08-12.** |
+| **Turn measurements into a profile, and validate it** | **Yes**, or a named ground truth that is not icccer. | **Still blocked**, on exactly the terms above. **Nothing here weakens that.** |
 
 ★ **This is the distinction the section already drew, used.** *"Writing
 synthetic profile bytes whose intended contents are known by
@@ -5676,7 +5676,7 @@ consequences, and the second is the one that will matter later:
   all text-in/structure-out *(verified — counted in `src/lib.rs`)*.
 - **A future profiler and a future measurement tool can share it.** A
   measurement file is not a profile; had the reader gone into
-  `iccce-profile`, the tool that only wants to *look at a target* would
+  `icccer-profile`, the tool that only wants to *look at a target* would
   have had to depend on an ICC parser.
 
 **Dependencies: none** *(verified — `[dependencies]` is empty but for a
@@ -5736,7 +5736,7 @@ it is this one.
 
 - **It does not start Pass 10.** The Pass's precondition — *state how a
   created profile's output is validated, naming a ground truth that is
-  not iccce* — is **untouched, unaddressed and still the whole
+  not icccer* — is **untouched, unaddressed and still the whole
   difficulty**.
 - **It does not make a colour claim of any kind.** No value in this
   crate has been compared to anything. Its eight tests are structural,
@@ -5765,8 +5765,8 @@ Recorded as `ARCHITECTURE.md` **DL-009**.
 
 Practical consequences, cheapest if done early:
 
-- **Crate-name availability on crates.io is unchecked.** `iccce`,
-  `iccce-color`, `iccce-profile`, `iccce-cmm`, `iccce-cli` — nobody has
+- **Crate-name availability on crates.io is unchecked.** `icccer`,
+  `icccer-color`, `icccer-profile`, `icccer-cmm`, `icccer-cli` — nobody has
   looked. Discover a squatted name before the API is public, not after.
   crates.io names are effectively permanent and are not released by a
   yank.
@@ -5809,11 +5809,11 @@ returned exactly `{"errors":[{"detail":"crate `<name>` does not exist"}]}`.**
 
 | Name | crates.io, 2026-08-17 |
 |---|---|
-| `iccce` | does not exist |
-| `iccce-color` | does not exist |
-| `iccce-profile` | does not exist |
-| `iccce-cmm` | does not exist |
-| `iccce-cli` | does not exist |
+| `icccer` | does not exist |
+| `icccer-color` | does not exist |
+| `icccer-profile` | does not exist |
+| `icccer-cmm` | does not exist |
+| `icccer-cli` | does not exist |
 
 ★ **Evidence class: `[REPORTED]`, with the command and the five verbatim
 response bodies carried in the dispatch.** This librarian **has no shell,
@@ -5842,24 +5842,24 @@ the entire apparatus.
    half. The `cargo-about` half is separately assessed below and is **not
    discharged**.
 
-#### ★★ The check covered FIVE names, and there are SIX candidates — `iccce-measure` was NOT checked
+#### ★★ The check covered FIVE names, and there are SIX candidates — `icccer-measure` was NOT checked
 
 **The five names queried are exactly the list DL-009 and the bullet above
 wrote on 2026-08-11 — and that list predates the crate.** `Cargo.toml`'s
 `[workspace] members` now names **five** crates and `Cargo.lock` lists
 **five packages** *(both verified — read)*: the four above plus
-**`iccce-measure`**, added 2026-08-12 (commit `2a2d616`, recorded in the
+**`icccer-measure`**, added 2026-08-12 (commit `2a2d616`, recorded in the
 2026-08-12 tail-debt block above and in `NUMERIC_CLAIMS.md` §2.12).
 
 > ★★★ **So the coverage is five of six candidate names, not "the crate
 > names".** A stale enumeration was copied forward into the query, and
 > the query returning five clean results is what makes it look complete.
 > **DL-031 and DL-053: the count is right and the population is wrong.**
-> ★ Note also that `iccce` — which *was* checked — is a **facade name
+> ★ Note also that `icccer` — which *was* checked — is a **facade name
 > that is not a workspace member**, so the queried set is neither a
 > subset nor a superset of the publishable set.
 
-**Owed:** query `iccce-measure`, in the same shape, before the same
+**Owed:** query `icccer-measure`, in the same shape, before the same
 publish. Owed to `icc-engineer`.
 
 #### ★★★ The `cargo-about` half: CARRIED, not discharged — the apparatus is built and its OUTPUT IS STALE
@@ -5881,14 +5881,14 @@ of the following are **verified — read**:
      snapshot shows a commit `a3fac00` **"release: the lockfile the 0.1.0
      bump left behind"** — corroborating, and **reported**, not verified
      by this librarian.)*
-  2. **Membership.** **`iccce-measure` does not appear in it at all**, and
+  2. **Membership.** **`icccer-measure` does not appear in it at all**, and
      its prose asserts *"The **four** crates … **are this project**"* and
      *"this manifest covers Cargo dependencies of the **four** workspace
      crates"*. There are five.
 - **★★★ And regenerating it today would emit a DEFECTIVE entry, not
   merely a missing one.** `about.toml` carries **four**
-  `[<crate>.clarify]` blocks — `iccce-color`, `iccce-profile`,
-  `iccce-cmm`, `iccce-cli` — and **none for `iccce-measure`**. By
+  `[<crate>.clarify]` blocks — `icccer-color`, `icccer-profile`,
+  `icccer-cmm`, `icccer-cli` — and **none for `icccer-measure`**. By
   **`about.toml`'s own written rationale**, a crate with no `clarify`
   block falls back to the **generic SPDX MIT template**, *"the one whose
   copyright line literally reads `Copyright (c) <year> <copyright
@@ -5909,7 +5909,7 @@ licence manifest that omits a crate and names the wrong version.**
 **The three things owed, in the order they must happen** (owed to
 `icc-engineer`; each needs a shell):
 
-1. **Add `[iccce-measure.clarify]` to `about.toml`**, pointing at
+1. **Add `[icccer-measure.clarify]` to `about.toml`**, pointing at
    `../../LICENSE` with the same sha256 as its four siblings — *before*
    regenerating, or step 2 emits the placeholder licence.
 2. **Update `about.hbs`'s "four crates" prose to five** (and prefer
@@ -5964,7 +5964,7 @@ as the refusal.** An unowned refusal is a slow deletion.
 
 | version | tag ref (**an annotated tag OBJECT, not the commit**) | release commit | evidence |
 |---|---|---|---|
-| **`v0.1.0`** | `.git/refs/tags/v0.1.0` present *(★ VERIFIED — loose ref file, read 2026-09-01)* | `3d88466` *"release: 0.1.0 — and iccce-cli could not have been published at all"* *(reflog)* | tag EXISTS; its CI result is **unknown here** |
+| **`v0.1.0`** | `.git/refs/tags/v0.1.0` present *(★ VERIFIED — loose ref file, read 2026-09-01)* | `3d88466` *"release: 0.1.0 — and icccer-cli could not have been published at all"* *(reflog)* | tag EXISTS; its CI result is **unknown here** |
 | **`v0.2.0`** | present, reads **`e9fc6b7f3f45e51c288960af834ad363ea2256b5`** *(★ VERIFIED)* | `578bf45` *"release: 0.2.0 — and the version literal now lives in ONE place, not five"* *(reflog)* | tag EXISTS; **its CI result is unknown here and was never evidenced** |
 | **`v0.3.0`** | present, reads **`e3e78bbd3fb9a26c3fcfae0ead4c5f2c982b0bff`** *(★ VERIFIED)* | **`a4d9003`** *"release: 0.3.0 — nothing here changes a converted colour value"* *(reflog)* | tag EXISTS; pushed *(reflog)*; **CI `success` is `[REPORTED]` — run **`33489492338`** (`CI`, on `a4d9003`) and **`33489492467`** (`Release`, on the tag), added 2026-09-01; a **third `CI` run on the tip `d328b95`** also `success`, **id not carried** — see §4 item 4's two addenda for what an id does and does not buy** |
 
@@ -6093,7 +6093,7 @@ handed over with the suite itself.
 
 ### What is measured today, stated at its real strength
 
-- **Acceptance** — `iccce inspect` on all 20 profiles: **20/20 exit 0,
+- **Acceptance** — `icccer inspect` on all 20 profiles: **20/20 exit 0,
   `malformations: 0`**, including a 1.36 MB X-Rite **ICC v4.2.0** CMYK
   profile whose full 18-tag table decodes. ★ **This proves the parser did
   not refuse. It proves nothing about the parsed values.**
@@ -6102,7 +6102,7 @@ handed over with the suite itself.
   all.*
 - **Self-consistency** — `eciRGB v2` as **v2.4.0 vs v4.2.0 from the same
   vendor**, 2,197 grid points, **max |Δ| = 0.000113 in destination device
-  coordinates**. ★★ **Both arms are iccce and it is NOT a ΔE.** Do not
+  coordinates**. ★★ **Both arms are icccer and it is NOT a ΔE.** Do not
   restate it as one.
 - **Capability only** — the X-Rite v4 CMYK profile at perceptual intent,
   and the 4-tag `kTRC`-only Gray profile, both evaluate. **Nothing is
@@ -6276,7 +6276,7 @@ and **NA-012**.
   which blue stays at **exactly `0.000000`** throughout. **A fitted grid
   interpolates smoothly and therefore cannot express a discontinuity at
   all**, which is why the two rival tables miss in opposite directions.
-  ★ **The entry carries the half that cuts against us too:** iccce's own
+  ★ **The entry carries the half that cuts against us too:** icccer's own
   CLUT interpolation smooths exactly the same way, and the clamp survives
   only because it is applied **analytically, after** every interpolation.
 - **★★ A NEW and WEAKER evidence class was added**, because the
@@ -6305,9 +6305,9 @@ and **NA-012**.
   §3.38.1).
 - **★ One row was added at the split: `NC-306`** — the **OPM 1** cell
   carries the **same** colour and Acrobat renders it **identically**
-  (`243 / 146 / 0`). ★★ **Its iccce arm carries no information** (same
+  (`243 / 146 / 0`). ★★ **Its icccer arm carries no information** (same
   input, same output by construction) and it says **nothing about
-  iccce**, which composites nothing at all. Filed as a **pre-registered
+  icccer**, which composites nothing at all. Filed as a **pre-registered
   negative**; §3.38.9.
 - **★ It also produced the first patch-level reading on this corpus.**
   Every earlier row here was a *profile* extracted from a patch and
@@ -6327,7 +6327,7 @@ to be dropped when this is retold:**
    evidence class**. What is established is that **one feature — a
    gamut-boundary discontinuity — is outside a fitted grid's
    representable set.**
-2. **Nothing was rendered.** The patch's *content* was read; **iccce
+2. **Nothing was rendered.** The patch's *content* was read; **icccer
    still rasterises nothing**, and the only rendered artifact in the
    comparison is somebody else's.
 3. **It is NOT established which CMYK source Acrobat used.** Three of the
@@ -6342,7 +6342,7 @@ to be dropped when this is retold:**
 
 **★ What remains open out of this:** (a) the **Acrobat-source confound**,
 which needs a source-discriminating experiment rather than a tighter
-number; (b) ★★ **whether iccce should expose a *"honour the document's
+number; (b) ★★ **whether icccer should expose a *"honour the document's
 output intent"* story to consumers at all** — this file *carries* its own
 `/DestOutputProfile`, a Heidelberg press profile, and the harness had to
 **extract it by hand** to use it. **That is a scope question for the
@@ -6437,7 +6437,7 @@ to him anywhere in these documents.
   pretending it had always been planned. **The validation-hardware
   problem that justified the original no is carried forward intact as an
   open engineering problem** — see Pass 10's precondition.
-- **(d)** Should `iccce` be published to crates.io? A general-purpose
+- **(d)** Should `icccer` be published to crates.io? A general-purpose
   MIT CMM in Rust is a thing the ecosystem lacks; that is a reason to,
   and a maintenance commitment.
   — **ANSWERED 2026-08-11: yes, publication is intended.** See
@@ -6487,7 +6487,7 @@ item 7).
 | `4db44a1` | *feat(cmm): both readings of sRGB's transfer function, default unchanged* | **the option** |
 | `ac921e2` | *feat(cmm): Pass L — lcms2 implements the C0 reading, and two of my claims were wrong* | **the measurement** |
 | `609ba67` | *memory: the reconstruction decision, and what to do when sources disagree* | agent memory only — **no `crates/`, no `docs/`, no numbers** |
-| `0a88ad6` | *fix(profile): a v2 profile has no profileID — iccce was fabricating one* | **a parser conformance defect and its fix** |
+| `0a88ad6` | *fix(profile): a v2 profile has no profileID — icccer was fabricating one* | **a parser conformance defect and its fix** |
 
 *(Commit **contents** are `[REPORTED]` — this role has no shell. What is
 verified is that the source described below reads as described **right
@@ -6504,7 +6504,7 @@ filed this as register row **`A57`** on 2026-08-19:
 | **C⁰** — value continuity | `1.055` exactly | `0.04045` | ICC's own sRGB document, W3C CSS Color 4, Khronos KDF |
 | **C¹** — value **and slope** continuity | `1.055 010 718 947 586 4` | `0.039 293 370 676 847 5` | **required** by `Rec. ITU-T H.273 (V4) (07/2024) / ISO/IEC 23091-2` clause 8.2 for `TransferCharacteristics = 13` — what AVIF, HEIF, AV1 and ISOBMFF `nclx` point at |
 
-**Both ship.** `iccce_cmm::builtin::SrgbTrc::{ValueContinuous,
+**Both ship.** `icccer_cmm::builtin::SrgbTrc::{ValueContinuous,
 SlopeContinuous}`, **default unchanged**, and ★ the C¹ constants are
 **derived from H.273's clause at run time by bisection, never
 transcribed** — which is rule 2 satisfied in the strongest available form:
@@ -6598,7 +6598,7 @@ mutation: dropping the argument yields **`0.000000e0`** and fires the
 guard with the right message *(`[REPORTED]`)*.
 
 ★ **Scope, stated because it is a fact about the feature and not about the
-harness: the shipped `iccce` binary has NO FLAG that selects `SrgbTrc`.**
+harness: the shipped `icccer` binary has NO FLAG that selects `SrgbTrc`.**
 The variant is reachable **only through the library API**, so **no CLI
 user can select the C¹ reading today**, and every §C number was produced
 in process.
@@ -6617,7 +6617,7 @@ instead — an equally strong guard. **Nothing is mis-scoped; a countable
 claim about the harness is wrong.** Inventory at `NUMERIC_CLAIMS.md`
 §3.37.7; **owed to `icc-conformance` / `icc-engineer`**, §7.26 item 2.
 
-### 6. ★★★ The parser fix — a v2 profile has no `profileID`, and iccce was fabricating one
+### 6. ★★★ The parser fix — a v2 profile has no `profileID`, and icccer was fabricating one
 
 **Not part of Pass L; filed here because it landed unrecorded in the same
 window.** It belongs to **Pass 2**'s subject matter, whose completion
@@ -6625,7 +6625,7 @@ record above is closed and is **not** edited.
 
 `profileID` was added in **v4**. In **ICC.1:2001-04 Table 9** header bytes
 `84..127` are **one 44-byte block**, *"44 bytes reserved for future
-expansion"* — **there is no identifier there.** iccce read `84..100` as a
+expansion"* — **there is no identifier there.** icccer read `84..100` as a
 `profileID` **regardless of edition**, so a v2 profile printed a plausible
 32-hex-digit identifier **and `malformations: 0` beside it**.
 
@@ -6663,7 +6663,7 @@ one shipped, one caught at design time.**
 editions prohibit duplicates** — the decision built on it survives, its
 **rationale** was false, and **`DL-003`'s *"revisit if"* has fired**; and
 `TagTooSmall` is not sourced at all, its cited table having been written
-as *"checks iccce should perform and REPORT"*, never as a quotation of a
+as *"checks icccer should perform and REPORT"*, never as a quotation of a
 requirement.
 
 ### Done-when, judged on these terms
@@ -6736,7 +6736,7 @@ filing against `fixtures/synthetic/`, `fixtures/synthetic/MANIFEST.md`,
 | *"no committed fixture carries an `A2B1`"* | ★★★ **FALSE** | **Four do.** `v2-rgb-header-intent-perceptual.icc`, `v2-rgb-header-intent-relative.icc`, `v4-rgb-mab-chromatic-black.icc`, `v4-rgb-mab-floored-b2a.icc` |
 | *"…or a `B2A1` tag at all"* | ★★ **FALSE** | **Two do** — both `mBA `: `v4-rgb-mab-chromatic-black.icc` and `v4-rgb-mab-floored-b2a.icc` |
 | *"every LUT fixture stops at `A2B0`/`B2A0`"* | **FALSE** | see above; the `MANIFEST.md` rows say so in their own `Contents` column |
-| *"intent→tag selection has zero regression coverage"* | ★★★ **FALSE for the forward, `mft2`, perceptual-vs-media-relative case** | `crates/iccce-cli/tests/header_rendering_intent_not_consumed.rs` — `the_control_two_named_intents_do_change_the_output` |
+| *"intent→tag selection has zero regression coverage"* | ★★★ **FALSE for the forward, `mft2`, perceptual-vs-media-relative case** | `crates/icccer-cli/tests/header_rendering_intent_not_consumed.rs` — `the_control_two_named_intents_do_change_the_output` |
 | *"a change that silently used `A2B0` at media-relative would pass CI green"* | ★★★ **FALSE, and this is the load-bearing one** | that control asserts a **separation floor of `0.02` device units** between the two intents on `v2-rgb-header-intent-perceptual.icc`, at **both** the library surface and the CLI. The named defect collapses the separation to **exactly zero** and the assertion fires with *"the two intents are only 0.000000 apart"* |
 
 ★★ **The existing control is not incidental — it was built for this hazard
@@ -6755,7 +6755,7 @@ are the rows worth buying.**
 
 | # | uncovered | why nothing catches it today | severity |
 |---|---|---|---|
-| **1** | ★★★ **The DESTINATION side: `B2A0` vs `B2A1`** | `iccce-cmm`'s `transform.rs` selects `B2A0`/`B2A1`/`B2A2` by intent in its own `match`, **a separate site from the forward one**. The only two committed fixtures carrying `B2A1` push **byte-identical bytes** into `B2A0` and `B2A1` — deliberately, with a stated reason, and therefore **zero separation** (`DL-077` §5). A defect selecting `B2A0` at media-relative on the destination side is invisible to every fixture in the tree | ★★★ **highest.** A live, intent-driven selection with **no separating fixture anywhere** |
+| **1** | ★★★ **The DESTINATION side: `B2A0` vs `B2A1`** | `icccer-cmm`'s `transform.rs` selects `B2A0`/`B2A1`/`B2A2` by intent in its own `match`, **a separate site from the forward one**. The only two committed fixtures carrying `B2A1` push **byte-identical bytes** into `B2A0` and `B2A1` — deliberately, with a stated reason, and therefore **zero separation** (`DL-077` §5). A defect selecting `B2A0` at media-relative on the destination side is invisible to every fixture in the tree | ★★★ **highest.** A live, intent-driven selection with **no separating fixture anywhere** |
 | **2** | ★★ **Saturation: `A2B2` / `B2A2`** | **no synthetic fixture carries either tag.** `recipes.rs` says so of its own two v4 recipes — *"no `gamt`, no `A2B2`/`B2A2`"*. Both `match` arms in `transform.rs` are therefore unexercised by any committed fixture | ★★ **high**, and the cheapest to describe: an entire intent's selection path |
 | **3** | ★ **The `mAB `/`mBA ` element pipeline's selection** | the one separating pair is **v2 `mft2`**. No v4 `lutAToBType` fixture separates `A2B0` from `A2B1`, so the selection is covered on the legacy tag type only | ★ **medium** — the `match` is shared, but the tag-fetch path is not |
 | **4** | **`Intent::Absolute` cannot be separated from `Intent::MediaRelative` at this layer** | ★ **by design, not by omission.** `transform.rs` maps both to `A2B1`/`B2A1` in one arm. Recorded so a later reader does not file it as a gap: **a fixture cannot distinguish them because the code does not**. Whether that mapping is right is a **clause question**, not a fixture question, and is not opened here |
@@ -6860,7 +6860,7 @@ conflict, per this document's standing practice.
 #### 1. What landed, verified at source
 
 `fixtures/synthetic/v2-cmyk-intent-separated-b2a.icc` and
-`crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs` — **both
+`crates/icccer-cmm/tests/b2a_intent_selection_is_separated.rs` — **both
 files read at this filing**, not taken from the dispatch. The fixture
 carries **six `mft2` tags at six distinct offsets** (`A2B0`/`A2B1`/`A2B2`
 and `B2A0`/`B2A1`/`B2A2`), the three `B2Ax` being twins with **one scalar

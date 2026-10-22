@@ -14,9 +14,9 @@
 //! policy — and each of them is keyed on something different. So the two sides'
 //! reach was read out of their sources first, and the intersection is what runs.
 //!
-//! ### iccce's reach — `Chain::with_bpc`, at commit `46f16e8`
+//! ### icccer's reach — `Chain::with_bpc`, at commit `46f16e8`
 //!
-//! | side | shape | black point iccce uses |
+//! | side | shape | black point icccer uses |
 //! |---|---|---|
 //! | matrix/TRC | any version, any non-absolute intent | `device_to_pcs([0,0,0])` — the media-relative transform of device black |
 //! | grayTRC | as above | `device_to_pcs(0.0)` |
@@ -53,13 +53,13 @@
 //!
 //! ### ★ The consequence, stated before the numbers exist
 //!
-//! **Everywhere iccce will do BPC at all, lcms2's estimator reduces to the same
+//! **Everywhere icccer will do BPC at all, lcms2's estimator reduces to the same
 //! two values.** On a matrix/TRC or gray side, guard 6's darkest-colorant
 //! estimate is device black carried through the profile at a colorimetric
 //! intent — which is exactly `device_to_pcs(0)` — and on every profile in reach
 //! that is **exactly `XYZ (0,0,0)`**, because every TRC in the corpus has
 //! `trc(0) = 0`. On a v4 LUT side at perceptual, guard 3 returns the same A41
-//! triple iccce hard-codes. **So Pass 5's cross-check cannot discriminate
+//! triple icccer hard-codes. **So Pass 5's cross-check cannot discriminate
 //! between the two estimators; it grades the scaling map, the direction, and
 //! the policy.** That is a coverage statement and it is made here, in advance,
 //! rather than inferred afterwards from a suspiciously small number.
@@ -68,14 +68,14 @@
 //! uses and what was predicted, so a reader can check the prediction against
 //! the observation rather than being handed only the observation.
 //!
-//! | # | pair | intent | iccce black src/dst | lcms2 black src/dst | map | predicted |
+//! | # | pair | intent | icccer black src/dst | lcms2 black src/dst | map | predicted |
 //! |---|---|---|---|---|---|---|
 //! | **S1** | sRGB → Adobe RGB (1998), both v2 matrix/TRC | media-relative | 0 / 0 | guard 6 / not-CLUT → guard 6 | identity | on ≡ off on **both** sides. **NULL BY CONSTRUCTION** — see below |
-//! | **S2** | `v4-cmyk-mab-lab.icc` → sRGB | perceptual | **A41 triple** / 0 | **guard 3 constant** / not-CLUT → guard 6 | `PB → 0`, **lowers** everything below D50 | iccce `--bpc` ≡ lcms2 `-b`; lcms2 does **not** force (destination is v2) |
-//! | **S3** | sRGB → `v4-cmyk-mab-lab.icc` | perceptual | 0 / **A41 triple** | guard 6 / **guard 3 constant** | `0 → PB`, **raises** | iccce `--bpc` ≡ lcms2 with **or without** `-b` — lcms2 **forces** here (destination is v4) |
+//! | **S2** | `v4-cmyk-mab-lab.icc` → sRGB | perceptual | **A41 triple** / 0 | **guard 3 constant** / not-CLUT → guard 6 | `PB → 0`, **lowers** everything below D50 | icccer `--bpc` ≡ lcms2 `-b`; lcms2 does **not** force (destination is v2) |
+//! | **S3** | sRGB → `v4-cmyk-mab-lab.icc` | perceptual | 0 / **A41 triple** | guard 6 / **guard 3 constant** | `0 → PB`, **raises** | icccer `--bpc` ≡ lcms2 with **or without** `-b` — lcms2 **forces** here (destination is v4) |
 //! | **S4** | sRGB → `v4-rgb-matrix-trc.icc` | perceptual | 0 / 0 | guard 6 / **guard 3's matrix-shaper escape** → 0 | identity | forced BPC costs **exactly zero** — corpus trap **T5** measured |
-//! | **S5** | sRGB → `USWebCoatedSWOP.icc` | media-relative | — | guard 6 / the **quadratic curve fit** | — | ~~iccce refuses by name; no comparison exists~~ **SUPERSEDED 2026-08-12**: the ISO estimator was wired (`c268261`) and iccce now converts. Pass 5c makes the comparison Pass 5 said did not exist |
-//! | **S6** | two committed matrix fixtures | **ICC-absolute** | — | excluded by guard 2 | — | **iccce refuses by name**; lcms2 excludes it too, for the same published reason |
+//! | **S5** | sRGB → `USWebCoatedSWOP.icc` | media-relative | — | guard 6 / the **quadratic curve fit** | — | ~~icccer refuses by name; no comparison exists~~ **SUPERSEDED 2026-08-12**: the ISO estimator was wired (`c268261`) and icccer now converts. Pass 5c makes the comparison Pass 5 said did not exist |
+//! | **S6** | two committed matrix fixtures | **ICC-absolute** | — | excluded by guard 2 | — | **icccer refuses by name**; lcms2 excludes it too, for the same published reason |
 //!
 //! ## What "null by construction" means and why S1 is still run
 //!
@@ -91,8 +91,8 @@
 //! ## What Pass 5 refuses to do
 //!
 //! - **It does not put an estimator in `crates/`.** The two-constraint solve
-//!   that grades [`iccce_cmm::bpc::BpcScale`] lives here, in the harness.
-//! - **It does not grade the policy difference.** iccce declines to force BPC
+//!   that grades [`icccer_cmm::bpc::BpcScale`] lives here, in the harness.
+//! - **It does not grade the policy difference.** icccer declines to force BPC
 //!   where lcms2 forces it; §7.1 of `ICC_Spec/icc/icc__ref__bpc.md` records
 //!   that lcms2 attributes the forcing to a document nobody in this project has
 //!   read, and that the one published source (Maria 2013) is silent about it.
@@ -105,16 +105,16 @@
 
 use std::path::{Path, PathBuf};
 
-use iccce_cmm::bpc::{BpcScale, PERCEPTUAL_BLACK};
-use iccce_cmm::matrix_trc::MatrixTrc;
-use iccce_color::{D50, Lab, Xyz, delta_e_2000};
-use iccce_profile::Profile;
+use icccer_cmm::bpc::{BpcScale, PERCEPTUAL_BLACK};
+use icccer_cmm::matrix_trc::MatrixTrc;
+use icccer_color::{D50, Lab, Xyz, delta_e_2000};
+use icccer_profile::Profile;
 
 use crate::pass4b::{
     Unavailable, cmyk_grid, expected_mab_lab, expected_mba_cmyk, fixture_path, rgb_grid,
 };
 use crate::{
-    Bpc, DiffError, Iccce, Intent, Kind, Metric, Oracle, Precalc, Record, Request, Space, Tolerance,
+    Bpc, DiffError, Icccer, Intent, Kind, Metric, Oracle, Precalc, Record, Request, Space, Tolerance,
 };
 
 // ===========================================================================
@@ -148,7 +148,7 @@ pub fn v4_matrix_fixture() -> PathBuf {
 
 /// `fixtures/synthetic/v2-rgb-matrix-trc-curv.icc` — category (a). S6's source,
 /// chosen with [`v4_matrix_fixture`] so the **refusal** rows never skip: a
-/// refusal is a property of iccce alone and must be gradeable on a machine with
+/// refusal is a property of icccer alone and must be gradeable on a machine with
 /// no colour directory at all.
 #[must_use]
 pub fn v2_matrix_fixture() -> PathBuf {
@@ -181,7 +181,7 @@ const MAX_ENCODEABLE_XYZ: f64 = 1.0 + 32767.0 / 32768.0;
 // Tolerances — every one written before the corresponding comparison was run
 // ===========================================================================
 
-/// **§A.** `iccce_cmm::bpc::BpcScale` against the two independent statements of
+/// **§A.** `icccer_cmm::bpc::BpcScale` against the two independent statements of
 /// the same map: ICC.1:2022 **6.3.4.3**'s printed equation (valid only for
 /// source black zero) and a **Gaussian elimination** on Maria (2013)'s two
 /// constraints (valid generally).
@@ -191,7 +191,7 @@ const MAX_ENCODEABLE_XYZ: f64 = 1.0 + 32767.0 / 32768.0;
 /// `f64` only by rounding — the Pass 4b lesson that "exact in a spec-derived
 /// argument means exact in ℝ" applies here in its purest form. Counting
 /// roundings on the worst path: the spec form is `x·(1 − Xb/Xi) + Xb`, three
-/// operations; iccce's is `((Xi − Xd)/(Xi − Xs))·x + Xi(Xd − Xs)/(Xi − Xs)`,
+/// operations; icccer's is `((Xi − Xd)/(Xi − Xs))·x + Xi(Xd − Xs)/(Xi − Xs)`,
 /// six. Every intermediate is bounded by `Xi ≤ 1`, so each rounding is at most
 /// 1 ulp of 1,0 = 2,22×10⁻¹⁶, and the division by `Xi − Xs ≈ 0,96` amplifies by
 /// at most 1,04. Worst case ≈ 9 × 2,22×10⁻¹⁶ × 1,04 ≈ **2,1×10⁻¹⁵**.
@@ -206,7 +206,7 @@ const MAX_ENCODEABLE_XYZ: f64 = 1.0 + 32767.0 / 32768.0;
 pub const MAP_ALGEBRA: Tolerance = Tolerance::new(
     1e-14,
     "the three algebraic forms of the same map (ICC.1:2022 6.3.4.3's printed equation, a Gaussian \
-     elimination on Maria 2013's two constraints, and iccce's closed form) are identical in R and \
+     elimination on Maria 2013's two constraints, and icccer's closed form) are identical in R and \
      differ in f64 only by rounding: at most 9 roundings on the longest path, each <= 1 ulp of 1.0 \
      (2.22e-16), amplified by at most 1.04 by the division by (Xi - Xs) ~ 0.96, so <= 2.1e-15. \
      1e-14 is ~4.8x that and 10 orders below one u16 lsb of the encoded PCS (1.53e-5), so a \
@@ -214,7 +214,7 @@ pub const MAP_ALGEBRA: Tolerance = Tolerance::new(
      same operations in the same order (the B0 lesson, TOLERANCES.md §4)",
 );
 
-/// **§B, S2 device space** — `v4-cmyk-mab-lab.icc` → sRGB at perceptual, iccce
+/// **§B, S2 device space** — `v4-cmyk-mab-lab.icc` → sRGB at perceptual, icccer
 /// `--bpc` against `transicc -b`, worst component over the grid, normalised.
 ///
 /// **This is Pass 4b's row B6 envelope times the BPC map's gain, and nothing
@@ -293,7 +293,7 @@ pub const DE_FIXTURE_TO_SRGB: Tolerance = Tolerance::new(
      BPC maps the darkest inputs below zero, where both sides clamp to 0 and agree exactly",
 );
 
-/// **§C, S3 device space** — sRGB → `v4-cmyk-mab-lab.icc` at perceptual, iccce
+/// **§C, S3 device space** — sRGB → `v4-cmyk-mab-lab.icc` at perceptual, icccer
 /// `--bpc` against `transicc` (with **and** without `-b`, since lcms2 forces
 /// here), worst component over the grid, normalised.
 ///
@@ -353,7 +353,7 @@ pub const EXACT: Tolerance = Tolerance::new(
 /// component ever rises**.
 ///
 /// It is a `0,0` of a different kind from [`EXACT`] — a sign test, not an
-/// equality — and it is exact for an algebraic reason. iccce's BPC output is
+/// equality — and it is exact for an algebraic reason. icccer's BPC output is
 /// `a·X + b` with `a = (Xi − Xd)/(Xi − Xs)` and `b = Xi(Xd − Xs)/(Xi − Xs)`, so
 ///
 /// ```text
@@ -381,14 +381,14 @@ pub const DIRECTION: Tolerance = Tolerance::new(
 /// the expected named reason and `1,0` otherwise; the tolerance is `0,0`.
 ///
 /// A refusal is graded, not merely reported, because *refusing where it cannot
-/// estimate* is a property iccce claims (`CLAUDE.md` rule 6: the parser reports,
+/// estimate* is a property icccer claims (`CLAUDE.md` rule 6: the parser reports,
 /// it does not repair — and the CMM does not guess). A build that quietly
 /// substituted a zero black for an unestimable one would produce plausible
 /// colour and pass every other row in this file.
 pub const REFUSAL: Tolerance = Tolerance::new(
     0.0,
     "0.0 when the shipped binary exited non-zero with the expected named refusal, 1.0 otherwise. \
-     Graded rather than reported because refusing where it cannot estimate is a property iccce \
+     Graded rather than reported because refusing where it cannot estimate is a property icccer \
      claims: a build that substituted a zero black for an unestimable one would produce plausible \
      colour and pass every other row in this file",
 );
@@ -397,7 +397,7 @@ pub const REFUSAL: Tolerance = Tolerance::new(
 /// black, in normalised device units.
 ///
 /// The prediction is exact arithmetic, so the bound is the two **print floors**
-/// on the observation and nothing else. `iccce transform` prints device values
+/// on the observation and nothing else. `icccer transform` prints device values
 /// at 6 decimals, so each of the two arms carries ±5×10⁻⁷ and their difference
 /// ±10⁻⁶. `5×10⁻⁶` is **5× that**, which admits the `f64` evaluation of the
 /// `mBA ` interpolation on both sides of the subtraction and refuses anything
@@ -407,7 +407,7 @@ pub const REFUSAL: Tolerance = Tolerance::new(
 pub const LIFT_CLOSED_FORM: Tolerance = Tolerance::new(
     5e-6,
     "the prediction is exact arithmetic, so the bound is the observation's print floor and \
-     nothing else: `iccce transform` prints 6 decimals, so each arm carries +-5e-7 and their \
+     nothing else: `icccer transform` prints 6 decimals, so each arm carries +-5e-7 and their \
      difference +-1e-6. 5e-6 is 5x that. It REFUSES the wrong perceptual-black triple, whose \
      signature here is dL* = 5.4e-3 i.e. dK ~ 5.4e-5, 11x this bound - so the row doubles as the \
      A41 discriminator",
@@ -442,7 +442,7 @@ pub fn spec_6_3_4_3(xt: f64, xb: f64, xi: f64) -> f64 {
 
 /// Maria (2013) §4.2's two constraints, solved by **Gaussian elimination with
 /// the pivot on the white row** — deliberately a different sequence of `f64`
-/// operations from the closed form `iccce-cmm` evaluates.
+/// operations from the closed form `icccer-cmm` evaluates.
 ///
 /// The constraints, verbatim from the paper:
 ///
@@ -481,7 +481,7 @@ pub fn maria_two_constraint_solve(xs: f64, xd: f64, xi: f64) -> Option<(f64, f64
 /// `ICC_Spec/icc/icc__ref__bpc.md` §7.2's list of unattributed constants,
 /// because that list was drawn from `cmssamp.c`: **lcms2 silently performs no
 /// BPC at all when the two black points are close enough**, and "close enough"
-/// is roughly `ΔL* ≲ 0,4` near black. iccce has no such threshold and will
+/// is roughly `ΔL* ≲ 0,4` near black. icccer has no such threshold and will
 /// apply the map however small it is. Neither behaviour is sourced.
 #[must_use]
 pub fn is_empty_layer_diff(a: [f64; 3], b: [f64; 3]) -> f64 {
@@ -495,7 +495,7 @@ pub fn is_empty_layer_diff(a: [f64; 3], b: [f64; 3]) -> f64 {
     diff
 }
 
-/// The per-channel `(a, b)` iccce computes, recovered from the public
+/// The per-channel `(a, b)` icccer computes, recovered from the public
 /// [`BpcScale`] API by evaluating it at two points.
 ///
 /// [`BpcScale`]'s fields are private — correctly, since a scale factor is not
@@ -528,7 +528,7 @@ pub struct MapAnalysis {
     /// Worst deviation of `BpcScale(bs → bd)` from the Gaussian solve, over the
     /// randomised sweep.
     pub vs_maria: f64,
-    /// Worst residual of the two constraints under iccce's own map:
+    /// Worst residual of the two constraints under icccer's own map:
     /// `|apply(D50) − D50|` and `|apply(bs) − bd|`.
     pub constraint_residual: f64,
     /// `|apply(x) − x|` maximum when the two blacks are equal — must be zero.
@@ -614,7 +614,7 @@ pub fn analyse_map() -> MapAnalysis {
             let mine = [got.x, got.y, got.z][c];
             vs_maria = vs_maria.max((mine - want).abs());
         }
-        // The two constraints, under iccce's own map.
+        // The two constraints, under icccer's own map.
         let at_white = s.apply(D50);
         let at_black = s.apply(bs);
         constraint_residual = constraint_residual
@@ -681,7 +681,7 @@ pub fn analyse_map() -> MapAnalysis {
 // The scenario runner
 // ===========================================================================
 
-/// One profile pair run four ways: `{iccce, lcms2} × {BPC off, BPC on}`.
+/// One profile pair run four ways: `{icccer, lcms2} × {BPC off, BPC on}`.
 ///
 /// Every one of the four arms differs from its partner in **exactly one flag**,
 /// which is the whole point: a second code path per arm would be free to differ
@@ -693,9 +693,9 @@ pub struct Scenario {
     pub intent: Intent,
     pub in_channels: usize,
     pub out_channels: usize,
-    /// iccce's device output, 0..1, with `--bpc` absent then present.
-    pub iccce_off: Vec<Vec<f64>>,
-    pub iccce_on: Vec<Vec<f64>>,
+    /// icccer's device output, 0..1, with `--bpc` absent then present.
+    pub icccer_off: Vec<Vec<f64>>,
+    pub icccer_on: Vec<Vec<f64>>,
     /// lcms2's device output, **already normalised to 0..1**, `-b` absent then
     /// present.
     pub lcms2_off: Vec<Vec<f64>>,
@@ -750,7 +750,7 @@ impl Scenario {
 fn run_scenario(
     id: &'static str,
     oracle: &Oracle,
-    iccce: &Iccce,
+    icccer: &Icccer,
     src: &Path,
     dst: &Path,
     intent: Intent,
@@ -760,8 +760,8 @@ fn run_scenario(
     out_scale: f64,
 ) -> Result<Scenario, Unavailable> {
     let in_channels = rows.first().map_or(0, Vec::len);
-    let iccce_off = iccce.transform_rows_shaped_bpc(src, dst, intent, rows, out_channels, false)?;
-    let iccce_on = iccce.transform_rows_shaped_bpc(src, dst, intent, rows, out_channels, true)?;
+    let icccer_off = icccer.transform_rows_shaped_bpc(src, dst, intent, rows, out_channels, false)?;
+    let icccer_on = icccer.transform_rows_shaped_bpc(src, dst, intent, rows, out_channels, true)?;
 
     let base = Request {
         input: Space::profile(src),
@@ -788,8 +788,8 @@ fn run_scenario(
         intent,
         in_channels,
         out_channels,
-        iccce_off,
-        iccce_on,
+        icccer_off,
+        icccer_on,
         lcms2_off: norm(off),
         lcms2_on: norm(on),
     })
@@ -828,12 +828,12 @@ pub struct S2 {
     /// graded row here for the reason row B6 excludes it.
     pub keep: Vec<bool>,
     pub overflow_count: usize,
-    /// ΔE2000 between iccce `--bpc` and lcms2 `-b`, per point.
+    /// ΔE2000 between icccer `--bpc` and lcms2 `-b`, per point.
     pub de_on: Vec<f64>,
     /// ΔE2000 between the BPC-off arms — the baseline this section's residual
     /// must be compared against before any of it is attributed to BPC.
     pub de_off: Vec<f64>,
-    /// The largest **ΔE2000 that BPC itself moves**, iccce's own two arms.
+    /// The largest **ΔE2000 that BPC itself moves**, icccer's own two arms.
     pub bpc_effect_de: f64,
     /// The A41 sensitivity: the same map rebuilt with ICC.1 Table 16's printed
     /// decimals instead of the implementations' triple, evaluated over this
@@ -850,12 +850,12 @@ pub struct S3 {
     pub scenario: Scenario,
     /// `|lcms2(-b) − lcms2(no -b)|` — the forcing, measured. Must be 0,0.
     pub forcing: f64,
-    /// ★ `|iccce(no --bpc) − lcms2(no -b)|` — **the policy difference**, in
+    /// ★ `|icccer(no --bpc) − lcms2(no -b)|` — **the policy difference**, in
     /// device units and in `L*` through the `mBA ` closed form.
     pub policy_device: f64,
     pub policy_dl: f64,
     /// The **sign** of the policy difference in `L*`: positive when lcms2's
-    /// output is *lighter* than iccce's.
+    /// output is *lighter* than icccer's.
     pub policy_lcms2_is_lighter: bool,
     /// ★ The BPC lift **at device black**, in closed form and as observed.
     ///
@@ -868,13 +868,13 @@ pub struct S3 {
     /// `K(no BPC) − K(BPC)` predicted in closed form.
     pub lift_predicted: f64,
     /// The same, observed through the shipped binary's two arms.
-    pub lift_iccce: f64,
+    pub lift_icccer: f64,
     /// The predicted `K` **with** BPC at device black, and what each
     /// implementation actually printed there. lcms2 has no BPC-off arm here
     /// (it forces), so its lift cannot be observed — only its endpoint can, and
     /// that is what is recorded.
     pub k_on_predicted: f64,
-    pub k_on_iccce: f64,
+    pub k_on_icccer: f64,
     pub k_on_lcms2: f64,
 }
 
@@ -904,11 +904,11 @@ fn to_lab(model: &MatrixTrc, rgb: &[f64]) -> Lab {
 pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
     let map = analyse_map();
 
-    let iccce = match Iccce::locate() {
+    let icccer = match Icccer::locate() {
         Ok(Some(i)) => i,
         Ok(None) => {
             return Err(Unavailable::Skip(
-                "iccce binary not built: run `cargo build --release -p iccce-cli`".into(),
+                "icccer binary not built: run `cargo build --release -p icccer-cli`".into(),
             ));
         }
         Err(e) => return Err(Unavailable::Error(e.to_string())),
@@ -919,13 +919,13 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
     let v2m = v2_matrix_fixture();
     let v4m = v4_matrix_fixture();
     let refusal_absolute = expect_refusal(
-        &iccce,
+        &icccer,
         &v2m,
         &v4m,
         Intent::AbsoluteColorimetric,
         &[vec![0.5, 0.5, 0.5]],
         3,
-        // The exact wording iccce prints, not a paraphrase: a needle that
+        // The exact wording icccer prints, not a paraphrase: a needle that
         // merely says "refused" would pass on the WRONG refusal, which is how
         // an ICC-absolute row silently becomes an estimation-subset row.
         "excluded at the absolute intent",
@@ -947,7 +947,7 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
         let s = run_scenario(
             "S1",
             oracle,
-            &iccce,
+            &icccer,
             srgb,
             adobe,
             Intent::RelativeColorimetric,
@@ -969,7 +969,7 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
         let scenario = run_scenario(
             "S2",
             oracle,
-            &iccce,
+            &icccer,
             &fx,
             srgb,
             Intent::Perceptual,
@@ -995,9 +995,9 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
         // one of them would only move the indexing rather than remove it.
         #[allow(clippy::needless_range_loop)]
         for i in 0..rows.len() {
-            let on_mine = to_lab(&srgb_model, &scenario.iccce_on[i]);
+            let on_mine = to_lab(&srgb_model, &scenario.icccer_on[i]);
             let on_theirs = to_lab(&srgb_model, &scenario.lcms2_on[i]);
-            let off_mine = to_lab(&srgb_model, &scenario.iccce_off[i]);
+            let off_mine = to_lab(&srgb_model, &scenario.icccer_off[i]);
             let off_theirs = to_lab(&srgb_model, &scenario.lcms2_off[i]);
             de_on.push(delta_e_2000(on_mine, on_theirs));
             de_off.push(delta_e_2000(off_mine, off_theirs));
@@ -1008,7 +1008,7 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
 
         // ★ A41 measured in a pipeline: rebuild the map with ICC.1 Table 16's
         // printed decimals and evaluate it on the same PCS values the fixture
-        // produces (the closed form of row B1, iccce's clamped reading).
+        // produces (the closed form of row B1, icccer's clamped reading).
         let impl_map = BpcScale::new(PERCEPTUAL_BLACK, Xyz { x: 0.0, y: 0.0, z: 0.0 })
             .ok_or_else(|| Unavailable::Error("BpcScale refused the A41 triple".into()))?;
         let spec_map = BpcScale::new(TABLE16_BLACK, Xyz { x: 0.0, y: 0.0, z: 0.0 })
@@ -1055,7 +1055,7 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
         let scenario = run_scenario(
             "S3",
             oracle,
-            &iccce,
+            &icccer,
             srgb,
             &fx,
             Intent::Perceptual,
@@ -1066,14 +1066,14 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
         )?;
         let all = vec![true; rows.len()];
         let forcing = Scenario::max_abs(&scenario.lcms2_on, &scenario.lcms2_off, &all);
-        let policy_device = Scenario::max_abs(&scenario.iccce_off, &scenario.lcms2_off, &all);
+        let policy_device = Scenario::max_abs(&scenario.icccer_off, &scenario.lcms2_off, &all);
         let policy_dl = k_to_dl(policy_device);
-        // lcms2 lighter <=> lcms2's K is LOWER than iccce's at the point of
+        // lcms2 lighter <=> lcms2's K is LOWER than icccer's at the point of
         // maximum disagreement. Taken at that point, not averaged: a sign is
         // not a statistic.
         let mut worst = 0.0f64;
         let mut lighter = false;
-        for (mine, theirs) in scenario.iccce_off.iter().zip(&scenario.lcms2_off) {
+        for (mine, theirs) in scenario.icccer_off.iter().zip(&scenario.lcms2_off) {
             for (p, q) in mine.iter().zip(theirs) {
                 if (p - q).abs() > worst {
                     worst = (p - q).abs();
@@ -1095,8 +1095,8 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
         })[3];
         let k_on = expected_mba_cmyk(Lab::from_xyz(PERCEPTUAL_BLACK, D50))[3];
         let lift_predicted = k_off - k_on;
-        let lift_iccce = scenario.iccce_off[black_at][3] - scenario.iccce_on[black_at][3];
-        let k_on_iccce = scenario.iccce_on[black_at][3];
+        let lift_icccer = scenario.icccer_off[black_at][3] - scenario.icccer_on[black_at][3];
+        let k_on_icccer = scenario.icccer_on[black_at][3];
         let k_on_lcms2 = scenario.lcms2_on[black_at][3];
 
         structure.push_str(&format!("; S3 {} RGB pts", rows.len()));
@@ -1107,9 +1107,9 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
             policy_dl,
             policy_lcms2_is_lighter: lighter,
             lift_predicted,
-            lift_iccce,
+            lift_icccer,
             k_on_predicted: k_on,
-            k_on_iccce,
+            k_on_icccer,
             k_on_lcms2,
         })
     } else {
@@ -1122,7 +1122,7 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
         let s = run_scenario(
             "S4",
             oracle,
-            &iccce,
+            &icccer,
             srgb,
             &v4m,
             Intent::Perceptual,
@@ -1139,7 +1139,7 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
 
     // --- S5: the estimation-subset refusal ----------------------------------
     // ★ INVERTED 2026-08-12. S5 used to assert a REFUSAL here: a v2 CMYK
-    // LUT destination at media-relative was outside iccce's black-point
+    // LUT destination at media-relative was outside icccer's black-point
     // estimation subset and the shipped binary exited 1 by name. Pass 5b
     // found that `bpc::estimate_lut_destination_black` implemented ISO/CD
     // 18619 4.2.5 in full and had NO CALLER; commit `c268261` wired it into
@@ -1151,7 +1151,7 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
     // visible closing rather than quietly absent. Pass 5c is the comparison.
     let refusal_lut = if srgb.is_file() && swop.is_file() {
         Some(
-            iccce
+            icccer
                 .transform_rows_shaped_bpc(
                     srgb,
                     swop,
@@ -1186,7 +1186,7 @@ pub fn analyse(oracle: &Oracle) -> Result<Pass5, Unavailable> {
 /// was expected is the failure this checks for, and it is reported with the
 /// answer attached so the reader does not have to re-run it.
 fn expect_refusal(
-    iccce: &Iccce,
+    icccer: &Icccer,
     src: &Path,
     dst: &Path,
     intent: Intent,
@@ -1194,7 +1194,7 @@ fn expect_refusal(
     out_channels: usize,
     needle: &str,
 ) -> Result<String, String> {
-    match iccce.transform_rows_shaped_bpc(src, dst, intent, rows, out_channels, true) {
+    match icccer.transform_rows_shaped_bpc(src, dst, intent, rows, out_channels, true) {
         Ok(v) => Err(format!(
             "expected a refusal containing {needle:?}; got an answer: {v:?}"
         )),
@@ -1217,7 +1217,7 @@ fn expect_refusal(
 // ===========================================================================
 
 const SRC_BOTH_COMPUTED: &str =
-    "both sides computed in this run (2026-08-11): iccce = target/release/iccce.exe, \
+    "both sides computed in this run (2026-08-11): icccer = target/release/icccer.exe, \
      lcms2 = transicc at pin 21c582a";
 const SRC_SPEC: &str =
     "ICC.1:2022 clause 6.3.4.3 (verbatim in ICC_Spec/icc/icc__ref__bpc.md §2.1, verified by two \
@@ -1234,7 +1234,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
 
     // ---- §A ---------------------------------------------------------------
     out.push(Record::graded(
-        "pass5/map/iccce-vs-icc1-6.3.4.3",
+        "pass5/map/icccer-vs-icc1-6.3.4.3",
         Kind::DerivedExpectation,
         Metric::AbsMaxComponent,
         MAP_ALGEBRA,
@@ -1245,7 +1245,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
          PRIMARY-SPECIFICATION ROW PASS 5 HAS: the map is in ICC.1, the estimation is not (A42)",
     ));
     out.push(Record::graded(
-        "pass5/map/iccce-vs-maria-two-constraint-solve",
+        "pass5/map/icccer-vs-maria-two-constraint-solve",
         Kind::DerivedExpectation,
         Metric::AbsMaxComponent,
         MAP_ALGEBRA,
@@ -1259,13 +1259,13 @@ pub fn records(p: &Pass5) -> Vec<Record> {
         ),
     ));
     out.push(Record::graded(
-        "pass5/map/constraints-hold-under-iccce",
+        "pass5/map/constraints-hold-under-icccer",
         Kind::DerivedExpectation,
         Metric::AbsMaxComponent,
         MAP_ALGEBRA,
         p.map.constraint_residual,
         SRC_SPEC,
-        "the two constraints evaluated under iccce's own map: apply(D50) = D50 and \
+        "the two constraints evaluated under icccer's own map: apply(D50) = D50 and \
          apply(black_src) = black_dst. Catches a map that is self-consistent but anchored on the \
          wrong white - the failure the absolute-intent exclusion exists to prevent",
     ));
@@ -1277,7 +1277,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
         p.map.equal_blacks_identity,
         SRC_BOTH_COMPUTED,
         "BpcScale(PB -> PB) applied to 1001 values must return them unchanged, bit for bit. This \
-         is what makes S1's and S4's null results interpretable: iccce's no-op is exact, so a \
+         is what makes S1's and S4's null results interpretable: icccer's no-op is exact, so a \
          nonzero difference there would be an estimation defect and not rounding",
     ));
     out.push(Record::graded(
@@ -1293,7 +1293,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
              MAX_ENCODEABLE_XYZ) and DROPS THE WHOLE BPC STAGE below 0.002. For the S2/S3 map the \
              discriminant is {:.6}, i.e. {:.1}x the threshold, so BPC is applied. The threshold \
              corresponds to a source-destination black difference of about {:.3} L* near black: \
-             lcms2 silently performs NO BPC below that and iccce has no such threshold. Neither \
+             lcms2 silently performs NO BPC below that and icccer has no such threshold. Neither \
              behaviour is sourced; ICC_Spec §7.2's list of unattributed constants was drawn from \
              cmssamp.c and does not contain this one",
             p.map.empty_layer_diff,
@@ -1315,7 +1315,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
             ));
         }
         Some(s) => {
-            let all = vec![true; s.iccce_off.len()];
+            let all = vec![true; s.icccer_off.len()];
             out.push(Record::graded(
                 "pass5/S1/srgb-to-adobergb/media-relative/lcms2-bpc-is-a-no-op",
                 Kind::OracleReproducibility,
@@ -1332,13 +1332,13 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                  S3's predictions depend on",
             ));
             out.push(Record::graded(
-                "pass5/S1/srgb-to-adobergb/media-relative/iccce-bpc-is-a-no-op",
+                "pass5/S1/srgb-to-adobergb/media-relative/icccer-bpc-is-a-no-op",
                 Kind::SelfConsistency,
                 Metric::DeviceAbsMaxNormalised,
                 EXACT,
-                Scenario::max_abs(&s.iccce_on, &s.iccce_off, &all),
+                Scenario::max_abs(&s.icccer_on, &s.icccer_off, &all),
                 SRC_BOTH_COMPUTED,
-                "the same on iccce's side: --bpc against no --bpc. Both profiles are matrix/TRC \
+                "the same on icccer's side: --bpc against no --bpc. Both profiles are matrix/TRC \
                  with trc(0) = 0, so device_to_pcs([0,0,0]) is XYZ(0,0,0) on both sides and \
                  BpcScale is the exact identity. NULL BY CONSTRUCTION, same caveat",
             ));
@@ -1371,7 +1371,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                 Kind::CrossCheck,
                 Metric::DeviceAbsMaxNormalised,
                 DEVICE_FIXTURE_TO_SRGB,
-                Scenario::max_abs(&sc.iccce_off, &sc.lcms2_off, &s.keep),
+                Scenario::max_abs(&sc.icccer_off, &sc.lcms2_off, &s.keep),
                 SRC_BOTH_COMPUTED,
                 format!(
                     "THE BASELINE, and it is graded first on purpose: the same chain with BPC off \
@@ -1380,7 +1380,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                      the forcing is keyed on the DESTINATION version (row B8). {} of {} points \
                      excluded as encoded-PCS overflow",
                     s.overflow_count,
-                    sc.iccce_off.len()
+                    sc.icccer_off.len()
                 ),
             ));
             out.push(Record::graded(
@@ -1388,13 +1388,13 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                 Kind::CrossCheck,
                 Metric::DeviceAbsMaxNormalised,
                 DEVICE_FIXTURE_TO_SRGB,
-                Scenario::max_abs(&sc.iccce_on, &sc.lcms2_on, &s.keep),
+                Scenario::max_abs(&sc.icccer_on, &sc.lcms2_on, &s.keep),
                 SRC_BOTH_COMPUTED,
                 format!(
-                    "★ THE ROW PASS 5's DONE-WHEN CLAUSE 2 RESTS ON. iccce --bpc against transicc \
+                    "★ THE ROW PASS 5's DONE-WHEN CLAUSE 2 RESTS ON. icccer --bpc against transicc \
                      -b. Both sides estimate the same two blacks - the A41 triple from lcms2's \
-                     guard 3 and iccce's hard-coded constant for the v4 LUT source, XYZ(0,0,0) \
-                     from lcms2's guard 6 and iccce's device black for the matrix/TRC destination \
+                     guard 3 and icccer's hard-coded constant for the v4 LUT source, XYZ(0,0,0) \
+                     from lcms2's guard 6 and icccer's device black for the matrix/TRC destination \
                      - so this grades the SCALING MAP and the pipeline it sits in, NOT the \
                      estimators, which cannot be discriminated here and are not claimed to be. \
                      ★ THE SENSITIVITY, WHICH IS WHAT MAKES A SMALL NUMBER MEAN ANYTHING: BPC \
@@ -1411,11 +1411,11 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                      bounds it because §C's 9.68e-5 was a maximum over the whole gray axis, not \
                      over the BPC-off operating point",
                     s.bpc_effect_de,
-                    Scenario::max_abs(&sc.iccce_on, &sc.lcms2_on, &s.keep),
-                    Scenario::min_signed(&sc.iccce_on, &sc.iccce_off, &s.keep).abs()
-                        / Scenario::max_abs(&sc.iccce_on, &sc.lcms2_on, &s.keep),
-                    Scenario::max_abs(&sc.iccce_on, &sc.lcms2_on, &s.keep)
-                        / Scenario::max_abs(&sc.iccce_off, &sc.lcms2_off, &s.keep)
+                    Scenario::max_abs(&sc.icccer_on, &sc.lcms2_on, &s.keep),
+                    Scenario::min_signed(&sc.icccer_on, &sc.icccer_off, &s.keep).abs()
+                        / Scenario::max_abs(&sc.icccer_on, &sc.lcms2_on, &s.keep),
+                    Scenario::max_abs(&sc.icccer_on, &sc.lcms2_on, &s.keep)
+                        / Scenario::max_abs(&sc.icccer_off, &sc.lcms2_off, &s.keep)
                 ),
             ));
             out.push(Record::graded(
@@ -1454,7 +1454,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                 Kind::SelfConsistency,
                 Metric::DeviceAbsMaxNormalised,
                 DIRECTION,
-                Scenario::max_signed(&sc.iccce_on, &sc.iccce_off, &s.keep),
+                Scenario::max_signed(&sc.icccer_on, &sc.icccer_off, &s.keep),
                 SRC_BOTH_COMPUTED,
                 format!(
                     "★ PASS 5's DONE-WHEN CLAUSE 1. The observed value is the largest SIGNED \
@@ -1462,7 +1462,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                      out - in = (Xd - Xs)/(Xi - Xs) * (Xi - X) and here Xd (zero) < Xs (the A41 \
                      triple) in every channel. The largest fall is {:.6e} device and the largest \
                      colour BPC moves in this scenario is {:.4} ΔE2000",
-                    Scenario::min_signed(&sc.iccce_on, &sc.iccce_off, &s.keep).abs(),
+                    Scenario::min_signed(&sc.icccer_on, &sc.icccer_off, &s.keep).abs(),
                     s.bpc_effect_de
                 ),
             ));
@@ -1498,7 +1498,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                      ★ NOTE THE SIZE: it is the same order as this section's entire agreement \
                      budget (5e-2), so on a FLOAT path the choice of digits is not negligible \
                      against the measurement noise - which is not a contradiction of the corpus's \
-                     'invisible at 16-bit' reading but its complement, and the reason iccce \
+                     'invisible at 16-bit' reading but its complement, and the reason icccer \
                      follows the implementations' triple and bpc.rs's doc comment says so",
                     s.a41_de, s.a41_de76, s.a41_dl
                 ),
@@ -1512,7 +1512,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
             for id in [
                 "pass5/S3/srgb-to-fixture/perceptual/bpc-on-device-vs-lcms2",
                 "pass5/S3/srgb-to-fixture/perceptual/lcms2-forces-bpc-unasked",
-                "pass5/S3/srgb-to-fixture/perceptual/POLICY-iccce-never-forces",
+                "pass5/S3/srgb-to-fixture/perceptual/POLICY-icccer-never-forces",
             ] {
                 out.push(Record::skipped(
                     id,
@@ -1526,7 +1526,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
         }
         Some(s) => {
             let sc = &s.scenario;
-            let all = vec![true; sc.iccce_off.len()];
+            let all = vec![true; sc.icccer_off.len()];
             out.push(Record::graded(
                 "pass5/S3/srgb-to-fixture/perceptual/lcms2-forces-bpc-unasked",
                 Kind::OracleReproducibility,
@@ -1545,20 +1545,20 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                 Kind::CrossCheck,
                 Metric::DeviceAbsMaxNormalised,
                 DEVICE_SRGB_TO_FIXTURE,
-                Scenario::max_abs(&sc.iccce_on, &sc.lcms2_on, &all),
+                Scenario::max_abs(&sc.icccer_on, &sc.lcms2_on, &all),
                 SRC_BOTH_COMPUTED,
                 format!(
-                    "★ THE OTHER DIRECTION OF THE MAP. iccce --bpc against transicc -b, source \
+                    "★ THE OTHER DIRECTION OF THE MAP. icccer --bpc against transicc -b, source \
                      black zero into the fixed A41 black, so everything RISES - the mirror of S2. \
                      Because lcms2 forces here, its -b and no--b arms are identical and this row \
                      would read the same against either. ★ SENSITIVITY: BPC moves K by {:.4e} \
                      device here and the two implementations disagree by {:.4e} - a ratio of \
                      {:.0}x, so the agreement is measured on a comparison that would have seen a \
                      wrong map immediately",
-                    Scenario::min_signed(&sc.iccce_on, &sc.iccce_off, &all).abs(),
-                    Scenario::max_abs(&sc.iccce_on, &sc.lcms2_on, &all),
-                    Scenario::min_signed(&sc.iccce_on, &sc.iccce_off, &all).abs()
-                        / Scenario::max_abs(&sc.iccce_on, &sc.lcms2_on, &all)
+                    Scenario::min_signed(&sc.icccer_on, &sc.icccer_off, &all).abs(),
+                    Scenario::max_abs(&sc.icccer_on, &sc.lcms2_on, &all),
+                    Scenario::min_signed(&sc.icccer_on, &sc.icccer_off, &all).abs()
+                        / Scenario::max_abs(&sc.icccer_on, &sc.lcms2_on, &all)
                 ),
             ));
             out.push(Record::graded(
@@ -1566,10 +1566,10 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                 Kind::CrossCheck,
                 Metric::DeviceAbsMaxNormalised,
                 DEVICE_SRGB_TO_FIXTURE,
-                Scenario::max_abs(&sc.iccce_on, &sc.lcms2_off, &all),
+                Scenario::max_abs(&sc.icccer_on, &sc.lcms2_off, &all),
                 SRC_BOTH_COMPUTED,
                 "the same against lcms2's UNASKED arm. It exists because a reader should not have \
-                 to trust the row above's parenthesis: iccce with --bpc reproduces what lcms2 does \
+                 to trust the row above's parenthesis: icccer with --bpc reproduces what lcms2 does \
                  whether or not lcms2 was asked",
             ));
             out.push(Record::graded(
@@ -1577,7 +1577,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                 Kind::SelfConsistency,
                 Metric::DeviceAbsMaxNormalised,
                 DIRECTION,
-                Scenario::max_signed(&sc.iccce_on, &sc.iccce_off, &all),
+                Scenario::max_signed(&sc.icccer_on, &sc.icccer_off, &all),
                 SRC_BOTH_COMPUTED,
                 format!(
                     "★ PASS 5's DONE-WHEN CLAUSE 1, IN THE OPPOSITE PCS DIRECTION. Here Xd (the \
@@ -1590,7 +1590,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                      3.1372e-2 - it asserted 'nothing may fall' on a scenario whose entire point is \
                      that K falls. The failure was the row, not the engine; the correction is \
                      recorded rather than quietly rewritten",
-                    Scenario::min_signed(&sc.iccce_on, &sc.iccce_off, &all).abs()
+                    Scenario::min_signed(&sc.icccer_on, &sc.icccer_off, &all).abs()
                 ),
             ));
             out.push(Record::graded(
@@ -1598,7 +1598,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                 Kind::DerivedExpectation,
                 Metric::DeviceAbsMaxNormalised,
                 LIFT_CLOSED_FORM,
-                (s.lift_iccce - s.lift_predicted).abs(),
+                (s.lift_icccer - s.lift_predicted).abs(),
                 "ICC.1:2022 6.3.4.3's map (the second constraint: black_src -> black_dst exactly), \
                  the A41 triple, CIELAB's linear segment, and the fixture's own stored mBA nodes \
                  (row B3's closed form). No implementation's output enters the prediction",
@@ -1607,10 +1607,10 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                      At RGB(0,0,0) sRGB's matrix/TRC gives XYZ(0,0,0) exactly; BPC's second \
                      constraint sends that to the destination black exactly, i.e. to the A41 \
                      triple, whose L* is 903.296296... x 0.0034731 = 3.137238; the mBA closed form \
-                     then gives K. Predicted lift {:.9}, iccce observed {:.9}. This is what turns \
+                     then gives K. Predicted lift {:.9}, icccer observed {:.9}. This is what turns \
                      'BPC changed something' into 'BPC changed it by the amount the sourced map \
                      says', which is the difference between a direction test and a measurement",
-                    s.lift_predicted, s.lift_iccce
+                    s.lift_predicted, s.lift_icccer
                 ),
             ));
             out.push(Record::graded(
@@ -1631,20 +1631,20 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                 ),
             ));
             out.push(Record::graded(
-                "pass5/S3/srgb-to-fixture/perceptual/POLICY-iccce-never-forces",
+                "pass5/S3/srgb-to-fixture/perceptual/POLICY-icccer-never-forces",
                 Kind::CrossCheck,
                 Metric::DeviceAbsMaxNormalised,
                 UNGRADED,
                 s.policy_device,
                 SRC_BOTH_COMPUTED,
                 format!(
-                    "★★ THE POLICY DIFFERENCE, REPORTED AND DELIBERATELY NOT GRADED. iccce WITHOUT \
+                    "★★ THE POLICY DIFFERENCE, REPORTED AND DELIBERATELY NOT GRADED. icccer WITHOUT \
                      --bpc against lcms2 WITHOUT -b, same pair, same intent: {:.6e} device = {:.4} \
                      L* through the mBA closed form, lcms2 {}. Neither is a defect. lcms2 forces \
                      BPC on for a v4 destination at perceptual on the authority of a document \
                      nobody in this project has read (ICC_Spec §7.1: the claim is in a source \
                      comment attributed to Adobe, and the one published BPC paper, Maria 2013, is \
-                     silent about the enable policy while corroborating the exclusion set). iccce \
+                     silent about the enable policy while corroborating the exclusion set). icccer \
                      declines to force and requires --bpc. GRADING THIS WOULD MEAN PICKING A \
                      WINNER WITHOUT A CLAUSE. Settled by AdobeBPC.pdf / ICC WP40 / ISO 18619; the \
                      operator download list is ICC_Spec §11",
@@ -1698,7 +1698,7 @@ pub fn records(p: &Pass5) -> Vec<Record> {
             ));
         }
         Some(s) => {
-            let all = vec![true; s.iccce_off.len()];
+            let all = vec![true; s.icccer_off.len()];
             out.push(Record::graded(
                 "pass5/S4/srgb-to-v4-matrix/perceptual/forced-bpc-costs-nothing",
                 Kind::OracleReproducibility,
@@ -1714,13 +1714,13 @@ pub fn records(p: &Pass5) -> Vec<Record> {
                  M2's 3.15 L* on every v4 perceptual profile would mis-attribute this null",
             ));
             out.push(Record::graded(
-                "pass5/S4/srgb-to-v4-matrix/perceptual/iccce-agrees-it-is-a-no-op",
+                "pass5/S4/srgb-to-v4-matrix/perceptual/icccer-agrees-it-is-a-no-op",
                 Kind::SelfConsistency,
                 Metric::DeviceAbsMaxNormalised,
                 EXACT,
-                Scenario::max_abs(&s.iccce_on, &s.iccce_off, &all),
+                Scenario::max_abs(&s.icccer_on, &s.icccer_off, &all),
                 SRC_BOTH_COMPUTED,
-                "iccce reaches the same no-op by a different route: its estimation subset sends a \
+                "icccer reaches the same no-op by a different route: its estimation subset sends a \
                  matrix/TRC destination to device black regardless of version or intent, so it \
                  never consults the A41 constant here at all. Same answer, different reason - \
                  worth recording because a shared answer from different reasoning is stronger \
@@ -1748,11 +1748,11 @@ pub fn records(p: &Pass5) -> Vec<Record> {
             SRC_BOTH_COMPUTED,
             format!(
                 "★ INVERTED 2026-08-12 - THE COVERAGE GAP CLOSED. This row used to assert \
-                 that iccce REFUSED here, and its prose ended 'SO NO COMPARISON EXISTS FOR THIS \
+                 that icccer REFUSED here, and its prose ended 'SO NO COMPARISON EXISTS FOR THIS \
                  CASE and Pass 5 claims none'. Both halves have stopped being true. A v2 CMYK \
                  prtr destination at media-relative is where lcms2 runs the Adobe-derived black \
                  point search whose thresholds are unattributed even in lcms2's own source (A42); \
-                 iccce refused rather than reproduce constants nobody can cite. It now implements \
+                 icccer refused rather than reproduce constants nobody can cite. It now implements \
                  ISO/CD 18619 4.2.5 instead, Pass 5b found that implementation had no caller, \
                  commit c268261 wired it, and PASS 5C MAKES THE COMPARISON THIS ROW SAID DID NOT \
                  EXIST - the two estimators are 0.0817 dE76 apart, entirely in L*. Outcome: {}",
@@ -1792,10 +1792,10 @@ pub fn records(p: &Pass5) -> Vec<Record> {
 #[must_use]
 pub fn unavailable_records(u: &Unavailable) -> Vec<Record> {
     let ids = [
-        "pass5/map/iccce-vs-icc1-6.3.4.3",
+        "pass5/map/icccer-vs-icc1-6.3.4.3",
         "pass5/S2/fixture-to-srgb/perceptual/bpc-on-device-vs-lcms2",
         "pass5/S3/srgb-to-fixture/perceptual/bpc-on-device-vs-lcms2",
-        "pass5/S3/srgb-to-fixture/perceptual/POLICY-iccce-never-forces",
+        "pass5/S3/srgb-to-fixture/perceptual/POLICY-icccer-never-forces",
         "pass5/S6/absolute-intent/refuses-bpc",
     ];
     ids.iter()

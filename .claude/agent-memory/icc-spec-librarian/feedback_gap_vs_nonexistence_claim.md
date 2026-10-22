@@ -52,7 +52,7 @@ as though **"checked" were a property of the source rather than of a question.**
    (ECI's info document makes no accuracy claim). **"We looked and did not find
    it" is an AVAILABILITY or ACCESS-TERMS finding, never an EXISTENCE one.**
    This is the expensive step: an availability blocker invites a retry, an
-   **existence blocker forecloses it**, and `iccce` carried "no
+   **existence blocker forecloses it**, and `icccer` carried "no
    published-ground-truth transform row" for nine filings partly on a sentence
    promoted two categories beyond its evidence.
 3. **If a file contains both a NOT-FOUND claim and a NOT-FETCHED row, the

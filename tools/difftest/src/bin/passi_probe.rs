@@ -7,7 +7,7 @@
 //! emitted here instead.
 //!
 //! It is also the fastest way to re-check the pass after touching
-//! `iccce_color::BRADFORD`, `D65_XY`, `D50` or `Mat3::inverse`: Pass I needs no
+//! `icccer_color::BRADFORD`, `D65_XY`, `D50` or `Mat3::inverse`: Pass I needs no
 //! oracle and no fixture, so this binary runs in milliseconds on any machine
 //! and its exit code is Pass I's alone.
 //!
@@ -20,7 +20,7 @@
 
 use std::io::Write;
 
-use iccce_difftest::{Report, passi};
+use icccer_difftest::{Report, passi};
 
 fn main() {
     let (a, records) = passi::run();
@@ -34,11 +34,11 @@ fn main() {
     println!("=== Pass I — the four matrices, cell by cell =========================");
     println!(
         "{:<6} {:>22} {:>22} {:>14} {:>10}",
-        "cell", "iccce", "ICC published", "difference", "ULP"
+        "cell", "icccer", "ICC published", "difference", "ULP"
     );
     for i in 0..3 {
         for j in 0..3 {
-            let got = a.iccce_chad[i][j];
+            let got = a.icccer_chad[i][j];
             let want = passi::PUBLISHED_CHAD[i][j];
             println!(
                 "r{i}c{j}   {got:>22.15} {want:>22.15} {:>14.6e} {:>10.3}",

@@ -1,4 +1,4 @@
-# iccce — an ICC colour management engine
+# icccer — an ICC colour management engine
 
 A from-scratch, MIT-licensed **colour management module (CMM)** in Rust:
 ICC profile parsing, transform construction, and pixel conversion. Built
@@ -113,7 +113,7 @@ same pattern `pdfce` uses for `oxidize-pdf`.
 **That licence was verified 2026-08-11** (`docs/LEGAL.md` §4): the core
 is verbatim MIT at the pinned commit — but not uniformly across the
 repository. The `fast_float` and `threaded` plugins are GPL-3.0, per
-upstream's own `plugins/README.1ST`. iccce is insulated three ways:
+upstream's own `plugins/README.1ST`. icccer is insulated three ways:
 lcms2 is driven as a subprocess and never linked, neither plugin is
 built, and the source is git-ignored so GPL code never enters this
 tree. A licence claim nobody checked is exactly the kind of thing this
@@ -145,8 +145,8 @@ it. **Pass numbers are filing order, not schedule order.**
 | Pass | Covers | State |
 |---|---|---|
 | 0 | Workspace, Linux+Windows CI, the lcms2 oracle pinned | **Done** |
-| 1 | Colorimetry — `iccce-color` | **Core complete and validated**, deliberately not called "done" — see below |
-| 2 | Profile parsing — `iccce-profile` | **Done** |
+| 1 | Colorimetry — `icccer-color` | **Core complete and validated**, deliberately not called "done" — see below |
+| 2 | Profile parsing — `icccer-profile` | **Done** |
 | 3 | Matrix/TRC transforms | **Done** |
 | 4 | LUT transforms and rendering intents | **Done** — all four intents measured against lcms2 in both directions, including `B2A2` saturation and ICC-absolute |
 | 5 | Black point compensation | **Done on stated terms**, and the terms are load-bearing — see below |
@@ -190,7 +190,7 @@ things a reader should take from them before trusting any figure:
 
 Every departure from exact colorimetry is named and its cost measured, in
 `docs/TOLERANCES.md`. The deliberate divergences from lcms2 are recorded
-the same way — including that **iccce never forces black point
+the same way — including that **icccer never forces black point
 compensation on**, where lcms2 does for a v4 destination at the
 perceptual intent. Two defensible CMMs can produce different pictures by
 default; this one says so rather than matching quietly.
@@ -199,10 +199,10 @@ default; this one says so rather than matching quietly.
 
 | Path | What it is |
 |---|---|
-| `crates/iccce-color` | CIE colorimetry. Depends on nothing — no siblings, no third-party crates |
-| `crates/iccce-profile` | ICC v2/v4 parsing. Reports malformations; repairs nothing |
-| `crates/iccce-cmm` | Transform construction and evaluation; where every approximation lives |
-| `crates/iccce-cli` | The `iccce` binary — `inspect`, `transform`, `bench` |
+| `crates/icccer-color` | CIE colorimetry. Depends on nothing — no siblings, no third-party crates |
+| `crates/icccer-profile` | ICC v2/v4 parsing. Reports malformations; repairs nothing |
+| `crates/icccer-cmm` | Transform construction and evaluation; where every approximation lives |
+| `crates/icccer-cli` | The `icccer` binary — `inspect`, `transform`, `bench` |
 | `tools/difftest` | The lcms2 differential harness. **Deliberately not a workspace member**, so no shipping crate can link the oracle |
 | `tools/gen-profiles` | The synthetic-fixture generator |
 | `docs/` | `ROADMAP.md`, `ARCHITECTURE.md` (with the dated decision log), `NUMERIC_CLAIMS.md`, `TOLERANCES.md`, `LEGAL.md` |

@@ -160,10 +160,10 @@
 //! It establishes **what lcms2 2.19.1 does**, on this machine, for this shape
 //! of profile. It is an `implementation-cross-check`-class observation
 //! (`NUMERIC_CLAIMS.md` §1), *not* ground truth: the specification text is the
-//! authority for what iccce must do, and this measurement cannot overrule it.
+//! authority for what icccer must do, and this measurement cannot overrule it.
 //! Its value is that it converts DL-011's *"a reading of two texts"* into a
 //! measured fact about the field's dominant CMM — which is what decides
-//! whether iccce's spec-following behaviour will visibly disagree with it.
+//! whether icccer's spec-following behaviour will visibly disagree with it.
 //!
 //! ## Running it
 //!
@@ -178,7 +178,7 @@
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-use iccce_difftest::{Bpc, Intent, Oracle, Precalc, Request, Space};
+use icccer_difftest::{Bpc, Intent, Oracle, Precalc, Request, Space};
 
 // ===========================================================================
 // Byte-level profile authoring
@@ -275,7 +275,7 @@ fn build_profile(version: u32, meta: MetaStyle) -> Vec<u8> {
             sig: *b"wtpt",
             // Media white point = the PCS illuminant D50 (0,9642 / 1,0000 /
             // 0,8249). Sourced: ICC.1:2022's PCS illuminant, the same triple
-            // `iccce-color` uses (NUMERIC_CLAIMS NC-017). Setting it to D50
+            // `icccer-color` uses (NUMERIC_CLAIMS NC-017). Setting it to D50
             // means no chromatic adaptation happens anywhere in this probe,
             // which keeps the measured quantity the encoding and only the
             // encoding.
@@ -558,7 +558,7 @@ const ATTRIBUTION: f64 = 0.01;
 /// constants, read out of lcms2's header. They are used here **only to predict
 /// what lcms2 will do**, which is the one purpose for which an
 /// implementation's own constants are the correct source. They are not a
-/// sourced colorimetric value and must not migrate into `iccce-color`.
+/// sourced colorimetric value and must not migrate into `icccer-color`.
 const LCMS2_PERCEPTUAL_BLACK: [f64; 3] = [0.00336, 0.0034731, 0.00287];
 
 /// The D50 white lcms2 compensates about (`cmsD50_XYZ`), and the same D50 the
@@ -566,9 +566,9 @@ const LCMS2_PERCEPTUAL_BLACK: [f64; 3] = [0.00336, 0.0034731, 0.00287];
 const D50: [f64; 3] = [0.9642, 1.0, 0.8249];
 
 /// The CIELAB transfer function, exact rational form — the same choice
-/// `iccce-color` makes and names as deviation **NA-001**
+/// `icccer-color` makes and names as deviation **NA-001**
 /// (`NUMERIC_CLAIMS.md` §4). Written out here rather than imported because
-/// this crate does not depend on `iccce-color`: the harness must not need the
+/// this crate does not depend on `icccer-color`: the harness must not need the
 /// code under test in order to run.
 fn lab_f(t: f64) -> f64 {
     const LIMIT: f64 = (24.0 / 116.0) * (24.0 / 116.0) * (24.0 / 116.0);
@@ -699,7 +699,7 @@ fn main() {
         Ok(Some(o)) => o,
         Ok(None) => {
             eprintln!(
-                "no transicc found; build it with fetch-lcms2.sh + build-lcms2.ps1, or set ICCCE_TRANSICC"
+                "no transicc found; build it with fetch-lcms2.sh + build-lcms2.ps1, or set ICCCER_TRANSICC"
             );
             std::process::exit(2);
         }
@@ -904,14 +904,14 @@ fn main() {
             "FINDING\tlcms2 2.19.1 applies the LEGACY encoding to an mft2 Lab tag in a v4 profile. \
              The selector is the TAG TYPE, not header.version. This AGREES with ICC.1:2022 6.3.4.2 NOTE 3 and 10.10, \
              and CONTRADICTS the corpus's claim that lcms2 keys on the profile version. \
-             DL-011 predicts iccce and lcms2 will disagree here; on this pin they do NOT."
+             DL-011 predicts icccer and lcms2 will disagree here; on this pin they do NOT."
         );
     } else if v4_all_general {
         println!(
             "FINDING\tlcms2 2.19.1 applies the GENERAL encoding to an mft2 Lab tag in a v4 profile. \
              The selector is header.version. This CONTRADICTS ICC.1:2022 6.3.4.2 NOTE 3 and 10.10, \
              and CONFIRMS the corpus's claim. DL-011's predicted divergence is real and measured: \
-             iccce will read L* about 0.39% higher than lcms2 on the majority of production CMYK profiles."
+             icccer will read L* about 0.39% higher than lcms2 on the majority of production CMYK profiles."
         );
     } else {
         println!(

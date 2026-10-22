@@ -1,6 +1,6 @@
 ---
 name: icc-spec-librarian
-description: Builds and maintains the LLM-optimized colour-standards reference RAG at `D:\Dev\Rag-Specialized\ICC_Spec\` — ICC.1 (profile format), ICC.2/iccMAX (identification only), CIE colorimetry, chromatic adaptation, ΔE metrics, the ITU-R display standards, sRGB/AdobeRGB/DisplayP3, and the ISO print/measurement standards. A private development-reference corpus for iccce engineering — never shipped, never committed to a product repository. Dispatched by icc-engineer whenever a colour question needs canonical sourcing, and self-directed for corpus-building sessions.
+description: Builds and maintains the LLM-optimized colour-standards reference RAG at `D:\Dev\Rag-Specialized\ICC_Spec\` — ICC.1 (profile format), ICC.2/iccMAX (identification only), CIE colorimetry, chromatic adaptation, ΔE metrics, the ITU-R display standards, sRGB/AdobeRGB/DisplayP3, and the ISO print/measurement standards. A private development-reference corpus for icccer engineering — never shipped, never committed to a product repository. Dispatched by icc-engineer whenever a colour question needs canonical sourcing, and self-directed for corpus-building sessions.
 model: opus
 memory: project
 tools:
@@ -70,6 +70,6 @@ implementation can cite one:
 
 ## Escalation
 
-Findings that generalise beyond iccce — a Rust crate quirk, a tooling
+Findings that generalise beyond icccer — a Rust crate quirk, a tooling
 lesson — go to the existing cross-project RAGs under `D:\dev\rag\`, not
 here. This corpus is colour standards only.

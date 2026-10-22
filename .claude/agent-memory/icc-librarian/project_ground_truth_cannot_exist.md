@@ -1,5 +1,5 @@
 ---
-name: iccce-ground-truth-cannot-exist
+name: icccer-ground-truth-cannot-exist
 description: DL-041/DL-042 — published ground truth for the LUT path CANNOT EXIST (structural, not availability); ICC.1 Annex D.6.3 is available AND a test now asserts its twelve integers (0bd76ad) — but NC-001 is STILL the only published-ground-truth LEDGER ROW. A test is not a row.
 metadata:
   type: project
@@ -21,7 +21,7 @@ corpus file `D:\Dev\Rag-Specialized\ICC_Spec\icc\icc__ref__ground_truth_availabi
 reproduce too (its `0808h` independently confirms v4's `65 535` `L*`
 scaling — v2 legacy would give `0800h`).
 
-> **They were reproduced by the CORPUS's arithmetic, not by iccce's
+> **They were reproduced by the CORPUS's arithmetic, not by icccer's
 > code. NOTHING IN THIS PROJECT HAS BEEN COMPARED TO EITHER.**
 > The ground truth is **available**; the row is **buildable**; **the row
 > does not exist. `NC-001` (ΔE2000 vs Sharma/Wu/Dalal) remains this
@@ -30,10 +30,10 @@ scaling — v2 legacy would give `0800h`).
 > ★★★ **CORRECTED 2026-08-17 — the first sentence of the box above is
 > STALE; the last one is STILL TRUE, and the gap between them is the
 > point.** Commit **`0bd76ad`** landed
-> `crates/iccce-cmm/tests/annex_d_ground_truth.rs` — *"the project's
+> `crates/icccer-cmm/tests/annex_d_ground_truth.rs` — *"the project's
 > first ground-truth test for a transform path"*, asserting **twelve
-> exact published integers** against iccce's own code *(verified — file
-> read at the tip 2026-08-17)*. **So iccce HAS now been compared to
+> exact published integers** against icccer's own code *(verified — file
+> read at the tip 2026-08-17)*. **So icccer HAS now been compared to
 > Annex D.6.3.**
 >
 > ★★★ **But `NUMERIC_CLAIMS.md` §7.17 still records NC-001 as the only
@@ -83,16 +83,16 @@ divergence is **a second implementation lineage** (iccDEV, BSD-3;
 
 Conflating them is the error the table exists to prevent: "we do not
 have it" has three completely different fixes. Same family as the ICC.1
-PDF blocker — see [[iccce-icc1-pdf-operator-blocker]].
+PDF blocker — see [[icccer-icc1-pdf-operator-blocker]].
 
 **How to apply.** When any filing touches the ground-truth item: say
-**available**, never **measured**, until an iccce row exists. Building
+**available**, never **measured**, until an icccer row exists. Building
 the Annex D fixture is blocked on **one operator decision** — may
 published numbers live in an MIT repo as fixtures (ICC's Annex D
 values + CIE's CC BY-SA tables + ECI's self-contradicting `cprt` are
 **one question**, not three). Relabel the LUT remainder **STRUCTURAL,
 not OPEN**.
 
-Related: [[iccce-negative-finding-removes-its-auditor]] (why this sat
-owed for eleven filings), [[iccce-pass-status]],
-[[iccce-agreement-can-be-the-symptom]], [[iccce-free-to-disagree]].
+Related: [[icccer-negative-finding-removes-its-auditor]] (why this sat
+owed for eleven filings), [[icccer-pass-status]],
+[[icccer-agreement-can-be-the-symptom]], [[icccer-free-to-disagree]].

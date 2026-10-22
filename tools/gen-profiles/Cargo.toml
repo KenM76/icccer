@@ -1,4 +1,4 @@
-# iccce-gen-profiles — the synthetic fixture generator.
+# icccer-gen-profiles — the synthetic fixture generator.
 #
 # ---------------------------------------------------------------------------
 # WHAT THIS IS, AND WHY IT IS NOT A LIBRARY CRATE
@@ -52,14 +52,14 @@
 # `LEGAL.md` §3 category (a) says a synthetic profile is unrestricted because
 # this project authored it; `CLAUDE.md` rule 3 says an expectation derived from
 # the code under test detects change, not error. Both die the moment this crate
-# gains a dependency on `iccce-profile` — writing a fixture with the same
+# gains a dependency on `icccer-profile` — writing a fixture with the same
 # encoder the parser was written against would make a shared misreading of the
 # specification invisible. So:
 #
-#   * ZERO dependencies. Not third-party, and NOT iccce's own crates either.
+#   * ZERO dependencies. Not third-party, and NOT icccer's own crates either.
 #     Every byte below is written from a corpus layout cited in a doc comment,
 #     with `std` alone. (Contrast `tools/difftest`, which *does* path-depend on
-#     `iccce-color` — that is a harness measuring with a ground-truth-validated
+#     `icccer-color` — that is a harness measuring with a ground-truth-validated
 #     ruler, and it is justified at length in its own manifest. A generator has
 #     no equivalent justification available, and none is intended.)
 #   * The arrow never reverses either: no crate under `crates/` may depend on
@@ -69,7 +69,7 @@
 # The cheapest classification is the empty set.
 
 [package]
-name = "iccce-gen-profiles"
+name = "icccer-gen-profiles"
 version = "0.0.1"
 edition = "2024"
 rust-version = "1.85"

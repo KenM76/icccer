@@ -1,5 +1,5 @@
 ---
-name: iccce-unowned-refusal-is-a-slow-deletion
+name: icccer-unowned-refusal-is-a-slow-deletion
 description: Declining to record an unevidenced claim is a HOLD, not a verdict — name who owes the evidence and what would discharge it, in the same paragraph. v0.2.0 ended up with no release record at all because two correct refusals were never re-asked.
 metadata:
   type: project
@@ -23,7 +23,7 @@ left was not.** Nobody returned with the evidence, so the project's own
 history was silent about its second release for six days, and would have
 stayed silent indefinitely. Filed as `ARCHITECTURE.md` **`DL-079`** §3.
 
-★ **It is [[iccce-negative-finding-removes-its-auditor]]'s mechanism
+★ **It is [[icccer-negative-finding-removes-its-auditor]]'s mechanism
 arriving in the paperwork instead of in the measurements.** There, a
 **wrong** rejection survives forever because nothing re-audits the reason.
 Here a **right** rejection did comparable damage by leaving a hole that
@@ -33,7 +33,7 @@ nothing pointed at. Both are failures of *ownership*, not of judgement.
 re-checks it. **An absent entry has no text to grep, no id to look up, and
 no date to notice going stale** — the only way it surfaces is somebody
 going looking for a precedent that was never written. That is the same
-asymmetry as [[iccce-gitignored-file-invisible-to-citation-sweep]]: the
+asymmetry as [[icccer-gitignored-file-invisible-to-citation-sweep]]: the
 error runs toward a **false all-clear**, and false all-clears are the ones
 nobody audits.
 
@@ -56,6 +56,6 @@ nobody audits.
    ahead"* did (`DL-068`) because **`success` and `failure` look identical
    in authority once the sentence is a month old.**
 
-See [[iccce-pass-status]] for the release itself and
-[[iccce-release-range-is-not-the-dispatch-list]] for the tag-object trap
+See [[icccer-pass-status]] for the release itself and
+[[icccer-release-range-is-not-the-dispatch-list]] for the tag-object trap
 that sits beside it.

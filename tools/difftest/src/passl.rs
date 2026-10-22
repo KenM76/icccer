@@ -11,8 +11,8 @@
 //! | **C⁰** — value continuity, offset pinned at `0.055` | `1.055` exactly | `0.04045` | ICC's own sRGB document, W3C CSS Color 4, Khronos KDF |
 //! | **C¹** — value *and slope* continuity | `1.055 010 718 947 586 4` | `0.039 293 370 676 847 5` | **required** by `Rec. ITU-T H.273 (V4) (07/2024) / ISO/IEC 23091-2` clause 8.2 for `TransferCharacteristics = 13`, which AVIF, HEIF, AV1 and ISOBMFF `nclx` all point at |
 //!
-//! `iccce` ships both — [`iccce_cmm::builtin::SrgbTrc::ValueContinuous`] (the
-//! default, unchanged) and [`iccce_cmm::builtin::SrgbTrc::SlopeContinuous`],
+//! `icccer` ships both — [`icccer_cmm::builtin::SrgbTrc::ValueContinuous`] (the
+//! default, unchanged) and [`icccer_cmm::builtin::SrgbTrc::SlopeContinuous`],
 //! whose constants are **derived** from H.273's clause at run time by
 //! bisection and never transcribed.
 //!
@@ -46,7 +46,7 @@
 //! ### Trap 2 — the maximum separation is INTERIOR, and it is in a DIFFERENT
 //! ### PLACE for each output space
 //!
-//! `iccce_cmm::builtin`'s
+//! `icccer_cmm::builtin`'s
 //! `tests::breakpoint_is_the_c0_solution_not_the_1996_value` already records
 //! that for the *other* breakpoint question the obvious "probe at the
 //! boundary" choice has **exactly zero** discriminating power. The same trap
@@ -147,14 +147,14 @@
 //!
 //! ## §C — what the choice COSTS, which is the number a caller needs
 //!
-//! *Self-comparison: both sides are iccce.* The operator's standing rule is
+//! *Self-comparison: both sides are icccer.* The operator's standing rule is
 //! that **a variant option is noise unless the ΔE between variants is
 //! measured**. This is that number.
 //!
-//! ★ **§C is in process, and it has to be.** The shipped `iccce` binary has no
-//! flag that selects [`iccce_cmm::builtin::SrgbTrc`] — the variant is
+//! ★ **§C is in process, and it has to be.** The shipped `icccer` binary has no
+//! flag that selects [`icccer_cmm::builtin::SrgbTrc`] — the variant is
 //! reachable **only through the library API**. Pass 5b set the precedent (it
-//! drives `iccce_cmm::bpc` in process because the shipped chain cannot reach
+//! drives `icccer_cmm::bpc` in process because the shipped chain cannot reach
 //! the ISO estimator). That is a real scope statement about the *feature*, not
 //! merely about the harness: **no CLI user can select the C¹ reading today.**
 //!
@@ -198,7 +198,7 @@
 //!   `-c0`.
 //! - **§B**'s destination-ruler finding is `mft2`-specific: it is a property
 //!   of lcms2's 16-bit CLUT stage and says nothing about `mAB `.
-//! - **§C** is iccce against iccce. It is **not** evidence that either variant
+//! - **§C** is icccer against icccer. It is **not** evidence that either variant
 //!   is *right*; it is the price of the choice.
 //! - Nothing here is ground truth. §A is a fact about an implementation; §C is
 //!   a self-comparison. The only ground-truth-class statement in the
@@ -207,13 +207,13 @@
 
 use std::path::{Path, PathBuf};
 
-use iccce_cmm::MatrixTrc;
-use iccce_cmm::builtin::{SrgbTrc, srgb_trc_params, srgb_with};
-use iccce_cmm::lut_transform::PcsValue;
-use iccce_cmm::matrix_trc::Intent as CmmIntent;
-use iccce_cmm::transform::Chain;
-use iccce_color::{D50, Lab, delta_e_2000};
-use iccce_profile::Profile;
+use icccer_cmm::MatrixTrc;
+use icccer_cmm::builtin::{SrgbTrc, srgb_trc_params, srgb_with};
+use icccer_cmm::lut_transform::PcsValue;
+use icccer_cmm::matrix_trc::Intent as CmmIntent;
+use icccer_cmm::transform::Chain;
+use icccer_color::{D50, Lab, delta_e_2000};
+use icccer_profile::Profile;
 
 use crate::{
     Bpc, Intent, Kind, Metric, Oracle, Precalc, Record, Request, SepUnits, Separation, Space,
@@ -281,7 +281,7 @@ const TOL_PERCEPTIBLE: Tolerance = Tolerance::new(
 );
 
 // ===========================================================================
-// The two readings, evaluated exactly as `iccce_cmm::builtin` builds them
+// The two readings, evaluated exactly as `icccer_cmm::builtin` builds them
 // ===========================================================================
 
 /// ICC `parametricCurveType` **function type 3**, which is what
@@ -634,7 +634,7 @@ const A_LAB_IDS: [&str; 7] = [
 /// Run Pass L.
 ///
 /// `oracle` is an `Option` so that §C — which needs no oracle at all, both
-/// sides being iccce — still produces its numbers on a machine with no lcms2
+/// sides being icccer — still produces its numbers on a machine with no lcms2
 /// build. §A and §B skip **with a reason** in that case rather than silently
 /// vanishing, because a suite that emits nothing when it cannot run is
 /// indistinguishable, in a log, from one that was never wired up.
@@ -777,7 +777,7 @@ pub fn run(oracle: Option<&Oracle>) -> (Analysis, Vec<Record>) {
                      separation there is {sep_at_break:.3e} L*. The usable maximum is INTERIOR, \
                      at code {l_sep_code:.5}, where it is {l_sep_max:.6e} L* ({:.1} printed \
                      quanta). Same trap as \
-                     iccce_cmm::builtin::tests::breakpoint_is_the_c0_solution_not_the_1996_value",
+                     icccer_cmm::builtin::tests::breakpoint_is_the_c0_solution_not_the_1996_value",
                     l_sep_max / PRINT_QUANTUM
                 ),
             )
@@ -1198,9 +1198,9 @@ pub fn run(oracle: Option<&Oracle>) -> (Analysis, Vec<Record>) {
     let pcs_de_mean = pcs_de_sum / probes.len() as f64;
 
     let c_src = format!(
-        "self-comparison: iccce vs iccce, {} probes (33^3 encoded grid + a 20 001-point neutral \
+        "self-comparison: icccer vs icccer, {} probes (33^3 encoded grid + a 20 001-point neutral \
          ramp) plus coordinate descent off the grid. Computed in f64 IN PROCESS, because the \
-         shipped iccce binary has NO FLAG that selects SrgbTrc - the variant is reachable only \
+         shipped icccer binary has NO FLAG that selects SrgbTrc - the variant is reachable only \
          through the library API (same posture as Pass 5b)",
         probes.len()
     );
@@ -1305,7 +1305,7 @@ pub fn run(oracle: Option<&Oracle>) -> (Analysis, Vec<Record>) {
                 Kind::SelfConsistency,
                 Metric::DeviceAbsMaxNormalised,
                 dev_tol,
-                "self-comparison: iccce vs iccce",
+                "self-comparison: icccer vs icccer",
                 format!("{} absent (LEGAL.md §3 category (c))", dst.display()),
             ));
             continue;
@@ -1317,7 +1317,7 @@ pub fn run(oracle: Option<&Oracle>) -> (Analysis, Vec<Record>) {
                 Kind::SelfConsistency,
                 Metric::DeviceAbsMaxNormalised,
                 dev_tol,
-                "self-comparison: iccce vs iccce",
+                "self-comparison: icccer vs icccer",
                 format!("could not evaluate {}", dst.display()),
             ));
             continue;
@@ -1329,7 +1329,7 @@ pub fn run(oracle: Option<&Oracle>) -> (Analysis, Vec<Record>) {
             dev_tol,
             cost.device_sep_max,
             format!(
-                "self-comparison: iccce vs iccce, {} probes (17^3 encoded grid + a 256-step \
+                "self-comparison: icccer vs icccer, {} probes (17^3 encoded grid + a 256-step \
                  neutral ramp), PCS -> device through the profile's own B2A/matrix, entirely in \
                  f64. Fixture is {}",
                 cost.n,
@@ -1364,7 +1364,7 @@ pub fn run(oracle: Option<&Oracle>) -> (Analysis, Vec<Record>) {
                 TOL_PERCEPTIBLE,
                 e2e,
                 format!(
-                    "self-comparison: iccce vs iccce, {} probes. sRGB(variant) -> {name} device \
+                    "self-comparison: icccer vs icccer, {} probes. sRGB(variant) -> {name} device \
                      -> back through a matrix/TRC profile -> Lab(D50), all in f64. The ORACLE \
                      CANNOT MEASURE THIS - see passl/B/dest/oracle-a2b-input-is-quantised-to-16-bits",
                     cost.n

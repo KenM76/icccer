@@ -1,6 +1,6 @@
 ---
-name: iccce-verification-loop-runs-both-ways
-description: On 2026-08-11 an iccce unit test caught an arithmetic error in the ICC_Spec corpus itself — a corpus "DERIVED" value is a calculation someone did, not a sourced fact
+name: icccer-verification-loop-runs-both-ways
+description: On 2026-08-11 an icccer unit test caught an arithmetic error in the ICC_Spec corpus itself — a corpus "DERIVED" value is a calculation someone did, not a sourced fact
 metadata:
   type: project
 ---
@@ -40,4 +40,4 @@ section warns about**. The document warning about the trap fell into it.
   `icc-spec-librarian`'s. Report, do not repair. (Same shape as the
   project's own parser invariant.)
 
-Related: [[iccce-pass-status]].
+Related: [[icccer-pass-status]].

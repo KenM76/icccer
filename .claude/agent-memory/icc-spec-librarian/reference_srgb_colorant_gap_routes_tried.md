@@ -18,7 +18,7 @@ the `color.org` bar was never touched. Corpus home:
 **★★★ THE REVERSAL, and it is the reusable part.** The corpus had concluded
 *"the HP 1998 colorants cannot be reproduced … `bXYZ.Z` provenance unknown"* —
 **correct arithmetic, wrong implication.** Measured vs ICC's own published
-values: **iccce from-constants = 3,02 ULP worst / 0,90 in `bXYZ.Z`;
+values: **icccer from-constants = 3,02 ULP worst / 0,90 in `bXYZ.Z`;
 the shipped HP/`sRGB2014` file = 11,13 ULP, all in `bXYZ.Z`.** **The file does
 not match ICC's own spec either.** Question reposed, not resolved.
 

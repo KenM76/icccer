@@ -1,0 +1,56 @@
+# icccer-profile — ICC profile parsing and representation.
+#
+# INVARIANT (ARCHITECTURE.md §1): no colour maths in this crate. It
+# parses bytes into a faithful representation of what the file says,
+# including things that are wrong. The parser reports; it does not
+# repair.
+
+[package]
+name = "icccer-profile"
+description = "ICC v2/v4 profile parsing: header, tag table, tag types. Reports malformations, repairs nothing. No colour maths."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+# --- crates.io publication metadata (ARCHITECTURE.md DL-009) ---
+# See crates/icccer-color/Cargo.toml for why `readme` and `license-file`
+# point at the workspace root rather than at per-crate copies.
+#
+# ★ EXPECTED WARNING — do NOT silence it by deleting `license-file`.
+# Cargo prints "only one of `license` or `license-file` is necessary" on
+# every build because both are set, and both are set on purpose:
+# `license = "MIT"` is the SPDX label crates.io indexes, `license-file`
+# is what actually puts the licence TEXT into the .crate tarball.
+# Delete it and the published crate ships no notice — which is the one
+# thing the MIT licence itself requires. The deletion is silent: the
+# build gets quieter and the tarball gets wrong.
+#
+# This warning has already lured one engineer (2026-08-12, caught only
+# by the longer note in icccer-color). Verify after ANY change here with
+# `cargo package --list -p <crate>`, which must still list `LICENSE`.
+readme = "../../README.md"
+license-file = "../../LICENSE"
+homepage = "https://github.com/KenM76/iccce"
+documentation = "https://docs.rs/icccer-profile"
+# Slugs verified against https://crates.io/api/v1/category_slugs,
+# 2026-08-12.
+categories = [
+    "parser-implementations",
+    "graphics",
+    "multimedia::images",
+    "encoding",
+]
+keywords = ["icc", "color-profile", "parser", "color", "colour"]
+# Integration tests read fixtures from the repository root, which a
+# .crate cannot carry; shipping them would publish tests that fail.
+exclude = ["tests/"]
+
+[dependencies]
+# Intentionally empty for Pass 0–2. Any addition is classified
+# (permissive only) before adoption, per docs/LEGAL.md §1.
+
+[lints]
+workspace = true

@@ -1,5 +1,5 @@
 ---
-name: iccce-stale-status-decays-faster-than-a-number
+name: icccer-stale-status-decays-faster-than-a-number
 description: DL-062 (2026-08-18) — a document said "not fixed here, deliberately" about a defect fixed 28 s earlier; a stale STATUS decays faster than a stale number because the fix lands in someone else's commit. NOW EIGHT INSTANCES: #4/#5 are consecutive handoffs carrying a wrong PUSH COUNT ⇒ DL-068 rules the field itself wrong (carry the two REF HASHES); #6 is a "next free ids" line naming a DL its OWN filing had just consumed — FALSE AT THE INSTANT OF WRITING; ★★★ #7/#8 (2026-09-01) both came from OUTSIDE — pdfce flagged a README "In progress" row TWICE across two files, and #8 is a version line that NAMES ITS OWN VERIFICATION METHOD AND DATE and went stale anyway, which is why "re-verify harder" is not the fix. ★★★ AND THE REVERSE FAILURE (2026-09-01, later): DL-068's run-id form was discharged BY REQUEST and the VERY NEXT CI observation omitted the databaseId — a field fixed by asking is not a field enforced; then asking again returned SIX rows including the project's ONLY observed CI FAILURE (767233d, run 32863604742)
 metadata:
   type: project
@@ -35,7 +35,7 @@ destination*) applied to a **verb tense**.
   open in the tree**, not just whether the numbers reproduce. Commit
   ORDER is checkable without a shell — `.git/logs/HEAD` is plain text and
   records adjacent commits with their messages
-  ([[iccce-git-files-readable-without-shell]]). Say plainly that this is
+  ([[icccer-git-files-readable-without-shell]]). Say plainly that this is
   a statement about a file's contents, not about `git status`.
 - **Two rows, not one edited row.** NC-265 carries the pre-fix numbers
   dated `2026-08-18 (pre-a05476c)`; NC-264 carries what is true now. The
@@ -53,7 +53,7 @@ destination*) applied to a **verb tense**.
   defect" are correct usage** — that is how a retired number should
   appear. The defect is a number presented as current. When sweeping,
   distinguish the two rather than counting occurrences
-  ([[iccce-count-from-a-sample-is-not-the-population]]).
+  ([[icccer-count-from-a-sample-is-not-the-population]]).
 
 **★★★ FILED AS DL-062 on 2026-08-18, WITH A SECOND INSTANCE — and the
 second is what makes it structural.** The mechanism reproduced **inside
@@ -254,7 +254,7 @@ outside reader has reported a staleness, treat the *class* of claim as
 suspect across the whole document, not just the line reported. (Had that
 been done at the first flag, instance 8 was three lines away and would have
 been caught in the same pass.) Related:
-[[iccce-consumer-exercises-paths-the-code-is-in]].
+[[icccer-consumer-exercises-paths-the-code-is-in]].
 
 ★ **New carrier phrases for the grep list**, both from this pair: `which is
 the authoritative source`, `read from the ... on 2026-`, `Version \`0.`,
@@ -279,7 +279,7 @@ is a month old***, the way `4` and `0` did. A follow-up dispatch supplied
 - ★★★ **CARRY THE COVERAGE WITH THE ID.** The `CI` run is on the release
   commit `a4d9003`, **not on the tip** — the tip was pushed 2 min 29 s
   after those runs started (reflog epochs, readable without a shell:
-  [[iccce-git-files-readable-without-shell]]). Write **"CI concluded
+  [[icccer-git-files-readable-without-shell]]). Write **"CI concluded
   `success` on `<commit>`"**, never *"the repository is green"*.
 - ★ **What made this cheap:** the ask named the artefact (`the run id`),
   not a quality (`better evidence`). Compare `DL-079` — the two `v0.2.0`
@@ -300,7 +300,7 @@ older runs nobody had asked about.
   could not see the commit it was gating"*. **It is the only evidence in
   this project's entire record that CI can go red** — every other row is
   `success`, and a gate observed only green is indistinguishable from one
-  that **cannot fail** ([[iccce-unfailable-row-protected-only-by-siblings]]).
+  that **cannot fail** ([[icccer-unfailable-row-protected-only-by-siblings]]).
   **Worth more than the five greens beside it.**
 - ★★ **The cost of the omitted field was never "one missing id."** It was
   **five runs' worth of history no filing could see**, invisible for as
@@ -312,14 +312,14 @@ older runs nobody had asked about.
   concluded `failure`***.
 - ★ **`--limit 6` still truncates.** It supports nothing about runs older
   than `767233d`, and no count
-  ([[iccce-count-from-a-sample-is-not-the-population]]).
+  ([[icccer-count-from-a-sample-is-not-the-population]]).
 
 Related: [[provenance-is-a-different-axis-from-evidence-class]],
 [[source-read-does-not-overturn-a-run]] (the same day's other pin: a
 hash buys **re-checkability, not rank**),
-[[iccce-pass-status]],
-[[iccce-artifact-existence-is-not-obligation-status]] (an artifact's
+[[icccer-pass-status]],
+[[icccer-artifact-existence-is-not-obligation-status]] (an artifact's
 existence is not the obligation's status — this is its twin: a
 *document's* claim about status is not the status),
-[[iccce-stale-citation-worse-than-stale-number]],
-[[iccce-gate-must-not-reward-deletion]].
+[[icccer-stale-citation-worse-than-stale-number]],
+[[icccer-gate-must-not-reward-deletion]].

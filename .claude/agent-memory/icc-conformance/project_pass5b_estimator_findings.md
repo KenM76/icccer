@@ -15,14 +15,14 @@ territory and the case Pass 5 row P19 recorded as a gap.
 is implemented, documented and unit tested; **nothing outside its own `mod
 tests` calls it**. `Chain::estimate_dst_black` in `transform.rs` still carries
 the pre-ISO subset (v4 + perceptual → the A41 constant, else
-`BpcEstimationUnsupported`). So the shipped `iccce transform --bpc` still
+`BpcEstimationUnsupported`). So the shipped `icccer transform --bpc` still
 refuses a v2 CMYK LUT destination at media-relative — Pass 5b **grades that
 refusal** and drives the library function in process for everything else. Check
 this is still true before quoting any Pass 5b row as being about the binary.
 
 **The two estimators, read at the pin (`cmssamp.c`):** the ramp, the monotonic
 pass, the sample count and **the root of the quadratic are identical** — so
-iccce's "root not vertex" correction is a correction of *Adobe*, not of lcms2.
+icccer's "root not vertex" correction is a correction of *Adobe*, not of lcms2.
 Two things differ: lcms2 **holds the ramp's chroma constant** where ISO 4.2.5.2.2
 ramps it to zero, and lcms2 **returns `Lab.a = InitialLab.a`** (L592) where ISO
 4.2.3 returns a neutral black. ★ Unpredicted third difference: lcms2 clamps the
@@ -35,7 +35,7 @@ a\* 0,3472, b\* 0,3001** (chroma 0,4589). Divergence **0,858 17 ΔE76**.
 
 | claim | verdict |
 |---|---|
-| mechanism (ISO drops chroma, lcms2 keeps it) | **CONFIRMED** — but *structural* on iccce's side; it grades that 4.2.3 is implemented, not that the prediction was right |
+| mechanism (ISO drops chroma, lcms2 keeps it) | **CONFIRMED** — but *structural* on icccer's side; it grades that 4.2.3 is implemented, not that the prediction was right |
 | magnitude 2–6 ΔE76 | **FALSIFIED**, robustly — 0,4589, and even + the whole error bar = 1,27 < 2,0. The band assumed a *chromatic* printer black; SWOP's darkest colorant is 0,834 off neutral |
 | shape ("the divergence IS the chroma") | **NOT ESTABLISHED** — L\* term 0,725 is 1,58× the chroma term but is *inside* the 0,814 error bar, and the only mechanism available is 13× too small (oracle-free: unneutralising the InitialLab moves the root only 0,0543 L\*) |
 | decay to zero at white | **CONFIRMED** — 0,0878 → 0,0531 → 0,0135 → 0,0088 → **0,0000**, monotone |

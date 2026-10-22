@@ -1,6 +1,6 @@
 ---
 name: project-a-fixed-defect-can-blind-its-own-row
-description: On iccce, Pass H's one RED row went green when the engineer fixed the abort it found — and the fix ALSO made the row unable to see that defect return, with no number moving and nobody editing the row; the remedy is to re-ask "which layer is in the loop" of the FIX, not just of the row, and to split.
+description: On icccer, Pass H's one RED row went green when the engineer fixed the abort it found — and the fix ALSO made the row unable to see that defect return, with no number moving and nobody editing the row; the remedy is to re-ask "which layer is in the loop" of the FIX, not just of the row, and to split.
 metadata:
   type: project
 ---
@@ -13,7 +13,7 @@ error=0` bare exit 0** *(re-measured by me, not taken on report)*.
 ## ★★★ The finding, which is about ROWS and not about the bug
 
 The row observed *"is the bare exit outside {0, 1}?"*. The fix had **two**
-independent parts in `crates/iccce-cmm/src/compiled.rs`:
+independent parts in `crates/icccer-cmm/src/compiled.rs`:
 
 1. a **SIZE** guard (`ChainError::GridExceedsBudget`,
    `MAX_COMPILED_GRID_BYTES = 64 MiB`) distinct from the `checked_pow`

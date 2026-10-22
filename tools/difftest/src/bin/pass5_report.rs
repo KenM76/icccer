@@ -27,8 +27,8 @@
 
 use std::io::Write;
 
-use iccce_difftest::pass5::{self, Scenario};
-use iccce_difftest::{Outcome, Oracle};
+use icccer_difftest::pass5::{self, Scenario};
+use icccer_difftest::{Outcome, Oracle};
 
 fn main() {
     let mut out = std::io::stdout().lock();
@@ -53,30 +53,30 @@ fn main() {
     println!("=== 2. the comparable scenario set, DERIVED BEFORE THE RUN ===\n");
     println!(
         "  Every row states which black point each implementation uses and why, read out of\n\
-         \x20 iccce's `Chain::with_bpc` and lcms2's cmssamp.c/cmscnvrt.c at pin 21c582a. The\n\
+         \x20 icccer's `Chain::with_bpc` and lcms2's cmssamp.c/cmscnvrt.c at pin 21c582a. The\n\
          \x20 headline consequence, also predicted in advance:\n\n\
-         \x20   ** Everywhere iccce will do BPC at all, lcms2's estimator reduces to the same\n\
+         \x20   ** Everywhere icccer will do BPC at all, lcms2's estimator reduces to the same\n\
          \x20      two values. So Pass 5's cross-check grades the SCALING MAP, the DIRECTION\n\
          \x20      and the POLICY — it cannot discriminate the two ESTIMATORS, and does not\n\
          \x20      claim to. **\n"
     );
     println!(
-        "  S1  sRGB -> AdobeRGB      rel.col.    iccce 0 / 0            lcms2 guard6 / guard6      identity   NULL BY CONSTRUCTION"
+        "  S1  sRGB -> AdobeRGB      rel.col.    icccer 0 / 0            lcms2 guard6 / guard6      identity   NULL BY CONSTRUCTION"
     );
     println!(
-        "  S2  fixture -> sRGB       perceptual  iccce A41 / 0          lcms2 guard3 / guard6      PB -> 0    lowers; lcms2 does NOT force (v2 dst)"
+        "  S2  fixture -> sRGB       perceptual  icccer A41 / 0          lcms2 guard3 / guard6      PB -> 0    lowers; lcms2 does NOT force (v2 dst)"
     );
     println!(
-        "  S3  sRGB -> fixture       perceptual  iccce 0 / A41          lcms2 guard6 / guard3      0 -> PB    raises; lcms2 FORCES (v4 dst)"
+        "  S3  sRGB -> fixture       perceptual  icccer 0 / A41          lcms2 guard6 / guard3      0 -> PB    raises; lcms2 FORCES (v4 dst)"
     );
     println!(
-        "  S4  sRGB -> v4 matrix     perceptual  iccce 0 / 0            lcms2 guard6 / guard3-esc  identity   trap T5: forcing costs nothing"
+        "  S4  sRGB -> v4 matrix     perceptual  icccer 0 / 0            lcms2 guard6 / guard3-esc  identity   trap T5: forcing costs nothing"
     );
     println!(
-        "  S5  sRGB -> SWOP          rel.col.    iccce REFUSES          lcms2 quadratic fit        --         the subset boundary (A42)"
+        "  S5  sRGB -> SWOP          rel.col.    icccer REFUSES          lcms2 quadratic fit        --         the subset boundary (A42)"
     );
     println!(
-        "  S6  two matrix fixtures   ICC-abs.    iccce REFUSES          lcms2 guard2 excludes      --         the one exclusion with a published source"
+        "  S6  two matrix fixtures   ICC-abs.    icccer REFUSES          lcms2 guard2 excludes      --         the one exclusion with a published source"
     );
     println!();
 
@@ -98,15 +98,15 @@ fn main() {
          \x20 states the ESTIMATION (A42).\n"
     );
     println!(
-        "  iccce vs ICC.1:2022 6.3.4.3 `Xp = Xt(1-Xb/Xi)+Xb`, 1005 PCS values : {:.6e}",
+        "  icccer vs ICC.1:2022 6.3.4.3 `Xp = Xt(1-Xb/Xi)+Xb`, 1005 PCS values : {:.6e}",
         p.map.vs_spec
     );
     println!(
-        "  iccce vs Gaussian solve of Maria 2013's two constraints, {} draws : {:.6e}",
+        "  icccer vs Gaussian solve of Maria 2013's two constraints, {} draws : {:.6e}",
         p.map.draws, p.map.vs_maria
     );
     println!(
-        "  the two constraints under iccce's own map (D50 fixed, bs -> bd)    : {:.6e}",
+        "  the two constraints under icccer's own map (D50 fixed, bs -> bd)    : {:.6e}",
         p.map.constraint_residual
     );
     println!(
@@ -120,7 +120,7 @@ fn main() {
          \x20   MAX_ENCODEABLE_XYZ) and DROPS THE ENTIRE BPC STAGE below 0.002.\n\
          \x20     discriminant for the S2/S3 map : {:.6}  ({:.1}x the threshold)\n\
          \x20     black difference at which lcms2 stops doing BPC at all : ~{:.3} L*\n\
-         \x20   iccce has no such threshold and applies the map however small it is. Neither\n\
+         \x20   icccer has no such threshold and applies the map however small it is. Neither\n\
          \x20   behaviour is sourced. ICC_Spec §7.2's list of unattributed constants was drawn\n\
          \x20   from cmssamp.c and does not contain this one.",
         p.map.empty_layer_diff,
@@ -134,7 +134,7 @@ fn main() {
     match &p.s1 {
         None => println!("  not run (category (c) profile absent).\n"),
         Some(s) => {
-            let all = vec![true; s.iccce_off.len()];
+            let all = vec![true; s.icccer_off.len()];
             println!("  PREDICTED: both implementations estimate XYZ(0,0,0) on both sides, so both");
             println!("             arms are the identity and BOTH differences are exactly zero.");
             println!(
@@ -142,8 +142,8 @@ fn main() {
                 Scenario::max_abs(&s.lcms2_on, &s.lcms2_off, &all)
             );
             println!(
-                "             iccce --bpc vs none : {:.6e}",
-                Scenario::max_abs(&s.iccce_on, &s.iccce_off, &all)
+                "             icccer --bpc vs none : {:.6e}",
+                Scenario::max_abs(&s.icccer_on, &s.icccer_off, &all)
             );
             println!(
                 "  READING:   confirmed, and INCONCLUSIVE as evidence that the two BPCs agree —\n\
@@ -164,19 +164,19 @@ fn main() {
             let sc = &s.scenario;
             println!(
                 "  grid {} CMYK points, {} excluded as encoded-PCS overflow (README §15.3.3)",
-                sc.iccce_off.len(),
+                sc.icccer_off.len(),
                 s.overflow_count
             );
-            println!("  PREDICTED: iccce --bpc reproduces transicc -b; lcms2 does NOT force here,");
+            println!("  PREDICTED: icccer --bpc reproduces transicc -b; lcms2 does NOT force here,");
             println!("             because the forcing is keyed on the DESTINATION version and the");
             println!("             destination is v2 sRGB (row B8).");
             println!(
                 "  OBSERVED:  device, BPC off both sides (the baseline)  : {:.6e}",
-                Scenario::max_abs(&sc.iccce_off, &sc.lcms2_off, &s.keep)
+                Scenario::max_abs(&sc.icccer_off, &sc.lcms2_off, &s.keep)
             );
             println!(
                 "             device, BPC on  both sides                 : {:.6e}",
-                Scenario::max_abs(&sc.iccce_on, &sc.lcms2_on, &s.keep)
+                Scenario::max_abs(&sc.icccer_on, &sc.lcms2_on, &s.keep)
             );
             println!(
                 "             lcms2 -b vs no -b (so it did NOT force)    : {:.6e}",
@@ -184,15 +184,15 @@ fn main() {
             );
             println!(
                 "             largest signed RISE under --bpc (must be 0): {:.6e}",
-                Scenario::max_signed(&sc.iccce_on, &sc.iccce_off, &s.keep)
+                Scenario::max_signed(&sc.icccer_on, &sc.icccer_off, &s.keep)
             );
             println!(
                 "             largest FALL under --bpc                   : {:.6e} device, {:.4} dE00",
-                Scenario::min_signed(&sc.iccce_on, &sc.iccce_off, &s.keep).abs(),
+                Scenario::min_signed(&sc.icccer_on, &sc.icccer_off, &s.keep).abs(),
                 s.bpc_effect_de
             );
-            let on = Scenario::max_abs(&sc.iccce_on, &sc.lcms2_on, &s.keep);
-            let off = Scenario::max_abs(&sc.iccce_off, &sc.lcms2_off, &s.keep);
+            let on = Scenario::max_abs(&sc.icccer_on, &sc.lcms2_on, &s.keep);
+            let off = Scenario::max_abs(&sc.icccer_off, &sc.lcms2_off, &s.keep);
             println!(
                 "  ** the residual moved by {:.3}x when BPC was switched on, where the tolerance's\n\
                  \x20    derivation predicted 1.0035 (the map's gain alone). The excess is the term\n\
@@ -223,25 +223,25 @@ fn main() {
         None => println!("  not run (sRGB absent).\n"),
         Some(s) => {
             let sc = &s.scenario;
-            let all = vec![true; sc.iccce_off.len()];
+            let all = vec![true; sc.icccer_off.len()];
             println!("  PREDICTED: lcms2 FORCES BPC here (v4 destination at perceptual), so its -b");
-            println!("             and no--b arms must be the same bytes; iccce --bpc must reproduce");
-            println!("             both; and iccce WITHOUT --bpc must differ by the full PRM black.");
+            println!("             and no--b arms must be the same bytes; icccer --bpc must reproduce");
+            println!("             both; and icccer WITHOUT --bpc must differ by the full PRM black.");
             println!(
                 "  OBSERVED:  lcms2 -b vs no -b (the forcing)  : {:.6e}   [must be 0]",
                 s.forcing
             );
             println!(
-                "             iccce --bpc vs lcms2 -b          : {:.6e}",
-                Scenario::max_abs(&sc.iccce_on, &sc.lcms2_on, &all)
+                "             icccer --bpc vs lcms2 -b          : {:.6e}",
+                Scenario::max_abs(&sc.icccer_on, &sc.lcms2_on, &all)
             );
             println!(
-                "             iccce --bpc vs lcms2 UNASKED     : {:.6e}",
-                Scenario::max_abs(&sc.iccce_on, &sc.lcms2_off, &all)
+                "             icccer --bpc vs lcms2 UNASKED     : {:.6e}",
+                Scenario::max_abs(&sc.icccer_on, &sc.lcms2_off, &all)
             );
             println!(
                 "             largest signed RISE in K (must be 0) : {:.6e}",
-                Scenario::max_signed(&sc.iccce_on, &sc.iccce_off, &all)
+                Scenario::max_signed(&sc.icccer_on, &sc.icccer_off, &all)
             );
             println!();
             println!("  THE CLOSED-FORM LIFT AT DEVICE BLACK — Pass 5's one end-to-end expectation");
@@ -253,10 +253,10 @@ fn main() {
             println!("    predicted K without BPC : {:.9}", s.k_on_predicted + s.lift_predicted);
             println!("    predicted K with    BPC : {:.9}", s.k_on_predicted);
             println!(
-                "    predicted lift {:.9} | iccce observed {:.9} | residual {:.6e}",
+                "    predicted lift {:.9} | icccer observed {:.9} | residual {:.6e}",
                 s.lift_predicted,
-                s.lift_iccce,
-                (s.lift_iccce - s.lift_predicted).abs()
+                s.lift_icccer,
+                (s.lift_icccer - s.lift_predicted).abs()
             );
             println!(
                 "    lcms2's own K at black {:.9} | residual against the same closed form {:.6e}",
@@ -271,7 +271,7 @@ fn main() {
             println!();
             println!("  ** THE POLICY DIFFERENCE — REPORTED, NOT GRADED **");
             println!(
-                "    iccce WITHOUT --bpc vs lcms2 WITHOUT -b : {:.6e} device = {:.4} L*",
+                "    icccer WITHOUT --bpc vs lcms2 WITHOUT -b : {:.6e} device = {:.4} L*",
                 s.policy_device, s.policy_dl
             );
             println!(
@@ -286,7 +286,7 @@ fn main() {
                 "    Neither is a defect. lcms2 forces BPC for a v4 destination at perceptual on\n\
                  \x20   the authority of a document nobody in this project has read; the one\n\
                  \x20   published BPC paper (Maria 2013) corroborates the EXCLUSION set and is\n\
-                 \x20   silent on the ENABLE policy. iccce declines to force. Grading this would\n\
+                 \x20   silent on the ENABLE policy. icccer declines to force. Grading this would\n\
                  \x20   mean picking a winner without a clause; settled by AdobeBPC.pdf / WP40 /\n\
                  \x20   ISO 18619 (ICC_Spec §11's operator download list)."
             );
@@ -313,7 +313,7 @@ fn main() {
     match &p.s4 {
         None => println!("  not run (sRGB absent).\n"),
         Some(s) => {
-            let all = vec![true; s.iccce_off.len()];
+            let all = vec![true; s.icccer_off.len()];
             println!("  PREDICTED: lcms2 forces BPC (v4 destination, perceptual) but guard 3 takes");
             println!("             the MATRIX-SHAPER ESCAPE to BlackPointAsDarkerColorant at");
             println!("             rel.col., which returns XYZ(0,0,0) — equal to the source's — so");
@@ -323,13 +323,13 @@ fn main() {
                 Scenario::max_abs(&s.lcms2_on, &s.lcms2_off, &all)
             );
             println!(
-                "             iccce --bpc vs none : {:.6e}",
-                Scenario::max_abs(&s.iccce_on, &s.iccce_off, &all)
+                "             icccer --bpc vs none : {:.6e}",
+                Scenario::max_abs(&s.icccer_on, &s.icccer_off, &all)
             );
             println!(
                 "  READING:   trap T5 measured. Anyone expecting M2's ~3.15 L* on EVERY v4\n\
                  \x20            perceptual profile would call this null an anomaly; it is correct.\n\
-                 \x20            iccce reaches the same no-op by a different route (its subset sends\n\
+                 \x20            icccer reaches the same no-op by a different route (its subset sends\n\
                  \x20            a matrix/TRC side to device black regardless of version or intent),\n\
                  \x20            which is stronger than reaching it by the same reasoning."
             );
@@ -349,7 +349,7 @@ fn main() {
         Err(e) => println!("  S6 ICC-absolute, --bpc           : *** DID NOT REFUSE *** {e}"),
     }
     println!(
-        "\n  S5 is a COVERAGE GAP, not a bug. lcms2 answers there; iccce does not; so no\n\
+        "\n  S5 is a COVERAGE GAP, not a bug. lcms2 answers there; icccer does not; so no\n\
          \x20 comparison exists for a v2 CMYK output destination and Pass 5 claims none. The\n\
          \x20 estimator lcms2 uses there is the least-squares quadratic fit whose mathematics\n\
          \x20 Maria 2013 forwards to the ToS-barred AdobeBPC.pdf and whose six thresholds are\n\
@@ -360,14 +360,14 @@ fn main() {
     println!("=== 9. what Pass 5 did NOT measure — stated, not left to the reader ===\n");
     println!(
         "  * THE ESTIMATORS. Every scenario in reach has both implementations arriving at the\n\
-         \x20   same black, so no row here discriminates iccce's named subset from lcms2's four\n\
+         \x20   same black, so no row here discriminates icccer's named subset from lcms2's four\n\
          \x20   methods. Methods 3 and 4 (the ink round trip and the quadratic fit) are\n\
-         \x20   UNTESTED against anything, because iccce does not implement them.\n\
-         \x20 * THE SATURATION INTENT. lcms2 forces BPC there too; iccce's subset admits only\n\
-         \x20   perceptual for a LUT side, so the saturation arm has no iccce half.\n\
+         \x20   UNTESTED against anything, because icccer does not implement them.\n\
+         \x20 * THE SATURATION INTENT. lcms2 forces BPC there too; icccer's subset admits only\n\
+         \x20   perceptual for a LUT side, so the saturation arm has no icccer half.\n\
          \x20 * ANY REAL v4 LUT PROFILE. A 40-profile sweep of this machine found zero mAB/mBA\n\
          \x20   tags (README §15.3.1); S2 and S3 are about ONE SYNTHETIC FIXTURE.\n\
-         \x20 * GRAY. iccce's subset admits a grayTRC side, and no scenario exercises it,\n\
+         \x20 * GRAY. icccer's subset admits a grayTRC side, and no scenario exercises it,\n\
          \x20   because every gray profile in reach has trc(0) = 0 and would be another null.\n\
          \x20 * THE 0.002 EMPTY-LAYER THRESHOLD, OBSERVED. It is computed from lcms2's source\n\
          \x20   and reported; no profile pair in reach has blacks close enough to trigger it,\n\

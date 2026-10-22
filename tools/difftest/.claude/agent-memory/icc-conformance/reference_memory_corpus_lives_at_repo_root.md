@@ -1,6 +1,6 @@
 ---
 name: reference-memory-corpus-lives-at-repo-root
-description: The icc-conformance memory corpus for iccce lives at the REPOSITORY ROOT (D:\Dev\iccce\.claude\agent-memory\icc-conformance\), not under tools\difftest — 25+ files with a maintained MEMORY.md index; read that one first whatever path this session was handed.
+description: The icc-conformance memory corpus for icccer lives at the REPOSITORY ROOT (D:\Dev\iccce\.claude\agent-memory\icc-conformance\), not under tools\difftest — 25+ files with a maintained MEMORY.md index; read that one first whatever path this session was handed.
 metadata:
   type: reference
 ---

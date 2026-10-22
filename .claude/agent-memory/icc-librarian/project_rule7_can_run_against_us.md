@@ -1,6 +1,6 @@
 ---
-name: iccce-rule7-can-run-against-us
-description: DL-030 — the first time "disagreement with lcms2 is a finding, not a failure" resolved against iccce; the pre-commitment written before the answer existed is what made it cheap, and withholding attribution is what made the measurement usable
+name: icccer-rule7-can-run-against-us
+description: DL-030 — the first time "disagreement with lcms2 is a finding, not a failure" resolved against icccer; the pre-commitment written before the answer existed is what made it cheap, and withholding attribution is what made the measurement usable
 metadata:
   type: project
 ---
@@ -11,17 +11,17 @@ writing — including a pre-commitment to the outcome that goes against
 this project.**
 
 **Why:** on 2026-08-12 the ISO/CD 18619 **4.2.5.4** question came back
-against iccce. The clause specifies the `DestinationBlackPoint` *"shall
-be the same as **InitialLab**"*; iccce returned `outRamp[first]` (which
+against icccer. The clause specifies the `DestinationBlackPoint` *"shall
+be the same as **InitialLab**"*; icccer returned `outRamp[first]` (which
 occurs in the whole clause only as `MinL`, a threshold — never a
-black-point candidate). **lcms2 conformed. iccce shipped a
+black-point candidate). **lcms2 conformed. icccer shipped a
 non-conformance.** Corrected at `fd34a44`; cost **0,0817 ΔE76** on SWOP
 = **100 % of NC-142's divergence**, *measured before it was found*.
 
 **What made it cheap:** `NUMERIC_CLAIMS.md` §3.18.6 had written, before
-any answer existed — *"if ISO names lcms2's, iccce is WRONG, not
+any answer existed — *"if ISO names lcms2's, icccer is WRONG, not
 divergent, and the engineer changes the code … **rule 7 is not a licence
-to assume iccce is right**"* — and had forbidden any document from
+to assume icccer is right**"* — and had forbidden any document from
 describing the difference as lcms2 departing from the standard. So the
 correction needed **one sentence added**, not a retraction. A section
 that had filed it as a finding *against lcms2* would have been
@@ -47,6 +47,6 @@ publishing a wrong claim for a day.
   same root.** The lesson is not "transcribe more" — it is that **the
   unexplained measurement is what made the gap findable.**
 
-Related: [[iccce-pass-status]], [[iccce-free-to-disagree]],
-[[iccce-predicted-divergence-must-be-measured]],
-[[iccce-direction-scoped-behaviour]].
+Related: [[icccer-pass-status]], [[icccer-free-to-disagree]],
+[[icccer-predicted-divergence-must-be-measured]],
+[[icccer-direction-scoped-behaviour]].

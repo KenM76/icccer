@@ -1,6 +1,6 @@
 ---
 name: project-passg-suite-population-findings
-description: Pass G graded iccce against 20 REAL producer-embedded profiles (the print-conformance suite) — the first vendor-authored v4 mAB; three findings a synthetic corpus could not produce (a non-identity B curve that broke a tolerance derivation, vendor-specific intent-tag aliasing, Adobe's shipped sRGB/AdobeRGB having wtpt=D65 with D50 colorants); and the eciRGB v2/v4 pair is NOT the version isolator it looks like.
+description: Pass G graded icccer against 20 REAL producer-embedded profiles (the print-conformance suite) — the first vendor-authored v4 mAB; three findings a synthetic corpus could not produce (a non-identity B curve that broke a tolerance derivation, vendor-specific intent-tag aliasing, Adobe's shipped sRGB/AdobeRGB having wtpt=D65 with D50 colorants); and the eciRGB v2/v4 pair is NOT the version isolator it looks like.
 metadata:
   type: project
 ---
@@ -13,7 +13,7 @@ operational notes `tools/difftest/README.md` **§22**. Suite went
 
 **Why: this corpus is not synthetic, OS-shipped or standards-body-issued.** It
 is what Adobe InDesign CS6 actually embedded, 121 times across 98 PDF/X files.
-Licensed, uncommittable, resolved via `$ICCCE_PRIVATE_FIXTURES`, **skips
+Licensed, uncommittable, resolved via `$ICCCER_PRIVATE_FIXTURES`, **skips
 everywhere else including CI permanently**.
 
 **How to apply.**
@@ -61,7 +61,7 @@ everywhere else including CI permanently**.
   **0.823487** (FOGRA39 v2.1), **2.084405** (X-Rite v4.2) — device cost
   3.5e-2 to 7.6e-2. Not a synthetic-fixture artefact. Still ungradeable:
   A27/A42, no normative BPC text.
-- **iccce refuses `--bpc` by name on 8 of 20 combinations** (v4 `mAB ` source
+- **icccer refuses `--bpc` by name on 8 of 20 combinations** (v4 `mAB ` source
   outside the estimation subset). Graded as deliverables at exactly `0.0`.
   ★ Note an unexplained asymmetry worth chasing: it **accepts** `--bpc` at
   perceptual for that source and **refuses** at media-relative and saturation.

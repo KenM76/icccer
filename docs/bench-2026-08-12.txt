@@ -1,4 +1,4 @@
-iccce bench — raw output, recorded 2026-08-12
+icccer bench — raw output, recorded 2026-08-12
 =============================================
 
 Recorded because `icc-librarian`'s Pass 6 filing noted that the
@@ -10,7 +10,7 @@ could not be checked. It can now.
 
 Machine: Windows 11 Pro 10.0.26200, MSVC toolchain, release build.
 Command:
-  iccce bench --src USWebCoatedSWOP.icc --dst "sRGB Color Space Profile.icm"
+  icccer bench --src USWebCoatedSWOP.icc --dst "sRGB Color Space Profile.icm"
 
 
 VARIANCE — why a single figure must not be quoted as "the" throughput
@@ -65,7 +65,7 @@ error.class: self-consistency (compiled vs reference, same code;
 
 Sensitivity control (DL-018), passing value
 -------------------------------------------
-From `cargo test -p iccce-cmm error_scales -- --nocapture`, sRGB ->
+From `cargo test -p icccer-cmm error_scales -- --nocapture`, sRGB ->
 AdobeRGB, smooth-region probes:
 
   coarse(5)=0.006414671  fine(9)=0.002479679  ratio=2.5869  (band 2.0-8.0)

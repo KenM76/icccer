@@ -14,7 +14,7 @@ the defect below (re-measured 2026-08-17; see
 [[project-a-fixed-defect-can-blind-its-own-row]] for why the fix forced a row
 split). Corpus:
 `D:\Dev\iccce-private-fixtures\color-org\`, 50 files, uncommittable,
-`$ICCCE_PRIVATE_FIXTURES`-gated, skips everywhere else forever.
+`$ICCCER_PRIVATE_FIXTURES`-gated, skips everywhere else forever.
 
 **Subject is NOT a colour value** — that corpus publishes transforms, never
 expected outputs (DL-041). It is *which files are accepted, which refused, and
@@ -38,15 +38,15 @@ whether a refusal says why*. **40 accepted / 10 refused**, measured.
   catches an intent-to-tag mis-wiring.
 - **★★★ Two conformant CMMs, `33.13 L*` apart, from one file.** ICC.1:2022
   **8.10.2 a)** prefers `DToBx`/`BToDx` *"except where this tag is not needed or
-  supported by the CMM"*; **b)** falls back to `AToBx`/`BToAx`. iccce does not
+  supported by the CMM"*; **b)** falls back to `AToBx`/`BToAx`. icccer does not
   implement `mpet` → takes (b); lcms2 does → takes (a). **Both conformant**
   (A33). lcms2's three intents return red/green/blue — exactly what the readme
   says `B2D0/1/2` do — so the profile *identifies which tag each engine used*.
-  ★ **Owed to the engineer: iccce takes step (b) SILENTLY.** Nothing in
+  ★ **Owed to the engineer: icccer takes step (b) SILENTLY.** Nothing in
   `inspect` or `transform` discloses that an author-preferred transform was
   present and declined. Clause permits declining; it does not require silence.
 - **★★ A REAL DEFECT the corpus found and nothing synthetic would have —
-  FIXED 2026-08-17, and the fix is a lesson of its own.** `iccce bench` on the
+  FIXED 2026-08-17, and the fix is a lesson of its own.** `icccer bench` on the
   corpus's `7CLR` profile **aborted**: bare exit `-1073740791` (`0xC0000409`),
   *"memory allocation of 1022842631448 bytes failed"*.
   `recommended_grid_points(7)` returned 33 (its `_ => 33` catch-all, documented
@@ -60,7 +60,7 @@ whether a refusal says why*. **40 accepted / 10 refused**, measured.
   [[project-a-fixed-defect-can-blind-its-own-row]].
 - **★★ The ≥5-channel compiled path stays REPORTED, not graded, and the reasons
   are ranked.** `compiled-vs-reference-at-the-default-grid` = `2.952005e-3`
-  device units at grid 6 over 527 probes. (1) **Both arms are iccce** —
+  device units at grid 6 over 527 probes. (1) **Both arms are icccer** —
   self-comparison, dispositive on its own. (2) The gate that justifies 33 for
   3-D/4-D is a *measured lcms2 agreement*; there is no counterpart at 7 inputs
   because ICC.1 legislates no interpolation method (A16) and lcms2's n>4 CLUT
@@ -80,13 +80,13 @@ whether a refusal says why*. **40 accepted / 10 refused**, measured.
   clause is where the missing term will be.** (Pass 4b `B6`, Pass G
   `SWEEP_DEVICE`, this.)
 - **★★ Pass 4b's encoded-PCS clamp divergence reproduces on a REAL file.**
-  iccce clamps the encoded PCS at the B curve (10.18's domain, `Trc::eval`);
+  icccer clamps the encoded PCS at the B curve (10.18's domain, `Trc::eval`);
   lcms2 does not. Found on a fixture *we authored*; now `0.2374 L*` on
   `Probev1_ICCv4`. ★ The two `Probev1` files nail the mechanism: same design,
   legacy `mft2` ceiling `100.390625` (no overflow) vs v4 `mAB ` ceiling `100.0`
   (overflow). **The overflow is the ENCODING, not the data.** Split predicate
   evaluated on **lcms2's** output — the side that does not clamp — never on
-  iccce's (splitting on iccce's clamp fixed-point would split on the behaviour
+  icccer's (splitting on icccer's clamp fixed-point would split on the behaviour
   under test).
 - **★★ Injection localised, and five separations predicted their own failure
   magnitude to the digit** (10, 4, and 81 three times); a sixth reproduced
@@ -113,7 +113,7 @@ whether a refusal says why*. **40 accepted / 10 refused**, measured.
   private corpora including `suite-v50` (20). They reconcile exactly —
   `23+16+1` and `10+9+1`. **The single GRAY profile is in `suite-v50`, not
   here.** The §E row now names its own denominator and points at the other.
-  *iccce does have GRAY evidence; Pass H is not where it lives.*
+  *icccer does have GRAY evidence; Pass H is not where it lives.*
 - **★ Coverage the corpus does NOT have, and the population census says so:**
   **no `GRAY`, no `Lab `, no `XYZ ` colour space in the accepted 40**
   (`D50/D55/D65_XYZ.icc` declare `colourSpace = 'RGB '`); **zero `6CLR`

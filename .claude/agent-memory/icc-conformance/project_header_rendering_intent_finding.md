@@ -1,6 +1,6 @@
 ---
 name: project-header-rendering-intent-finding
-description: Measured 2026-08-18 — neither iccce nor lcms2 consumes a profile header's renderingIntent on a non-DeviceLink profile; lcms2 reads it in exactly ONE place (DeviceLink, cmsIsCLUT); the library API had no "unspecified" state so only the CLI arm of the test could catch the rival hypothesis.
+description: Measured 2026-08-18 — neither icccer nor lcms2 consumes a profile header's renderingIntent on a non-DeviceLink profile; lcms2 reads it in exactly ONE place (DeviceLink, cmsIsCLUT); the library API had no "unspecified" state so only the CLI arm of the test could catch the rival hypothesis.
 metadata:
   type: project
 ---
@@ -8,7 +8,7 @@ metadata:
 Built the synthetic pair `v2-rgb-header-intent-perceptual.icc` /
 `…-relative.icc` (byte-identical except **file offset 67**, the low byte of
 `renderingIntent` at header offset 64) plus
-`crates/iccce-cli/tests/header_rendering_intent_not_consumed.rs` and
+`crates/icccer-cli/tests/header_rendering_intent_not_consumed.rs` and
 `docs/TOLERANCES.md` §3.11.
 
 **Why:** the operator measured the behaviour on two licensed suite profiles
@@ -35,7 +35,7 @@ at all.
 ## 2. The two engines ignore the same field while defaulting to DIFFERENT intents
 
 `transicc.c` declares `static cmsUInt32Number Intent = INTENT_PERCEPTUAL`;
-iccce's CLI default is media-relative. So on the member whose header says **1**,
+icccer's CLI default is media-relative. So on the member whose header says **1**,
 lcms2's no-flag run chose **0** — the header value was present, disagreed with
 the default, and lost. **That is a stronger observation than either engine
 alone**: a shared default could have been mistaken for the header being
@@ -50,10 +50,10 @@ Measured (transicc 5.1 / LittleCMS 2.19, dst `v4-rgb-matrix-trc.icc`, in
 is no "unspecified" state at the library surface. So the library half of the
 measurement **cannot** detect the rival hypothesis; proved it by injecting the
 rival (CLI patched to honour the header when no `--intent` given): only the
-arm that shells out to `env!("CARGO_BIN_EXE_iccce")` went red.
+arm that shells out to `env!("CARGO_BIN_EXE_icccer")` went red.
 
-Consequence: the file lives in **`crates/iccce-cli/tests/`**, not
-`iccce-cmm/tests/` where every other transform test is. When the observable is
+Consequence: the file lives in **`crates/icccer-cli/tests/`**, not
+`icccer-cmm/tests/` where every other transform test is. When the observable is
 "what happens when the caller says nothing", the only surface that has a
 "nothing" is the CLI.
 

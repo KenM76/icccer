@@ -1,5 +1,5 @@
 ---
-name: iccce-consumer-exercises-paths-the-code-is-in
+name: icccer-consumer-exercises-paths-the-code-is-in
 description: DL-078 (2026-09-01) — pdfce's question found an API hole four Passes of our own testing had missed, because a successful `with_bpc()` can be a total no-op; our tests exercise the paths the code is FOR, a consumer exercises the paths the code is IN. Plus the rule that follows: when a call can succeed and do nothing, DISCLOSE, and check whether the ambiguity is the STANDARD'S before touching the code
 metadata:
   type: project
@@ -18,7 +18,7 @@ built for BPC was built to measure *what the map does*, and the case in
 question is the one where the map does nothing.
 
 It surfaced on **2026-09-01** because **`pdfce` filed a request about its
-own use of the flag**. The measurement that followed: `iccce transform
+own use of the flag**. The measurement that followed: `icccer transform
 --bpc`, sRGB (v2 matrix/TRC) → U.S. Web Coated (SWOP) v2, 729 grid
 operands, ink units — media-relative changed 727/729 (max `0.243951`);
 **perceptual and saturation changed `0` of `729`, bit-identical**;
@@ -30,7 +30,7 @@ ICC-absolute refused by name. Filed as `NUMERIC_CLAIMS.md` §3.42,
 shape, and not asking is the failure mode, not a courtesy"* — has been
 demonstrated with an OUTCOME rather than asserted as a rationale.**
 
-★★ It is [[iccce-documented-is-not-tested]]'s shape (`DL-051`: a suite's
+★★ It is [[icccer-documented-is-not-tested]]'s shape (`DL-051`: a suite's
 power is **per-defect**, not per-suite; the best-documented constant was
 caught by **none** of six injections) **arriving from outside instead of
 from an injection.** Both say the same thing about self-assessment: the
@@ -50,7 +50,7 @@ apparatus you build is shaped by the failure you imagined.
   and there is no reason to think it is the only one.
 - ★ **A second, smaller instance in the same dispatch:** `pdfce` flagged a
   stale `README.md` status row **twice, across two files**, before it was
-  corrected — [[iccce-stale-status-decays-faster-than-a-number]] instance
+  corrected — [[icccer-stale-status-decays-faster-than-a-number]] instance
   #7. When an outside reader reports a staleness, sweep the **class** of
   claim, not the line.
 
@@ -107,12 +107,12 @@ behaves identically whether or not a caller reads it. **Do not quote
 2. ★★★ **The intent-separation figures are a SEPARATION claim, not an
    accuracy claim.** `NC-308` … `NC-311` have **no oracle** — a CMM wrong
    by 20 ΔE2000 at all four intents separates identically.
-   [[iccce-agreement-can-be-the-symptom]] is the mirror hazard.
+   [[icccer-agreement-can-be-the-symptom]] is the mirror hazard.
 3. ★★ **The unit is INK, and no ΔE may be derived from any of it.** `0.464373`
-   is not *"0.46 ΔE"*. [[iccce-fitted-table-cannot-express-a-clamp]] records
+   is not *"0.46 ΔE"*. [[icccer-fitted-table-cannot-express-a-clamp]] records
    the sibling rule for capture-derived units.
 
-Related: [[iccce-pass-status]], [[iccce-disclosure-is-not-enforcement]],
-[[iccce-gate-must-not-reward-deletion]],
-[[iccce-injection-measures-one-magnitude]],
-[[iccce-refusal-at-one-layer-is-nonconformance-at-another]].
+Related: [[icccer-pass-status]], [[icccer-disclosure-is-not-enforcement]],
+[[icccer-gate-must-not-reward-deletion]],
+[[icccer-injection-measures-one-magnitude]],
+[[icccer-refusal-at-one-layer-is-nonconformance-at-another]].

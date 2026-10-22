@@ -11,7 +11,7 @@ build a computed sRGB destination on. The oracle-contamination risk that blocked
 matrices and the transfer function.**
 
 **Why:** the whole corpus previously took sRGB from lcms2, which is also
-iccce's differential oracle — so a computed sRGB would have taken its white
+icccer's differential oracle — so a computed sRGB would have taken its white
 point from the implementation it is meant to be checked against
 (`NUMERIC_CLAIMS.md` shared-misreading risk = ELEVATED). Three non-lcms2
 documents are now held: **ITU-R BT.709-6** (primaries + D65, `primary_spec`),
@@ -35,7 +35,7 @@ licence), **W3C sRGB 1996** (superseded, self-disavowed).
 - **Consequence for any sRGB-building work:** a from-constants sRGB is
   defensible, but **will not be byte-identical to the HP profile.** A
   byte-equality test against `sRGB Color Space Profile.icm` tests HP's 1998
-  arithmetic, not iccce's. Use a ΔE round-trip and name the ~`2×10⁻⁴ XYZ`
+  arithmetic, not icccer's. Use a ΔE round-trip and name the ~`2×10⁻⁴ XYZ`
   blue-Z construction difference as an approximation under project rule 4.
 - **Compute the sRGB→XYZ matrix from the chromaticities; do not transcribe it.**
   The Grassmann construction reproduces CSS Color 4's published exact rationals

@@ -3,30 +3,30 @@
 version = 4
 
 [[package]]
-name = "iccce-cli"
-version = "0.3.1"
+name = "icccer-cli"
+version = "0.4.0"
 dependencies = [
- "iccce-cmm",
- "iccce-color",
- "iccce-profile",
+ "icccer-cmm",
+ "icccer-color",
+ "icccer-profile",
 ]
 
 [[package]]
-name = "iccce-cmm"
-version = "0.3.1"
+name = "icccer-cmm"
+version = "0.4.0"
 dependencies = [
- "iccce-color",
- "iccce-profile",
+ "icccer-color",
+ "icccer-profile",
 ]
 
 [[package]]
-name = "iccce-color"
-version = "0.3.1"
+name = "icccer-color"
+version = "0.4.0"
 
 [[package]]
-name = "iccce-measure"
-version = "0.3.1"
+name = "icccer-measure"
+version = "0.4.0"
 
 [[package]]
-name = "iccce-profile"
-version = "0.3.1"
+name = "icccer-profile"
+version = "0.4.0"

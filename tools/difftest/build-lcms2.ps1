@@ -53,7 +53,7 @@
        CORRECTNESS, secondarily: fast_float replaces lcms2's floating
        point pipeline with a faster approximate one. An oracle should be
        the reference implementation's most careful path, not its
-       fastest. Comparing iccce against an approximation would make
+       fastest. Comparing icccer against an approximation would make
        every disagreement ambiguous.
 
    -DLCMS2_BUILD_JPGICC=OFF -DLCMS2_BUILD_TIFICC=OFF -DLCMS2_BUILD_TIFDIFF=OFF

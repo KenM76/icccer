@@ -6,7 +6,7 @@ metadata:
 ---
 
 **2026-08-18, on the engineer's dispatch.** `tools/difftest/src/passk.rs`
-§E/§F repointed at `iccce transform --preserve-black k-only-equal-lightness`;
+§E/§F repointed at `icccer transform --preserve-black k-only-equal-lightness`;
 `docs/TOLERANCES.md` **§3.10.12**; `tools/difftest/README.md` **§25.13**; CI
 floor `22 → 23`. Pass K **40 → 44 rows** (E7, E8, E9, F8); suite `pass=331 fail=2` →
 **`pass=337 fail=0 skip=9 error=0`**; corpus-free (CI-shaped)
@@ -34,13 +34,13 @@ was widened** — `E1` and `F5` are still exactly `0`.
   from the axis halves (`1.138e-3` → `5.34e-4`). **`O(1)` beside `O(h^1.32)`**,
   which is exactly what Pass 6's `R6` band exists to detect. Direction is
   **over-application**: it preserves pixels that do not qualify. Unreachable
-  from the CLI (`iccce bench` takes no `--preserve-black`); **reachable from
+  from the CLI (`icccer bench` takes no `--preserve-black`); **reachable from
   the library**, which is where a per-pixel consumer lives. Filed §3.10.12.7.
   ★★★ **CORRECTED 2026-08-18 (re-measured): IT WAS FIXED, in `a05476c`, the
   commit BEFORE the grading commit that filed it as open.** The engineer took
   the second remedy — `CompiledTransform` carries `k_preserve:
   Option<KPreserve>` **outside** the grid and branches per pixel. Re-measured
-  today by `crates/iccce-cmm/tests/compiled_black_preservation_convergence.rs`:
+  today by `crates/icccer-cmm/tests/compiled_black_preservation_convergence.rs`:
   near-axis **`6.234231e-7` → `3.330669e-16`** (grid 17 → 33), control
   `3.710322e-4` → `6.289234e-8`; identical in debug and release. **`0.617121`
   is now HISTORY — the pre-fix value, live only in doc comments.**
@@ -61,7 +61,7 @@ was widened** — `E1` and `F5` are still exactly `0`.
 - ★★★ **`E8`: the oracle is wrong and the engine is right, by algebra.** On a
   **same-profile** pair the equal-lightness construction **is the identity**
   for any strictly monotonic ramp — no implementation in the expectation, so
-  `DerivedExpectation`, bound = **one printed unit** and nothing else. iccce
+  `DerivedExpectation`, bound = **one printed unit** and nothing else. icccer
   `0.000000`; **lcms2 intent 11 is `6.1e-5` off**, because its K returns
   through a 17-node CLUT. ★ Its rival must be **the oracle's own answer**, not
   "copy K through" — which on this pair *is* correct and would be
@@ -72,7 +72,7 @@ was widened** — `E1` and `F5` are still exactly `0`.
   A whole-ramp agreement figure grades the *vendor's grid density*. `E9` grades
   **only at the nodes**, bound from `pcs_quantum_tolerance` at run time
   (`1.09e-4`), rival `4.890e-2` → **`1577×`**. It is the **only** row that can
-  say which definition iccce implements — which is what the mandatory
+  say which definition icccer implements — which is what the mandatory
   `--preserve-black <policy>` argument promises a caller.
 - ★★ **AN OBSERVATION THAT DOES NOT MOVE ACROSS THE CHANGE IT WAS WRITTEN TO
   DETECT NEEDS A SECOND NUMBER.** `E3`/`F6` read `0.000000` before *and* after,

@@ -4,7 +4,7 @@
 //!
 //! `docs/ROADMAP.md` records Pass 2's done-when clause 2 — *"a synthetic
 //! corpus covers each tag type"* — as **PARTIAL**, because the only synthetic
-//! bytes the project had were authored inside `iccce-profile`'s unit tests.
+//! bytes the project had were authored inside `icccer-profile`'s unit tests.
 //! Those are tag-level, not profile-level: they cannot cover header/tag-table
 //! /tag-data interaction, cross-tag consistency, or anything a consumer would
 //! open, and nothing outside `cargo test` can use them. This program is the
@@ -21,7 +21,7 @@
 //!
 //! * **Nothing reads a clock, an environment variable, or a random number.**
 //!   The profile creation date is the constant
-//!   [`iccce_gen_profiles::profile::FIXTURE_DATE`]. Byte-for-byte
+//!   [`icccer_gen_profiles::profile::FIXTURE_DATE`]. Byte-for-byte
 //!   reproducibility is a property this corpus has, not one it hopes for.
 //! * **`verify` is a first-class subcommand**, not a script. It regenerates
 //!   every recipe in memory and compares against the files on disk. A fixture
@@ -61,7 +61,7 @@ use std::path::Path;
 use std::process::ExitCode;
 
 const USAGE: &str = "\
-gen-profiles — byte-by-byte synthetic ICC profile generator (iccce)
+gen-profiles — byte-by-byte synthetic ICC profile generator (icccer)
 
 USAGE:
   gen-profiles list                 List every recipe with its coverage.
@@ -248,7 +248,7 @@ fn cmd_manifest() -> ExitCode {
              when the specification has not been read on the exact point the fixture probes, \
              so neither 'must report' nor 'must be silent' can be written down without \
              inventing the answer. The `Expected of a consumer` row therefore carries a \
-             **dated measurement of what iccce does today** and names the outstanding \
+             **dated measurement of what icccer does today** and names the outstanding \
              sourcing question. When that question is answered the fixture moves into one of \
              the two sections above and its row becomes a real expectation \u{2014} that \
              move is the visible event this section exists to produce.",
@@ -269,7 +269,7 @@ fn cmd_manifest() -> ExitCode {
                 "**No fixtures are currently in this category.** That is a statement, not an \
                  omission: every fixture in this corpus has a settled category. A fixture \
                  lands here only when a dispatch to `icc-spec-librarian` is outstanding on \
-                 the exact point the fixture probes \u{2014} not when iccce's behaviour is \
+                 the exact point the fixture probes \u{2014} not when icccer's behaviour is \
                  doubted (that is a defect, and the fixture is filed under what the standard \
                  says), and not when the text has been read and licenses more than one \
                  consumer behaviour (that is settled, and the project's choice is recorded \

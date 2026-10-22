@@ -17,15 +17,15 @@ whatever is at the destination** — arriving somewhere plausible reads as
 confirmation, so the citation authenticates the wrong text rather than
 failing.
 
-The 2026-08-17 instance: `NEXT_SESSION.md` §3.0 cited iccce's 33-node
+The 2026-08-17 instance: `NEXT_SESSION.md` §3.0 cited icccer's 33-node
 recommended grid as `NUMERIC_CLAIMS.md:2164, :2529`. `:2529` described
 **`USWebCoatedSWOP.icc`'s own `lut8` CLUT, which also has 33 nodes — a
-different 33**, a vendor file's tag rather than iccce's recommendation.
+different 33**, a vendor file's tag rather than icccer's recommendation.
 The line was copied unchecked into an outbound `pdfce` request. Real homes:
 **§3.19 / NC-145** and **§3.27**; symbol
-`iccce_cmm::compiled::recommended_grid_points`
-(`crates/iccce-cmm/src/compiled.rs:77`, called from
-`crates/iccce-cli/src/main.rs:421`). Correction filed at §3.30.7.
+`icccer_cmm::compiled::recommended_grid_points`
+(`crates/icccer-cmm/src/compiled.rs:77`, called from
+`crates/icccer-cli/src/main.rs:421`). Correction filed at §3.30.7.
 
 **It is structural, not a slip.** I read all six cited locations at tip
 `e21154c`: of `:2164`, `:2529`, `:5788`, `:623`, `:976`, `:6488`, **six of

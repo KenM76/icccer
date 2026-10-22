@@ -1,5 +1,5 @@
 ---
-name: iccce-negative-finding-removes-its-auditor
+name: icccer-negative-finding-removes-its-auditor
 description: DL-042 — a wrong REJECTION survives indefinitely because nobody re-tests a fixture they were told is broken; when an item has been owed for many cycles, re-audit the REASON it is owed, not just the item
 metadata:
   type: project
@@ -54,7 +54,7 @@ published a finding; this ledger **propagated** it.
 important sentence in the filing" — was **false**, and the tension was
 visible **three lines below the heading in its own table**. ★ **A
 claim's prominence is not evidence about it.** See
-[[iccce-verify-own-draft-too]].
+[[icccer-verify-own-draft-too]].
 
-Related: [[iccce-ground-truth-cannot-exist]] (the item this was found
-on), [[iccce-count-needs-its-apparatus]], [[iccce-pass-status]].
+Related: [[icccer-ground-truth-cannot-exist]] (the item this was found
+on), [[icccer-count-needs-its-apparatus]], [[icccer-pass-status]].

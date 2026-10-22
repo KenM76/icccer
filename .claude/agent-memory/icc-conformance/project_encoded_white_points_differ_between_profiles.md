@@ -47,7 +47,7 @@ a widened number, with both texts kept.
 3. **An upper-bound round-trip check rewards deleting the clamp** (the
    round trip gets *better*). Pair it with a check that pins the observed
    cost to the closed-form prediction, and print the sensitivity control.
-4. **Scope caveat found the same day:** iccce clamps at **three** sites
+4. **Scope caveat found the same day:** icccer clamps at **three** sites
    (F.8–F.16 in `pcs_to_device`, 10.18's domain in `Trc::eval`, F.1(b) in
    `eval_inverse`/`invert_table`), so removing the F.8–F.16 clamp *alone*
    is **undetectable** — the clamp-before/clamp-after ordering is

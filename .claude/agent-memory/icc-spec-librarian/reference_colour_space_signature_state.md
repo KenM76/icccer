@@ -7,7 +7,7 @@ metadata:
 
 **Durable answer lives at
 `D:\Dev\Rag-Specialized\ICC_Spec\icc\icc__s__colour_space_signatures.md`**
-(written 2026-08-17 for an iccce public-API dispatch: a `Signature → component
+(written 2026-08-17 for an icccer public-API dispatch: a `Signature → component
 count` accessor for `pdfce`'s `/ICCBased` `/N` check). Do not re-derive; grep it.
 
 **The four facts most likely to be mis-remembered:**

@@ -20,7 +20,7 @@ escape is a `Default*` resource, which substitutes the *source space*).
 ⇒ colour-managing a bare `DeviceGray` is **non-conforming in 1.7**,
 merely unusual in 2.0. **★ This STRENGTHENS the conclusion: both
 editions route the gray leg to the device rule, so in NEITHER is it
-iccce's leg.**
+icccer's leg.**
 
 **The reserved-colourant-name delta is SCOPE, not existence.**
 `reserved to name` = 0 hits in 1.7 / 2 in 2.0 ✔, **but `reserved name` =
@@ -66,7 +66,7 @@ for A31/A47 — no new blocker was created.
 `Separation /Black` and `DeviceN [/Black]` bind to the K colourant by
 **§8.6.6.4**'s `shall`. **So all four the suite's publisher "grays" agree inside the PDF
 processor before any conversion — pdfce's job, the same boundary class as
-overprint.** iccce owns only CMYK→CMYK and the non-CMYK-native device.
+overprint.** icccer owns only CMYK→CMYK and the non-CMYK-native device.
 **PDF, not ICC, also names the harm** — §8.6.5.7 NOTE 2 (both editions):
 4→3→4 "results in a loss of fidelity in the black component".
 
@@ -88,7 +88,7 @@ dispatch's definition of "K-only" was wrong.** lcms2/literature K-only =
 *already-K-only pixels stay K-only* (a CMYK→CMYK rule). "Gray maps onto K
 alone" is the PDF device rule, a different layer. And lcms2 maps K by
 **equal L\*** on the K ramp, while **Cholewo 2000** maps it by the
-**K_MIN/K_MAX ratio** — two definitions, one name. State which one iccce
+**K_MIN/K_MAX ratio** — two definitions, one name. State which one icccer
 implements before any cross-check means anything.
 
 **Numeric expectation: NONE exists, and that was verified rather than
@@ -143,7 +143,7 @@ citing paper then says “in our method”.)*
 ≡ destination printing condition the four limits coincide and Eq. (1)
 reduces EXACTLY to `K_d = K_i`, for every colour.** So on a same-press
 fixture **“copy K through” IS Cholewo’s answer, to the bit** — it is not
-the plausible-but-wrong candidate iccce’s suite names it. A wrong Cholewo
+the plausible-but-wrong candidate icccer’s suite names it. A wrong Cholewo
 and a right one are indistinguishable there **by construction**. Cross-press
 on the pure-K axis it does not copy through: `K_i = K_iMAX` ⇒ `K_d = K_MAX`
 (destination), which reproduces the paper’s own VERBATIM headline claim —

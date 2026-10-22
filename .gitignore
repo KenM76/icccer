@@ -78,5 +78,5 @@ __pycache__/
 # ★ The case file lives OUTSIDE the working tree, not in a gitignored path
 # inside it — a gitignored path is one `git add -f` away from the thing the
 # decision was made to prevent. The PCS010 case is at
-# D:/Dev/temp/iccce-suite/pcs1_010_shading.case.json on the operator's machine.
+# D:/Dev/temp/icccer-suite/pcs1_010_shading.case.json on the operator's machine.
 # ------------------------------------------------------------------------

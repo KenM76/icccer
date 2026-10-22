@@ -1,5 +1,5 @@
 ---
-name: iccce-inferred-environment-constraint-is-a-reading
+name: icccer-inferred-environment-constraint-is-a-reading
 description: DL-060 (VERIFIED 2026-08-18, promoted from REPORTED) — "the Read tool cannot render PDF pages here" was inferred from ONE failing call and written into permanent docs as a fact; it was false (pdftoppm absent, but pypdfium2 renders and Read reads the PNG), and what it cost was the only INDEPENDENT check on a transcribed equation, because all three text engines drop Symbol-font glyphs TOGETHER
 metadata:
   type: project
@@ -15,7 +15,7 @@ not tried**.
 **Why:** on 2026-08-18 `icc-spec-librarian` retracted *"the Read tool
 cannot render PDF pages in this environment"*, which it had
 **overgeneralised from a single failing invocation** and which had
-propagated into seven of its corpus files and into `iccce`'s `LEGAL.md`,
+propagated into seven of its corpus files and into `icccer`'s `LEGAL.md`,
 `NUMERIC_CLAIMS.md` and `SESSION_LOG.md`, plus this agent's own memory.
 
 **The narrow correct claim — do not round it up.** ★★★ ***"PDF pages can
@@ -34,7 +34,7 @@ depend on an uncommitted corpus for a capability it asserts.
 multi-engine agreement is **correlated, not independent**, wherever
 meaning turns on a sign or an inequality — the concordance measures the
 shared failure mode, not the quantity. **A raster is the only independent
-channel.** This is [[iccce-agreement-can-be-the-symptom]] arriving in the
+channel.** This is [[icccer-agreement-can-be-the-symptom]] arriving in the
 sourcing layer.
 
 **★★★ Three instances, not two** — and the third is the argument:
@@ -52,7 +52,7 @@ lives in `ICC_Spec\LEGAL_NOTE.md` §4 and had no counterpart in
 not bind this repository's documents.** That gap is what DL-060 closes,
 and it is a better reason to file than the pattern.
 
-**Not a duplicate of [[iccce-negative-finding-removes-its-auditor]]
+**Not a duplicate of [[icccer-negative-finding-removes-its-auditor]]
 (DL-042).** DL-042 is the remedy applied *later* — re-read the REASON an
 item is owed. DL-060 is the check applied *at the moment of writing*.
 They compose: DL-060 stops the false negative being filed, DL-042 catches
@@ -65,7 +65,7 @@ this librarian has no shell, so DL-060 records the capability as
 `[REPORTED]` with a named first use (Cholewo 2000 Eq. (1), promoted
 RECONSTRUCTION → VERIFIED off a rasterised page, `≤` glyphs recovered),
 and §7.21 owes the invocation to whoever renders next. See
-[[iccce-verify-own-draft-too]].
+[[icccer-verify-own-draft-too]].
 
 **Live consequence:** NC-230's condition (b) — a second reading of ICC's
 `srgb.pdf` §B.2 — was recorded as *barred*; it is **unblocked and merely
@@ -116,7 +116,7 @@ corpus case recovers glyphs the engines mangle, this one recovers content
 they never mention — but **it is not the earlier one, and the record is
 not rewritten.**
 
-Related: [[iccce-source-labelled-number]] (DL-061, what the first use
-found), [[iccce-pass-status]],
-[[iccce-absence-of-publication-is-not-evidence]],
-[[iccce-count-from-a-sample-is-not-the-population]].
+Related: [[icccer-source-labelled-number]] (DL-061, what the first use
+found), [[icccer-pass-status]],
+[[icccer-absence-of-publication-is-not-evidence]],
+[[icccer-count-from-a-sample-is-not-the-population]].

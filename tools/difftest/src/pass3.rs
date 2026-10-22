@@ -1,4 +1,4 @@
-//! # Pass 3 — the matrix/TRC differential, iccce against lcms2
+//! # Pass 3 — the matrix/TRC differential, icccer against lcms2
 //!
 //! This module answers ROADMAP Pass 3's done-when:
 //!
@@ -13,7 +13,7 @@
 //! ```text
 //!   grid (133 RGB triples in 0..1, deterministic — see `grid()`)
 //!     │
-//!     ├──▶ iccce transform --src sRGB --dst AdobeRGB      (subprocess)
+//!     ├──▶ icccer transform --src sRGB --dst AdobeRGB      (subprocess)
 //!     │        → A: destination device RGB, 0..1, 6 decimals
 //!     │
 //!     └──▶ transicc -isRGB -oAdobeRGB -t1 -c0 -n          (subprocess)
@@ -21,20 +21,20 @@
 //!
 //!   compare  A  vs  B/255   in DEVICE space          → check 1
 //!   carry both into D50 CIELAB, compare in ΔE2000    → check 2
-//!   iccce sRGB→AdobeRGB→sRGB, compare to the grid    → check 3
-//!   instrument check: the Lab ruler, iccce vs lcms2  → check 4
+//!   icccer sRGB→AdobeRGB→sRGB, compare to the grid    → check 3
+//!   instrument check: the Lab ruler, icccer vs lcms2  → check 4
 //! ```
 //!
-//! **Both sides cross a process boundary.** iccce's answer comes from the
-//! shipped `iccce transform` binary, not from the `iccce-cmm` crate this
-//! module links — see the doc comment on [`crate::Iccce`] for why that
+//! **Both sides cross a process boundary.** icccer's answer comes from the
+//! shipped `icccer transform` binary, not from the `icccer-cmm` crate this
+//! module links — see the doc comment on [`crate::Icccer`] for why that
 //! asymmetry would matter.
 //!
 //! ## Why the intent is media-relative colorimetric and nothing else
 //!
 //! Two independent reasons, and the second is the one that took measuring:
 //!
-//! 1. **iccce implements only that intent in Pass 3.** `iccce transform`
+//! 1. **icccer implements only that intent in Pass 3.** `icccer transform`
 //!    refuses any other by name rather than substituting.
 //! 2. **Perceptual and saturation would be comparing a transform with black
 //!    point compensation silently switched on.** `ARCHITECTURE.md` DL-013 /
@@ -59,13 +59,13 @@
 //! instead of flattening it into a sampled grid. An oracle must be the
 //! reference implementation's **most accurate** path, for the same reason
 //! `fast_float` is never built (README §3). Any other `-c` would make a
-//! disagreement ambiguous between "iccce is wrong" and "lcms2 approximated".
+//! disagreement ambiguous between "icccer is wrong" and "lcms2 approximated".
 //!
 //! ## The units trap, stated once so it is never re-derived
 //!
 //! | | input | output |
 //! |---|---|---|
-//! | `iccce transform` | one triple per line, floats **0..1** | 6 decimals, **0..1** |
+//! | `icccer transform` | one triple per line, floats **0..1** | 6 decimals, **0..1** |
 //! | `transicc` (8-bit RGB) | one component per line, **0..255** | 4 decimals, **0..255** |
 //!
 //! Everything below works in normalised 0..1 and converts at the `transicc`
@@ -74,12 +74,12 @@
 
 use std::path::{Path, PathBuf};
 
-use iccce_cmm::MatrixTrc;
-use iccce_color::{D50, Lab, delta_e_2000};
-use iccce_profile::Profile;
+use icccer_cmm::MatrixTrc;
+use icccer_color::{D50, Lab, delta_e_2000};
+use icccer_profile::Profile;
 
 use crate::{
-    Bpc, DiffError, Iccce, Intent, Kind, Metric, Oracle, Precalc, Record, Request, Space, Tolerance,
+    Bpc, DiffError, Icccer, Intent, Kind, Metric, Oracle, Precalc, Record, Request, Space, Tolerance,
 };
 
 // ===========================================================================
@@ -92,7 +92,7 @@ use crate::{
 /// committed, never a required input. Every check here **skips** when it is
 /// absent, so the Linux runner reports 3 ("nothing ran"), not 0.
 ///
-/// As read by `iccce inspect` on 2026-08-11: v2.1, `mntr`, `RGB `/`XYZ `,
+/// As read by `icccer inspect` on 2026-08-11: v2.1, `mntr`, `RGB `/`XYZ `,
 /// `desc` = "sRGB IEC61966-2.1", colorants
 /// r(0.4361, 0.2225, 0.0139) g(0.3851, 0.7169, 0.0971) b(0.1431, 0.0606,
 /// 0.7141), and — this is the part that matters below — **`rTRC`/`gTRC`/
@@ -107,7 +107,7 @@ pub const SRGB: &str = r"C:\Windows\System32\spool\drivers\color\sRGB Color Spac
 /// ROADMAP's done-when, so no substitution-with-reason is needed; the search
 /// for an alternative second RGB profile was made moot by finding it present.
 ///
-/// As read by `iccce inspect` on 2026-08-11: v2.1, `mntr`, `RGB `/`XYZ `,
+/// As read by `icccer inspect` on 2026-08-11: v2.1, `mntr`, `RGB `/`XYZ `,
 /// `cprt` = "Copyright 2000 Adobe Systems Incorporated", `desc` = "Adobe RGB
 /// (1998)", colorants r(0.6097, 0.3111, 0.0195) g(0.2053, 0.6257, 0.0609)
 /// b(0.1492, 0.0632, 0.7446), and **`rTRC`/`gTRC`/`bTRC` are single-value
@@ -116,7 +116,7 @@ pub const SRGB: &str = r"C:\Windows\System32\spool\drivers\color\sRGB Color Spac
 /// The two profiles are therefore *deliberately unalike in the way that
 /// matters*: the source's tone curve is a sampled table and the
 /// destination's is an analytic gamma, so the comparison exercises both of
-/// `iccce-cmm::curve`'s evaluation paths and both of its inversion paths in
+/// `icccer-cmm::curve`'s evaluation paths and both of its inversion paths in
 /// one run. Had both been gammas, the whole table-interpolation half of the
 /// crate would have gone untested while the report said "sRGB → Adobe RGB
 /// verified".
@@ -126,7 +126,7 @@ pub const ADOBE_RGB: &str = r"C:\Windows\System32\spool\drivers\color\AdobeRGB19
 // The tolerances — every one of them, with the reason it is that number
 // ===========================================================================
 
-/// **Check 1 — device-space agreement, iccce vs lcms2, sRGB → Adobe RGB.**
+/// **Check 1 — device-space agreement, icccer vs lcms2, sRGB → Adobe RGB.**
 ///
 /// Metric: max |Δ| over every component of every grid point, **normalised
 /// device units (0..1)**, after clamping lcms2's output into `[0,1]` (the
@@ -135,7 +135,7 @@ pub const ADOBE_RGB: &str = r"C:\Windows\System32\spool\drivers\color\AdobeRGB19
 ///
 /// ## Where 5×10⁻⁴ comes from — three terms, none of them "it passed"
 ///
-/// The dominant disagreement is **not** iccce's; it is a documented
+/// The dominant disagreement is **not** icccer's; it is a documented
 /// approximation inside lcms2, and the bound is derived from lcms2's own
 /// arithmetic:
 ///
@@ -154,7 +154,7 @@ pub const ADOBE_RGB: &str = r"C:\Windows\System32\spool\drivers\color\AdobeRGB19
 /// The source profile's TRCs are exactly that case — 1024-entry sampled
 /// `curv` tables with no analytic segments. So lcms2 rounds the *input* to
 /// 1/65535 and rounds the curve's *output* to 1/65535, twice per channel,
-/// where iccce interpolates in `f64` throughout. Each rounding is ≤ ½ lsb =
+/// where icccer interpolates in `f64` throughout. Each rounding is ≤ ½ lsb =
 /// **7.63×10⁻⁶**.
 ///
 /// **(b) The input rounding is amplified by the source TRC's slope.** The
@@ -192,7 +192,7 @@ pub const DEVICE_CROSSCHECK: Tolerance = Tolerance::new(
      arithmetic-agreement, NOT perceptual",
 );
 
-/// **Check 2 — perceptual agreement, iccce vs lcms2, in ΔE2000.**
+/// **Check 2 — perceptual agreement, icccer vs lcms2, in ΔE2000.**
 ///
 /// Metric: max CIEDE2000 (`kL=kC=kH=1`, D50 CIELAB) between the two
 /// implementations' destination device outputs, both carried into Lab through
@@ -247,7 +247,7 @@ pub const DE_CROSSCHECK: Tolerance = Tolerance::new(
      perceptibility anchor, which is inherited with its warning",
 );
 
-/// **Check 3 — the round trip, iccce alone: sRGB → Adobe RGB → sRGB.**
+/// **Check 3 — the round trip, icccer alone: sRGB → Adobe RGB → sRGB.**
 ///
 /// Metric: max CIEDE2000 (`kL=kC=kH=1`, D50 CIELAB) between the original grid
 /// point and the round-tripped one, both carried into Lab through the
@@ -314,7 +314,7 @@ pub const DE_CROSSCHECK: Tolerance = Tolerance::new(
 /// ### ★ What this tolerance cannot catch, stated because it is uncomfortable
 ///
 /// It is an **upper** bound, and the dominant term is a *cost* rather than an
-/// *error*. If iccce stopped clamping altogether, the round trip would get
+/// *error*. If icccer stopped clamping altogether, the round trip would get
 /// **better**, the observed value would fall toward zero, and this check would
 /// go green. **A gate that rewards removing a normative requirement is not a
 /// gate.** That is why [`WHITE_CLAMP_PREDICTION`] exists: it pins the observed
@@ -345,7 +345,7 @@ pub const DE_ROUNDTRIP: Tolerance = Tolerance::new(
 /// ## Why this exists
 ///
 /// [`DE_ROUNDTRIP`] is an upper bound on a quantity that is mostly a
-/// *deliberate cost*. Remove iccce's range clamping and the round trip
+/// *deliberate cost*. Remove icccer's range clamping and the round trip
 /// becomes **more** accurate: the upper bound would pass while a normative
 /// requirement had been deleted. This check refuses that trade. The observed
 /// cost would collapse from 1.88×10⁻² toward zero while the prediction stayed
@@ -357,7 +357,7 @@ pub const DE_ROUNDTRIP: Tolerance = Tolerance::new(
 /// The first draft of this doc claimed it "makes the normative F.8–F.16
 /// *ordering* falsifiable — delete the clamp from `pcs_to_device` and this
 /// check fails". **That claim was wrong and is kept here as a correction
-/// rather than deleted.** Reading `iccce-cmm::curve`, range clamping happens
+/// rather than deleted.** Reading `icccer-cmm::curve`, range clamping happens
 /// at *three* independent sites, each with its own normative citation:
 ///
 /// | site | clause | what it clamps |
@@ -377,16 +377,16 @@ pub const DE_ROUNDTRIP: Tolerance = Tolerance::new(
 /// - range clamping removed from **all three** sites → observation collapses,
 ///   prediction does not → fails;
 /// - the F.8–F.16 clamp removed **on its own** → **not detected**, because
-///   iccce's other two clamps make it redundant.
+///   icccer's other two clamps make it redundant.
 ///
 /// **That last line is the honest scope statement.** For this profile pair the
 /// F.8–F.16 *ordering* is unobservable at the shipped surface — it is defence
 /// in depth, not a load-bearing distinction — and no test in this repository
 /// currently distinguishes clamp-before from clamp-after. `matrix_trc.rs`'s
 /// module doc is right that the order is normative and right about the symptom
-/// if a CMM got it wrong; it is `iccce-cmm`'s own belt-and-braces clamping
+/// if a CMM got it wrong; it is `icccer-cmm`'s own belt-and-braces clamping
 /// that makes it undetectable *here*. Distinguishing the two orders needs a
-/// TRC whose inverse is defined outside `[0,1]`, which iccce never permits.
+/// TRC whose inverse is defined outside `[0,1]`, which icccer never permits.
 /// **Recorded as owed, not as covered.**
 ///
 /// ## Where 1×10⁻³ ΔE2000 comes from
@@ -402,13 +402,13 @@ pub const DE_ROUNDTRIP: Tolerance = Tolerance::new(
 /// binary's, without room for a missing clamp.
 pub const WHITE_CLAMP_PREDICTION: Tolerance = Tolerance::new(
     1e-3,
-    "iccce prints device values at 6 decimals on both legs => +-5e-7 per component, \
+    "icccer prints device values at 6 decimals on both legs => +-5e-7 per component, \
      x(dL*/d device ~= 85 at white) => ~1e-4 dE00 print floor; 1e-3 is 10x that. \
      Sized to admit f64 inverse-matrix noise and to REFUSE both a wrong colorant matrix \
      and range clamping removed from all three of its sites (F.8-F.16, 10.18, F.1(b)), \
      which would collapse the observation to ~0 while the prediction stayed at 1.88e-2 \
      -- 19x this bound. SCOPE: it does NOT detect the F.8-F.16 clamp being removed on its \
-     own, because iccce's other two clamps make it redundant; the clamp-before vs \
+     own, because icccer's other two clamps make it redundant; the clamp-before vs \
      clamp-after ORDERING is unobservable at the shipped surface for this pair and is \
      recorded as OWED, not covered",
 );
@@ -417,14 +417,14 @@ pub const WHITE_CLAMP_PREDICTION: Tolerance = Tolerance::new(
 /// agree with lcms2's Lab rendering of the same profile?
 ///
 /// Metric: max CIEDE2000 between (a) Adobe RGB device → Lab through
-/// `iccce-cmm`'s destination model, called **in-process** — this one is the
+/// `icccer-cmm`'s destination model, called **in-process** — this one is the
 /// instrument, not the shipped surface, and is labelled as such — and (b) the
 /// same device values through `transicc -iAdobeRGB -o*Lab4 -t1 -c0`.
 ///
 /// ## Why this check exists at all
 ///
 /// Check 2 measures a disagreement between two implementations *with a ruler
-/// built partly out of one of them*. If iccce's destination forward model
+/// built partly out of one of them*. If icccer's destination forward model
 /// were wrong, check 2's ΔE would be systematically mis-scaled and the error
 /// would hide inside the metric instead of appearing as a number. This check
 /// drags it out: it is the ruler, held against a second ruler.
@@ -441,7 +441,7 @@ pub const WHITE_CLAMP_PREDICTION: Tolerance = Tolerance::new(
 /// matrix-shaper stage, where the destination TRC is an analytic γ (no
 /// tabulated quantisation applies in this direction) but the D50 Lab
 /// conversion goes through lcms2's `cmsXYZ2Lab` with its own white-point
-/// constants — `cmsD50X/Y/Z`, which agree with iccce's `D50` to 4 decimals by
+/// constants — `cmsD50X/Y/Z`, which agree with icccer's `D50` to 4 decimals by
 /// construction (`illuminant.rs` cites both) but not beyond. A 1×10⁻⁴
 /// difference in the white point moves `L*` by ~0.01. **0.05 is ~500× the
 /// print floor and ~5× the white-point term** — loose enough not to fail on
@@ -450,11 +450,11 @@ pub const WHITE_CLAMP_PREDICTION: Tolerance = Tolerance::new(
 /// confusion at ≈0.39 `L*`) could not pass.
 pub const DE_INSTRUMENT: Tolerance = Tolerance::new(
     5e-2,
-    "transicc prints Lab to 4 decimals => dE00 floor ~1e-4; lcms2's and iccce's D50 agree \
+    "transicc prints Lab to 4 decimals => dE00 floor ~1e-4; lcms2's and icccer's D50 agree \
      to 4 decimals by construction but not beyond, worth ~0.01 in L*; 0.05 is ~5x that \
      and would still catch a swapped colorant, a missing D50 adaptation, or the v2/v4 Lab \
      encoding error (~0.39 L*). This grades the MEASURING INSTRUMENT of the dE cross-check, \
-     not the shipped iccce binary",
+     not the shipped icccer binary",
 );
 
 // ===========================================================================
@@ -477,7 +477,7 @@ pub const DE_INSTRUMENT: Tolerance = Tolerance::new(
 ///
 /// **Determinism is the point.** The LCG is
 /// `x ← x·6364136223846793005 + 1442695040888963407` (Knuth's MMIX
-/// constants), seeded `0x0000_0003_ICCCE_...` — see the code. No `rand`
+/// constants), seeded `0x0000_0003_ICCCER_...` — see the code. No `rand`
 /// dependency, no clock, no thread-id: two runs on two machines compare the
 /// same 133 colours, or the comparison between their reports means nothing.
 ///
@@ -615,7 +615,7 @@ fn de(model: &MatrixTrc, a: [f64; 3], b: [f64; 3]) -> f64 {
 /// any gamma has `1^γ = 1`), and every inverse to exactly 1 at 1. So at the
 /// white corner the tone curves are the identity and the whole round-trip
 /// cost is matrix-and-clamp. **No lcms2 appears either** — this is a
-/// prediction about iccce, made from the files.
+/// prediction about icccer, made from the files.
 ///
 /// If this quantity is ≈0, the two files' encoded whites agree and the
 /// round-trip's dominant term is absent — in which case [`DE_ROUNDTRIP`]'s
@@ -642,7 +642,7 @@ pub fn predicted_white_clamp_de(src: &MatrixTrc, dst: &MatrixTrc) -> f64 {
     let w_back = dst.matrix().apply(clamped);
     let lab = |v: [f64; 3]| {
         Lab::from_xyz(
-            iccce_color::Xyz {
+            icccer_color::Xyz {
                 x: v[0],
                 y: v[1],
                 z: v[2],
@@ -679,23 +679,23 @@ pub struct Analysis {
     pub dst_path: PathBuf,
     /// The input grid, source device RGB in 0..1.
     pub grid: Vec<[f64; 3]>,
-    /// iccce's destination device output, 0..1, from `iccce transform`.
-    pub iccce_out: Vec<[f64; 3]>,
+    /// icccer's destination device output, 0..1, from `icccer transform`.
+    pub icccer_out: Vec<[f64; 3]>,
     /// lcms2's destination device output **as printed**, 0..255.
     pub lcms2_out_255: Vec<[f64; 3]>,
     /// lcms2's output normalised to 0..1, *not* clamped.
     pub lcms2_out: Vec<[f64; 3]>,
-    /// iccce's round trip back into source device space, 0..1.
+    /// icccer's round trip back into source device space, 0..1.
     pub roundtrip: Vec<[f64; 3]>,
-    /// lcms2's Lab rendering of iccce's destination outputs (instrument check).
-    pub lcms2_lab_of_iccce_out: Vec<Lab>,
+    /// lcms2's Lab rendering of icccer's destination outputs (instrument check).
+    pub lcms2_lab_of_icccer_out: Vec<Lab>,
 
     // --- reductions -------------------------------------------------------
     /// Per-point max |Δ| in device units 0..1, lcms2 clamped into [0,1].
     pub device_dev_clamped: Vec<f64>,
     /// Per-point max |Δ| in device units 0..1, lcms2 **as printed**.
     pub device_dev_raw: Vec<f64>,
-    /// Per-point ΔE2000, iccce vs lcms2, through iccce's destination model.
+    /// Per-point ΔE2000, icccer vs lcms2, through icccer's destination model.
     pub de_crosscheck: Vec<f64>,
     /// Per-point ΔE2000 of the round trip, through the source model.
     pub de_roundtrip: Vec<f64>,
@@ -724,8 +724,8 @@ pub struct Analysis {
 
     /// Provenance, printed on every record.
     pub oracle_banner: String,
-    pub iccce_exe: PathBuf,
-    pub iccce_is_debug: bool,
+    pub icccer_exe: PathBuf,
+    pub icccer_is_debug: bool,
 }
 
 impl Analysis {
@@ -771,13 +771,13 @@ impl From<DiffError> for Unavailable {
 /// the cheapest failure comes first so a missing binary is reported in
 /// milliseconds rather than after a grid has been pushed through lcms2:
 ///
-/// 1. `iccce transform` src → dst (the answer under test)
+/// 1. `icccer transform` src → dst (the answer under test)
 /// 2. `transicc` src → dst (the oracle's answer)
-/// 3. `iccce transform` dst → src on (1)'s output (the round trip)
+/// 3. `icccer transform` dst → src on (1)'s output (the round trip)
 /// 4. `transicc` dst → `*Lab4` on (1)'s output (the second ruler)
 ///
 /// # Errors
-/// [`Unavailable::Skip`] when a category (c) profile or the `iccce` binary is
+/// [`Unavailable::Skip`] when a category (c) profile or the `icccer` binary is
 /// absent; [`Unavailable::Error`] when a subprocess fails or its output does
 /// not parse.
 pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Analysis, Unavailable> {
@@ -790,12 +790,12 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
             )));
         }
     }
-    let iccce = match Iccce::locate() {
+    let icccer = match Icccer::locate() {
         Err(e) => return Err(Unavailable::Error(e.to_string())),
         Ok(None) => {
             return Err(Unavailable::Skip(
-                "iccce binary not found: run `cargo build --release -p iccce-cli`, \
-                 or set $ICCCE_BIN"
+                "icccer binary not found: run `cargo build --release -p icccer-cli`, \
+                 or set $ICCCER_BIN"
                     .to_string(),
             ));
         }
@@ -807,8 +807,8 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
 
     let grid = grid();
 
-    // (1) iccce, source -> destination. The answer under test.
-    let iccce_out = iccce.transform_grid(src_path, dst_path, &grid)?;
+    // (1) icccer, source -> destination. The answer under test.
+    let icccer_out = icccer.transform_grid(src_path, dst_path, &grid)?;
 
     // (2) lcms2, source -> destination. transicc wants 0..255, one component
     //     per line; the multiply happens HERE and nowhere else.
@@ -831,24 +831,24 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
         .map(|r| [r[0] / 255.0, r[1] / 255.0, r[2] / 255.0])
         .collect();
 
-    // (3) iccce, destination -> source, on iccce's own output. The round trip
-    //     is iccce ALONE — lcms2 is not in this loop, and the Kind says so.
-    let roundtrip = iccce.transform_grid(dst_path, src_path, &iccce_out)?;
+    // (3) icccer, destination -> source, on icccer's own output. The round trip
+    //     is icccer ALONE — lcms2 is not in this loop, and the Kind says so.
+    let roundtrip = icccer.transform_grid(dst_path, src_path, &icccer_out)?;
 
-    // (4) The second ruler: lcms2's Lab rendering of iccce's dst output.
+    // (4) The second ruler: lcms2's Lab rendering of icccer's dst output.
     let lab_req = Request {
         input: Space::profile(dst_path),
         output: Space::lab_v4(),
         intent: Intent::RelativeColorimetric,
         precalc: Precalc::Exact,
         bpc: Bpc::Off,
-        values: iccce_out
+        values: icccer_out
             .iter()
             .flat_map(|t| t.iter().map(|v| v * 255.0))
             .collect(),
     };
     let lab_rows = oracle.convert_batch(&lab_req, 3)?;
-    let lcms2_lab_of_iccce_out: Vec<Lab> = lab_rows
+    let lcms2_lab_of_icccer_out: Vec<Lab> = lab_rows
         .iter()
         .map(|r| Lab {
             l: r[0],
@@ -868,7 +868,7 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
     let mut lcms2_out_of_range = Vec::new();
 
     for i in 0..n {
-        let a = iccce_out[i];
+        let a = icccer_out[i];
         let b = lcms2_out[i];
         let mut d_raw = 0.0_f64;
         let mut d_clamped = 0.0_f64;
@@ -893,7 +893,7 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
 
         de_instrument.push(delta_e_2000(
             to_lab(&dst_model, a),
-            lcms2_lab_of_iccce_out[i],
+            lcms2_lab_of_icccer_out[i],
         ));
     }
 
@@ -929,11 +929,11 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
         src_path: src_path.to_path_buf(),
         dst_path: dst_path.to_path_buf(),
         grid,
-        iccce_out,
+        icccer_out,
         lcms2_out_255,
         lcms2_out,
         roundtrip,
-        lcms2_lab_of_iccce_out,
+        lcms2_lab_of_icccer_out,
         device_dev_clamped,
         device_dev_raw,
         de_crosscheck,
@@ -942,8 +942,8 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
         de_instrument,
         lcms2_out_of_range,
         oracle_banner: oracle.banner().unwrap_or_default(),
-        iccce_exe: iccce.path().to_path_buf(),
-        iccce_is_debug: iccce.is_debug_build(),
+        icccer_exe: icccer.path().to_path_buf(),
+        icccer_is_debug: icccer.is_debug_build(),
     })
 }
 
@@ -969,9 +969,9 @@ pub fn records(a: &Analysis) -> Vec<Record> {
         a.grid.len()
     );
     let provenance = format!(
-        "iccce={} ({}) | oracle={}",
-        a.iccce_exe.display(),
-        if a.iccce_is_debug {
+        "icccer={} ({}) | oracle={}",
+        a.icccer_exe.display(),
+        if a.icccer_is_debug {
             "DEBUG BUILD - not the shipped artefact"
         } else {
             "release"
@@ -987,7 +987,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
     let (inst_max, _) = max_mean(&a.de_instrument);
 
     let both_ran = "BOTH SIDES COMPUTED IN THIS RUN — no recorded expectation is being \
-                    reproduced. iccce's numbers from the shipped `iccce transform` binary, \
+                    reproduced. icccer's numbers from the shipped `icccer transform` binary, \
                     lcms2's from the pinned transicc. Cross-check, NOT ground truth.";
 
     vec![
@@ -1029,7 +1029,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             both_ran,
             format!(
                 "{pair} | {provenance} | both device outputs carried into D50 CIELAB through \
-                 iccce's destination matrix/TRC model; the metric is iccce_color::delta_e_2000, \
+                 icccer's destination matrix/TRC model; the metric is icccer_color::delta_e_2000, \
                  validated against all 34 Sharma/Wu/Dalal (2005) pairs at 1e-4 (NC-001). \
                  A VALIDATED RULER DOES NOT MAKE THIS GROUND TRUTH. \
                  Note the ruler clamps device values into [0,1] (clause 10.18's normative \
@@ -1056,13 +1056,13 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             Metric::DeltaE2000Max,
             DE_ROUNDTRIP,
             rt_max,
-            "BOTH SIDES ARE ICCCE. This prices the approximations in the loop (1024-entry \
+            "BOTH SIDES ARE ICCCER. This prices the approximations in the loop (1024-entry \
              sampled-table interpolation and its Annex F.1 inversion, plus the F.8-F.16 \
              clamp). It is WORTHLESS as correctness evidence: a round trip through a wrong \
              matrix round-trips perfectly.",
             format!(
                 "{pair} | {provenance} | sRGB -> AdobeRGB -> sRGB, two invocations of the \
-                 shipped binary; compared in D50 CIELAB through iccce's SOURCE model. \
+                 shipped binary; compared in D50 CIELAB through icccer's SOURCE model. \
                  mean={rt_mean:.6e} dE00; max device deviation {rt_dev_max:.6e} (0..1). \
                  {} of {} grid points are CLIPPED in the destination's linear space \
                  (the superseded 1e-2 justification asserted this was zero); the maximum \
@@ -1078,7 +1078,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             Metric::DeltaE2000Max,
             WHITE_CLAMP_PREDICTION,
             (a.white_clamp_predicted - a.white_clamp_observed).abs(),
-            "BOTH SIDES ARE ICCCE, but they are independent of each other: the PREDICTION \
+            "BOTH SIDES ARE ICCCER, but they are independent of each other: the PREDICTION \
              is closed-form f64 arithmetic on the two profiles' colorant matrices plus the \
              clamp, computed in-process; the OBSERVATION crosses two subprocess boundaries \
              through the shipped binary's full TRC-and-matrix pipeline. Neither is a \
@@ -1088,9 +1088,9 @@ pub fn records(a: &Analysis) -> Vec<Record> {
                 "{pair} | {provenance} | at device white (1,1,1): predicted \
                  {:.6e} dE00 from M_src, M_dst and the clamp alone (no tone curve \
                  enters: every TRC here is exactly 1 at 1); observed {:.6e} through two \
-                 invocations of `iccce transform`. Pins the COLORANT MATRICES and the NET \
+                 invocations of `icccer transform`. Pins the COLORANT MATRICES and the NET \
                  RANGE POLICY; does NOT pin the F.8-F.16 clamp ORDERING, which is redundant \
-                 with 10.18 and F.1(b) in iccce and is recorded as owed",
+                 with 10.18 and F.1(b) in icccer and is recorded as owed",
                 a.white_clamp_predicted, a.white_clamp_observed
             ),
         ),
@@ -1100,16 +1100,16 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             Metric::DeltaE2000Max,
             DE_INSTRUMENT,
             inst_max,
-            "BOTH RULERS COMPUTED IN THIS RUN. iccce's side is an IN-PROCESS library call \
-             (iccce-cmm), deliberately — this record grades the MEASURING INSTRUMENT of the \
+            "BOTH RULERS COMPUTED IN THIS RUN. icccer's side is an IN-PROCESS library call \
+             (icccer-cmm), deliberately — this record grades the MEASURING INSTRUMENT of the \
              dE cross-check, not the shipped binary. It is the one place in this module where \
-             iccce is not invoked as a subprocess, and that is the reason.",
+             icccer is not invoked as a subprocess, and that is the reason.",
             format!(
-                "{pair} | {provenance} | Adobe RGB device -> D50 CIELAB, iccce-cmm's model \
-                 vs transicc -i<dst> -o*Lab4 -t1 -c0, over iccce's {} destination outputs. \
+                "{pair} | {provenance} | Adobe RGB device -> D50 CIELAB, icccer-cmm's model \
+                 vs transicc -i<dst> -o*Lab4 -t1 -c0, over icccer's {} destination outputs. \
                  Bounds the systematic mis-scaling that a wrong destination model would \
                  introduce into the dE2000 cross-check above",
-                a.iccce_out.len()
+                a.icccer_out.len()
             ),
         ),
     ]

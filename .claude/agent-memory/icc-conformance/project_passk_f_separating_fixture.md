@@ -28,7 +28,7 @@ the same predicate on two profiles. Separation `4.207 049×10⁻¹`.
 - ★★★ **The class you can reach without an oracle is `DerivedExpectation`, and
   it is only worth the name if the HARNESS reads the bytes.** §F's `Mft2Bytes`
   walks the tag table and decodes `mft2` in `tools/difftest`, deliberately not
-  through `iccce-profile`: a parser that read the CLUT wrongly would otherwise
+  through `icccer-profile`: a parser that read the CLUT wrongly would otherwise
   make the expectation wrong *in the same way* as the observation. Six rows are
   `DerivedExpectation`; `F7` is the paired lcms2 **third reading** the enum's
   own doc asks for.

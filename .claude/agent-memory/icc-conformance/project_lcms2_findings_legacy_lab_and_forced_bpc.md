@@ -17,7 +17,7 @@ not. `cmsio1.c` `_cmsReadInputLUT` / `_cmsReadOutputLUT` /
 `_cmsGetTagTrueType(...) != cmsSigLut16Type` and never consult the
 version; `namedColor2Type` paths insert the stage unconditionally.
 Measured on four synthetic profiles differing only in the version word:
-all decode legacy. **So DL-011's predicted iccce-vs-lcms2 divergence does
+all decode legacy. **So DL-011's predicted icccer-vs-lcms2 divergence does
 not exist on this pin.** `cmsLabEncoded2FloatV2` is called only from
 `cmspack.c` (a pixel formatter), never from profile reading.
 

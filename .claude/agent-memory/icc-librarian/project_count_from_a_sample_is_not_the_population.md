@@ -1,5 +1,5 @@
 ---
-name: iccce-count-from-a-sample-is-not-the-population
+name: icccer-count-from-a-sample-is-not-the-population
 description: DL-053 — "two iccMAX" was really TEN; the claim carried [VERIFIED] and every word was true of what was RUN. A [VERIFIED] tag certifies the measurement happened and certifies nothing about what it ranged over. Filed 2026-08-17.
 metadata:
   type: project
@@ -18,7 +18,7 @@ what was run. Filed as `ARCHITECTURE.md` **DL-053**; the measured
 population is `NUMERIC_CLAIMS.md` §3.32.10a / **NC-219** (40 parse with
 `malformations: 0`, 10 refused by name).
 
-### Why this is NOT [[iccce-count-needs-its-apparatus]] (DL-031)
+### Why this is NOT [[icccer-count-needs-its-apparatus]] (DL-031)
 
 DL-031 says an **unlabelled** count is not a claim, because the
 **apparatus** is half the number. **Here the apparatus WAS labelled** and
@@ -48,6 +48,6 @@ mechanism with a count instead of a citation.
 - Applies to profiles, files, tests, findings, rows, corpora. Anywhere a
   sweep was cheaper than the sample that got run.
 
-Related: [[iccce-count-needs-its-apparatus]],
-[[iccce-stale-citation-worse-than-stale-number]],
-[[iccce-documented-is-not-tested]], [[iccce-pass-status]].
+Related: [[icccer-count-needs-its-apparatus]],
+[[icccer-stale-citation-worse-than-stale-number]],
+[[icccer-documented-is-not-tested]], [[icccer-pass-status]].

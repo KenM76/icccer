@@ -1,5 +1,5 @@
 ---
-name: iccce-injection-measures-one-magnitude
+name: icccer-injection-measures-one-magnitude
 description: DL-064 — an injection that turns a test RED measures it at ONE magnitude and no other; the sweep's GREEN run is where the finding is. Pass K's leak guards proved discriminating above 1.106780e-1 / 5.0e-2 and decorative below; the rival was named WITH a magnitude (1e-9) and the guard claimed WITHOUT one. NC-267/NC-268, 2026-08-19.
 metadata:
   type: project
@@ -12,7 +12,7 @@ INJECTED and at no other.** Filed as `ARCHITECTURE.md` **DL-064**;
 
 **Why:** the ledger owed *"prove the leak guards by injection"* since the
 Pass K filing — the direct consequence of
-[[iccce-documented-is-not-tested]]. `icc-engineer` widened the qualifying
+[[icccer-documented-is-not-tested]]. `icc-engineer` widened the qualifying
 test in `KPreserve::apply` (`black_preserve.rs:404`) from
 `C = M = Y = 0` to `max(C,M,Y) <= t` and ran the **full difftest suite at
 three magnitudes**, not one:
@@ -43,7 +43,7 @@ subtracted them.**
 **A justification that names a rival must name the magnitude at which the
 guard catches it.** Otherwise it is a hope with a citation attached.
 
-★ This is [[iccce-bound-cannot-catch-its-own-magnitude]] (DL-016) one
+★ This is [[icccer-bound-cannot-catch-its-own-magnitude]] (DL-016) one
 level up: there a *tolerance* was blind to a magnitude, here a *probe
 set* is. Both fail by never quantifying the instrument itself.
 
@@ -80,13 +80,13 @@ guard nobody can reason about.**
   exact values came from the **generators**. Two apparatus agreeing is
   corroboration, not a second measurement.
 - ★ **A suite-wide "green below X" from ONE point is not an interval** —
-  `t = 0.045` was never run ([[iccce-count-from-a-sample-is-not-the-population]]).
+  `t = 0.045` was never run ([[icccer-count-from-a-sample-is-not-the-population]]).
 
-Related: [[iccce-documented-is-not-tested]],
-[[iccce-bound-cannot-catch-its-own-magnitude]],
-[[iccce-disclosure-caught-a-bad-justification]],
-[[iccce-gate-must-not-reward-deletion]],
-[[iccce-control-only-as-good-as-its-fixture]],
-[[iccce-disclosure-is-not-enforcement]],
-[[iccce-wrong-clause-refusal-and-discarded-halves]],
-[[iccce-pass-status]].
+Related: [[icccer-documented-is-not-tested]],
+[[icccer-bound-cannot-catch-its-own-magnitude]],
+[[icccer-disclosure-caught-a-bad-justification]],
+[[icccer-gate-must-not-reward-deletion]],
+[[icccer-control-only-as-good-as-its-fixture]],
+[[icccer-disclosure-is-not-enforcement]],
+[[icccer-wrong-clause-refusal-and-discarded-halves]],
+[[icccer-pass-status]].

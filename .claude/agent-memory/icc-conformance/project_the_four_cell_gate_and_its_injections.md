@@ -6,7 +6,7 @@ metadata:
 ---
 
 Replaced `rendering_intent_high_bits_not_version_gated.rs` with
-`crates/iccce-profile/tests/rendering_intent_report_is_edition_specific.rs`
+`crates/icccer-profile/tests/rendering_intent_report_is_edition_specific.rs`
 when `icc-engineer` landed the edition gate. Five things below are durable.
 
 ## 1. ★★ A gate of two conditions has FOUR cells, and the corpus held one
@@ -29,7 +29,7 @@ different in each
 |---|---|---|
 | v4 high | **QUOTED** — 7.2.15 "shall be set to zero" | the code is wrong |
 | v4 low | **INFERRED, 2 steps** (`A56`) | check the inference is still the project's reading first |
-| v2 high | 6.1.11 imposes nothing; 6.1.8's identical boilerplate makes the half vendor space | iccce is making a **FALSE report against a conformant file** — the worst of the four |
+| v2 high | 6.1.11 imposes nothing; 6.1.8's identical boilerplate makes the half vendor space | icccer is making a **FALSE report against a conformant file** — the worst of the four |
 | v2 low | **nothing in ICC.1** | a project **policy** changed; allowed, but must not change silently |
 
 That table is in the module doc *and* in the `IF_THIS_FAILED` panic text,
@@ -76,7 +76,7 @@ the **fourth** instance of the family in
 [[project-stale-claim-strings-in-emitted-records]].
 
 Interpolation is unavailable here **by design**: `tools/gen-profiles` must never
-link `iccce-profile`, or a fixture could inherit a bug from the code it tests.
+link `icccer-profile`, or a fixture could inherit a bug from the code it tests.
 The available substitute is to read the generated file **as text** from the test
 crate — `the_manifest_quotes_the_report_text_that_is_actually_emitted` asserts
 every emitted string appears verbatim in `MANIFEST.md`, plus that the silence

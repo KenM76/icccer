@@ -4,7 +4,7 @@
 //! and cannot: the corpus it runs on publishes *transforms*, never expected
 //! *outputs*, so no ΔE in it could ever be ground truth (`DL-041`). What it
 //! grades instead is broader than anything else the project holds — **which
-//! files iccce accepts, which it refuses, and whether a refusal says why.**
+//! files icccer accepts, which it refuses, and whether a refusal says why.**
 //!
 //! ## The corpus
 //!
@@ -21,7 +21,7 @@
 //!   printed. The only identifiers this module holds are **file names** —
 //!   pointers to a licensed artifact, not content of it — and structural facts
 //!   (a version word, a channel count) which are format metadata.
-//! - The corpus resolves from `$ICCCE_PRIVATE_FIXTURES`, then the default path,
+//! - The corpus resolves from `$ICCCER_PRIVATE_FIXTURES`, then the default path,
 //!   and **every row SKIPs with a reason when it is absent.** CI is permanently
 //!   in the skipping case. ★ A green CI run is **not** evidence that anything
 //!   here passed; it is evidence that nothing here ran.
@@ -30,8 +30,8 @@
 //!
 //! `CLAUDE.md` rule 6 — *"the parser reports; it does not repair"* — had until
 //! now been demonstrated **only on profiles this project authored**
-//! (`tools/gen-profiles`). A synthetic fixture asserting that iccce refuses
-//! iccMAX proves that iccce refuses *the file we wrote to be refused*. The ten
+//! (`tools/gen-profiles`). A synthetic fixture asserting that icccer refuses
+//! iccMAX proves that icccer refuses *the file we wrote to be refused*. The ten
 //! iccMAX files in this corpus were written by the ICC, by X-Rite and by Kodak
 //! for their own purposes, and none of them was shaped by anything in this
 //! repository. That is the whole value, and it is not obtainable synthetically.
@@ -76,7 +76,7 @@
 //! would be the failure this role exists to prevent.** It is ground truth about
 //! **rendering-intent tag selection** and about **the lightness band a tag's
 //! output lies in**. It is *not* a published colorimetric value: nobody
-//! measured a patch and printed a `L*a*b*` triple. A row here can catch iccce
+//! measured a patch and printed a `L*a*b*` triple. A row here can catch icccer
 //! selecting `B2A1` when it was asked for `B2A0`, evaluating the wrong element
 //! order, mis-decoding PCSLAB, or transposing an ink — every one of which is a
 //! defect a cross-check against lcms2 could only catch if lcms2 happened not to
@@ -91,14 +91,14 @@
 //!    to a v1 file is therefore a **reading of that sentence**, not a statement
 //!    the document makes. The v1 rows are graded — a reading that cannot fail is
 //!    not a reading — but they are [`Kind::DerivedExpectation`], and a red one
-//!    is ambiguous between *"iccce is wrong"* and *"the reading is wrong"*.
+//!    is ambiguous between *"icccer is wrong"* and *"the reading is wrong"*.
 //!    That ambiguity is the entire reason they are not ground truth.
 //! 2. The readme states the profile is **deliberately non-compliant**:
 //!    *"Technically, this is non-compliant with the v4 ICC specification,
 //!    because (obviously) the media relative colorimetric intent tags are not
 //!    based on real measurement data."* That non-compliance is in the tags'
 //!    **content**, not their **encoding**, so it does not touch anything §D
-//!    grades — but a reader must not quote a green §D as evidence that iccce
+//!    grades — but a reader must not quote a green §D as evidence that icccer
 //!    handles a *conformant* profile correctly.
 //! 3. The readme's own colour-code table contains transcription defects (the
 //!    `B2A2` block is duplicated; the prose describes `B2D0/1/2` where the table
@@ -125,12 +125,12 @@
 
 use std::path::{Path, PathBuf};
 
-use iccce_cmm::lut_ab::LutAbModel;
-use iccce_cmm::lut_transform::{Lut16Model, PcsKind, PcsValue};
-use iccce_color::Lab;
-use iccce_profile::Profile;
-use iccce_profile::num::Signature;
-use iccce_profile::tag_types::TagData;
+use icccer_cmm::lut_ab::LutAbModel;
+use icccer_cmm::lut_transform::{Lut16Model, PcsKind, PcsValue};
+use icccer_color::Lab;
+use icccer_profile::Profile;
+use icccer_profile::num::Signature;
+use icccer_profile::tag_types::TagData;
 
 use crate::{Kind, Metric, Record, SepUnits, Separation, Tolerance};
 
@@ -147,7 +147,7 @@ use crate::{Kind, Metric, Record, SepUnits, Separation, Tolerance};
 /// nothing.
 #[must_use]
 pub fn corpus_dir() -> PathBuf {
-    std::env::var_os("ICCCE_PRIVATE_FIXTURES")
+    std::env::var_os("ICCCER_PRIVATE_FIXTURES")
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from(r"D:\Dev\iccce-private-fixtures"))
         .join("color-org")
@@ -155,7 +155,7 @@ pub fn corpus_dir() -> PathBuf {
 
 /// How many device channels a colour-space signature denotes.
 ///
-/// ## Why this lives in the harness and not in `iccce-profile`
+/// ## Why this lives in the harness and not in `icccer-profile`
 ///
 /// As of 2026-08-17 **no such table exists in the crates under test** — the
 /// channel count is taken from whatever LUT tag is being evaluated, never from
@@ -262,14 +262,14 @@ pub const B2A_COLORANT: [(u32, &str, &str, usize); 3] = [
 // Evaluating one LUT tag, whichever family stores it
 // ===========================================================================
 
-/// One decoded LUT tag, built through `iccce-cmm`'s own models.
+/// One decoded LUT tag, built through `icccer-cmm`'s own models.
 ///
 /// **Both storage families appear in this corpus's three Probe profiles** —
 /// `Probev1_ICCv2` stores its tags as `mft2` (`lut16Type`), the two v4 probes
 /// as `mAB `/`mBA ` (`lutAToBType`/`lutBToAType`) — so a §D that handled only
 /// one family would silently grade one profile and skip two.
 ///
-/// ★ This is an **in-process** evaluation of `iccce-cmm`, not the shipped
+/// ★ This is an **in-process** evaluation of `icccer-cmm`, not the shipped
 /// binary, and every record built from it says so. The shipped binary has no
 /// surface that emits PCS `L*a*b*`; its `transform` takes a destination
 /// *profile*. §D therefore carries **both** arms — this one for the PCS-side
@@ -396,7 +396,7 @@ pub const EXACT_COUNT: Tolerance = Tolerance::new(
 /// **The shipped binary's own print resolution**, for a row whose published
 /// expectation is *"this channel carries none of the colorant"*.
 ///
-/// `iccce transform` writes **6 decimals** (`crates/iccce-cli/src/main.rs`), so
+/// `icccer transform` writes **6 decimals** (`crates/icccer-cli/src/main.rs`), so
 /// the smallest non-zero value it can express is `1e-6` and a true zero and a
 /// value below `5e-7` are indistinguishable in its output. The bound is one
 /// printed unit rather than the half-ulp so that a last-digit rounding
@@ -406,14 +406,14 @@ pub const EXACT_COUNT: Tolerance = Tolerance::new(
 /// irrelevant to it** (`TOLERANCES.md` §2). It is the resolution of the
 /// instrument doing the reading.
 ///
-/// **What it is sensitive enough to catch**, which is the real test: if iccce
+/// **What it is sensitive enough to catch**, which is the real test: if icccer
 /// selected `B2A1` when asked for perceptual, the cyan channel would read
 /// **0** and the magenta channel would carry the entire tint — up to `1.0`,
 /// which is `10^6` times this bound. Intent mis-selection is not a near miss
 /// here; it is six orders of magnitude.
 pub const SHIPPED_PRINT_FLOOR: Tolerance = Tolerance::new(
     1e-6,
-    "iccce transform prints 6 decimals, so 1e-6 is one printed unit and a true zero is \
+    "icccer transform prints 6 decimals, so 1e-6 is one printed unit and a true zero is \
      indistinguishable from anything below 5e-7; the bound is the unit rather than the \
      half-ulp so a last-digit rounding difference is not a failure. Arithmetic-resolution, \
      NOT perceptual. Sensitivity: selecting the wrong B2A tag moves this channel by up to \
@@ -526,7 +526,7 @@ pub(crate) fn show_stderr(stderr: &str) -> String {
 
 use std::process::{Command, Stdio};
 
-use crate::{Bpc, DiffError, Iccce, InspectRun, Intent, Oracle, Precalc, Request, Space};
+use crate::{Bpc, DiffError, Icccer, InspectRun, Intent, Oracle, Precalc, Request, Space};
 
 /// The corpus member names §C and §D reach for by name.
 ///
@@ -612,7 +612,7 @@ impl FileVerdict {
     }
 
     /// The subset of the disclosed set that breaches a stated
-    /// requirement, as printed by `iccce inspect`'s `violations:` line.
+    /// requirement, as printed by `icccer inspect`'s `violations:` line.
     ///
     /// ★★ **This is the quantity a conformance question wants, and it
     /// did not exist until 2026-08-21.** `malformations` counts
@@ -777,7 +777,7 @@ pub const ZERO_COLORANT: Tolerance = Tolerance::new(
 /// point compensation on when the **destination** profile is v4 and the intent
 /// is perceptual or saturation (Pass 4b finding 2). Measured on
 /// `Probev1_ICCv4` into `*Lab4`: perceptual reads `67.5743` where `*Lab2` reads
-/// `67.7359` — a `0.16` shift that would have been attributed to iccce. The
+/// `67.7359` — a `0.16` shift that would have been attributed to icccer. The
 /// Pass 4c lesson applies unchanged: **a fixture that keeps the gate shut beats
 /// a model that subtracts what the gate did.**
 pub const ORACLE_LAB: Tolerance = Tolerance::new(
@@ -855,7 +855,7 @@ const ROWS: &[(&str, Kind, Tolerance)] = &[
         EXACT_COUNT,
     ),
     (
-        "passh/A/gate/harness-reading-of-byte-8-predicts-iccce-on-every-file",
+        "passh/A/gate/harness-reading-of-byte-8-predicts-icccer-on-every-file",
         Kind::DerivedExpectation,
         EXACT_COUNT,
     ),
@@ -880,12 +880,12 @@ const ROWS: &[(&str, Kind, Tolerance)] = &[
         REPORTED,
     ),
     (
-        "passh/B/acceptance/iccce-and-lcms2-reach-the-same-verdict-on-every-file",
+        "passh/B/acceptance/icccer-and-lcms2-reach-the-same-verdict-on-every-file",
         Kind::CrossCheck,
         EXACT_COUNT,
     ),
     (
-        "passh/B/acceptance/header-fields-iccce-printed-match-the-raw-bytes",
+        "passh/B/acceptance/header-fields-icccer-printed-match-the-raw-bytes",
         Kind::DerivedExpectation,
         EXACT_COUNT,
     ),
@@ -1029,8 +1029,8 @@ const REFUSAL_CONDITIONS: f64 = 4.0;
 ///
 /// ## What is done about it, and what is deliberately NOT done
 ///
-/// Once a published premise is shown false, continuing to grade iccce against
-/// it grades iccce against the document's error. So on `Probev2_ICCv4` the
+/// Once a published premise is shown false, continuing to grade icccer against
+/// it grades icccer against the document's error. So on `Probev2_ICCv4` the
 /// three rows that depend on the *strict* form of the sentence are emitted
 /// **[`REPORTED`] — tolerance infinity, claiming nothing** — with the measured
 /// value in the detail.
@@ -1146,15 +1146,15 @@ fn interior_grid_7() -> Vec<Vec<f64>> {
 pub fn run(oracle: &Oracle) -> (Option<Analysis>, Vec<Record>) {
     let dir = corpus_dir();
 
-    let iccce = match Iccce::locate() {
+    let icccer = match Icccer::locate() {
         Ok(Some(i)) => i,
         Ok(None) => {
             return (
                 None,
                 skip_everything(
                     &dir,
-                    "the shipped iccce binary is not built on this machine \
-                     (cargo build --release -p iccce-cli)",
+                    "the shipped icccer binary is not built on this machine \
+                     (cargo build --release -p icccer-cli)",
                 ),
             );
         }
@@ -1172,7 +1172,7 @@ pub fn run(oracle: &Oracle) -> (Option<Analysis>, Vec<Record>) {
             skip_everything(
                 &dir,
                 format!(
-                    "the private color.org corpus is absent at {} — set $ICCCE_PRIVATE_FIXTURES. \
+                    "the private color.org corpus is absent at {} — set $ICCCER_PRIVATE_FIXTURES. \
                      THIS PASS DID NOT RUN; a green suite line on this machine says nothing about it",
                     dir.display()
                 ),
@@ -1195,7 +1195,7 @@ pub fn run(oracle: &Oracle) -> (Option<Analysis>, Vec<Record>) {
         let bytes = std::fs::read(path).unwrap_or_default();
         let raw = raw_version(&bytes);
         let major = raw.map_or(0, |v| v >> 24);
-        let run = match iccce.inspect(path) {
+        let run = match icccer.inspect(path) {
             Ok(r) => r,
             Err(e) => {
                 return (
@@ -1226,15 +1226,15 @@ pub fn run(oracle: &Oracle) -> (Option<Analysis>, Vec<Record>) {
     let refused = verdicts.len() - accepted;
 
     let mut recs: Vec<Record> = Vec::new();
-    section_a(&iccce, &verdicts, &mut recs);
+    section_a(&icccer, &verdicts, &mut recs);
     section_b(&verdicts, &mut recs);
-    section_c(&iccce, oracle, &dir, &verdicts, &mut recs);
+    section_c(&icccer, oracle, &dir, &verdicts, &mut recs);
     section_e(&verdicts, &mut recs);
-    section_d(&iccce, oracle, &dir, &mut recs);
+    section_d(&icccer, oracle, &dir, &mut recs);
 
     let analysis = Analysis {
         structure: format!(
-            "{} .icc files at {} | iccce accepted {accepted}, refused {refused} \
+            "{} .icc files at {} | icccer accepted {accepted}, refused {refused} \
              (bare exit status per file, never through a pipe) | \
              rows {} (run `cargo run --release --bin passh_probe` for the Probe instrument)",
             verdicts.len(),
@@ -1299,7 +1299,7 @@ fn graded(
 /// The provenance string every section A/B row carries.
 const SRC_BYTES: &str = "the expectation is the HARNESS's own reading of the profile version word \
      at byte offset 8 (ICC.1:2022 clause 7.2.4), taken from the file's raw bytes with the parser \
-     under test nowhere in the loop, plus iccce's declared scope (ICC v2/v4 only, no iccMAX \
+     under test nowhere in the loop, plus icccer's declared scope (ICC v2/v4 only, no iccMAX \
      execution — README/ARCHITECTURE). NO implementation's output is in it";
 
 // ===========================================================================
@@ -1313,7 +1313,7 @@ const SRC_BYTES: &str = "the expectation is the HARNESS's own reading of the pro
 /// which is what makes them a stronger demonstration of `CLAUDE.md` rule 6
 /// than the committed synthetic fixture — and the synthetic fixture is
 /// nevertheless kept, as the **control** that isolates the cause.
-fn section_a(iccce: &Iccce, v: &[FileVerdict], out: &mut Vec<Record>) {
+fn section_a(icccer: &Icccer, v: &[FileVerdict], out: &mut Vec<Record>) {
     let expect_refuse: Vec<&FileVerdict> = v.iter().filter(|f| f.harness_says_refuse).collect();
     let n = expect_refuse.len() as f64;
 
@@ -1369,7 +1369,7 @@ fn section_a(iccce: &Iccce, v: &[FileVerdict], out: &mut Vec<Record>) {
             noisy,
             SRC_BYTES,
             format!(
-                "CLAUDE.md rule 6 - the parser reports, it does not repair. A profile iccce \
+                "CLAUDE.md rule 6 - the parser reports, it does not repair. A profile icccer \
                  declined to parse must not also have produced a partial header/tag dump that a \
                  caller could mistake for a successful read. {} files checked",
                 expect_refuse.len()
@@ -1395,7 +1395,7 @@ fn section_a(iccce: &Iccce, v: &[FileVerdict], out: &mut Vec<Record>) {
             format!("the committed control fixture is missing at {}", ctrl.display()),
         )
     } else {
-        match iccce.inspect(&ctrl) {
+        match icccer.inspect(&ctrl) {
             Err(e) => Record::errored(
                 "passh/A/control/the-version-word-ALONE-produces-the-same-refusal",
                 Kind::DerivedExpectation,
@@ -1445,7 +1445,7 @@ fn section_a(iccce: &Iccce, v: &[FileVerdict], out: &mut Vec<Record>) {
     };
     out.push(rec);
 
-    // --- A4: the harness's prediction against iccce, over the whole set ----
+    // --- A4: the harness's prediction against icccer, over the whole set ----
     let mut wrong = 0.0_f64;
     let mut wrong_names = Vec::new();
     for f in v {
@@ -1461,14 +1461,14 @@ fn section_a(iccce: &Iccce, v: &[FileVerdict], out: &mut Vec<Record>) {
         .collect();
     out.push(
         graded(
-            "passh/A/gate/harness-reading-of-byte-8-predicts-iccce-on-every-file",
+            "passh/A/gate/harness-reading-of-byte-8-predicts-icccer-on-every-file",
             Kind::DerivedExpectation,
             EXACT_COUNT,
             wrong,
             SRC_BYTES,
             format!(
                 "over all {} files: the harness reads byte 8 itself and predicts REFUSE iff the \
-                 major version is >= 5; iccce is then asked. Disagreements: [{}]",
+                 major version is >= 5; icccer is then asked. Disagreements: [{}]",
                 v.len(),
                 wrong_names.join(", ")
             ),
@@ -1517,9 +1517,9 @@ fn section_b(v: &[FileVerdict], out: &mut Vec<Record>) {
             ),
         )
         .with_separation(Separation::none(
-            "the expectation is binary and its only rival is its negation. \"iccce should refuse \
+            "the expectation is binary and its only rival is its negation. \"icccer should refuse \
              some of these\" is not a reading anybody holds: every one is published as a \
-             conformant ICC v2/v4 profile and iccce's declared scope is ICC v2/v4",
+             conformant ICC v2/v4 profile and icccer's declared scope is ICC v2/v4",
         ))
         .with_metric(Metric::IndicatorCount),
     );
@@ -1535,7 +1535,7 @@ fn section_b(v: &[FileVerdict], out: &mut Vec<Record>) {
     // one `HeaderReservedNonZero` because they are **v2** files carrying
     // an MD5 in bytes 84..99 where **v4** later placed `profileID`.
     //
-    // ★★ The old row's own text offered two hypotheses — "either iccce
+    // ★★ The old row's own text offered two hypotheses — "either icccer
     // over-reports or a published ICC profile is defective" — and the
     // answer was NEITHER. ICC.1:2001-04 Table 9's cell is the
     // unmodalised "44 bytes reserved for future expansion", the only
@@ -1585,7 +1585,7 @@ fn section_b(v: &[FileVerdict], out: &mut Vec<Record>) {
              2026-08-21: a disclosure can be lawful (ICC.1:2001-04 Table 9 attaches no modal verb \
              to the v2 reserved block), whereas a violation names the `shall` it breaks",
             format!(
-                "★ a non-zero is STILL a FINDING to ADJUDICATE - either iccce over-accuses or a \
+                "★ a non-zero is STILL a FINDING to ADJUDICATE - either icccer over-accuses or a \
                  published ICC profile breaches a stated requirement - and it is NEVER answered \
                  by widening the bound (CLAUDE.md rule 5). {} files; violating: [{}]; files that \
                  printed no `malformations:`/`violations:` pair at all (itself a defect, \
@@ -1597,7 +1597,7 @@ fn section_b(v: &[FileVerdict], out: &mut Vec<Record>) {
         )
         .with_separation(Separation::none(
             "there is no rival READING of this quantity. A non-zero result is an adjudication \
-             between two hypotheses - iccce over-accuses, or a published profile breaches a \
+             between two hypotheses - icccer over-accuses, or a published profile breaches a \
              stated requirement - and this corpus cannot settle it alone; a second parser's \
              violation list would be needed, and transicc does not emit one",
         ))
@@ -1622,7 +1622,7 @@ fn section_b(v: &[FileVerdict], out: &mut Vec<Record>) {
             format!(
                 "{} of {} accepted files disclose {} observations between them, of which {} are \
                  VIOLATIONS (graded on the row above). Disclosing: [{}]. ★ A disclosure is not an \
-                 accusation - see DL-063 and `iccce_profile::diag::Malformation`. This row exists \
+                 accusation - see DL-063 and `icccer_profile::diag::Malformation`. This row exists \
                  so that the corpus fact survives the 2026-08-21 repointing instead of being \
                  tidied away by it",
                 disclosers.len(),
@@ -1649,7 +1649,7 @@ fn section_b(v: &[FileVerdict], out: &mut Vec<Record>) {
             Some(l) => {
                 if l != f.accepted() {
                     disagree.push(format!(
-                        "{} (iccce {}, lcms2 {})",
+                        "{} (icccer {}, lcms2 {})",
                         f.name,
                         if f.accepted() { "accepts" } else { "refuses" },
                         if l { "uses" } else { "declines" }
@@ -1660,11 +1660,11 @@ fn section_b(v: &[FileVerdict], out: &mut Vec<Record>) {
     }
     out.push(
         graded(
-            "passh/B/acceptance/iccce-and-lcms2-reach-the-same-verdict-on-every-file",
+            "passh/B/acceptance/icccer-and-lcms2-reach-the-same-verdict-on-every-file",
             Kind::CrossCheck,
             EXACT_COUNT,
             disagree.len() as f64,
-            "both sides computed in this run: iccce's bare exit status, and whether transicc \
+            "both sides computed in this run: icccer's bare exit status, and whether transicc \
              produced any numbers. ★ transicc EXITS 0 even when it prints \"Couldn't link the \
              profiles\" and converts nothing (measured 2026-08-17), so its exit code is NOT the \
              observable and a row that used it would have recorded lcms2 as accepting every \
@@ -1679,7 +1679,7 @@ fn section_b(v: &[FileVerdict], out: &mut Vec<Record>) {
         .with_separation(Separation::against_distance(
             "★ MEASURED, not hypothetical: on fixtures/synthetic/iccmax-version.icc - a file \
              whose only iccMAX property is its version word - the two implementations DISAGREE. \
-             lcms2 builds a transform from it; iccce refuses it by name. So lcms2 does not gate \
+             lcms2 builds a transform from it; icccer refuses it by name. So lcms2 does not gate \
              on the version at all, and its refusal of the ten real files is caused by their \
              content. This row would observe 1 on that file",
             1.0,
@@ -1703,7 +1703,7 @@ fn section_b(v: &[FileVerdict], out: &mut Vec<Record>) {
     }
     out.push(
         graded(
-            "passh/B/acceptance/header-fields-iccce-printed-match-the-raw-bytes",
+            "passh/B/acceptance/header-fields-icccer-printed-match-the-raw-bytes",
             Kind::DerivedExpectation,
             EXACT_COUNT,
             mismatch.len() as f64,
@@ -1770,7 +1770,7 @@ fn section_e(v: &[FileVerdict], out: &mut Vec<Record>) {
                  23+16+1 = 40 here, 10+9+1 = 20 there. The single GRAY profile is in suite-v50, \
                  NOT here. ■ There is therefore no contradiction between the two counts, only two \
                  different populations - and a coverage number quoted without its corpus is not a \
-                 coverage number. iccce DOES have GRAY evidence; Pass H is not where it lives"
+                 coverage number. icccer DOES have GRAY evidence; Pass H is not where it lives"
             ),
         )
         .with_separation(Separation::none(
@@ -1789,7 +1789,7 @@ fn section_e(v: &[FileVerdict], out: &mut Vec<Record>) {
 /// unreachable behind the version gate. Both facts are graded or reported
 /// here; neither is inferred.
 fn section_c(
-    iccce: &Iccce,
+    icccer: &Icccer,
     oracle: &Oracle,
     dir: &Path,
     v: &[FileVerdict],
@@ -1825,7 +1825,7 @@ fn section_c(
     } else {
         // --- C1: the shipped binary converts a 7-channel source ------------
         let corners = device_corners(7);
-        let got = iccce.transform_rows_shaped(&src, &dst, Intent::RelativeColorimetric, &corners, 3);
+        let got = icccer.transform_rows_shaped(&src, &dst, Intent::RelativeColorimetric, &corners, 3);
         match &got {
             Err(e) => {
                 out.push(Record::errored(
@@ -1850,8 +1850,8 @@ fn section_c(
                         Kind::DerivedExpectation,
                         EXACT_COUNT,
                         nonfinite + arity,
-                        "the shipped binary's own contract: `iccce transform` writes one converted \
-                         set per input line (crates/iccce-cli/src/main.rs). No published value is \
+                        "the shipped binary's own contract: `icccer transform` writes one converted \
+                         set per input line (crates/icccer-cli/src/main.rs). No published value is \
                          involved and none is claimed",
                         format!(
                             "★ FIRST EVIDENCE: {} device corners of a SEVEN-channel source \
@@ -1907,7 +1907,7 @@ fn section_c(
                     Kind::CrossCheck,
                     ORACLE_LAB,
                     max,
-                    "both sides computed in this run: iccce-cmm's LutAbModel IN PROCESS on the \
+                    "both sides computed in this run: icccer-cmm's LutAbModel IN PROCESS on the \
                      profile's own A2B1 tag (the shipped binary has no surface that emits PCS \
                      L*a*b*), and transicc into *Lab2",
                     format!(
@@ -1971,7 +1971,7 @@ fn section_c(
             ),
         ] {
             let mine =
-                iccce.transform_rows_shaped(&src, &dst, Intent::RelativeColorimetric, &points, 3);
+                icccer.transform_rows_shaped(&src, &dst, Intent::RelativeColorimetric, &points, 3);
             // transicc takes ink percentages 0..100 and prints RGB in 0..255.
             let req = Request {
                 input: Space::profile(src.clone()),
@@ -1996,7 +1996,7 @@ fn section_c(
                             Kind::CrossCheck,
                             tol,
                             max,
-                            "both sides computed in this run: the shipped iccce binary (prints \
+                            "both sides computed in this run: the shipped icccer binary (prints \
                              0..1, 6 decimals) and transicc (prints 0..255, 4 decimals). The \
                              /255 rescale is stated because a number quoted without its scale is \
                              wrong by 255",
@@ -2023,7 +2023,7 @@ fn section_c(
                     "both sides computed in this run",
                     format!(
                         "the 7-channel comparison did not produce two comparable grids: \
-                         iccce {:?}, oracle {:?}",
+                         icccer {:?}, oracle {:?}",
                         a.err().map(|e| e.to_string()),
                         b.err().map(|e| e.to_string())
                     ),
@@ -2038,12 +2038,12 @@ fn section_c(
         // ★★ THIS WAS ONE ROW UNTIL 2026-08-17, AND THE SPLIT IS THE WHOLE
         // LESSON OF THE FIX.
         //
-        // The original single row observed: *did `iccce bench` on this file
+        // The original single row observed: *did `icccer bench` on this file
         // exit with a bare status outside {0, 1}?* On 2026-08-17 at tip
         // `e21154c` it observed **1** — the process aborted — and that was a
         // real defect in shipped code (`docs/TOLERANCES.md` §3.8.4).
         //
-        // The engineer fixed it in `crates/iccce-cmm/src/compiled.rs` with two
+        // The engineer fixed it in `crates/icccer-cmm/src/compiled.rs` with two
         // changes, and **each one independently makes the single row green**:
         //
         //   1. a SIZE guard (`ChainError::GridExceedsBudget`, bounded by
@@ -2063,8 +2063,8 @@ fn section_c(
         //   C4b  the default path BUILDS, at the grid the library recommends
         //   C4c  an oversized grid is a NAMED REFUSAL      (guard (1) itself)
         //   C4d  what the default grid COSTS, reported     (self-comparison)
-        let grid = iccce_cmm::compiled::recommended_grid_points(7);
-        let budget = iccce_cmm::compiled::MAX_COMPILED_GRID_BYTES as u128;
+        let grid = icccer_cmm::compiled::recommended_grid_points(7);
+        let budget = icccer_cmm::compiled::MAX_COMPILED_GRID_BYTES as u128;
         let out_ch: u128 = 3; // the destination is sRGB2014, a matrix/TRC RGB profile
         let nodes = (grid as u128).pow(7);
         let bytes = nodes * out_ch * 8;
@@ -2080,7 +2080,7 @@ fn section_c(
             a.extend(extra.iter().map(|s| (*s).to_string()));
             a
         };
-        let st = iccce.bench_status(&bench_args(&[]));
+        let st = icccer.bench_status(&bench_args(&[]));
 
         // --- C4a: the default path must not abort the process --------------
         let rec = match &st {
@@ -2090,7 +2090,7 @@ fn section_c(
                 Metric::IndicatorCount,
                 EXACT_COUNT,
                 SRC_BYTES,
-                format!("could not run `iccce bench`: {e}"),
+                format!("could not run `icccer bench`: {e}"),
             ),
             Ok(r) => {
                 // 0 = it worked; 1 = a NAMED refusal, which is the CLI's own
@@ -2107,13 +2107,13 @@ fn section_c(
                      of both, and a caller cannot distinguish it from a crash in their own code",
                     format!(
                         "★ THE DEFECT THIS ROW FOUND IS FIXED; THE ROW IS KEPT AND ITS SUBJECT \
-                         HAS NARROWED. LIVE, computed this run: `iccce bench` on the corpus's \
+                         HAS NARROWED. LIVE, computed this run: `icccer bench` on the corpus's \
                          7-channel source exited {:?}, so the indicator (a bare exit outside \
                          {{0, 1}}) observes {bad}. \
-                         iccce_cmm::compiled::recommended_grid_points(7) returns {grid}, so \
+                         icccer_cmm::compiled::recommended_grid_points(7) returns {grid}, so \
                          CompiledTransform::new samples {grid}^7 = {nodes} nodes x {out_ch} \
                          outputs x 8 bytes = {bytes} bytes ({}), against \
-                         iccce_cmm::compiled::MAX_COMPILED_GRID_BYTES = {budget} bytes ({}). \
+                         icccer_cmm::compiled::MAX_COMPILED_GRID_BYTES = {budget} bytes ({}). \
                          ■ HISTORICAL, DATED, NOT LIVE - at tip `e21154c` on 2026-08-17 this row \
                          was RED: recommended_grid_points carried a `_ => 33` catch-all, so the \
                          same call sampled 33^7 = 42618442977 nodes x 3 x 8 = 1022842631448 bytes \
@@ -2160,7 +2160,7 @@ fn section_c(
         // ★ The second half of that is NC-148's shape one layer up. Pass 6
         // found the harness's `DEFAULT_GRID` and the shipped default drifting
         // apart; the same drift is possible between `recommended_grid_points`
-        // and what `iccce bench` does with it, and nothing else in this suite
+        // and what `icccer bench` does with it, and nothing else in this suite
         // would see it.
         let rec = match &st {
             Err(e) => Record::errored(
@@ -2169,7 +2169,7 @@ fn section_c(
                 Metric::IndicatorCount,
                 EXACT_COUNT,
                 SRC_BYTES,
-                format!("could not run `iccce bench`: {e}"),
+                format!("could not run `icccer bench`: {e}"),
             ),
             Ok(r) => {
                 let printed_grid = r.field("grid.points_per_axis").map(str::trim);
@@ -2185,8 +2185,8 @@ fn section_c(
                     EXACT_COUNT,
                     violations,
                     "two contracts of the shipped product, neither of them a colour claim. (1) \
-                     `iccce bench` with no --grid uses compiled::recommended_grid_points(inputs) \
-                     (crates/iccce-cli/src/main.rs) and prints what it used; a recommendation the \
+                     `icccer bench` with no --grid uses compiled::recommended_grid_points(inputs) \
+                     (crates/icccer-cli/src/main.rs) and prints what it used; a recommendation the \
                      binary does not honour is a recommendation that documents nothing. (2) A \
                      DEFAULT that refuses is not a default - C4a is satisfied by a polite refusal \
                      for ever, so this row requires exit 0 and an empty stderr specifically",
@@ -2237,7 +2237,7 @@ fn section_c(
         const FORCED: u128 = 33;
         let f_nodes = FORCED.pow(7);
         let f_bytes = f_nodes * out_ch * 8;
-        let forced = iccce.bench_status(&bench_args(&["--grid", "33"]));
+        let forced = icccer.bench_status(&bench_args(&["--grid", "33"]));
         let rec = match forced {
             Err(e) => Record::errored(
                 "passh/C/7clr/oversized-grid-is-a-NAMED-refusal",
@@ -2245,7 +2245,7 @@ fn section_c(
                 Metric::IndicatorCount,
                 EXACT_COUNT,
                 SRC_BYTES,
-                format!("could not run `iccce bench --grid 33`: {e}"),
+                format!("could not run `icccer bench --grid 33`: {e}"),
             ),
             Ok(r) => {
                 let se = r.stderr.replace(['\u{a0}', ','], "");
@@ -2273,14 +2273,14 @@ fn section_c(
                      the row tracks the guard's arithmetic instead of freezing yesterday's",
                     format!(
                         "★★ THE REGRESSION DETECTOR FOR THE 2026-08-17 DEFECT. Re-runs the exact \
-                         configuration that aborted: `iccce bench --grid 33` on the 7-channel \
+                         configuration that aborted: `icccer bench --grid 33` on the 7-channel \
                          source. Required: exit 1, empty stdout, and stderr naming {f_nodes} \
                          nodes, {f_bytes} bytes ({}) and the {budget}-byte budget ({}). \
                          Violations: budget no longer exceeded so the row would be vacuous \
                          ({v_vacuous}); exit != 1 ({v_exit}, saw {:?}); stdout not empty \
                          ({v_stdout}); node count absent ({v_nodes}); byte count absent \
                          ({v_bytes}); budget absent ({v_budget}). ★ NOT REDUNDANT with \
-                         crates/iccce-cmm's own \
+                         crates/icccer-cmm's own \
                          `compiled::tests::oversized_grid_arithmetic_is_refused_not_aborted`: that \
                          test asserts the guard's arithmetic IN PROCESS and deliberately never \
                          attempts the allocation, so it is blind to the CLI wiring - exit code, \
@@ -2309,7 +2309,7 @@ fn section_c(
         // --- C4d: what the default grid COSTS, reported and never graded ---
         //
         // ★ The weakest evidence class in this file, labelled as such. Both
-        // arms are iccce: `iccce bench` prints the maximum device-space
+        // arms are icccer: `icccer bench` prints the maximum device-space
         // difference between the COMPILED grid and the REFERENCE chain, off
         // the grid nodes. Same code, same profile, same intent - it can show
         // that interpolation costs something, and it CANNOT show that either
@@ -2326,8 +2326,8 @@ fn section_c(
                 Kind::SelfConsistency,
                 Metric::DeviceAbsMaxNormalised,
                 REPORTED,
-                "both arms are iccce",
-                format!("could not run `iccce bench`: {e}"),
+                "both arms are icccer",
+                format!("could not run `icccer bench`: {e}"),
             ),
             Ok(r) => {
                 let off = r
@@ -2340,9 +2340,9 @@ fn section_c(
                         Kind::SelfConsistency,
                         Metric::DeviceAbsMaxNormalised,
                         REPORTED,
-                        "both arms are iccce",
+                        "both arms are icccer",
                         format!(
-                            "`iccce bench` exited {:?} without printing \
+                            "`icccer bench` exited {:?} without printing \
                              error.max_device_offnode",
                             r.code
                         ),
@@ -2360,13 +2360,13 @@ fn section_c(
                              WEAKEST CLASS IN THIS PASS. Maximum device-space (0..1) difference \
                              between the compiled grid at {grid} points per axis and the reference \
                              chain, over {samples} off-node probes: {v:.9}. ■ SELF-COMPARISON - \
-                             both arms are iccce, so this is worthless as correctness evidence \
+                             both arms are icccer, so this is worthless as correctness evidence \
                              (NUMERIC_CLAIMS.md §1). It is recorded because \
                              MAX_COMPILED_GRID_BYTES's own doc says the >=5-channel \
                              recommendations carry NO ΔE claim, and an absence of a claim is more \
                              useful with a number beside it than without. ★ WHY THIS IS NOT \
                              PROMOTED TO A GRADED ROW: the 33 for 3-D and 4-D is gated on Pass 4's \
-                             MEASURED iccce-vs-lcms2 agreement on a real pair; no equivalent \
+                             MEASURED icccer-vs-lcms2 agreement on a real pair; no equivalent \
                              exists at 7 inputs, because lcms2's >4-input CLUT geometry has not \
                              been read out of the pinned source and ICC.1 legislates none (A16). \
                              A bound fitted to this one file would be a population of one"
@@ -2408,7 +2408,7 @@ fn section_c(
             format!(
                 "★ COVERAGE, STATED HONESTLY. Accepted profiles declaring a 6CLR colour space: \
                  {} [{}]. The corpus's only six-channel file is [{}], which is iccMAX and is \
-                 refused at the version gate - so iccce has ZERO evidence of any kind about \
+                 refused at the version gate - so icccer has ZERO evidence of any kind about \
                  6-channel handling, and none may be inferred from the 7-channel rows above: a \
                  7CLR mAB and a 6CLR tag share no code path that this pass exercised",
                 six.len(),
@@ -2434,7 +2434,7 @@ const SRC_README: &str = "ICC, `Probe2 Profile Readme June 1, 2007`, distributed
      about RENDERING-INTENT TAG SELECTION and about the lightness band a tag's output lies in - \
      NOT a published colorimetric value";
 
-fn section_d(iccce: &Iccce, oracle: &Oracle, dir: &Path, out: &mut Vec<Record>) {
+fn section_d(icccer: &Icccer, oracle: &Oracle, dir: &Path, out: &mut Vec<Record>) {
     for (fname, short, kind) in PROBES {
         let path = dir.join(fname);
         let push_skip = |out: &mut Vec<Record>, why: String| {
@@ -2454,16 +2454,16 @@ fn section_d(iccce: &Iccce, oracle: &Oracle, dir: &Path, out: &mut Vec<Record>) 
             continue;
         };
         let Ok(profile) = Profile::parse(&bytes) else {
-            push_skip(out, format!("{fname} was refused by iccce"));
+            push_skip(out, format!("{fname} was refused by icccer"));
             continue;
         };
-        probe_rows(iccce, oracle, &path, &profile, short, *kind, out);
+        probe_rows(icccer, oracle, &path, &profile, short, *kind, out);
     }
 }
 
 #[allow(clippy::too_many_lines)]
 fn probe_rows(
-    iccce: &Iccce,
+    icccer: &Icccer,
     oracle: &Oracle,
     path: &Path,
     profile: &Profile,
@@ -2755,7 +2755,7 @@ fn probe_rows(
     // -----------------------------------------------------------------
     // The mpet rows — clause 8.10.2's precedence question
     // -----------------------------------------------------------------
-    let mpet: Vec<&iccce_profile::TagEntry> = profile
+    let mpet: Vec<&icccer_profile::TagEntry> = profile
         .tags
         .iter()
         .filter(|t| t.type_sig == Some(Signature(0x6D70_6574)))
@@ -2800,12 +2800,12 @@ fn probe_rows(
                  section 5)",
                 format!(
                     "★★ THE PRECONDITION FOR A CONFORMANT DIVERGENCE. This profile carries {} \
-                     mpet tags [{}] and iccce decodes {mpet_decoded} of them. Because the tag is \
-                     not supported by this CMM, clause 8.10.2's own proviso sends iccce to step \
+                     mpet tags [{}] and icccer decodes {mpet_decoded} of them. Because the tag is \
+                     not supported by this CMM, clause 8.10.2's own proviso sends icccer to step \
                      b) and the AToBx/BToAx tags - which is CONFORMANT. lcms2 supports mpet and \
                      takes step a), which is ALSO conformant. Two conformant CMMs, two different \
                      colours, from one file: the standard's own designed-in divergence (A33). \
-                     ★ What is NOT settled by this row: iccce takes step b) SILENTLY. Nothing in \
+                     ★ What is NOT settled by this row: icccer takes step b) SILENTLY. Nothing in \
                      `inspect` or `transform` tells a caller that an author-preferred transform \
                      was present and declined - and CLAUDE.md rule 6 is about exactly that kind \
                      of undisclosed substitution",
@@ -2814,7 +2814,7 @@ fn probe_rows(
                 ),
             )
             .with_separation(Separation::against_distance(
-                "iccce decodes mpet and takes step a) like lcms2. Under that reading this row \
+                "icccer decodes mpet and takes step a) like lcms2. Under that reading this row \
                  observes every mpet tag in the file, and the profile's answer changes completely \
                  - see the divergence row",
                 mpet.len() as f64,
@@ -2840,7 +2840,7 @@ fn probe_rows(
                      ICC.1:2022 8.10.2 (see the sibling row)",
                     format!(
                         "★★★ THE SIZE OF A CONFORMANT DISAGREEMENT. Unmarked media (CMYK 0,0,0,0) \
-                         at the perceptual intent: iccce reads AToB0 and returns L* {mine:.6}; \
+                         at the perceptual intent: icccer reads AToB0 and returns L* {mine:.6}; \
                          lcms2 reads DToB0 and returns L* {their_l:.6}. The readme identifies the \
                          two by their published colour codes, so the divergence is not a mystery \
                          to be diagnosed - the profile was BUILT to make it visible, and it did. \
@@ -2873,7 +2873,7 @@ fn probe_rows(
         // ★★ The encoded-PCS ceiling, computed from the tag's OWN storage
         // family, and the predicate that splits this comparison.
         //
-        // iccce clamps the encoded PCS to the representable range at the B
+        // icccer clamps the encoded PCS to the representable range at the B
         // curve (clause 10.18's domain, via `Trc::eval`); lcms2 does not (its
         // identity curve is an analytic gamma-1 segment, evaluated unbounded).
         // Pass 4b found this on `fixtures/synthetic/v4-cmyk-mab-lab.icc` and
@@ -2881,10 +2881,10 @@ fn probe_rows(
         // specification requires is unsettled**
         // (`pass4b/fixture/mab/encoded-pcs-overflow-divergence`).
         //
-        // ★ The predicate is evaluated on **lcms2's** output, not on iccce's:
+        // ★ The predicate is evaluated on **lcms2's** output, not on icccer's:
         // "the file encodes a PCS value above what this tag's encoding can
         // represent" is a fact about the file, and the side that does *not*
-        // clamp is the one that can still show it. Splitting on iccce's own
+        // clamp is the one that can still show it. Splitting on icccer's own
         // clamp fixed-point would be splitting on the behaviour under test.
         let ceiling = match TagEval::build(profile, Signature(A2B_BANDS[0].0)) {
             // v4 PCSLAB (clause 10.13): L* = 100 x code/65535, max 100.0.
@@ -2930,7 +2930,7 @@ fn probe_rows(
                                 if d > clamp_worst {
                                     clamp_worst = d;
                                     clamp_example = format!(
-                                        "{intent} at device {p:?}: iccce {:.6}, lcms2 {:.6}",
+                                        "{intent} at device {p:?}: icccer {:.6}, lcms2 {:.6}",
                                         l.l, r[0]
                                     );
                                 }
@@ -2956,7 +2956,7 @@ fn probe_rows(
                  `pass4b/fixture/mab/encoded-pcs-overflow-divergence`, owed to icc-spec-librarian",
                 format!(
                     "★★★ PASS 4b's SYNTHETIC FINDING, REPRODUCED ON A REAL ICC-PUBLISHED FILE. \
-                     iccce clamps the encoded PCS at the B curve (clause 10.18's domain, via \
+                     icccer clamps the encoded PCS at the B curve (clause 10.18's domain, via \
                      Trc::eval); lcms2 does not (its identity curve is an analytic gamma-1 \
                      segment, evaluated unbounded). Pass 4b measured this on a fixture THIS \
                      PROJECT AUTHORED, so it could have been an artefact of our own fixture \
@@ -2964,7 +2964,7 @@ fn probe_rows(
                      above this tag's representable ceiling ({ceiling:.6}); largest divergence \
                      {clamp_worst:.6} L*. Worst: [{clamp_example}]. These points are EXCLUDED \
                      from the sibling cross-check row by a predicate evaluated on LCMS2's output \
-                     (the side that does not clamp), never on iccce's",
+                     (the side that does not clamp), never on icccer's",
                 ),
             )
             .with_separation(Separation::none(
@@ -2988,7 +2988,7 @@ fn probe_rows(
                 Kind::CrossCheck,
                 ORACLE_LAB,
                 worst,
-                "both sides computed in this run: iccce-cmm's LutAbModel/Lut16Model IN PROCESS \
+                "both sides computed in this run: icccer-cmm's LutAbModel/Lut16Model IN PROCESS \
                  (the shipped binary has no surface that emits PCS L*a*b*), and transicc into \
                  *Lab2. ★ *Lab2 and not *Lab4: lcms2 forces BPC on when the DESTINATION is v4 and \
                  the intent is perceptual or saturation (Pass 4b finding 2), and into *Lab4 this \
@@ -3026,7 +3026,7 @@ fn probe_rows(
                 tol,
                 "both sides would be computed in this run",
                 "★ lcms2 does not read this profile's AToBx tags AT ALL - it takes the DToBx \
-                 (mpet) tags per clause 8.10.2 a), which iccce declines under the same clause's \
+                 (mpet) tags per clause 8.10.2 a), which icccer declines under the same clause's \
                  \"not supported by the CMM\" proviso. There is therefore no second reading of \
                  the SAME tag to compare against, and a comparison of the two DIFFERENT tags \
                  would be a number with no meaning. The size of that divergence is reported by \
@@ -3062,7 +3062,7 @@ fn probe_rows(
                 "media-relative" => Intent::RelativeColorimetric,
                 _ => Intent::Saturation,
             };
-            match iccce.transform_rows_shaped(&src, path, it, &rows, 4) {
+            match icccer.transform_rows_shaped(&src, path, it, &rows, 4) {
                 Err(e) => err = Some(format!("{intent}/{colorant}: {e}")),
                 Ok(got) => {
                     for r in &got {
@@ -3100,7 +3100,7 @@ fn probe_rows(
                 SRC_README,
                 format!(
                     "★★ THE MOST VALUABLE ROW IN THIS PASS: the SHIPPED PRODUCT's intent-to-tag \
-                     wiring, graded against a published statement. `iccce transform` from a \
+                     wiring, graded against a published statement. `icccer transform` from a \
                      COMMITTED synthetic RGB fixture into this probe at each of the three named \
                      intents; the readme's colorant for that intent must be strictly the largest \
                      of C, M, Y in the printed output. {} source points x 3 intents. Smallest \

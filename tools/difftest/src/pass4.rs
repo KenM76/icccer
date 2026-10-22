@@ -1,8 +1,8 @@
-//! # Pass 4 — the LUT differential: CMYK → RGB, iccce against lcms2
+//! # Pass 4 — the LUT differential: CMYK → RGB, icccer against lcms2
 //!
 //! This module answers the **first** part of ROADMAP Pass 4's done-when: a
 //! four-channel `lut16` A2B source profile, chained into a matrix/TRC
-//! destination, compared against the pinned oracle at every intent iccce
+//! destination, compared against the pinned oracle at every intent icccer
 //! implements, with the numbers and their tolerances written down.
 //!
 //! Read `tools/difftest/README.md` §14 for the prose record of what was run
@@ -13,7 +13,7 @@
 //! ```text
 //!   grid (CMYK quadruples in 0..1, deterministic — see `grid()`)
 //!     │
-//!     ├──▶ iccce transform --src SWOP --dst sRGB --intent <n>   (subprocess)
+//!     ├──▶ icccer transform --src SWOP --dst sRGB --intent <n>   (subprocess)
 //!     │        → A: destination device RGB, 0..1, 6 decimals
 //!     │
 //!     ├──▶ transicc -iSWOP -osRGB -t<n> -c0 -n        (subprocess)
@@ -24,16 +24,16 @@
 //!
 //!   compare  A  vs  B/255       in DEVICE space                  → record 1
 //!   carry both into D50 CIELAB, compare in ΔE2000                → record 3
-//!   compare iccce's own A2Bx PCS against C                       → record 5
+//!   compare icccer's own A2Bx PCS against C                       → record 5
 //!   the same, at the 16 CLUT-node corners only                   → record 6
 //!   the same, with lcms2's OWN interpolation geometry emulated   → record 7
 //! ```
 //!
 //! ## ★ Which side runs where — and a correction made mid-session
 //!
-//! **The end-to-end comparison drives the shipped `iccce transform` binary as
+//! **The end-to-end comparison drives the shipped `icccer transform` binary as
 //! a subprocess**, exactly as Pass 3 does, so both sides cross a process
-//! boundary, are printed as text and are parsed back ([`crate::Iccce`]'s doc
+//! boundary, are printed as text and are parsed back ([`crate::Icccer`]'s doc
 //! comment explains why that symmetry is worth the trouble).
 //!
 //! That was not a foregone conclusion, and the record of why is kept rather
@@ -52,16 +52,16 @@
 //!
 //! 1. [`SourcePipeline`] — the harness's own reimplementation of the `mft2`
 //!    pipeline, which exists so the CLUT interpolation geometry can be
-//!    *substituted*. It is graded against `iccce-cmm`'s evaluator on every
+//!    *substituted*. It is graded against `icccer-cmm`'s evaluator on every
 //!    point before anything is concluded from it
-//!    (`pass4/apparatus/harness-nlinear-matches-iccce-cmm`).
+//!    (`pass4/apparatus/harness-nlinear-matches-icccer-cmm`).
 //! 2. `Lut16Model` and `MatrixTrc`, called directly for the PCS-side records
 //!    and for the ΔE ruler — the same arrangement, and the same declared
 //!    weakness, as Pass 3's record 7.
 //!
 //! ## What lcms2 actually does with a 4-D CLUT — read at the pin, not assumed
 //!
-//! The expected deviation source was stated in advance as "iccce interpolates
+//! The expected deviation source was stated in advance as "icccer interpolates
 //! n-linear, lcms2 tetrahedral". **For four inputs that is not what lcms2
 //! does**, and the tolerances below rest on what the source says:
 //!
@@ -84,7 +84,7 @@
 //! channel (C), *tetrahedral* (Sakamoto, 6 simplices) in the remaining three
 //! (M, Y, K). It is neither pure tetrahedral nor pure n-linear, and it is
 //! **not symmetric in the four channels** — swapping the ink order would
-//! change the answer. iccce's n-linear is quadrilinear and *is* symmetric.
+//! change the answer. icccer's n-linear is quadrilinear and *is* symmetric.
 //!
 //! **And the float path does not use the float interpolator.** An `mft2` tag
 //! is read into a 16-bit CLUT stage (`cmsStageAllocCLut16bitGranular`), whose
@@ -96,7 +96,7 @@
 //!
 //! This is `impl_crosscheck` knowledge — read out of the pinned source at
 //! `21c582a`, not out of ICC.1. ICC.1 says **nothing** about CLUT
-//! interpolation (corpus ambiguity **A16**, SILENT), which is why iccce's
+//! interpolation (corpus ambiguity **A16**, SILENT), which is why icccer's
 //! n-linear is a named choice (**NA-006**) rather than a conformance question,
 //! and why a disagreement here is a *difference*, not an error on either side.
 //!
@@ -120,7 +120,7 @@
 //!
 //! | | input | output |
 //! |---|---|---|
-//! | `iccce transform` | one whitespace-separated **quadruple** per line, floats **0..1** | 6 decimals, **0..1** |
+//! | `icccer transform` | one whitespace-separated **quadruple** per line, floats **0..1** | 6 decimals, **0..1** |
 //! | `transicc` (CMYK in) | one component per line, **0..100** | — |
 //! | `transicc` (8-bit RGB out) | — | 4 decimals, **0..255** |
 //! | `transicc` (`*Lab4` out) | — | 4 decimals, `L*` 0..100, `a*`/`b*` −128..127 |
@@ -135,18 +135,18 @@
 
 use std::path::{Path, PathBuf};
 
-use iccce_cmm::MatrixTrc;
-use iccce_cmm::lut_transform::{Lut16Model, PcsKind, PcsValue};
-use iccce_cmm::matrix_trc::Intent as CmmIntent;
-use iccce_cmm::transform::Chain;
-use iccce_color::{D50, Lab, delta_e_2000};
-use iccce_profile::Profile;
-use iccce_profile::lut::Lut16;
-use iccce_profile::num::Signature;
-use iccce_profile::tag_types::TagData;
+use icccer_cmm::MatrixTrc;
+use icccer_cmm::lut_transform::{Lut16Model, PcsKind, PcsValue};
+use icccer_cmm::matrix_trc::Intent as CmmIntent;
+use icccer_cmm::transform::Chain;
+use icccer_color::{D50, Lab, delta_e_2000};
+use icccer_profile::Profile;
+use icccer_profile::lut::Lut16;
+use icccer_profile::num::Signature;
+use icccer_profile::tag_types::TagData;
 
 use crate::{
-    Bpc, DiffError, Iccce, Intent, Kind, Metric, Oracle, Precalc, Record, Request, Space, Tolerance,
+    Bpc, DiffError, Icccer, Intent, Kind, Metric, Oracle, Precalc, Record, Request, Space, Tolerance,
 };
 
 // ===========================================================================
@@ -175,7 +175,7 @@ use crate::{
 ///   nodes), 256-entry input tables (non-identity, mild ink curves), 2-entry
 ///   output tables (identity), identity 3×3 matrix.
 /// - The `B2A*` tags are `mft1` (`lut8Type`) — **not exercised here**: this
-///   pass runs the A2B direction only, and `iccce-cmm` does not evaluate
+///   pass runs the A2B direction only, and `icccer-cmm` does not evaluate
 ///   `mft1` yet (assembly stage 3).
 pub const SWOP: &str = r"C:\Windows\System32\spool\drivers\color\USWebCoatedSWOP.icc";
 
@@ -183,14 +183,14 @@ pub const SWOP: &str = r"C:\Windows\System32\spool\drivers\color\USWebCoatedSWOP
 ///
 /// **Category (c) per `LEGAL.md` §3.** The same file Pass 3 used as its
 /// *source*; here it is the destination, which exercises the other half of
-/// `iccce-cmm::curve` on it (table **inversion** rather than table
+/// `icccer-cmm::curve` on it (table **inversion** rather than table
 /// evaluation).
 ///
 /// **It has no `B2A*` tags** — verified in this module from the parsed tag
 /// list ([`Analysis::structure`]): 17 tags, `cprt desc wtpt bkpt rXYZ gXYZ
 /// bXYZ dmnd dmdd vued view lumi meas tech rTRC gTRC bTRC`. That matters more
 /// than it looks: if it carried a `B2A0`, lcms2 would use the LUT path for the
-/// destination while `iccce-cmm::transform::Chain` (whose destination side is
+/// destination while `icccer-cmm::transform::Chain` (whose destination side is
 /// matrix/TRC only, stage 3 pending) used the colorant matrix, and every ΔE
 /// below would be measuring **two different models**, not two implementations
 /// of one. It does not, so both sides evaluate clause 8.10.2 step 4 on this
@@ -208,7 +208,7 @@ pub const SRGB: &str = r"C:\Windows\System32\spool\drivers\color\sRGB Color Spac
 ///
 /// ## What is being bounded
 ///
-/// iccce evaluates the 9⁴ CLUT by **n-linear** (quadrilinear) interpolation —
+/// icccer evaluates the 9⁴ CLUT by **n-linear** (quadrilinear) interpolation —
 /// the **NA-006** named choice inside ICC.1's silence (**A16**). lcms2 at pin
 /// `21c582a` evaluates the same table by a **hybrid**: linear along input
 /// channel 0, Sakamoto tetrahedral in channels 1–3 (module doc). At a CLUT
@@ -217,16 +217,16 @@ pub const SRGB: &str = r"C:\Windows\System32\spool\drivers\color\sRGB Color Spac
 /// points per axis the cells are 1/8 wide in CLUT-input space, which is coarse
 /// enough for the difference to be perceptible. `NUMERIC_CLAIMS.md` NA-006
 /// carries a **corpus-derived bound of ~1 ΔE** for trilinear-vs-tetrahedral
-/// and states plainly that iccce has **not measured it**. This pass measures
+/// and states plainly that icccer has **not measured it**. This pass measures
 /// it.
 ///
 /// ## Where the number comes from — the table and the two algorithms, not the
 /// observed disagreement
 ///
 /// [`SourcePipeline`] reimplements the whole `mft2` A2B path in this harness
-/// twice: once with iccce's n-linear CLUT, once with lcms2's geometry as read
+/// twice: once with icccer's n-linear CLUT, once with lcms2's geometry as read
 /// from `cmsintrp.c`. **Neither run involves lcms2 the program**, and neither
-/// involves the observed iccce-vs-lcms2 residual. The maximum ΔE2000 between
+/// involves the observed icccer-vs-lcms2 residual. The maximum ΔE2000 between
 /// the two evaluations, over this grid, is the *envelope of the method
 /// difference for this fixture*: what two correct implementations of two
 /// unspecified-by-ICC.1 interpolation schemes are entitled to differ by here.
@@ -247,7 +247,7 @@ pub const SRGB: &str = r"C:\Windows\System32\spool\drivers\color\sRGB Color Spac
 ///
 /// | | `0,254 23` (here) | `0,252 94` (Pass 4's cross-check) |
 /// |---|---|---|
-/// | what | the **interpolation-method envelope** | the **observed iccce-vs-lcms2 residual** |
+/// | what | the **interpolation-method envelope** | the **observed icccer-vs-lcms2 residual** |
 /// | computed from | the 9⁴ table and the two algorithms | two programs' outputs |
 /// | is lcms2 the *program* in it? | **no** — no `transicc` runs | **yes** |
 /// | what it bounds | what two correct implementations may differ by | what these two implementations *did* differ by |
@@ -292,7 +292,7 @@ pub const SRGB: &str = r"C:\Windows\System32\spool\drivers\color\sRGB Color Spac
 pub const DE_PCS_CROSSCHECK: Tolerance = Tolerance::new(
     2.0,
     "the CLUT INTERPOLATION-METHOD envelope for this fixture, computed from the 9^4 table and \
-     the two algorithms ALONE (no lcms2 run, no observed residual): iccce's n-linear (NA-006, \
+     the two algorithms ALONE (no lcms2 run, no observed residual): icccer's n-linear (NA-006, \
      ICC.1 is SILENT on interpolation - A16) against lcms2's hybrid linear-in-C x tetrahedral-in-MYK \
      (cmsintrp.c Eval4Inputs at pin 21c582a) = max 0.25423 dE00 on A2B1, 1.5741 on A2B0 over this \
      grid; 2.0 is the larger with ~27% headroom for between-point maxima and for lcms2's \
@@ -331,8 +331,8 @@ pub const DE_PCS_CROSSCHECK: Tolerance = Tolerance::new(
 /// 1.1091×10⁻³) at perceptual/saturation — i.e. the emulation shrinks the
 /// disagreement by **55×** and **326×** respectively.
 ///
-/// **This is where "iccce and lcms2 agree" is earned**: with lcms2's own
-/// interpolation geometry substituted for iccce's, the two implementations of
+/// **This is where "icccer and lcms2 agree" is earned**: with lcms2's own
+/// interpolation geometry substituted for icccer's, the two implementations of
 /// the `lut16` pipeline — input curves, index order, CLUT, output curves,
 /// legacy Lab decode, PCS handling — agree to the arithmetic of the oracle's
 /// own quantisation. What it does **not** establish is that either one is
@@ -351,7 +351,7 @@ pub const DE_PCS_EMULATED: Tolerance = Tolerance::new(
 
 /// **Record 6 — the interpolation-free control: the 16 CLUT-node corners.**
 ///
-/// Metric: max ΔE2000 between iccce's A2Bx PCS output and `transicc`'s, over
+/// Metric: max ΔE2000 between icccer's A2Bx PCS output and `transicc`'s, over
 /// the **16 hypercube corners only**.
 ///
 /// ## Why these 16 points are special, and why the control is necessary
@@ -429,7 +429,7 @@ pub const DE_PCS_CORNERS: Tolerance = Tolerance::new(
 /// (media-relative), in normalised device units.
 ///
 /// **2×10⁻² is the larger of those with ~86 % headroom.** The observed
-/// iccce-vs-lcms2 maximum is **1.0816×10⁻²** — 0.6 % *above* the propagated
+/// icccer-vs-lcms2 maximum is **1.0816×10⁻²** — 0.6 % *above* the propagated
 /// envelope, which is the right sign and the right size: the envelope models
 /// the interpolation geometry only, and lcms2's 16-bit quantisation is
 /// genuinely on top of it.
@@ -451,8 +451,8 @@ pub const DEVICE_CROSSCHECK: Tolerance = Tolerance::new(
 
 /// **Record 3 — end-to-end agreement expressed perceptually.**
 ///
-/// Metric: max ΔE2000 between iccce's and lcms2's destination device RGB, both
-/// carried into D50 CIELAB through iccce's sRGB matrix/TRC model.
+/// Metric: max ΔE2000 between icccer's and lcms2's destination device RGB, both
+/// carried into D50 CIELAB through icccer's sRGB matrix/TRC model.
 ///
 /// ## Where 2.0 ΔE2000 comes from
 ///
@@ -466,7 +466,7 @@ pub const DEVICE_CROSSCHECK: Tolerance = Tolerance::new(
 /// The measured decomposition (`pass4_report` §4): the method envelope alone,
 /// propagated end-to-end and expressed in ΔE2000, is **1.6639**
 /// (perceptual/saturation) and **0.254 23** (media-relative); the observed
-/// iccce-vs-lcms2 maxima are **1.6590** and **0.252 94**. Those agree to
+/// icccer-vs-lcms2 maxima are **1.6590** and **0.252 94**. Those agree to
 /// **0.3 %** and **0.5 %** — the same shape of result as Pass 3's white-clamp
 /// prediction: the disagreement is *accounted for* by a named non-error
 /// mechanism rather than merely being small.
@@ -496,12 +496,12 @@ pub const DE_CROSSCHECK: Tolerance = Tolerance::new(
 /// **The absolute-intent record that IS graded.**
 ///
 /// Metric: max ΔE2000 between lcms2's ICC-absolute output and a prediction of
-/// it that replaces exactly two of iccce's choices with lcms2's — the CLUT
+/// it that replaces exactly two of icccer's choices with lcms2's — the CLUT
 /// geometry, and the **destination media white**.
 ///
 /// ## The divergence this exists to explain
 ///
-/// At ICC-absolute, iccce and lcms2 differ by **up to 11.2 ΔE2000** (mean
+/// At ICC-absolute, icccer and lcms2 differ by **up to 11.2 ΔE2000** (mean
 /// 4.67) on this pair — two orders of magnitude more than at any other intent,
 /// and far above anything the interpolation-method envelope (0.25 ΔE00 for
 /// `A2B1`) could account for. That is a divergence, and leaving it inside a
@@ -526,19 +526,19 @@ pub const DE_CROSSCHECK: Tolerance = Tolerance::new(
 /// `(0.950 455, 1.0, 1.089 050)`, not D50, which is a common v2-era encoding
 /// (the colorants are D50-adapted while `wtpt` records the unadapted white).
 /// So at `AdaptationState == 1.0` lcms2's `ComputeAbsoluteIntent` scales the
-/// PCS by `wtpt_src / D50`, while iccce (NA-007: `wtpt` **as stored**) scales
+/// PCS by `wtpt_src / D50`, while icccer (NA-007: `wtpt` **as stored**) scales
 /// by `wtpt_src / wtpt_dst`. The two differ by `D65/D50` per component —
 /// (0.9858, 1.0, 1.3202) — which is a ~32 % error in `Z`. That is the 11 ΔE.
 ///
 /// ## Which one is right? — NOT SETTLED HERE, and that is the finding
 ///
-/// `NUMERIC_CLAIMS.md` **NA-007** registers iccce's as-stored reading, and
+/// `NUMERIC_CLAIMS.md` **NA-007** registers icccer's as-stored reading, and
 /// corpus **A4b** — *what a v2 profile's `wtpt` means* — is **UNVERIFIED**,
 /// because ICC.1:2001-04 has not been obtained. lcms2's substitution is
 /// justified in its source by a comment, not by a clause. **A dispatch to
 /// `icc-spec-librarian` is owed** (README §14.6 states the question). Until it
 /// is settled this record grades the *model*, not the *policy*: it asserts
-/// that iccce's absolute path differs from lcms2's **only** in the white point
+/// that icccer's absolute path differs from lcms2's **only** in the white point
 /// it reads, which is a falsifiable claim and the one worth pinning.
 ///
 /// ## Where 5×10⁻² ΔE2000 comes from — and this is the weakest-justified
@@ -584,7 +584,7 @@ pub const WP_POLICY_EMULATED: Tolerance = Tolerance::new(
 ///   because it passed, and 15 ΔE00 is a *different colour*. It would also
 ///   silently absorb any future arithmetic error in the absolute path.
 /// - **Let it fail permanently.** A red line that never changes is a line
-///   people stop reading, and it would report "iccce disagrees with lcms2" as
+///   people stop reading, and it would report "icccer disagrees with lcms2" as
 ///   though the disagreement were unexplained, which it is not.
 ///
 /// So the raw numbers are **recorded with an infinite tolerance** — the same
@@ -594,8 +594,8 @@ pub const WP_POLICY_EMULATED: Tolerance = Tolerance::new(
 /// implementations acquires a defect and this becomes a graded row again.
 pub const ABSOLUTE_REPORTED: Tolerance = Tolerance::new(
     f64::INFINITY,
-    "REPORTED, NOT GRADED at icc-absolute. iccce and lcms2 use DIFFERENT DESTINATION MEDIA WHITES \
-     here - iccce the wtpt tag as stored (D65 in this v2 mntr file, NA-007), lcms2 D50 by its \
+    "REPORTED, NOT GRADED at icc-absolute. icccer and lcms2 use DIFFERENT DESTINATION MEDIA WHITES \
+     here - icccer the wtpt tag as stored (D65 in this v2 mntr file, NA-007), lcms2 D50 by its \
      v2-display substitution rule (cmsio1.c) - so this number is a POLICY divergence, ~11 dE00, \
      whose mechanism is established by the white-point-policy record and whose spec question \
      (corpus A4b, v2 wtpt semantics) is UNSOURCED. Grading it would mean either a ~15 dE00 \
@@ -660,7 +660,7 @@ pub const INTENT_SHARED_TAG: Tolerance = Tolerance::new(
 /// - **Nothing below 1/8 in a single channel except exact zero**, except
 ///   through the random block.
 /// - **One profile pair, one direction.** The B2A direction (`mft1` in this
-///   file) is not evaluated by `iccce-cmm` at all yet.
+///   file) is not evaluated by `icccer-cmm` at all yet.
 #[must_use]
 pub fn grid() -> Vec<[f64; 4]> {
     let mut out: Vec<[f64; 4]> = Vec::new();
@@ -758,14 +758,14 @@ pub const NAMED_POINTS: [([f64; 4], &str); 5] = [
 /// Which CLUT interpolation geometry to use.
 ///
 /// **Both are implemented here, in the harness, in `f64`.** Nothing in
-/// `crates/` gains a tetrahedral evaluator from this file: `iccce-cmm`'s
+/// `crates/` gains a tetrahedral evaluator from this file: `icccer-cmm`'s
 /// interpolation remains n-linear (NA-006), and lcms2's geometry exists here
 /// only as a *model of the oracle's arithmetic*, the same way README §13.6.1
 /// modelled `cmsEvalToneCurveFloat` to explain Pass 3's residual.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Scheme {
-    /// iccce's choice: n-linear (quadrilinear) over all four inputs. This
-    /// implementation must agree with `iccce_cmm::clut::Clut::eval` to `f64`
+    /// icccer's choice: n-linear (quadrilinear) over all four inputs. This
+    /// implementation must agree with `icccer_cmm::clut::Clut::eval` to `f64`
     /// noise, which [`SourcePipeline::self_check`] asserts before any result
     /// from this module is believed.
     NLinear,
@@ -782,11 +782,11 @@ pub enum Scheme {
 /// The `lut16Type` device→PCS pipeline, reimplemented in the harness so that
 /// the CLUT interpolation geometry can be **substituted**.
 ///
-/// ## Why this exists at all, given `iccce_cmm::lut_transform::Lut16Model`
+/// ## Why this exists at all, given `icccer_cmm::lut_transform::Lut16Model`
 ///
 /// The experiment that makes Pass 4's tolerances defensible needs the *same*
 /// pipeline evaluated two ways, differing in exactly one component. That
-/// substitution cannot be made inside `iccce-cmm` — this role does not edit
+/// substitution cannot be made inside `icccer-cmm` — this role does not edit
 /// `crates/`, and putting a tetrahedral evaluator there would change the
 /// subject of the test. So the pipeline is rebuilt here from the parsed tag,
 /// and [`SourcePipeline::self_check`] holds the `NLinear` arm against
@@ -876,7 +876,7 @@ impl SourcePipeline {
     }
 
     /// n-linear: the 2ⁿ-corner convex combination. Mirrors
-    /// `iccce_cmm::clut::Clut::eval`, including its clamped-index-then-
+    /// `icccer_cmm::clut::Clut::eval`, including its clamped-index-then-
     /// fraction pairing.
     fn eval_nlinear(&self, input: &[f64], out: &mut [f64]) {
         let d = self.inputs;
@@ -1049,7 +1049,7 @@ pub(crate) fn fclamp(v: f64) -> f64 {
 /// ★ **lcms2's** cell origin and fraction — *not* the same convention as
 /// [`cell`], and the difference is load-bearing at the top of each axis.
 ///
-/// iccce (and `Clut::eval`, and every 1-D table evaluator in `iccce-cmm`)
+/// icccer (and `Clut::eval`, and every 1-D table evaluator in `icccer-cmm`)
 /// clamps the cell index to `points − 2` and lets the fraction reach 1.0, so
 /// an input of exactly 1.0 is "the last cell, fully to the right". lcms2
 /// instead takes `k0 = floor(pk)` **unclamped** — which is `points − 1` at the
@@ -1073,8 +1073,8 @@ pub(crate) fn cell_lcms2(x: f64, points: usize) -> (usize, f64) {
     (k0, rest)
 }
 
-/// Cell origin and fraction for one axis of a `points`-node grid — **iccce's**
-/// convention, mirroring `iccce_cmm::clut::Clut::eval`.
+/// Cell origin and fraction for one axis of a `points`-node grid — **icccer's**
+/// convention, mirroring `icccer_cmm::clut::Clut::eval`.
 pub(crate) fn cell(x: f64, points: usize) -> (usize, f64) {
     let x = x.clamp(0.0, 1.0);
     #[allow(clippy::cast_precision_loss)]
@@ -1106,10 +1106,10 @@ pub(crate) fn interp_table(t: &[f64], x: f64) -> f64 {
 // ===========================================================================
 
 /// A2B tag signatures, intent-indexed per 8.10.2 — the same mapping
-/// `iccce_cmm::transform` uses, restated here because this module reads the
+/// `icccer_cmm::transform` uses, restated here because this module reads the
 /// tags directly for the PCS-side records.
 mod tag {
-    use iccce_profile::num::Signature;
+    use icccer_profile::num::Signature;
     pub const A2B0: Signature = Signature(0x4132_4230);
     pub const A2B1: Signature = Signature(0x4132_4231);
     pub const A2B2: Signature = Signature(0x4132_4232);
@@ -1151,16 +1151,16 @@ fn read_lut16(profile: &Profile, sig: Signature) -> Option<Lut16> {
 #[derive(Debug)]
 pub struct IntentRun {
     pub intent: Intent,
-    /// iccce's destination device RGB, 0..1, from the **shipped**
-    /// `iccce transform` binary (6-decimal print, re-parsed).
-    pub iccce_rgb: Vec<[f64; 3]>,
+    /// icccer's destination device RGB, 0..1, from the **shipped**
+    /// `icccer transform` binary (6-decimal print, re-parsed).
+    pub icccer_rgb: Vec<[f64; 3]>,
     /// lcms2's destination device RGB as printed, 0..255.
     pub lcms2_rgb_255: Vec<[f64; 3]>,
     /// lcms2's PCS rendering of the source profile alone, D50 CIELAB.
     /// `None` at the absolute intent — see [`IntentRun::pcs_note`].
     pub lcms2_pcs: Option<Vec<Lab>>,
-    /// iccce's PCS, n-linear (the shipped choice).
-    pub iccce_pcs: Vec<Lab>,
+    /// icccer's PCS, n-linear (the shipped choice).
+    pub icccer_pcs: Vec<Lab>,
     /// The same pipeline with lcms2's CLUT geometry emulated.
     pub emulated_pcs: Vec<Lab>,
 
@@ -1168,7 +1168,7 @@ pub struct IntentRun {
     pub device_dev_clamped: Vec<f64>,
     pub device_dev_raw: Vec<f64>,
     pub de_end_to_end: Vec<f64>,
-    /// ΔE2000, iccce's PCS vs lcms2's PCS. Empty when `lcms2_pcs` is `None`.
+    /// ΔE2000, icccer's PCS vs lcms2's PCS. Empty when `lcms2_pcs` is `None`.
     pub de_pcs: Vec<f64>,
     /// ΔE2000, emulated-geometry PCS vs lcms2's PCS.
     pub de_pcs_emulated: Vec<f64>,
@@ -1181,7 +1181,7 @@ pub struct IntentRun {
     pub device_method_end_to_end: Vec<f64>,
     /// ★ **The absolute-intent white-point-policy experiment.** Per-point
     /// ΔE2000 between lcms2's absolute output and a *re-prediction* of it in
-    /// which two of iccce's choices are replaced by lcms2's:
+    /// which two of icccer's choices are replaced by lcms2's:
     /// (i) the CLUT geometry, and (ii) the **destination media white**, which
     /// lcms2 substitutes with D50 for a **v2 display-class** profile
     /// regardless of what the `wtpt` tag says (`cmsio1.c`
@@ -1192,7 +1192,7 @@ pub struct IntentRun {
     /// lcms2 output components outside `[0,1]`, as `(point, channel, value)`.
     pub lcms2_out_of_range: Vec<(usize, usize, f64)>,
     /// Max |Δ| between the harness's n-linear reimplementation and
-    /// `iccce_cmm`'s own `Lut16Model`, in `L*`/`a*`/`b*` units. **Must be
+    /// `icccer_cmm`'s own `Lut16Model`, in `L*`/`a*`/`b*` units. **Must be
     /// f64 noise or nothing in this module means anything.**
     pub self_check: f64,
 }
@@ -1204,7 +1204,7 @@ impl IntentRun {
             "PCS side compared against transicc -o*Lab4 at this intent"
         } else {
             "PCS-side records SKIP at icc-absolute: transicc -o*Lab4 -t3 applies the D.6/D.7 \
-             media-white scale to the PCS on lcms2's side, and iccce's A2Bx evaluation is \
+             media-white scale to the PCS on lcms2's side, and icccer's A2Bx evaluation is \
              media-relative by construction, so the two are not the same quantity. \
              Comparing them would require reproducing lcms2's absolute handling in the harness, \
              which would be modelling the oracle rather than measuring it. The end-to-end \
@@ -1228,13 +1228,13 @@ pub struct Analysis {
     /// record so a substituted profile cannot pass unnoticed.
     pub structure: String,
     /// Max |Δ| in device units between the perceptual and saturation outputs,
-    /// on iccce's side and on lcms2's side.
-    pub per_vs_sat_iccce: f64,
+    /// on icccer's side and on lcms2's side.
+    pub per_vs_sat_icccer: f64,
     pub per_vs_sat_lcms2: f64,
     pub oracle_banner: String,
-    /// Which `iccce` binary answered, and whether it was a debug build.
-    pub iccce_exe: PathBuf,
-    pub iccce_is_debug: bool,
+    /// Which `icccer` binary answered, and whether it was a debug build.
+    pub icccer_exe: PathBuf,
+    pub icccer_is_debug: bool,
 }
 
 /// Why a Pass 4 run could not happen.
@@ -1274,12 +1274,12 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
             )));
         }
     }
-    let iccce = match Iccce::locate() {
+    let icccer = match Icccer::locate() {
         Err(e) => return Err(Unavailable::Error(e.to_string())),
         Ok(None) => {
             return Err(Unavailable::Skip(
-                "iccce binary not found: run `cargo build --release -p iccce-cli`, or set \
-                 $ICCCE_BIN. Pass 4 needs the N-channel `transform` of commit 490191b or later"
+                "icccer binary not found: run `cargo build --release -p icccer-cli`, or set \
+                 $ICCCER_BIN. Pass 4 needs the N-channel `transform` of commit 490191b or later"
                     .to_string(),
             ));
         }
@@ -1322,7 +1322,7 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
         Intent::Saturation,
         Intent::AbsoluteColorimetric,
     ] {
-        // --- iccce, the SHIPPED binary ----------------------------------
+        // --- icccer, the SHIPPED binary ----------------------------------
         // The channel count is checked in-process first: a `Chain` that
         // refuses to build, or builds with the wrong arity, should be
         // reported as that rather than as an unparsable subprocess.
@@ -1335,9 +1335,9 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
             )));
         }
         let rows: Vec<Vec<f64>> = grid.iter().map(|q| q.to_vec()).collect();
-        let iccce_rgb = iccce.transform_rows(src_path, dst_path, intent, &rows)?;
+        let icccer_rgb = icccer.transform_rows(src_path, dst_path, intent, &rows)?;
 
-        // --- iccce's PCS side, both geometries --------------------------
+        // --- icccer's PCS side, both geometries --------------------------
         let lut = read_lut16(&src, a2b_sig(intent)).ok_or_else(|| {
             Unavailable::Error(format!("no decodable mft2 for intent {}", intent.name()))
         })?;
@@ -1345,7 +1345,7 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
         let model = Lut16Model::from_lut16(&lut, false, PcsKind::Lab)
             .map_err(|e| Unavailable::Error(e.to_string()))?;
 
-        let mut iccce_pcs = Vec::with_capacity(grid.len());
+        let mut icccer_pcs = Vec::with_capacity(grid.len());
         let mut emulated_pcs = Vec::with_capacity(grid.len());
         let mut self_check = 0.0f64;
         for q in &grid {
@@ -1362,7 +1362,7 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
                     "Lut16Model::device_to_pcs refused a grid point".into(),
                 ));
             }
-            iccce_pcs.push(mine);
+            icccer_pcs.push(mine);
             emulated_pcs.push(pipeline.eval_lab(q, Scheme::Lcms2Hybrid));
         }
 
@@ -1417,7 +1417,7 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
         let mut lcms2_out_of_range = Vec::new();
 
         for i in 0..n {
-            let a = iccce_rgb[i];
+            let a = icccer_rgb[i];
             let b = [
                 lcms2_rgb_255[i][0] / 255.0,
                 lcms2_rgb_255[i][1] / 255.0,
@@ -1440,15 +1440,15 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
             ));
 
             if let Some(p) = &lcms2_pcs {
-                de_pcs.push(delta_e_2000(iccce_pcs[i], p[i]));
+                de_pcs.push(delta_e_2000(icccer_pcs[i], p[i]));
                 de_pcs_emulated.push(delta_e_2000(emulated_pcs[i], p[i]));
             }
-            de_method_envelope.push(delta_e_2000(iccce_pcs[i], emulated_pcs[i]));
+            de_method_envelope.push(delta_e_2000(icccer_pcs[i], emulated_pcs[i]));
 
             // The method difference carried through the ACTUAL destination
             // model — the propagation that DEVICE_CROSSCHECK and DE_CROSSCHECK
             // rest on. No lcms2 output enters this quantity.
-            let nl = dst_model.pcs_to_device(iccce_pcs[i].to_xyz(D50));
+            let nl = dst_model.pcs_to_device(icccer_pcs[i].to_xyz(D50));
             let em = dst_model.pcs_to_device(emulated_pcs[i].to_xyz(D50));
             match (nl, em) {
                 (Ok(nl), Ok(em)) => {
@@ -1466,7 +1466,7 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
         }
 
         // --- the absolute-intent white-point-policy experiment ------------
-        // Re-predict lcms2's absolute output with TWO of iccce's choices
+        // Re-predict lcms2's absolute output with TWO of icccer's choices
         // replaced by lcms2's, and nothing else: the CLUT geometry, and the
         // destination media white (D50 rather than the stored wtpt, which is
         // what `_cmsReadMediaWhitePoint` does for a v2 DISPLAY profile). If
@@ -1479,7 +1479,7 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
             })?;
             for i in 0..grid.len() {
                 let rel = emulated_pcs[i].to_xyz(D50);
-                let abs = iccce_color::Xyz {
+                let abs = icccer_color::Xyz {
                     x: rel.x * (mw_src.x / D50.x),
                     y: rel.y * (mw_src.y / D50.y),
                     z: rel.z * (mw_src.z / D50.z),
@@ -1505,10 +1505,10 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
 
         runs.push(IntentRun {
             intent,
-            iccce_rgb,
+            icccer_rgb,
             lcms2_rgb_255,
             lcms2_pcs,
-            iccce_pcs,
+            icccer_pcs,
             emulated_pcs,
             device_dev_clamped,
             device_dev_raw,
@@ -1528,9 +1528,9 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
     // both must be exactly zero.
     let per = runs.iter().find(|r| r.intent == Intent::Perceptual).expect("built above");
     let sat = runs.iter().find(|r| r.intent == Intent::Saturation).expect("built above");
-    let per_vs_sat_iccce = (0..grid.len())
+    let per_vs_sat_icccer = (0..grid.len())
         .flat_map(|i| (0..3).map(move |c| (i, c)))
-        .map(|(i, c)| (per.iccce_rgb[i][c] - sat.iccce_rgb[i][c]).abs())
+        .map(|(i, c)| (per.icccer_rgb[i][c] - sat.icccer_rgb[i][c]).abs())
         .fold(0.0f64, f64::max);
     let per_vs_sat_lcms2 = (0..grid.len())
         .flat_map(|i| (0..3).map(move |c| (i, c)))
@@ -1544,23 +1544,23 @@ pub fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<Anal
         runs,
         version_words: (src.header.version.raw, dst.header.version.raw),
         structure,
-        per_vs_sat_iccce,
+        per_vs_sat_icccer,
         per_vs_sat_lcms2,
         oracle_banner: oracle.banner().unwrap_or_default(),
-        iccce_exe: iccce.path().to_path_buf(),
-        iccce_is_debug: iccce.is_debug_build(),
+        icccer_exe: icccer.path().to_path_buf(),
+        icccer_is_debug: icccer.is_debug_build(),
     })
 }
 
-/// The `wtpt` tag as stored — no substitution, no adaptation. iccce's
+/// The `wtpt` tag as stored — no substitution, no adaptation. icccer's
 /// `Chain` reads it the same way (NA-007), and the difference between that and
 /// what lcms2 reads is the subject of the absolute-intent experiment.
-fn read_wtpt(profile: &Profile) -> Option<iccce_color::Xyz> {
+fn read_wtpt(profile: &Profile) -> Option<icccer_color::Xyz> {
     const WTPT: Signature = Signature(0x7774_7074);
     let entry = profile.tags.iter().find(|t| t.sig == WTPT)?;
     match profile.decode_tag(entry) {
         Some(Ok(d)) => match d.data {
-            TagData::Xyz(v) if v.len() == 1 => Some(iccce_color::Xyz {
+            TagData::Xyz(v) if v.len() == 1 => Some(icccer_color::Xyz {
                 x: v[0].x.to_f64(),
                 y: v[0].y.to_f64(),
                 z: v[0].z.to_f64(),
@@ -1615,15 +1615,15 @@ fn max_mean_at(v: &[f64], idx: &[usize]) -> (f64, f64) {
 pub fn records(a: &Analysis) -> Vec<Record> {
     let mut out = Vec::new();
     let provenance = format!(
-        "{} | src={} dst={} grid={} points | iccce={} ({}) | oracle={} | \
-         end-to-end: BOTH sides are subprocesses (iccce transform --intent, N-channel, \
-         commit 490191b+); PCS-side records call iccce-cmm in-process as an INSTRUMENT",
+        "{} | src={} dst={} grid={} points | icccer={} ({}) | oracle={} | \
+         end-to-end: BOTH sides are subprocesses (icccer transform --intent, N-channel, \
+         commit 490191b+); PCS-side records call icccer-cmm in-process as an INSTRUMENT",
         a.structure,
         a.src_path.display(),
         a.dst_path.display(),
         a.grid.len(),
-        a.iccce_exe.display(),
-        if a.iccce_is_debug {
+        a.icccer_exe.display(),
+        if a.icccer_is_debug {
             "DEBUG BUILD - not the shipped artefact"
         } else {
             "release"
@@ -1637,7 +1637,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
         a.version_words.0, a.version_words.1
     );
     let both_ran = "BOTH SIDES COMPUTED IN THIS RUN — no recorded expectation is being reproduced. \
-                    iccce's end-to-end numbers from the shipped `iccce transform` binary, lcms2's \
+                    icccer's end-to-end numbers from the shipped `icccer transform` binary, lcms2's \
                     from the pinned transicc. Cross-check, NOT ground truth.";
 
     let corners = corner_indices(&a.grid);
@@ -1645,19 +1645,19 @@ pub fn records(a: &Analysis) -> Vec<Record> {
 
     // --- whole-run record 1: the apparatus ---------------------------------
     out.push(Record::graded(
-        "pass4/apparatus/harness-nlinear-matches-iccce-cmm",
+        "pass4/apparatus/harness-nlinear-matches-icccer-cmm",
         Kind::SelfConsistency,
         Metric::AbsMaxComponent,
         Tolerance::new(
             1e-9,
             "the harness reimplements the mft2 pipeline so the CLUT geometry can be SUBSTITUTED; \
-             its n-linear arm must reproduce iccce_cmm::lut_transform::Lut16Model to f64 noise or \
+             its n-linear arm must reproduce icccer_cmm::lut_transform::Lut16Model to f64 noise or \
              every number in this module is void. 1e-9 in L*/a*/b* units is ~7 orders above f64 \
              noise on this arithmetic and ~6 orders below anything colorimetric: it cannot pass a \
              real divergence and cannot fail on rounding",
         ),
         self_check_max,
-        "BOTH SIDES ARE ICCCE-DERIVED. This grades the APPARATUS, not the colour: it is the \
+        "BOTH SIDES ARE ICCCER-DERIVED. This grades the APPARATUS, not the colour: it is the \
          precondition for believing the interpolation-envelope experiment at all.",
         format!(
             "{provenance} | max |delta| in L*/a*/b* units over every grid point and all four \
@@ -1671,14 +1671,14 @@ pub fn records(a: &Analysis) -> Vec<Record> {
         Kind::CrossCheck,
         Metric::DeviceAbsMaxNormalised,
         INTENT_SHARED_TAG,
-        a.per_vs_sat_iccce.max(a.per_vs_sat_lcms2),
+        a.per_vs_sat_icccer.max(a.per_vs_sat_lcms2),
         "A PROPERTY OF THE FIXTURE, asserted against both implementations: A2B0 and A2B2 point at \
          one shared block of tag data in this file (README §8.4). Not a colour claim.",
         format!(
-            "{provenance} | iccce max |delta| {:.6e}, lcms2 max |delta| {:.6e}, normalised device \
-             units; the record grades the larger. A non-zero value on iccce's side is an 8.10.2 \
+            "{provenance} | icccer max |delta| {:.6e}, lcms2 max |delta| {:.6e}, normalised device \
+             units; the record grades the larger. A non-zero value on icccer's side is an 8.10.2 \
              fallback defect; on lcms2's side it would mean the Pass 0 finding had changed",
-            a.per_vs_sat_iccce, a.per_vs_sat_lcms2
+            a.per_vs_sat_icccer, a.per_vs_sat_lcms2
         ),
     ));
 
@@ -1744,7 +1744,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             de_max,
             both_ran,
             format!(
-                "{pair} | both device outputs carried into D50 CIELAB through iccce's sRGB \
+                "{pair} | both device outputs carried into D50 CIELAB through icccer's sRGB \
                  matrix/TRC model (the ruler; Pass 3 record 7 bounds a DIFFERENT profile's ruler \
                  at 8.79e-5 dE00 and that bound is INHERITED here, not re-measured). \
                  Interpolation-method envelope propagated end-to-end: {env_e2e_max:.6e} dE00 \
@@ -1779,7 +1779,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
                 pcs_max,
                 both_ran,
                 format!(
-                    "{pair} | the SOURCE profile alone: iccce's A2Bx (n-linear, NA-006) vs \
+                    "{pair} | the SOURCE profile alone: icccer's A2Bx (n-linear, NA-006) vs \
                      transicc -o*Lab4. Isolates the CLUT from the destination model. \
                      mean {pcs_mean:.6e}. The method envelope computed from the table and the two \
                      ALGORITHMS ALONE (no lcms2 output) is max {env_max:.6e} mean {env_mean:.6e} \
@@ -1793,7 +1793,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
                 Metric::DeltaE2000Max,
                 DE_PCS_EMULATED,
                 emu_max,
-                "BOTH SIDES COMPUTED IN THIS RUN. iccce's side is the harness's reimplementation \
+                "BOTH SIDES COMPUTED IN THIS RUN. icccer's side is the harness's reimplementation \
                  of the mft2 pipeline with lcms2's OWN CLUT geometry substituted for n-linear — \
                  a model of the oracle's arithmetic, as README §13.6.1 modelled its tone-curve \
                  quantisation. Cross-check, NOT ground truth, and NOT a claim about the shipped \
@@ -1832,7 +1832,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
                 Metric::DeltaE2000Max,
                 WP_POLICY_EMULATED,
                 wp_max,
-                "BOTH SIDES COMPUTED IN THIS RUN. The prediction replaces exactly TWO of iccce's \
+                "BOTH SIDES COMPUTED IN THIS RUN. The prediction replaces exactly TWO of icccer's \
                  choices with lcms2's — the CLUT geometry and the DESTINATION MEDIA WHITE — and \
                  changes nothing else. It is a model of the oracle's policy, not a claim that the \
                  policy is right: which white point ICC.1 requires here is corpus A4b, UNSOURCED.",
@@ -1840,7 +1840,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
                     "{pair} | lcms2 substitutes D50 for the wtpt tag of a v2 DISPLAY-class \
                      profile (cmsio1.c _cmsReadMediaWhitePoint), and the destination here is \
                      v2 'mntr' whose wtpt tag holds D65 (0.95045,1.0,1.08905) — so lcms2 scales \
-                     by wtpt_src/D50 where iccce scales by wtpt_src/wtpt_dst (NA-007, as stored). \
+                     by wtpt_src/D50 where icccer scales by wtpt_src/wtpt_dst (NA-007, as stored). \
                      Re-predicting lcms2's output with that one substitution gives max \
                      {wp_max:.6e} mean {wp_mean:.6e} dE00, against the {:.6e} dE00 the two \
                      implementations differ by unmodelled. ★ THE MECHANISM OF THE ABSOLUTE-INTENT \
@@ -1884,7 +1884,7 @@ pub fn unavailable_records(u: &Unavailable) -> Vec<Record> {
     let reason = u.to_string();
     let mut specs: Vec<(String, Kind, Metric, Tolerance)> = vec![
         (
-            "pass4/apparatus/harness-nlinear-matches-iccce-cmm".into(),
+            "pass4/apparatus/harness-nlinear-matches-icccer-cmm".into(),
             Kind::SelfConsistency,
             Metric::AbsMaxComponent,
             Tolerance::new(1e-9, "apparatus self-check"),
@@ -2060,7 +2060,7 @@ mod tests {
             input_chan: 4,
             output_chan: 3,
             clut_points: 2,
-            matrix: [iccce_profile::num::S15Fixed16(0); 9],
+            matrix: [icccer_profile::num::S15Fixed16(0); 9],
             input_ent: 2,
             output_ent: 2,
             input_tables: vec![0, 65535, 0, 65535, 0, 65535, 0, 65535],
@@ -2106,7 +2106,7 @@ mod tests {
             input_chan: 4,
             output_chan: 3,
             clut_points: 3,
-            matrix: [iccce_profile::num::S15Fixed16(0); 9],
+            matrix: [icccer_profile::num::S15Fixed16(0); 9],
             input_ent: 2,
             output_ent: 2,
             input_tables: vec![0, 65535, 0, 65535, 0, 65535, 0, 65535],

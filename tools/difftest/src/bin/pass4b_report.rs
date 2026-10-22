@@ -27,7 +27,7 @@
 
 use std::io::Write;
 
-use iccce_difftest::{Oracle, pass4b};
+use icccer_difftest::{Oracle, pass4b};
 
 fn main() {
     let mut out = std::io::stdout().lock();
@@ -73,7 +73,7 @@ fn main() {
                 let (de, de_mean) = mm(&r.de_roundtrip);
                 let (cf, cf_mean) = mm(&r.counterfactual);
                 println!("--- intent {} ---", r.intent.name());
-                println!("  apparatus (harness lut8 vs iccce-cmm)   {:.6e}", r.apparatus);
+                println!("  apparatus (harness lut8 vs icccer-cmm)   {:.6e}", r.apparatus);
                 println!("  device max / mean                       {dev:.6e} / {dev_mean:.6e}");
                 println!("  device, lcms2 arithmetic modelled       {modelled:.6e}");
                 println!("  quantisation envelope max / mean        {env:.6e} / {env_mean:.6e}");
@@ -100,8 +100,8 @@ fn main() {
                     t[0], t[1], t[2]
                 );
                 println!(
-                    "    iccce   CMYK {:?}",
-                    r.iccce_cmyk[i].iter().map(r6).collect::<Vec<_>>()
+                    "    icccer   CMYK {:?}",
+                    r.icccer_cmyk[i].iter().map(r6).collect::<Vec<_>>()
                 );
                 println!(
                     "    lcms2   CMYK {:?}",
@@ -123,7 +123,7 @@ fn main() {
             let (p, pm) = mm(&a.pcs_device_dev);
             let (pmod, _) = mm(&a.pcs_device_dev_modelled);
             let (pcf, _) = mm(&a.pcs_counterfactual);
-            println!("--- PCS side: Lab -> SWOP B2A1 (iccce IN-PROCESS) ---");
+            println!("--- PCS side: Lab -> SWOP B2A1 (icccer IN-PROCESS) ---");
             println!("  device max / mean                       {p:.6e} / {pm:.6e}");
             println!("  device, lcms2 arithmetic modelled       {pmod:.6e}");
             println!("  COUNTERFACTUAL tetrahedral              {pcf:.6e}");
@@ -146,24 +146,24 @@ fn main() {
             let keep: Vec<bool> = m.mab_overflows.iter().map(|o| !o).collect();
             println!("--- mAB: CMYK -> Lab, {} points ---", m.cmyk_grid.len());
             println!(
-                "  iccce vs derived (clamped reading)      {:.6e}   [max |dL*|,|da*|,|db*|, \
+                "  icccer vs derived (clamped reading)      {:.6e}   [max |dL*|,|da*|,|db*|, \
                  excluding the {n_over} overflow points]",
-                max_at(&m.mab_iccce_vs_derived, &keep)
+                max_at(&m.mab_icccer_vs_derived, &keep)
             );
             println!(
                 "  lcms2 vs derived (unclamped reading)    {:.6e}",
                 mm(&m.mab_lcms2_vs_derived).0
             );
             println!(
-                "  iccce vs lcms2                          {:.6e}  (all points) / {:.6e}  \
+                "  icccer vs lcms2                          {:.6e}  (all points) / {:.6e}  \
                  (excluding overflow)",
                 mm(&m.mab_cross).0,
                 max_at(&m.mab_cross, &keep)
             );
             println!("--- mBA: Lab -> CMYK, {} points ---", m.lab_grid.len());
             println!(
-                "  iccce vs derived                        {:.6e}",
-                mm(&m.mba_iccce_vs_derived).0
+                "  icccer vs derived                        {:.6e}",
+                mm(&m.mba_icccer_vs_derived).0
             );
             println!(
                 "  lcms2 vs derived                        {:.6e}",
@@ -196,7 +196,7 @@ fn main() {
                      1.00390625."
                 );
                 println!(
-                    "    iccce clamps it (clause 10.18's [0,1] curve domain, in Trc::eval) -> \
+                    "    icccer clamps it (clause 10.18's [0,1] curve domain, in Trc::eval) -> \
                      L* = 100."
                 );
                 println!(
@@ -250,15 +250,15 @@ fn main() {
                 println!("  attribution shrink                      {:.1}x", dev / modelled);
             }
             println!(
-                "  perceptual vs media-relative: iccce {:.3e}, lcms2 {:.3e}",
-                g.intent_identity_iccce, g.intent_identity_lcms2
+                "  perceptual vs media-relative: icccer {:.3e}, lcms2 {:.3e}",
+                g.intent_identity_icccer, g.intent_identity_lcms2
             );
             let (i, _) = argmax(&g.device_dev);
             println!(
-                "\n  worst point g = {:.6}:\n    iccce    {:?}\n    lcms2    {:?}\n    \
+                "\n  worst point g = {:.6}:\n    icccer    {:?}\n    lcms2    {:?}\n    \
                  modelled {:?}",
                 g.axis[i],
-                g.iccce_rgb[i].iter().map(r6).collect::<Vec<_>>(),
+                g.icccer_rgb[i].iter().map(r6).collect::<Vec<_>>(),
                 g.lcms2_rgb_255[i]
                     .iter()
                     .map(|v| r6(&(v / 255.0)))
@@ -281,14 +281,14 @@ fn main() {
             r.kind.tag(),
             fmt(r.tolerance.value),
             match &r.outcome {
-                iccce_difftest::Outcome::Pass { observed, .. }
-                | iccce_difftest::Outcome::Fail { observed, .. } => format!("{observed:.6e}"),
+                icccer_difftest::Outcome::Pass { observed, .. }
+                | icccer_difftest::Outcome::Fail { observed, .. } => format!("{observed:.6e}"),
                 _ => "-".into(),
             }
         );
         match r.outcome {
-            iccce_difftest::Outcome::Pass { .. } => n_pass += 1,
-            iccce_difftest::Outcome::Fail { .. } => n_fail += 1,
+            icccer_difftest::Outcome::Pass { .. } => n_pass += 1,
+            icccer_difftest::Outcome::Fail { .. } => n_fail += 1,
             _ => {}
         }
     }

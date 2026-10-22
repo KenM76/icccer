@@ -17,7 +17,7 @@ The corner tolerance's first draft was a constant `1e-3` justified in part by
 X-Rite v4 profile and **irrelevant**; the property that mattered was *"the exact
 identity `(0x0000,0xFFFF)`"*, which is true of `A2B1` and **false of `A2B0` in
 the same file**. lcms2 evaluates a non-identity 2-entry `curv` through
-`cmsEvalToneCurve16` and rounds twice where iccce uses `f64` — one lsb =
+`cmsEvalToneCurve16` and rounds twice where icccer uses `f64` — one lsb =
 `1.526e-3` in `L*`. **The `A2B1` arm passed at the print floor; the `A2B0` arm
 FAILED at `1.111856e-3`.**
 
@@ -61,7 +61,7 @@ question with no free parameter (*is the colorant sum nearer the normative PCS
 white or nearer the profile's own encoded `wtpt`?*, tolerance = half the distance
 between the file's own two candidates) and **imports no third white point** —
 D65 in particular, whose constant `NEXT_SESSION.md` §0 records as the weakest in
-`iccce-color`. Never put a weak constant underneath a conformance claim.
+`icccer-color`. Never put a weak constant underneath a conformance claim.
 
 **4. The injection pattern that validated all of it** — four injections, each in
 a **detached `git worktree`**, reverted before the next, baseline reproduced
@@ -69,7 +69,7 @@ first:
 
 | what | expect |
 |---|---|
-| corrupt iccce's v4 PCSLAB decode (255→254) | apparatus + end-to-end red; **the PCS rows stay GREEN**, because they compare the HARNESS to lcms2 — the apparatus row is the only link to iccce |
+| corrupt icccer's v4 PCSLAB decode (255→254) | apparatus + end-to-end red; **the PCS rows stay GREEN**, because they compare the HARNESS to lcms2 — the apparatus row is the only link to icccer |
 | transpose `rXYZ`/`gXYZ` | trap rows red **at exactly the stated separation, to six figures**; self-consistency rows stay green because they are blind to a *symmetric* defect by construction |
 | defeat a run-time tolerance *selection* | exactly one row red |
 | defeat the geometry substitution in the harness arm | the agreement rows red **and their separations stay `DISCRIMINATING`** — proof that `against_distance` (not `against`) was used |

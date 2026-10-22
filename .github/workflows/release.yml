@@ -1,4 +1,4 @@
-# iccce release — build the CLI for each platform FROM THE TAGGED COMMIT.
+# icccer release — build the CLI for each platform FROM THE TAGGED COMMIT.
 #
 # ★ WHY THIS EXISTS RATHER THAN UPLOADING A BINARY FROM A DEV MACHINE.
 #
@@ -52,12 +52,12 @@ jobs:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            bin: iccce
-            asset: iccce-x86_64-unknown-linux-gnu
+            bin: icccer
+            asset: icccer-x86_64-unknown-linux-gnu
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            bin: iccce.exe
-            asset: iccce-x86_64-pc-windows-msvc.exe
+            bin: icccer.exe
+            asset: icccer-x86_64-pc-windows-msvc.exe
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -66,7 +66,7 @@ jobs:
           targets: ${{ matrix.target }}
 
       - name: Build the CLI (release)
-        run: cargo build --release -p iccce-cli --target ${{ matrix.target }}
+        run: cargo build --release -p icccer-cli --target ${{ matrix.target }}
 
       # ★ The artifact is run, not merely built. See the header.
       - name: Smoke — the binary starts and honours its exit-code contract

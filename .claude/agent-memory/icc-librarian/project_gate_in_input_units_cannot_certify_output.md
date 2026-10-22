@@ -1,5 +1,5 @@
 ---
-name: iccce-gate-in-input-units-cannot-certify-output
+name: icccer-gate-in-input-units-cannot-certify-output
 description: DL-065 — a separation gate stated in DEVICE units cannot certify a separation in COLOUR; a spectrally neutral black makes the preserved answer a METAMER, so the fixture lays 0.42 of ink, clears every gate, and reports a cost of zero. No tolerance can express it; the remedy is a fixture
 metadata:
   type: project
@@ -65,9 +65,9 @@ sufficient for a colour claim.** Any recipe whose black appears only in
 `L*` is the easiest black to write and the one that nullifies this class
 of measurement.
 
-Related: [[iccce-pass-status]],
-[[iccce-control-only-as-good-as-its-fixture]],
-[[iccce-refusal-discharged-by-fixture]],
-[[iccce-unfailable-row-protected-only-by-siblings]],
-[[iccce-measurement-under-the-guards]],
-[[iccce-documented-is-not-tested]].
+Related: [[icccer-pass-status]],
+[[icccer-control-only-as-good-as-its-fixture]],
+[[icccer-refusal-discharged-by-fixture]],
+[[icccer-unfailable-row-protected-only-by-siblings]],
+[[icccer-measurement-under-the-guards]],
+[[icccer-documented-is-not-tested]].

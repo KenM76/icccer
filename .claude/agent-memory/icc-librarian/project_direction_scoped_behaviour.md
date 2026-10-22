@@ -1,5 +1,5 @@
 ---
-name: iccce-direction-scoped-behaviour
+name: icccer-direction-scoped-behaviour
 description: DL-021 + DL-027 — a measured implementation behaviour is a fact about one DIRECTION, one PATH and one PROFILE CLASS until measured in the others; four lcms2 instances, incl. two black-point estimators picked by the destination's header
 metadata:
   type: project
@@ -75,11 +75,11 @@ conjunction, a confound may be removable by choosing INPUTS.)*
 **The defect is in the transcription, not in lcms2** — each behaviour
 has a rationale in its own place.
 
-**Corpus twin:** [[iccce-refusal-discharged-by-fixture]] (DL-020) says a
+**Corpus twin:** [[icccer-refusal-discharged-by-fixture]] (DL-020) says a
 blanket sentence over a mirrored pair is a defect class. **DL-020
 governs how a *specification* is transcribed; DL-021 governs how an
 *implementation's behaviour* is.**
 
-Related: [[iccce-pass-status]], [[iccce-gate-must-not-reward-deletion]],
-[[iccce-predicted-divergence-must-be-measured]],
-[[iccce-verify-own-draft-too]].
+Related: [[icccer-pass-status]], [[icccer-gate-must-not-reward-deletion]],
+[[icccer-predicted-divergence-must-be-measured]],
+[[icccer-verify-own-draft-too]].

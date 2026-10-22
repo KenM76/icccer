@@ -1,5 +1,5 @@
 ---
-name: iccce-control-only-as-good-as-its-fixture
+name: icccer-control-only-as-good-as-its-fixture
 description: DL-025 — a sensitivity control can be nullified by its own FIXTURE, and its scaling law must match the function's smoothness class; plus the three-instance pattern that instruments, not re-reading, catch this project's errors
 metadata:
   type: project
@@ -35,7 +35,7 @@ is evidence, not debris, and must never be answered by widening the
 band. Also record the control's **passing margin** — Pass 6 recorded
 both failing ratios (0.94, 1.44) and **not** the passing one.
 
-**The pattern this is the third instance of.** In iccce the thing that
+**The pattern this is the third instance of.** In icccer the thing that
 catches an error is **never** a re-reading of the code and **never** the
 number looking wrong (10⁻¹⁵ looks magnificent) — it is always **an
 apparatus built to fail**:
@@ -49,7 +49,7 @@ apparatus built to fail**:
 Rule 1's corollary, now stateable from three worked cases: **a wrong
 measurement looks exactly like a right one.**
 
-Related: [[iccce-pass-status]], [[iccce-free-to-disagree]],
-[[iccce-gate-must-not-reward-deletion]],
-[[iccce-bound-cannot-catch-its-own-magnitude]],
-[[iccce-refusal-discharged-by-fixture]].
+Related: [[icccer-pass-status]], [[icccer-free-to-disagree]],
+[[icccer-gate-must-not-reward-deletion]],
+[[icccer-bound-cannot-catch-its-own-magnitude]],
+[[icccer-refusal-discharged-by-fixture]].

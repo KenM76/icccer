@@ -1,5 +1,5 @@
 ---
-name: iccce-git-files-readable-without-shell
+name: icccer-git-files-readable-without-shell
 description: A shell-less librarian CAN corroborate commit hashes, push events and dates — .git/logs/HEAD, .git/logs/refs/remotes/*, .git/config and .git/refs/* are plain text and readable with the Read tool
 metadata:
   type: reference
@@ -57,4 +57,4 @@ have been needed, label the item **`unverified-this-filing` with the
 reason** rather than *owed*. These `.git/` file reads work in either
 case, which is why they remain the baseline.
 
-Related: [[iccce-pass-status]], [[iccce-verify-own-draft-too]].
+Related: [[icccer-pass-status]], [[icccer-verify-own-draft-too]].

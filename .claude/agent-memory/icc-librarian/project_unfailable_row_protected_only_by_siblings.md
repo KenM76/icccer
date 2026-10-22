@@ -1,5 +1,5 @@
 ---
-name: iccce-unfailable-row-protected-only-by-siblings
+name: icccer-unfailable-row-protected-only-by-siblings
 description: DL-066 — the number a register carries can be one that CANNOT fail (G1 is REPORTED by design), so its whole protection is two siblings failing beside it; and a population row is coverage, not a gate — G16 is one-sided and blind to every defect that makes the policy cost MORE
 metadata:
   type: project
@@ -55,10 +55,10 @@ headline is not counting its protection** — only injection distinguishes
 the two; (4) for any universal/count row, **state which direction it
 faces on the row itself.**
 
-Related: [[iccce-pass-status]],
-[[iccce-injection-measures-one-magnitude]],
-[[iccce-documented-is-not-tested]],
-[[iccce-agreement-can-be-the-symptom]],
-[[iccce-disclosure-is-not-enforcement]],
-[[iccce-gate-must-not-reward-deletion]],
-[[iccce-gate-in-input-units-cannot-certify-output]].
+Related: [[icccer-pass-status]],
+[[icccer-injection-measures-one-magnitude]],
+[[icccer-documented-is-not-tested]],
+[[icccer-agreement-can-be-the-symptom]],
+[[icccer-disclosure-is-not-enforcement]],
+[[icccer-gate-must-not-reward-deletion]],
+[[icccer-gate-in-input-units-cannot-certify-output]].

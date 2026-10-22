@@ -3,7 +3,7 @@
 //! `NUMERIC_CLAIMS.md` registered **NA-012**'s cost field as `UNMEASURED`:
 //! nobody had measured the ΔE2000 between the preserved answer and the
 //! colorimetric one on a **cross-press** pair. Pass K §G measures it and
-//! reduces it to a [`Record`](iccce_difftest::Record) — which carries **one
+//! reduces it to a [`Record`](icccer_difftest::Record) — which carries **one
 //! number**, and one number is the wrong shape for the two things a reader of
 //! that field needs to see:
 //!
@@ -32,9 +32,9 @@
 //! cargo run --release --bin passk_cost_probe
 //! ```
 //!
-//! Requires the pinned `transicc` (`$ICCCE_TRANSICC` or the vendored build)
-//! and the shipped `iccce` binary (`$ICCCE_BIN` or `target/release/iccce`).
-//! The **licensed** the print-conformance suite corpus (`$ICCCE_PRIVATE_FIXTURES`) is needed
+//! Requires the pinned `transicc` (`$ICCCER_TRANSICC` or the vendored build)
+//! and the shipped `icccer` binary (`$ICCCER_BIN` or `target/release/icccer`).
+//! The **licensed** the print-conformance suite corpus (`$ICCCER_PRIVATE_FIXTURES`) is needed
 //! for blocks 1 and 2 only; blocks 3 and 4 run from committed fixtures and are
 //! printed even when the corpus is absent, which is the normal case off the
 //! operator's machine and the permanent case in CI.
@@ -54,11 +54,11 @@
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
-use iccce_color::delta_e_2000;
-use iccce_difftest::passk::{
+use icccer_color::delta_e_2000;
+use icccer_difftest::passk::{
     as_cmyk, corpus_dir, cost_ramp, synthetic_dir, to_lab, warm_black_expected_cost,
 };
-use iccce_difftest::{Iccce, Intent, Oracle};
+use icccer_difftest::{Icccer, Intent, Oracle};
 
 /// The six real CMYK members of the suite corpus, by short name and by the
 /// first 16 hex digits of their SHA-256 — a pointer to a licensed artifact,
@@ -116,19 +116,19 @@ impl Leg {
 }
 
 /// Measure one ordered pair, exactly as `passk::analyse_cost_leg` does — two
-/// `iccce transform` invocations differing only in `--preserve-black`, with
+/// `icccer transform` invocations differing only in `--preserve-black`, with
 /// the oracle carrying both answers into Lab through the destination's `A2B1`.
-fn measure(oracle: &Oracle, iccce: &Iccce, src: &Path, dst: &Path) -> Result<Leg, String> {
+fn measure(oracle: &Oracle, icccer: &Icccer, src: &Path, dst: &Path) -> Result<Leg, String> {
     let ramp = cost_ramp();
     let rows: Vec<Vec<f64>> = ramp.iter().map(|r| r.to_vec()).collect();
     let off = as_cmyk(
-        iccce
+        icccer
             .transform_rows_shaped(src, dst, Intent::RelativeColorimetric, &rows, 4)
             .map_err(|e| e.to_string())?,
     )
     .map_err(|e| format!("{e:?}"))?;
     let on = as_cmyk(
-        iccce
+        icccer
             .transform_rows_shaped_preserve_black(
                 src,
                 dst,
@@ -168,17 +168,17 @@ fn measure(oracle: &Oracle, iccce: &Iccce, src: &Path, dst: &Path) -> Result<Leg
 fn run() -> Result<(), String> {
     let oracle = Oracle::locate()
         .map_err(|e| e.to_string())?
-        .ok_or("the pinned transicc was not found — set $ICCCE_TRANSICC")?;
-    let iccce = Iccce::locate()
+        .ok_or("the pinned transicc was not found — set $ICCCER_TRANSICC")?;
+    let icccer = Icccer::locate()
         .map_err(|e| e.to_string())?
-        .ok_or("the shipped iccce binary was not found — `cargo build --release -p iccce-cli`")?;
+        .ok_or("the shipped icccer binary was not found — `cargo build --release -p icccer-cli`")?;
 
     println!("passk_cost_probe — what K-only black preservation costs, and on which pair");
     println!("  oracle : {}", oracle.path().display());
     println!(
-        "  iccce  : {}{}",
-        iccce.path().display(),
-        if iccce.is_debug_build() {
+        "  icccer  : {}{}",
+        icccer.path().display(),
+        if icccer.is_debug_build() {
             "   ** DEBUG BUILD — numbers describe an artefact nobody ships **"
         } else {
             ""
@@ -188,7 +188,7 @@ fn run() -> Result<(), String> {
         "  probe  : C = M = Y = 0, K = j/100 (j = 0..=100) — the QUALIFYING SET, media-relative"
     );
     println!(
-        "  metric : dE2000 between iccce's preserved answer and iccce's own colorimetric one,"
+        "  metric : dE2000 between icccer's preserved answer and icccer's own colorimetric one,"
     );
     println!(
         "           both carried into Lab through the DESTINATION's A2B1 by lcms2 as a RULER."
@@ -198,7 +198,7 @@ fn run() -> Result<(), String> {
 
     let dir = corpus_dir();
     if dir.is_dir() {
-        block1_and_2(&oracle, &iccce, &dir)?;
+        block1_and_2(&oracle, &icccer, &dir)?;
     } else {
         println!(
             "=== 1 & 2. SKIPPED — the print-conformance suite corpus is not at {} ===",
@@ -216,7 +216,7 @@ fn run() -> Result<(), String> {
 
     println!("=== 3. THE COMMITTED PAIR PASS K ALREADY HAD — and why it CANNOT price this ===");
     println!("    v2-cmyk-mft2-lab -> v2-cmyk-chromatic-neutral");
-    let bad = measure(&oracle, &iccce, &mft2, &neutral)?;
+    let bad = measure(&oracle, &icccer, &mft2, &neutral)?;
     let (bmax, bat) = bad.max();
     println!(
         "    cost max {bmax:.6} at K = {bat:.2}, mean {:.6} — AND THE REFERENCE LEG IS {:.6} \
@@ -242,7 +242,7 @@ fn run() -> Result<(), String> {
     println!("=== 4. THE COMMITTED PAIR AUTHORED FOR THIS MEASUREMENT, vs the CLOSED FORM ===");
     println!("    v2-cmyk-chromatic-neutral -> v2-cmyk-warm-black  (differ in ONE variable:");
     println!("    the chroma of the black ink — a* += 2K, b* += 6K in the destination)");
-    let good = measure(&oracle, &iccce, &neutral, &warm)?;
+    let good = measure(&oracle, &icccer, &neutral, &warm)?;
     let (gmax, gat) = good.max();
     println!(
         "    cost max {gmax:.6} at K = {gat:.2}, mean {:.6}; reference leg sound to {:.6}; \
@@ -291,7 +291,7 @@ fn run() -> Result<(), String> {
     clippy::too_many_lines,
     reason = "a report generator: splitting it would scatter the printed layout across functions"
 )]
-fn block1_and_2(oracle: &Oracle, iccce: &Iccce, dir: &Path) -> Result<(), String> {
+fn block1_and_2(oracle: &Oracle, icccer: &Icccer, dir: &Path) -> Result<(), String> {
     println!("=== 1. THE PAIR MATRIX — thirty ordered pairs of six real CMYK destinations ===");
     println!("    A pair is entitled to report a cost only if it separates in BOTH senses and");
     println!("    its reference leg is sound. The flag column says which gate a pair misses.");
@@ -314,7 +314,7 @@ fn block1_and_2(oracle: &Oracle, iccce: &Iccce, dir: &Path) -> Result<(), String
             if !src.is_file() || !dst.is_file() {
                 continue;
             }
-            let leg = measure(oracle, iccce, &src, &dst)?;
+            let leg = measure(oracle, icccer, &src, &dst)?;
             let (m, _) = leg.max();
             // Every gate a pair misses, not the first: two pairs miss two, and
             // reporting only the first would make a pair look nearer to being
@@ -386,7 +386,7 @@ fn block1_and_2(oracle: &Oracle, iccce: &Iccce, dir: &Path) -> Result<(), String
     println!("=== 2. THE HEADLINE RAMP, point by point ===");
     let src = dir.join("c6b4b62f07262437.icc");
     let dst = dir.join("5bad92a6f018e726.icc");
-    let leg = measure(oracle, iccce, &src, &dst)?;
+    let leg = measure(oracle, icccer, &src, &dst)?;
     println!("    ISO Coated v2 300% (ECI) -> PCS_GenericCMYK, media-relative");
     println!();
     println!(

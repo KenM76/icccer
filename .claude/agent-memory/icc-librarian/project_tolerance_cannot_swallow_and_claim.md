@@ -1,5 +1,5 @@
 ---
-name: iccce-tolerance-cannot-swallow-and-claim
+name: icccer-tolerance-cannot-swallow-and-claim
 description: DL-019 and the Pass 4 gate design — a tolerance wide enough to absorb a method difference cannot also demonstrate agreement; use a wide structural gate PLUS a tight gate with the difference switched off, and report-not-grade what nobody can adjudicate
 metadata:
   type: project
@@ -10,7 +10,7 @@ a comparison's dominant term is *not error* — a method difference, or a
 policy divergence — a single tolerance either swallows it (and then
 proves nothing) or fails forever (and then stops being read).
 
-**Why.** Pass 4 (2026-08-11) compared iccce's `lut16` CMYK pipeline to
+**Why.** Pass 4 (2026-08-11) compared icccer's `lut16` CMYK pipeline to
 lcms2. The dominant term was the **CLUT interpolation-method
 difference** — n-linear vs lcms2's four-input hybrid — which ICC.1 does
 not choose between (ambiguity **A16**, SILENT). It is **1.6590 ΔE2000**,
@@ -39,8 +39,8 @@ also demonstrate agreement."*
    that the reimplementation is faithful.
 
 **★ And when nobody can say which side is RIGHT — DL-019.** At the
-absolute intent iccce and lcms2 read different destination media whites
-(iccce `wtpt` as stored; lcms2 substitutes D50 for a **v2 display-class**
+absolute intent icccer and lcms2 read different destination media whites
+(icccer `wtpt` as stored; lcms2 substitutes D50 for a **v2 display-class**
 profile) and differ by **11.217 ΔE2000**. The spec question (corpus
 **A4b**) is unsourced. The posture, five **conjunctive** steps:
 (a) emit the raw comparison with an **infinite** tolerance, labelled
@@ -62,6 +62,6 @@ right response to that is a failing gate.
 without naming its gate — corners, emulated, or raw differ by four
 orders of magnitude.
 
-Related: [[iccce-gate-must-not-reward-deletion]],
-[[iccce-bound-cannot-catch-its-own-magnitude]], [[iccce-pass-status]],
-[[iccce-predicted-divergence-must-be-measured]].
+Related: [[icccer-gate-must-not-reward-deletion]],
+[[icccer-bound-cannot-catch-its-own-magnitude]], [[icccer-pass-status]],
+[[icccer-predicted-divergence-must-be-measured]].

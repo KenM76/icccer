@@ -1,5 +1,5 @@
 ---
-name: iccce-wrong-clause-refusal-and-discarded-halves
+name: icccer-wrong-clause-refusal-and-discarded-halves
 description: DL-057 — a refusal that names the WRONG clause is worse than a vague one because the citation makes it persuasive; and a path that reuses machinery "and discards part of the result" inherits the discarded half's failure modes, since that half's error is what the caller sees
 metadata:
   type: project
@@ -27,7 +27,7 @@ private corpora **for the shape**, not by review.
 matrix/TRC model requires PCSXYZ (Annex F.3, normative); profile PCS is 'Lab '
 ```
 
-**True. Correctly clause-cited. And about a model iccce was about to
+**True. Correctly clause-cited. And about a model icccer was about to
 throw away.** A caller reads it as *"my source profile is unusable"* —
 false.
 
@@ -38,7 +38,7 @@ false.
 > like a right one) arriving in the ERROR SURFACE rather than in a colour
 > value**, and it is DL-048's mechanism in a third register: a pointer
 > that is individually correct and points at the wrong thing, so arrival
-> reads as confirmation ([[iccce-stale-citation-worse-than-stale-number]]).
+> reads as confirmation ([[icccer-stale-citation-worse-than-stale-number]]).
 
 **Corollary for rule 6.** *The parser reports and does not repair* gains a
 second half: **a report must be ABOUT THE THING THE CALLER ASKED ABOUT.**
@@ -60,10 +60,10 @@ leak.
   Beside *"these profiles now work as sources"* sits *"these same
   profiles are still correctly REFUSED as destinations"*; without it the
   first test can go green **for the wrong reason** — DL-020's discipline
-  ([[iccce-refusal-discharged-by-fixture]]) applied to a pair of tests.
+  ([[icccer-refusal-discharged-by-fixture]]) applied to a pair of tests.
 - **Coverage, stated:** four profiles, one class, found by a shape scan
   of two private corpora. **No claim that four is all of them.**
 
-Related: [[iccce-pass-status]], [[iccce-absence-of-publication-is-not-evidence]],
-[[iccce-gate-must-not-reward-deletion]],
-[[iccce-agreement-can-be-the-symptom]].
+Related: [[icccer-pass-status]], [[icccer-absence-of-publication-is-not-evidence]],
+[[icccer-gate-must-not-reward-deletion]],
+[[icccer-agreement-can-be-the-symptom]].

@@ -1,6 +1,6 @@
 ---
 name: refusal-at-one-layer-is-nonconformance-at-another
-description: DL-072 (2026-08-25) — iccce's CLI refuses an unknown intent name by design; a library API consumed by a PDF reader MUST substitute and disclose. Both right, different layers; the decision is that neither may be changed by citing the other, and the dangerous commit is the tidying one.
+description: DL-072 (2026-08-25) — icccer's CLI refuses an unknown intent name by design; a library API consumed by a PDF reader MUST substitute and disclose. Both right, different layers; the decision is that neither may be changed by citing the other, and the dangerous commit is the tidying one.
 metadata:
   type: project
 ---
@@ -8,7 +8,7 @@ metadata:
 **A behaviour that is correct at the CLI can be NON-CONFORMANT in the
 library, and the two are not evidence about each other.**
 
-`iccce transform --intent <name>` refuses an unrecognised name with exit
+`icccer transform --intent <name>` refuses an unrecognised name with exit
 `2`, with a doc comment giving project rule 1 as the reason: *"a
 substituted intent produces plausible wrong colour."* `pdfce` requires the
 opposite of a library API, citing ISO 32000-2 **§8.6.5.8**, which permits
@@ -35,16 +35,16 @@ there is a human to tell.
 - **Check existing mechanisms before proposing a third.** Both were read
   and neither generalises: `DestinationProvenance` is a payload-free
   two-variant enum (`DL-050`); `SpecDeviation` carries
-  `declined: Vec<Signature>` and is about **iccce** declining a capability
+  `declined: Vec<Signature>` and is about **icccer** declining a capability
   — the opposite shape, since here the *caller* handed us an unnameable
   thing. Candidate: **`IntentProvenance`** (requested name, intent used,
   substitution occurred). ★ **Verified 2026-08-25 that no such type
   exists** — grep before recommending it.
 - **§8.6.5.8 is `[REPORTED]` by `pdfce` and NOT re-derived.** Re-derive
   from `PDF_Spec\_sources\` first — see
-  [[iccce-wrong-clause-refusal-and-discarded-halves]] (`DL-057`), where an
+  [[icccer-wrong-clause-refusal-and-discarded-halves]] (`DL-057`), where an
   attractive wrong clause number was persuasive precisely because it was a
   citation.
-- Related: [[iccce-disclosure-is-not-enforcement]] — disclose rather than
+- Related: [[icccer-disclosure-is-not-enforcement]] — disclose rather than
   perform silently is this project's standing answer to exactly this
   shape.

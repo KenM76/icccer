@@ -37,7 +37,7 @@
 //! CLUT stage of the pipeline, which sends `DefaultInterpolatorsFactory`'s
 //! `case 3` down `TrilinearInterpFloat`/`TrilinearInterp16` instead of the
 //! tetrahedral routines. **Trilinear over three inputs *is* n-linear**, which
-//! is exactly what `iccce-cmm`'s `Clut::eval` computes (NA-006).
+//! is exactly what `icccer-cmm`'s `Clut::eval` computes (NA-006).
 //!
 //! **Predicted in advance, therefore: the interpolation-method envelope that
 //! dominated Pass 4 — 1.57 ΔE2000 — is IDENTICALLY ZERO in the B2A direction**,
@@ -55,7 +55,7 @@
 //! - **8-bit table data is NOT a divergence.** `Type_LUT8_Read` widens every
 //!   8-bit sample with `FROM_8_TO_16(v) = (v<<8)|v = v·257`, and `257·255 =
 //!   65535`, so lcms2's normalised sample is `v/255` — bit-identical to
-//!   `iccce-cmm`'s `f64::from(v)/255.0`. The 1/255 granularity of the *table*
+//!   `icccer-cmm`'s `f64::from(v)/255.0`. The 1/255 granularity of the *table*
 //!   is shared by both implementations and cancels in the difference. What it
 //!   does do is make the pipeline *sensitive*: one lsb of table data is
 //!   3.9×10⁻³ of the device range, so a small input difference can be
@@ -72,11 +72,11 @@
 //!   `_cmsReadOutputLUT` inserts `_cmsStageAllocLabV4ToV2` **only when
 //!   `OriginalType == cmsSigLut16Type`** — for a `lut8Type` tag it does not,
 //!   so the pipeline keeps lcms2's internal v4-normalised Lab (`L*/100`,
-//!   `(ab+128)/255`, from `cmspack.c`'s `UnrollLabDoubleToFloat`). iccce's
+//!   `(ab+128)/255`, from `cmspack.c`'s `UnrollLabDoubleToFloat`). icccer's
 //!   `PcsCodec::Lab8` encodes `L/100`, `(ab+128)/255` (Tables 12/13's 8-bit
 //!   column, corpus A10). **The two agree exactly** — the legacy 652,8 scale
 //!   belongs to `lut16Type` and neither implementation applies it here. Had
-//!   iccce applied it, `L*` would be 0,39 % low and `a*`/`b*` 0,39 % off, which
+//!   icccer applied it, `L*` would be 0,39 % low and `a*`/`b*` 0,39 % off, which
 //!   is ≈0,2 ΔE2000 — *below* the perceptibility anchor and invisible to a
 //!   suite graded at it.
 //!
@@ -115,7 +115,7 @@
 //!    idealised line; an expectation that ignored the rounding would be wrong
 //!    by 7,6×10⁻⁶ and would look like an implementation defect.
 //!
-//! ### C — gray: lcms2 and iccce build the **same** model, from the same D50
+//! ### C — gray: lcms2 and icccer build the **same** model, from the same D50
 //!
 //! ```c
 //! // cmsio1.c: the gray input pipeline is TRC then a 1x3 matrix of D50.
@@ -124,7 +124,7 @@
 //! ```
 //!
 //! `cmsD50X/Y/Z` are `0.9642 / 1.0 / 0.8249` (`lcms2.h`) and
-//! `iccce_color::D50` is `0.9642 / 1.0000 / 0.8249` — **the same three
+//! `icccer_color::D50` is `0.9642 / 1.0000 / 0.8249` — **the same three
 //! literals**, so the F.2 white multiplication cannot diverge. (`InpAdj` is
 //! lcms2's internal 1/1,99997 XYZ encoding scale; it is undone by the matching
 //! `OutpAdj` on the destination side and does not survive into the answer.)
@@ -141,7 +141,7 @@
 //!   model: `BuildRGBOutputMatrixShaper` inverts each 1024-entry `curv` with
 //!   `cmsReverseToneCurve`, i.e. `cmsReverseToneCurveEx(4096, ...)` — a
 //!   **4096-entry `u16` resampling** of the inverse, itself then evaluated
-//!   through the 16-bit float path. iccce inverts the stored table directly.
+//!   through the 16-bit float path. icccer inverts the stored table directly.
 //!   [`ReverseCurve`] reimplements lcms2's, which turns §C from an observation
 //!   into an attribution and answers README §14.9 item 4.
 //!
@@ -151,7 +151,7 @@
 //!   live here, in the harness, as models of the two implementations.
 //! - **It does not grade a mean.** Means are recorded next to their maxima and
 //!   marked REPORTED, NOT GRADED, for the reason `pass3`/`pass4` state.
-//! - **It does not decide the §B clamp question.** iccce and lcms2 disagree
+//! - **It does not decide the §B clamp question.** icccer and lcms2 disagree
 //!   about what happens when the `mAB ` matrix pushes an encoded PCS value
 //!   above 1,0; that is a specification question, it is recorded as a finding
 //!   with the exact text to put to `icc-spec-librarian`, and the affected rows
@@ -160,19 +160,19 @@
 
 use std::path::{Path, PathBuf};
 
-use iccce_cmm::gray_trc::GrayTrc;
-use iccce_cmm::lut_ab::LutAbModel;
-use iccce_cmm::lut_transform::{Lut16Model, PcsKind, PcsValue};
-use iccce_cmm::matrix_trc::MatrixTrc;
-use iccce_color::{D50, Lab, Xyz, delta_e_2000};
-use iccce_profile::Profile;
-use iccce_profile::lut::{ClutSamples, Lut8, LutAB};
-use iccce_profile::num::Signature;
-use iccce_profile::tag_types::TagData;
+use icccer_cmm::gray_trc::GrayTrc;
+use icccer_cmm::lut_ab::LutAbModel;
+use icccer_cmm::lut_transform::{Lut16Model, PcsKind, PcsValue};
+use icccer_cmm::matrix_trc::MatrixTrc;
+use icccer_color::{D50, Lab, Xyz, delta_e_2000};
+use icccer_profile::Profile;
+use icccer_profile::lut::{ClutSamples, Lut8, LutAB};
+use icccer_profile::num::Signature;
+use icccer_profile::tag_types::TagData;
 
 use crate::pass4::{cell, cell_lcms2, fclamp, interp_table};
 use crate::{
-    Bpc, DiffError, Iccce, Intent, Kind, Metric, Oracle, Precalc, Record, Request, Space, Tolerance,
+    Bpc, DiffError, Icccer, Intent, Kind, Metric, Oracle, Precalc, Record, Request, Space, Tolerance,
 };
 
 // ===========================================================================
@@ -210,7 +210,7 @@ pub fn fixture_path() -> PathBuf {
 }
 
 mod tag {
-    use iccce_profile::num::Signature;
+    use icccer_profile::num::Signature;
     pub const A2B0: Signature = Signature(0x4132_4230);
     pub const B2A0: Signature = Signature(0x4232_4130);
     pub const B2A1: Signature = Signature(0x4232_4131);
@@ -223,7 +223,7 @@ mod tag {
 // Tolerances — each is the envelope its `why` describes, plus headroom
 // ===========================================================================
 
-/// **§A, device space.** iccce's CMYK against lcms2's, worst component over the
+/// **§A, device space.** icccer's CMYK against lcms2's, worst component over the
 /// grid, normalised 0..1.
 ///
 /// The envelope is **computed, not bounded in closed form**, for the reason
@@ -310,7 +310,7 @@ pub const DE_B2A_ROUNDTRIP: Tolerance = Tolerance::new(
      1.0 perceptibility anchor, whose provisional mark it inherits",
 );
 
-/// **§A, the attribution.** iccce's *modelled* prediction of lcms2 — the same
+/// **§A, the attribution.** icccer's *modelled* prediction of lcms2 — the same
 /// pipeline with every one of lcms2's roundings switched on — against lcms2's
 /// actual printed CMYK.
 ///
@@ -337,7 +337,7 @@ pub const DEVICE_B2A_MODELLED: Tolerance = Tolerance::new(
 );
 
 /// **§A, apparatus.** The harness's own `lut8` reimplementation against
-/// `iccce-cmm`'s `Lut16Model::pcs_to_device`, exact arithmetic, every point.
+/// `icccer-cmm`'s `Lut16Model::pcs_to_device`, exact arithmetic, every point.
 ///
 /// The precondition for believing §A's experiments: they need one pipeline
 /// evaluated several ways, and that substitution cannot be made inside
@@ -376,11 +376,11 @@ pub const APPARATUS_B2A: Tolerance = Tolerance::new(
      colorimetric, so it cannot pass a real divergence nor fail on noise",
 );
 
-/// **§B, the derived expectation, iccce side.** iccce's `mAB `/`mBA `
+/// **§B, the derived expectation, icccer side.** icccer's `mAB `/`mBA `
 /// evaluation against the closed form of [`expected_mab_lab`] /
 /// [`expected_mba_cmyk`].
 ///
-/// iccce evaluates the whole chain in `f64` with no intermediate quantisation,
+/// icccer evaluates the whole chain in `f64` with no intermediate quantisation,
 /// and the expectation is the same arithmetic written independently from the
 /// clause text, so the residual is **`f64` rounding on a handful of
 /// operations** — a few ulp. In `L*` units an ulp near 100 is 1,4×10⁻¹⁴, so
@@ -391,7 +391,7 @@ pub const APPARATUS_B2A: Tolerance = Tolerance::new(
 pub const DERIVED_EXACT: Tolerance = Tolerance::new(
     1e-12,
     "the expectation is the same f64 arithmetic derived independently from ICC.1:2022 \
-     10.12/10.13 and Tables 45/47, and iccce evaluates the chain in f64 with no intermediate \
+     10.12/10.13 and Tables 45/47, and icccer evaluates the chain in f64 with no intermediate \
      quantisation, so the residual is a few ulp. 1e-12 is far above that and 7 orders below \
      one u16 lsb (1.5e-5), so a single-lsb error in a stored node still fails",
 );
@@ -401,7 +401,7 @@ pub const DERIVED_EXACT: Tolerance = Tolerance::new(
 /// and the derivation being wrong together.
 ///
 /// lcms2's residual against an exact closed form is its own quantisation, and
-/// it is one-sided in a way the iccce row is not: `EvaluateCLUTfloatIn16`
+/// it is one-sided in a way the icccer row is not: `EvaluateCLUTfloatIn16`
 /// rounds the CLUT input to `u16` (½ lsb = 7,6×10⁻⁶ of the axis) and returns
 /// the interpolated value as `u16/65535` (1 lsb = 1,5×10⁻⁵), and the fixed-point
 /// interpolation adds up to another. In `L*` units (`L* = 100·n`) that is
@@ -418,7 +418,7 @@ pub const DERIVED_LCMS2: Tolerance = Tolerance::new(
      below the 0.39% legacy-vs-general PCSLAB confusion it would also catch",
 );
 
-/// **§B, the cross-check.** iccce's shipped binary against `transicc`, through
+/// **§B, the cross-check.** icccer's shipped binary against `transicc`, through
 /// the fixture in both directions, in device units.
 ///
 /// The interpolation-method envelope is **zero by construction** (both CLUTs
@@ -485,7 +485,7 @@ pub const DEVICE_MAB_CROSSCHECK: Tolerance = Tolerance::new(
      reported separately rather than absorbed",
 );
 
-/// **§C, device space.** iccce's sRGB against lcms2's over the gray axis.
+/// **§C, device space.** icccer's sRGB against lcms2's over the gray axis.
 ///
 /// Predicted in advance from the *destination*, because the source cannot
 /// contribute: both implementations multiply the same analytic
@@ -505,7 +505,7 @@ pub const DEVICE_MAB_CROSSCHECK: Tolerance = Tolerance::new(
 /// The observed residual is **9,686×10⁻⁵ — 0,06 % ABOVE the envelope**, and that
 /// is expected rather than alarming: the envelope is computed between two `f64`
 /// pipelines, while the observation additionally carries `transicc`'s 4-decimal
-/// print of 0..255 (3,9×10⁻⁷) and `iccce transform`'s 6-decimal print
+/// print of 0..255 (3,9×10⁻⁷) and `icccer transform`'s 6-decimal print
 /// (5×10⁻⁷). A residual far *below* the envelope would be the surprising
 /// outcome, because it would mean the model of lcms2 was pessimistic about
 /// lcms2.
@@ -554,7 +554,7 @@ pub const DE_GRAY: Tolerance = Tolerance::new(
      the provisional 1.0 perceptibility anchor, whose provisional mark it inherits",
 );
 
-/// **§C, the attribution.** iccce's model of lcms2's destination — the 4096-entry
+/// **§C, the attribution.** icccer's model of lcms2's destination — the 4096-entry
 /// reverse curve with both roundings — against lcms2's actual output.
 ///
 /// Collapses to `transicc`'s print floor if the mechanism is right: RGB is
@@ -824,12 +824,12 @@ pub fn gray_axis() -> Vec<f64> {
 
 /// Which CLUT geometry to evaluate with. Same meaning as
 /// [`crate::pass4::Scheme`], restated here because §A's question is the
-/// *opposite* of §14.2's: there, lcms2's geometry differed from iccce's and the
+/// *opposite* of §14.2's: there, lcms2's geometry differed from icccer's and the
 /// difference had to be modelled; here lcms2 forces the geometry to match, and
 /// the tetrahedral arm exists only to show what that override is worth.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Scheme {
-    /// n-linear over every input (trilinear when there are three). iccce's
+    /// n-linear over every input (trilinear when there are three). icccer's
     /// choice (NA-006), **and** lcms2's for any Lab-PCS output LUT.
     NLinear,
     /// lcms2's default for 3 inputs — Sakamoto tetrahedral — recursing on the
@@ -887,7 +887,7 @@ impl HarnessClut {
         }
     }
 
-    /// The 2ⁿ-corner convex combination — `iccce_cmm::clut::Clut::eval`'s
+    /// The 2ⁿ-corner convex combination — `icccer_cmm::clut::Clut::eval`'s
     /// algorithm, including its clamped-index-then-fraction pairing.
     fn eval_nlinear(&self, input: &[f64], out: &mut [f64]) {
         let d = self.dims.len();
@@ -1084,7 +1084,7 @@ fn q16(v: f64) -> f64 {
 /// two switches are [`Scheme`] (geometry) and `quantise` (whether lcms2's
 /// roundings are applied).
 ///
-/// `iccce-cmm`'s own evaluator is held against the `NLinear`, unquantised arm
+/// `icccer-cmm`'s own evaluator is held against the `NLinear`, unquantised arm
 /// on every grid point before any conclusion is drawn from this type
 /// ([`APPARATUS_B2A`]).
 #[derive(Debug, Clone)]
@@ -1106,7 +1106,7 @@ impl B2aPipeline {
         let outputs = usize::from(lut.output_chan);
         let points = usize::from(lut.clut_points);
         // FROM_8_TO_16(v)/65535 == v/255 exactly (257*255 = 65535), so this is
-        // lcms2's normalisation as well as iccce's.
+        // lcms2's normalisation as well as icccer's.
         let norm = |v: u8| f64::from(v) / 255.0;
         B2aPipeline {
             input_tables: (0..inputs)
@@ -1153,7 +1153,7 @@ impl B2aPipeline {
 
     /// Evaluate PCS → device.
     ///
-    /// With `quantise = false` this is iccce's arithmetic: `f64` throughout.
+    /// With `quantise = false` this is icccer's arithmetic: `f64` throughout.
     /// With `quantise = true` it is lcms2's, modelled stage by stage:
     ///
     /// | lcms2 | what it does | modelled as |
@@ -1369,11 +1369,11 @@ impl ReverseCurve {
 /// ## ★ The clamp question this function does NOT answer
 ///
 /// At `K = 0` the encoded `L*` is `1 + 1/256 = 1,00390625` — **outside the
-/// representable range of the PCS encoding it is about to be read as**. iccce
+/// representable range of the PCS encoding it is about to be read as**. icccer
 /// clamps (its `Trc::eval` enforces clause 10.18's `[0,1]` domain at the `B`
 /// curve, so `L* = 100`); lcms2 does not (its identity curve is an analytic
 /// gamma-1 segment evaluated unbounded, so `L* = 100,390625`). The function
-/// takes a parameter rather than a side: `clamped = true` is iccce's reading,
+/// takes a parameter rather than a side: `clamped = true` is icccer's reading,
 /// `false` is lcms2's, and §15.3 records the question and the fact that it is
 /// unsettled.
 #[must_use]
@@ -1493,7 +1493,7 @@ fn read_lut_ab(profile: &Profile, sig: Signature) -> Option<LutAB> {
     }
 }
 
-fn read_lut16(profile: &Profile, sig: Signature) -> Option<iccce_profile::lut::Lut16> {
+fn read_lut16(profile: &Profile, sig: Signature) -> Option<icccer_profile::lut::Lut16> {
     let entry = profile.tags.iter().find(|t| t.sig == sig)?;
     match profile.decode_tag(entry) {
         Some(Ok(d)) => match d.data {
@@ -1535,14 +1535,14 @@ impl From<DiffError> for Unavailable {
 #[derive(Debug)]
 pub struct B2aIntentRun {
     pub intent: Intent,
-    /// iccce's CMYK from the **shipped binary**, 0..1.
-    pub iccce_cmyk: Vec<Vec<f64>>,
+    /// icccer's CMYK from the **shipped binary**, 0..1.
+    pub icccer_cmyk: Vec<Vec<f64>>,
     /// lcms2's CMYK as printed, 0..100.
     pub lcms2_cmyk_100: Vec<Vec<f64>>,
     /// The harness's model of lcms2: quantised source TRCs, quantised lut8
     /// pipeline, trilinear.
     pub modelled_cmyk: Vec<Vec<f64>>,
-    /// The same pipeline with **no** quantisation — iccce's arithmetic.
+    /// The same pipeline with **no** quantisation — icccer's arithmetic.
     pub exact_cmyk: Vec<Vec<f64>>,
     /// Device-space deviations, normalised 0..1.
     pub device_dev: Vec<f64>,
@@ -1553,7 +1553,7 @@ pub struct B2aIntentRun {
     pub de_roundtrip: Vec<f64>,
     /// The counterfactual: trilinear vs tetrahedral on this same table.
     pub counterfactual: Vec<f64>,
-    /// The apparatus check: harness pipeline vs `iccce-cmm`'s evaluator.
+    /// The apparatus check: harness pipeline vs `icccer-cmm`'s evaluator.
     pub apparatus: f64,
 }
 
@@ -1563,7 +1563,7 @@ pub struct B2aAnalysis {
     pub lab_grid: Vec<Lab>,
     pub rgb_grid: Vec<[f64; 3]>,
     pub runs: Vec<B2aIntentRun>,
-    /// PCS-side: Lab → CMYK, iccce's `Lut16Model` (in-process) vs `transicc`.
+    /// PCS-side: Lab → CMYK, icccer's `Lut16Model` (in-process) vs `transicc`.
     pub pcs_device_dev: Vec<f64>,
     pub pcs_device_dev_modelled: Vec<f64>,
     pub pcs_counterfactual: Vec<f64>,
@@ -1647,7 +1647,7 @@ impl TagDistinctness {
 /// Read the three `B2A*` tags' raw bytes and compare them pairwise.
 ///
 /// Deliberately byte-level and parser-free: the question is whether the file
-/// stores three tables, and routing it through `iccce-profile` would make the
+/// stores three tables, and routing it through `icccer-profile` would make the
 /// answer depend on the code under test.
 fn measure_tag_distinctness(profile: &Profile, bytes: &[u8]) -> TagDistinctness {
     let sigs: [(&'static str, Signature); 3] =
@@ -1726,11 +1726,11 @@ pub fn analyse_b2a(oracle: &Oracle) -> Result<B2aAnalysis, Unavailable> {
             )));
         }
     }
-    let iccce = match Iccce::locate() {
+    let icccer = match Icccer::locate() {
         Err(e) => return Err(Unavailable::Error(e.to_string())),
         Ok(None) => {
             return Err(Unavailable::Skip(
-                "iccce binary not found: run `cargo build --release -p iccce-cli`".to_string(),
+                "icccer binary not found: run `cargo build --release -p icccer-cli`".to_string(),
             ));
         }
         Ok(Some(i)) => i,
@@ -1804,9 +1804,9 @@ pub fn analyse_b2a(oracle: &Oracle) -> Result<B2aAnalysis, Unavailable> {
             .map_err(|e| Unavailable::Error(e.to_string()))?;
         max_step = max_step.max(pipe.max_adjacent_step());
 
-        // --- iccce, the SHIPPED binary --------------------------------------
+        // --- icccer, the SHIPPED binary --------------------------------------
         let rows: Vec<Vec<f64>> = rgb.iter().map(|t| t.to_vec()).collect();
-        let iccce_cmyk = iccce.transform_rows_shaped(src_path, dst_path, intent, &rows, 4)?;
+        let icccer_cmyk = icccer.transform_rows_shaped(src_path, dst_path, intent, &rows, 4)?;
 
         // --- lcms2, subprocess. RGB in 0..255, CMYK out 0..100 --------------
         let req = Request {
@@ -1867,7 +1867,7 @@ pub fn analyse_b2a(oracle: &Oracle) -> Result<B2aAnalysis, Unavailable> {
         let mut device_dev_modelled = Vec::with_capacity(rgb.len());
         let mut de_roundtrip = Vec::with_capacity(rgb.len());
         for i in 0..rgb.len() {
-            let mine = &iccce_cmyk[i];
+            let mine = &icccer_cmyk[i];
             let theirs: Vec<f64> = lcms2_cmyk_100[i].iter().map(|v| v / 100.0).collect();
             device_dev.push(
                 mine.iter()
@@ -1890,7 +1890,7 @@ pub fn analyse_b2a(oracle: &Oracle) -> Result<B2aAnalysis, Unavailable> {
 
         runs.push(B2aIntentRun {
             intent,
-            iccce_cmyk,
+            icccer_cmyk,
             lcms2_cmyk_100,
             modelled_cmyk,
             exact_cmyk,
@@ -1904,7 +1904,7 @@ pub fn analyse_b2a(oracle: &Oracle) -> Result<B2aAnalysis, Unavailable> {
     }
 
     // --- the PCS side: Lab -> CMYK, media-relative -------------------------
-    // iccce is in-process here and the record says so: the shipped CLI has no
+    // icccer is in-process here and the record says so: the shipped CLI has no
     // Lab entry point, so this grades the MODEL, not the binary. Its value is
     // that the source model is out of the picture entirely, which is what
     // isolates the B2A table.
@@ -1974,17 +1974,17 @@ pub fn analyse_b2a(oracle: &Oracle) -> Result<B2aAnalysis, Unavailable> {
 pub struct MabAnalysis {
     pub cmyk_grid: Vec<[f64; 4]>,
     pub lab_grid: Vec<Lab>,
-    /// mAB: iccce's Lab (in-process `LutAbModel`) vs the closed form, clamped
+    /// mAB: icccer's Lab (in-process `LutAbModel`) vs the closed form, clamped
     /// reading, in `L*`/`a*`/`b*` units.
-    pub mab_iccce_vs_derived: Vec<f64>,
+    pub mab_icccer_vs_derived: Vec<f64>,
     /// mAB: `transicc -o*Lab4` vs the closed form, **unclamped** reading.
     pub mab_lcms2_vs_derived: Vec<f64>,
     /// mAB: the two implementations against each other, in `L*` units.
     pub mab_cross: Vec<f64>,
     /// Which grid points overflow the encoded PCS (the clamp question).
     pub mab_overflows: Vec<bool>,
-    /// mBA: iccce's CMYK (in-process) vs the closed form.
-    pub mba_iccce_vs_derived: Vec<f64>,
+    /// mBA: icccer's CMYK (in-process) vs the closed form.
+    pub mba_icccer_vs_derived: Vec<f64>,
     /// mBA: `transicc` vs the closed form.
     pub mba_lcms2_vs_derived: Vec<f64>,
     /// End-to-end through the shipped binary: sRGB → fixture (`mBA `), device.
@@ -2041,11 +2041,11 @@ pub fn analyse_mab(oracle: &Oracle) -> Result<MabAnalysis, Unavailable> {
         )));
     }
     let srgb = Path::new(SRGB);
-    let iccce = match Iccce::locate() {
+    let icccer = match Icccer::locate() {
         Err(e) => return Err(Unavailable::Error(e.to_string())),
         Ok(None) => {
             return Err(Unavailable::Skip(
-                "iccce binary not found: run `cargo build --release -p iccce-cli`".to_string(),
+                "icccer binary not found: run `cargo build --release -p icccer-cli`".to_string(),
             ));
         }
         Ok(Some(i)) => i,
@@ -2136,7 +2136,7 @@ pub fn analyse_mab(oracle: &Oracle) -> Result<MabAnalysis, Unavailable> {
     };
     let lcms2_lab = oracle.convert_batch_shaped(&req, 4, 3)?;
 
-    let mut mab_iccce_vs_derived = Vec::new();
+    let mut mab_icccer_vs_derived = Vec::new();
     let mut mab_lcms2_vs_derived = Vec::new();
     let mut mab_cross = Vec::new();
     let mut mab_overflows = Vec::new();
@@ -2150,7 +2150,7 @@ pub fn analyse_mab(oracle: &Oracle) -> Result<MabAnalysis, Unavailable> {
             a: lcms2_lab[i][1],
             b: lcms2_lab[i][2],
         };
-        mab_iccce_vs_derived.push(lab_dist(mine, expected_mab_lab(*q, true)));
+        mab_icccer_vs_derived.push(lab_dist(mine, expected_mab_lab(*q, true)));
         mab_lcms2_vs_derived.push(lab_dist(theirs, expected_mab_lab(*q, false)));
         mab_cross.push(lab_dist(mine, theirs));
         // The overflow set: where the encoded L* leaves [0,1] after the matrix.
@@ -2168,14 +2168,14 @@ pub fn analyse_mab(oracle: &Oracle) -> Result<MabAnalysis, Unavailable> {
         values: labs.iter().flat_map(|l| [l.l, l.a, l.b]).collect(),
     };
     let lcms2_cmyk = oracle.convert_batch_shaped(&req, 3, 4)?;
-    let mut mba_iccce_vs_derived = Vec::new();
+    let mut mba_icccer_vs_derived = Vec::new();
     let mut mba_lcms2_vs_derived = Vec::new();
     for (i, l) in labs.iter().enumerate() {
         let want = expected_mba_cmyk(*l);
         let mine = mba
             .pcs_to_device(PcsValue::Lab(*l))
             .ok_or_else(|| Unavailable::Error("LutAbModel refused a Lab grid point".into()))?;
-        mba_iccce_vs_derived.push(
+        mba_icccer_vs_derived.push(
             mine.iter()
                 .zip(&want)
                 .map(|(a, b)| (a - b).abs())
@@ -2209,7 +2209,7 @@ pub fn analyse_mab(oracle: &Oracle) -> Result<MabAnalysis, Unavailable> {
         let rgb = rgb_grid();
         let rows: Vec<Vec<f64>> = rgb.iter().map(|t| t.to_vec()).collect();
         let mine =
-            iccce.transform_rows_shaped(srgb, &fx, Intent::RelativeColorimetric, &rows, 4)?;
+            icccer.transform_rows_shaped(srgb, &fx, Intent::RelativeColorimetric, &rows, 4)?;
         let req = Request {
             input: Space::profile(srgb),
             output: Space::profile(&fx),
@@ -2232,7 +2232,7 @@ pub fn analyse_mab(oracle: &Oracle) -> Result<MabAnalysis, Unavailable> {
         // fixture -> sRGB: the mAB direction. This is where the clamp
         // divergence shows up in a colour, so the ΔE is recorded here.
         let rows: Vec<Vec<f64>> = cmyk.iter().map(|q| q.to_vec()).collect();
-        let mine = iccce.transform_rows_shaped(&fx, srgb, Intent::RelativeColorimetric, &rows, 3)?;
+        let mine = icccer.transform_rows_shaped(&fx, srgb, Intent::RelativeColorimetric, &rows, 3)?;
         let req = Request {
             input: Space::profile(&fx),
             output: Space::profile(srgb),
@@ -2309,11 +2309,11 @@ pub fn analyse_mab(oracle: &Oracle) -> Result<MabAnalysis, Unavailable> {
     Ok(MabAnalysis {
         cmyk_grid: cmyk,
         lab_grid: labs,
-        mab_iccce_vs_derived,
+        mab_icccer_vs_derived,
         mab_lcms2_vs_derived,
         mab_cross,
         mab_overflows,
-        mba_iccce_vs_derived,
+        mba_icccer_vs_derived,
         mba_lcms2_vs_derived,
         e2e_mba_device,
         e2e_mab_device,
@@ -2333,7 +2333,7 @@ pub fn analyse_mab(oracle: &Oracle) -> Result<MabAnalysis, Unavailable> {
 #[derive(Debug)]
 pub struct GrayAnalysis {
     pub axis: Vec<f64>,
-    pub iccce_rgb: Vec<[f64; 3]>,
+    pub icccer_rgb: Vec<[f64; 3]>,
     pub lcms2_rgb_255: Vec<[f64; 3]>,
     /// The harness's model of lcms2: F.2 forward, then the destination with
     /// lcms2's 4096-entry reverse curve and its two roundings.
@@ -2341,11 +2341,11 @@ pub struct GrayAnalysis {
     pub device_dev: Vec<f64>,
     pub device_dev_modelled: Vec<f64>,
     pub de: Vec<f64>,
-    /// The envelope: iccce's exact destination vs the modelled one. No lcms2
+    /// The envelope: icccer's exact destination vs the modelled one. No lcms2
     /// output in it.
     pub envelope: Vec<f64>,
     /// Perceptual against media-relative, both sides.
-    pub intent_identity_iccce: f64,
+    pub intent_identity_icccer: f64,
     pub intent_identity_lcms2: f64,
     pub structure: String,
 }
@@ -2363,11 +2363,11 @@ pub fn analyse_gray(oracle: &Oracle) -> Result<GrayAnalysis, Unavailable> {
             )));
         }
     }
-    let iccce = match Iccce::locate() {
+    let icccer = match Icccer::locate() {
         Err(e) => return Err(Unavailable::Error(e.to_string())),
         Ok(None) => {
             return Err(Unavailable::Skip(
-                "iccce binary not found: run `cargo build --release -p iccce-cli`".to_string(),
+                "icccer binary not found: run `cargo build --release -p icccer-cli`".to_string(),
             ));
         }
         Ok(Some(i)) => i,
@@ -2389,7 +2389,7 @@ pub fn analyse_gray(oracle: &Oracle) -> Result<GrayAnalysis, Unavailable> {
         .ok_or_else(|| Unavailable::Error("destination colorant matrix is singular".into()))?;
     let reverses: Vec<Option<ReverseCurve>> = (0..3)
         .map(|i| match &dst_model.trc[i] {
-            iccce_cmm::curve::Trc::Table(t) => Some(ReverseCurve::build(t, 4096)),
+            icccer_cmm::curve::Trc::Table(t) => Some(ReverseCurve::build(t, 4096)),
             _ => None,
         })
         .collect();
@@ -2403,7 +2403,7 @@ pub fn analyse_gray(oracle: &Oracle) -> Result<GrayAnalysis, Unavailable> {
         src.header.color_space,
         src.header.pcs,
         match &dst_model.trc[0] {
-            iccce_cmm::curve::Trc::Table(t) => format!("dst-table-{}", t.len()),
+            icccer_cmm::curve::Trc::Table(t) => format!("dst-table-{}", t.len()),
             _ => "dst-analytic".into(),
         },
         {
@@ -2427,9 +2427,9 @@ pub fn analyse_gray(oracle: &Oracle) -> Result<GrayAnalysis, Unavailable> {
 
     let axis = gray_axis();
     let rows: Vec<Vec<f64>> = axis.iter().map(|&g| vec![g]).collect();
-    let iccce_rel =
-        iccce.transform_rows(src_path, dst_path, Intent::RelativeColorimetric, &rows)?;
-    let iccce_per = iccce.transform_rows(src_path, dst_path, Intent::Perceptual, &rows)?;
+    let icccer_rel =
+        icccer.transform_rows(src_path, dst_path, Intent::RelativeColorimetric, &rows)?;
+    let icccer_per = icccer.transform_rows(src_path, dst_path, Intent::Perceptual, &rows)?;
 
     let req = |intent: Intent| Request {
         input: Space::profile(src_path),
@@ -2442,9 +2442,9 @@ pub fn analyse_gray(oracle: &Oracle) -> Result<GrayAnalysis, Unavailable> {
     let lcms2_rel = oracle.convert_batch_shaped(&req(Intent::RelativeColorimetric), 1, 3)?;
     let lcms2_per = oracle.convert_batch_shaped(&req(Intent::Perceptual), 1, 3)?;
 
-    let intent_identity_iccce = iccce_rel
+    let intent_identity_icccer = icccer_rel
         .iter()
-        .zip(&iccce_per)
+        .zip(&icccer_per)
         .flat_map(|(a, b)| (0..3).map(move |c| (a[c] - b[c]).abs()))
         .fold(0.0f64, f64::max);
     let intent_identity_lcms2 = lcms2_rel
@@ -2464,7 +2464,7 @@ pub fn analyse_gray(oracle: &Oracle) -> Result<GrayAnalysis, Unavailable> {
         // F.2 forward — identical on both sides (same D50 literals, same
         // analytic gamma), so this is not a modelled quantity but a shared one.
         let xyz = gray.device_to_pcs(g);
-        // iccce's destination, exactly.
+        // icccer's destination, exactly.
         let exact = dst_model
             .pcs_to_device(xyz)
             .map_err(|e| Unavailable::Error(format!("destination refused a PCS value: {e}")))?;
@@ -2491,7 +2491,7 @@ pub fn analyse_gray(oracle: &Oracle) -> Result<GrayAnalysis, Unavailable> {
         ];
         device_dev.push(
             (0..3)
-                .map(|c| (iccce_rel[i][c] - theirs[c]).abs())
+                .map(|c| (icccer_rel[i][c] - theirs[c]).abs())
                 .fold(0.0f64, f64::max),
         );
         device_dev_modelled.push(
@@ -2500,21 +2500,21 @@ pub fn analyse_gray(oracle: &Oracle) -> Result<GrayAnalysis, Unavailable> {
                 .fold(0.0f64, f64::max),
         );
         de.push(delta_e_2000(
-            to_lab(&dst_model, iccce_rel[i]),
+            to_lab(&dst_model, icccer_rel[i]),
             to_lab(&dst_model, theirs),
         ));
     }
 
     Ok(GrayAnalysis {
         axis,
-        iccce_rgb: iccce_rel,
+        icccer_rgb: icccer_rel,
         lcms2_rgb_255,
         modelled_rgb,
         device_dev,
         device_dev_modelled,
         de,
         envelope,
-        intent_identity_iccce,
+        intent_identity_icccer,
         intent_identity_lcms2,
         structure,
     })
@@ -2568,13 +2568,13 @@ pub fn b2a_records(a: &B2aAnalysis) -> Vec<Record> {
         let (cf_max, _) = max_mean(&r.counterfactual);
 
         out.push(Record::graded(
-            format!("pass4b/srgb-to-swop/{s}/apparatus-lut8-matches-iccce-cmm"),
+            format!("pass4b/srgb-to-swop/{s}/apparatus-lut8-matches-icccer-cmm"),
             Kind::SelfConsistency,
             Metric::AbsMaxComponent,
             APPARATUS_B2A,
             r.apparatus,
             "both sides computed in this run: the harness's lut8 pipeline and \
-             iccce-cmm's Lut16Model::pcs_to_device, same Lab inputs",
+             icccer-cmm's Lut16Model::pcs_to_device, same Lab inputs",
             format!("{both} | intent={}", r.intent.name()),
         ));
         out.push(Record::graded(
@@ -2583,7 +2583,7 @@ pub fn b2a_records(a: &B2aAnalysis) -> Vec<Record> {
             Metric::DeviceAbsMaxNormalised,
             DEVICE_B2A,
             dev_max,
-            "both sides computed in this run: shipped `iccce transform` vs transicc -c0",
+            "both sides computed in this run: shipped `icccer transform` vs transicc -c0",
             format!(
                 "{both} | intent={} | envelope(max/mean)={env_max:.4e}/{env_mean:.4e} | \
                  counterfactual if lcms2 had NOT forced trilinear={cf_max:.4e} | \
@@ -2649,7 +2649,7 @@ pub fn b2a_records(a: &B2aAnalysis) -> Vec<Record> {
         Metric::DeviceAbsMaxNormalised,
         DEVICE_B2A,
         pcs_max,
-        "iccce IN-PROCESS (Lut16Model::pcs_to_device - the shipped CLI has no Lab entry \
+        "icccer IN-PROCESS (Lut16Model::pcs_to_device - the shipped CLI has no Lab entry \
          point, so this grades the MODEL, not the binary) against transicc -i*Lab4",
         format!(
             "Lab -> USWebCoatedSWOP B2A1, {} Lab points, source model entirely out of the \
@@ -2707,17 +2707,17 @@ pub fn mab_records(m: &MabAnalysis) -> Vec<Record> {
     // Derived expectations, both implementations.
     let keep_no_overflow: Vec<bool> = m.mab_overflows.iter().map(|o| !o).collect();
     out.push(Record::graded(
-        "pass4b/fixture/mab/iccce-vs-derived-expectation",
+        "pass4b/fixture/mab/icccer-vs-derived-expectation",
         Kind::DerivedExpectation,
         Metric::AbsMaxComponent,
         DERIVED_EXACT,
-        max_at(&m.mab_iccce_vs_derived, &keep_no_overflow),
+        max_at(&m.mab_icccer_vs_derived, &keep_no_overflow),
         "closed form derived from ICC.1:2022 10.12.1 (element order), 10.12.5 (the 3x4 \
          matrix and its offsets) and 6.3.4.2 Tables 12/13 (the GENERAL 16-bit PCSLAB \
          encoding - mAB is not in NOTE 3's legacy set), plus the fixture's own stored nodes. \
          No implementation's output enters it",
         format!(
-            "{ctx} | iccce IN-PROCESS (LutAbModel) | L*/a*/b* units | EXCLUDES the {} \
+            "{ctx} | icccer IN-PROCESS (LutAbModel) | L*/a*/b* units | EXCLUDES the {} \
              encoded-PCS-overflow points (see the clamp record)",
             m.mab_overflows.iter().filter(|o| **o).count()
         ),
@@ -2736,16 +2736,16 @@ pub fn mab_records(m: &MabAnalysis) -> Vec<Record> {
         ),
     ));
     out.push(Record::graded(
-        "pass4b/fixture/mba/iccce-vs-derived-expectation",
+        "pass4b/fixture/mba/icccer-vs-derived-expectation",
         Kind::DerivedExpectation,
         Metric::AbsMaxComponent,
         DERIVED_EXACT,
-        max_mean(&m.mba_iccce_vs_derived).0,
+        max_mean(&m.mba_icccer_vs_derived).0,
         "closed form derived from ICC.1:2022 10.13.1 (element order, the mirror), 10.13.4 \
          (matrix) and Tables 12/13, plus the fixture's own stored nodes INCLUDING the u16 \
          rounding of the middle node (32768, not 32767.5) - an idealised 1-L would be wrong \
          by 7.6e-6 and would look like an implementation defect",
-        format!("{ctx} | iccce IN-PROCESS (LutAbModel) | device units 0..1"),
+        format!("{ctx} | icccer IN-PROCESS (LutAbModel) | device units 0..1"),
     ));
     out.push(Record::graded(
         "pass4b/fixture/mba/lcms2-vs-derived-expectation",
@@ -2767,7 +2767,7 @@ pub fn mab_records(m: &MabAnalysis) -> Vec<Record> {
             Metric::DeviceAbsMaxNormalised,
             DEVICE_MAB_CROSSCHECK,
             mx,
-            "both sides computed in this run: shipped `iccce transform` vs transicc -c0",
+            "both sides computed in this run: shipped `icccer transform` vs transicc -c0",
             format!("{ctx} | the mBA direction, end to end | mean={mean:.4e}"),
         ));
     }
@@ -2780,7 +2780,7 @@ pub fn mab_records(m: &MabAnalysis) -> Vec<Record> {
             Metric::DeviceAbsMaxNormalised,
             DEVICE_MAB_TO_SRGB,
             mx,
-            "both sides computed in this run: shipped `iccce transform` vs transicc -c0",
+            "both sides computed in this run: shipped `icccer transform` vs transicc -c0",
             format!(
                 "{ctx} | the mAB direction, end to end | EXCLUDES the {} \
                  encoded-PCS-overflow points",
@@ -2797,7 +2797,7 @@ pub fn mab_records(m: &MabAnalysis) -> Vec<Record> {
              specification requires is UNSETTLED - see README section 15.3, the question is \
              owed to icc-spec-librarian",
             format!(
-                "{ctx} | iccce clamps the encoded PCS to [0,1] at the B curve (clause 10.18's \
+                "{ctx} | icccer clamps the encoded PCS to [0,1] at the B curve (clause 10.18's \
                  domain, via Trc::eval), lcms2 does not (its identity curve is an analytic \
                  gamma-1 segment, evaluated unbounded), so L* = 100 vs 100.390625 wherever \
                  the 3x4 matrix's +1/256 offset pushes past full scale"
@@ -2813,7 +2813,7 @@ pub fn mab_records(m: &MabAnalysis) -> Vec<Record> {
             m.forced_bpc_cost.0.max(m.forced_bpc_cost.1),
             "BOTH SIDES ARE lcms2: its own media-relative output against its own perceptual \
              output, on the same pair of profiles, in each direction. Says nothing whatever \
-             about iccce - it is the size of the DL-013 / corpus M2 confound, measured rather \
+             about icccer - it is the size of the DL-013 / corpus M2 confound, measured rather \
              than assumed, and it refines M2",
             format!(
                 "{ctx} | v4 fixture as SOURCE into a v2 destination: {:.4e} (bit-identical - \
@@ -2847,7 +2847,7 @@ pub fn gray_records(g: &GrayAnalysis) -> Vec<Record> {
             Metric::DeviceAbsMaxNormalised,
             DEVICE_GRAY,
             dev_max,
-            "both sides computed in this run: shipped `iccce transform` vs transicc -c0",
+            "both sides computed in this run: shipped `icccer transform` vs transicc -c0",
             format!("{ctx} | envelope(max/mean)={env_max:.4e}/{env_mean:.4e}"),
         ),
         Record::graded(
@@ -2883,11 +2883,11 @@ pub fn gray_records(g: &GrayAnalysis) -> Vec<Record> {
             Kind::CrossCheck,
             Metric::DeviceAbsMaxNormalised,
             GRAY_INTENT_IDENTITY,
-            g.intent_identity_iccce.max(g.intent_identity_lcms2),
+            g.intent_identity_icccer.max(g.intent_identity_lcms2),
             "both sides computed in this run; graded on the larger of the two",
             format!(
-                "{ctx} | iccce={:.4e} lcms2={:.4e}",
-                g.intent_identity_iccce, g.intent_identity_lcms2
+                "{ctx} | icccer={:.4e} lcms2={:.4e}",
+                g.intent_identity_icccer, g.intent_identity_lcms2
             ),
         ),
     ]
@@ -2913,7 +2913,7 @@ pub fn unavailable_records(u: &Unavailable, section: &str) -> Vec<Record> {
         ));
         for s in ["perceptual", "media-relative", "saturation"] {
             specs.push((
-                format!("pass4b/srgb-to-swop/{s}/apparatus-lut8-matches-iccce-cmm"),
+                format!("pass4b/srgb-to-swop/{s}/apparatus-lut8-matches-icccer-cmm"),
                 Kind::SelfConsistency,
                 Metric::AbsMaxComponent,
                 APPARATUS_B2A,
@@ -2969,7 +2969,7 @@ pub fn unavailable_records(u: &Unavailable, section: &str) -> Vec<Record> {
             Tolerance::new(1e-14, "affine CLUT: every geometry agrees to f64 rounding"),
         ));
         specs.push((
-            "pass4b/fixture/mab/iccce-vs-derived-expectation".into(),
+            "pass4b/fixture/mab/icccer-vs-derived-expectation".into(),
             Kind::DerivedExpectation,
             Metric::AbsMaxComponent,
             DERIVED_EXACT,
@@ -2981,7 +2981,7 @@ pub fn unavailable_records(u: &Unavailable, section: &str) -> Vec<Record> {
             DERIVED_LCMS2,
         ));
         specs.push((
-            "pass4b/fixture/mba/iccce-vs-derived-expectation".into(),
+            "pass4b/fixture/mba/icccer-vs-derived-expectation".into(),
             Kind::DerivedExpectation,
             Metric::AbsMaxComponent,
             DERIVED_EXACT,

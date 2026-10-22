@@ -1,5 +1,5 @@
 ---
-name: iccce-prohibition-buys-nameability-not-prevention
+name: icccer-prohibition-buys-nameability-not-prevention
 description: DL-075 — a prohibition did NOT prevent the act: its author re-derived the prohibition's own reason from first principles, disclosed it as his own "Limit 1", and computed the forbidden number anyway. What it bought was NAMEABILITY by a reader with no context. Also — DL-070 reaches a ΔE between TWO captures (the rule attaches to the ARTIFACT), a ratio of two different planes both printed "ΔE00" is not a number, and (DL-076's sweep) a correction aimed at a named clause does not sweep the block it is written into.
 metadata:
   type: project
@@ -11,7 +11,7 @@ metadata:
 
 **The prohibition attaches to the ARTIFACT, not to what sits opposite it.**
 `NUMERIC_CLAIMS.md` §1's class definition names *pixels read out of a screen
-capture* in its **head clause**; the `iccce` side appears only after
+capture* in its **head clause**; the `icccer` side appears only after
 *"Here:"*, as the instance in hand. `DL-070`'s reasoning is built entirely on
 the capture's provenance — *"it is the capture's display leg that earns
 it."*
@@ -89,8 +89,8 @@ destination profile's own transform, denominator a **display-space
 pseudo-distance** off a capture. ★★★ **It survived being looked at because
 both numbers were printed `ΔE00` — the unit label matched and the PLANE did
 not, and notation carries no plane.** Same family as
-[[iccce-source-labelled-number]] (the label is the untested half) and
-[[iccce-absence-of-publication-is-not-evidence]] (right number, wrong owner).
+[[icccer-source-labelled-number]] (the label is the untested half) and
+[[icccer-absence-of-publication-is-not-evidence]] (right number, wrong owner).
 
 **Rule: before dividing or ranking, name the plane each quantity was measured
 on, not just the unit each is printed in.** If the planes differ there is no
@@ -130,7 +130,7 @@ every derived statement has removed the evidence and left the claim.**
   ★ The reason generalises: a display transform is **non-linear**, so it
   **cancels in the difference without preserving the distance** — cancellation
   licenses the **comparison**, never the **unit**. See
-  [[iccce-intra-run-differential-outranks-cross-renderer]].
+  [[icccer-intra-run-differential-outranks-cross-renderer]].
 - **The withdrawal sweep is still incomplete** — three passages reported with
   line numbers, unrepaired at the `DL-076` filing. `NUMERIC_CLAIMS.md` §7.32.
 - ★ **`DL-074`'s third `Revisit when` trigger fired ONE DAY after it was

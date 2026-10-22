@@ -1,5 +1,5 @@
 ---
-name: iccce-bound-cannot-catch-its-own-magnitude
+name: icccer-bound-cannot-catch-its-own-magnitude
 description: A tolerance derived from quantity Q cannot discriminate a defect whose magnitude IS Q — the Pass 3 table off-by-one that both self-consistency checks would have passed (DL-016)
 metadata:
   type: project
@@ -55,5 +55,5 @@ caught it. Filed as `ARCHITECTURE.md` **DL-016**, rows **NC-025** /
   would have failed — so the conclusion is true for this table size and
   is **not a general law**.
 
-Related: [[iccce-verify-own-draft-too]],
-[[iccce-verification-loop-runs-both-ways]], [[iccce-pass-status]].
+Related: [[icccer-verify-own-draft-too]],
+[[icccer-verification-loop-runs-both-ways]], [[icccer-pass-status]].

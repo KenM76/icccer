@@ -1,4 +1,4 @@
-# iccce — project instructions
+# icccer — project instructions
 
 A from-scratch, MIT-licensed **ICC colour management module** in Rust.
 Read `README.md` for scope, `docs/ARCHITECTURE.md` for shape,
@@ -62,7 +62,7 @@ could disclose it.
 
 lcms2 is an implementation, not the standard. When the two differ, settle
 it from the specification text and record the outcome — a case where
-iccce is deliberately right and lcms2 is wrong is worth writing down.
+icccer is deliberately right and lcms2 is wrong is worth writing down.
 
 ### 8. Optimise only after correct
 
@@ -97,7 +97,7 @@ Four things about it that are load-bearing and will otherwise be
 discovered late:
 
 1. **Requests flow BOTH ways.** Unlike the GUI channel `pdfce` also runs,
-   this one is not a one-way queue. **`iccce` may write
+   this one is not a one-way queue. **`icccer` may write
    `open/request_<topic>.md` asking `pdfce` things** — *"what shape does a
    PDF actually hand you an ICC profile in?"*, *"how many components does
    a real `DeviceN` carry in the wild?"*, *"is this API callable from a
@@ -108,16 +108,16 @@ discovered late:
    It must build for **`wasm32-unknown-unknown` (CI-enforced)**; it takes
    **no copyleft anywhere in a dependency tree** (it is MIT, same as this
    project); and **`pdfce-core`/`pdfce-render` must never gain a network
-   client under any future decision**. iccce satisfies all three today —
+   client under any future decision**. icccer satisfies all three today —
    the whole `Cargo.lock` is five packages, all of them ours — but that is
    a *dated observation, not a standing guarantee*. Classify against those
    three before adding anything, not just against rule 9.
 
-   ★★ **CORRECTED 2026-08-25: this rule used to say "iccce does not gate
+   ★★ **CORRECTED 2026-08-25: this rule used to say "icccer does not gate
    wasm32 in CI", and that was FALSE.** `.github/workflows/ci.yml` has a
    `wasm32` job that builds all four library crates for
    `wasm32-unknown-unknown` on every push to `master`, and a companion gate
-   asserting every line of `cargo tree` is an `iccce-*` crate at a local
+   asserting every line of `cargo tree` is an `icccer-*` crate at a local
    path. Both landed in `68d4601`, **before `v0.1.0`** — so the sentence was
    already wrong when it was written here. ★ It was also **repeated to
    `pdfce` in the request channel as a caveat about this library**, which
@@ -129,19 +129,19 @@ discovered late:
    paint operation writes to, in a device space, *before* any conversion
    to a display. This is the single row of the channel's boundary table
    most likely to be mis-filed, and
-   `open/note_boundary_and_overprint.md` explains why. iccce supplies the
+   `open/note_boundary_and_overprint.md` explains why. icccer supplies the
    conversion at the *end* of that pipeline and owns none of the
-   compositing in front of it. The dependency runs one way: **iccce's half
+   compositing in front of it. The dependency runs one way: **icccer's half
    unblocks `pdfce`'s overprint work, and none of the overprint work is
-   iccce's.**
+   icccer's.**
 4. **`pdfce`'s shipped `DeviceCMYK`→sRGB table is fitted to *pdfium*
    output** (`crates/pdfce-core/src/color/cmyk_table.rs`) — a 6×6×6×6
    lookup obtained by rendering patches and measuring them. That makes it
    a **cross-check against another implementation, not ground truth** —
    this project's own rule 3, applied to `pdfce`'s existing work. It
-   matters because **replacing it with iccce is a *lateral* move in
-   evidence class**, since iccce's oracle for a CMYK LUT path is lcms2,
-   also a cross-check. Adopting iccce is defensible as a **conformance**
+   matters because **replacing it with icccer is a *lateral* move in
+   evidence class**, since icccer's oracle for a CMYK LUT path is lcms2,
+   also a cross-check. Adopting icccer is defensible as a **conformance**
    gain (the document's declared output intent gets honoured at all) and
    **not** as an accuracy gain. Do not let it be written as the latter.
 

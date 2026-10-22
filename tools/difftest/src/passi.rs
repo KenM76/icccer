@@ -1,6 +1,6 @@
 //! # Pass I — ICC's **published** chromatic-adaptation matrix, graded cell by cell
 //!
-//! **Subject:** `iccce_color::adaptation_matrix(&BRADFORD, D65, D50)` — the
+//! **Subject:** `icccer_color::adaptation_matrix(&BRADFORD, D65, D50)` — the
 //! matrix every D65-referenced conversion in this library rests on — against
 //! the nine cells ICC prints at fifteen decimal places in
 //!
@@ -20,16 +20,16 @@
 //! ## ★★★ What this section does NOT claim, stated before what it does
 //!
 //! **`ICC.1` mandates no chromatic-adaptation transform at all** (corpus
-//! ambiguity **A29**; `iccce-color/src/adapt.rs` module header). A profile's
+//! ambiguity **A29**; `icccer-color/src/adapt.rs` module header). A profile's
 //! `chad` tag stores a *resulting matrix*, not a method, so when a profile has
-//! no `chad` the CMM's choice of Bradford is **iccce policy, not a
+//! no `chad` the CMM's choice of Bradford is **icccer policy, not a
 //! requirement**. Every row below therefore grades exactly one sentence:
 //!
-//! > *iccce's Bradford-derived D65→D50 matrix agrees with the matrix ICC
+//! > *icccer's Bradford-derived D65→D50 matrix agrees with the matrix ICC
 //! > recommends, to the extent that the two constructions' published inputs
 //! > entail.*
 //!
-//! It does **not** say "iccce's chromatic adaptation is correct". There is no
+//! It does **not** say "icccer's chromatic adaptation is correct". There is no
 //! specification text against which that sentence could be graded, and any
 //! reader who quotes these rows for it has been given the wrong number.
 //!
@@ -40,7 +40,7 @@
 //! cone-matrix difference alone:
 //!
 //! - **ICC.1:2022 Annex E.3 Eq. (E.1) prints Bradford `M_A[0][0] = 0.8951`**,
-//!   and that is what `iccce_color::BRADFORD` carries, because it is what the
+//!   and that is what `icccer_color::BRADFORD` carries, because it is what the
 //!   specification prints.
 //! - **ICC's published `chad` was built with `0.8950`** — recovered by
 //!   `icc-spec-librarian` by eigendecomposition (a von-Kries matrix
@@ -55,14 +55,14 @@
 //!
 //! - **ICC's `chad` adapts a *rounded* white.** `chad⁻¹ · D50` returns
 //!   `(0.9505, 1.0000, 1.0890)` exactly — the white the same document states in
-//!   §A.4 as `Xabs/Yabs/Zabs = 76.04/80/87.12`. **iccce's D65 is derived from
+//!   §A.4 as `Xabs/Yabs/Zabs = 76.04/80/87.12`. **icccer's D65 is derived from
 //!   BT.709-6 item 1.4's chromaticities** `(0.3127, 0.3290)`, which give
 //!   `(0.950455927…, 1, 1.089057751…)`. The two differ by `−4.407e-5` in X and
 //!   `+5.775e-5` in Z, and that difference propagates to **`4.453188e-5`** in
 //!   the matrix — **7.9× the cone term.**
 //!
 //! The two terms **partially cancel**, and the exact-arithmetic prediction for
-//! iccce as shipped is `4.164937e-5` at cell `(0,0)`. Every bound in §B is that
+//! icccer as shipped is `4.164937e-5` at cell `(0,0)`. Every bound in §B is that
 //! prediction, per cell, plus one numerical allowance.
 //!
 //! > **The generalisation, and it is the third instance of one failure shape in
@@ -76,13 +76,13 @@
 //!
 //! | | cone `M_A[0][0]` | source white | what it is |
 //! |---|---|---|---|
-//! | **A** | `0.8951` | chromaticity-derived | **iccce as shipped** — the subject |
+//! | **A** | `0.8951` | chromaticity-derived | **icccer as shipped** — the subject |
 //! | **B** | `0.8951` | `0.9505/1/1.0890` | isolates the **cone** term |
 //! | **C** | `0.8950` | `0.9505/1/1.0890` | **ICC's own construction** — must reproduce the published matrix |
-//! | **D** | `0.8950` | chromaticity-derived | the **named rival**: iccce with ICC's cone cell |
+//! | **D** | `0.8950` | chromaticity-derived | the **named rival**: icccer with ICC's cone cell |
 //!
 //! **C is the instrument check** (§A). If the harness's own CAT — its own
-//! typed digits, its own adjugate inverse, no iccce code in the loop —
+//! typed digits, its own adjugate inverse, no icccer code in the loop —
 //! reproduces ICC's fifteen published decimals from ICC's own inputs, then the
 //! harness's predictions for A, B and D are trustworthy, and the librarian's
 //! `0.8950` finding has been reproduced by a second route in a second language.
@@ -100,9 +100,9 @@
 //!
 //! ## What is in the loop, and what is therefore invisible here
 //!
-//! §A–§D call `iccce_color::adaptation_matrix` **in process**. §E calls
-//! `iccce_cmm::builtin::srgb()`, which is the construction the shipped binary
-//! actually uses. Neither runs the `iccce` executable, so **a wiring defect
+//! §A–§D call `icccer_color::adaptation_matrix` **in process**. §E calls
+//! `icccer_cmm::builtin::srgb()`, which is the construction the shipped binary
+//! actually uses. Neither runs the `icccer` executable, so **a wiring defect
 //! between the CLI and the library is invisible to every row in this file** —
 //! the Pass H lesson, applied in advance: *ask of every row not "what does it
 //! measure" but "which layer is in the loop".* §E is the layer closest to the
@@ -116,7 +116,7 @@ use crate::{Kind, Metric, Record, SepUnits, Separation, Tolerance};
 //
 // ★ These digits are typed in THIS file on purpose. The row's power comes
 // entirely from the prediction side being independent of the code under test:
-// if the harness imported `iccce_color::BRADFORD` or `iccce_color::D50`, a
+// if the harness imported `icccer_color::BRADFORD` or `icccer_color::D50`, a
 // corrupted constant in the library would move both sides together and every
 // row here would stay green while the product went wrong. The cost of the
 // independence is a second transcription that can itself be mistyped, which is
@@ -151,7 +151,7 @@ pub const PUBLISHED_COLORANTS: [[f64; 3]; 3] = [
 ];
 
 /// Bradford as **ICC.1:2022 Annex E.3 Equation (E.1) prints it** — the variant
-/// `iccce_color::BRADFORD` carries. First row sums to `1.0001`, which the
+/// `icccer_color::BRADFORD` carries. First row sums to `1.0001`, which the
 /// corpus records as real and not a transcription error.
 const BRADFORD_E3: [[f64; 3]; 3] = [
     [0.8951, 0.2664, -0.1614],
@@ -177,7 +177,7 @@ const WHITE_D50: [f64; 3] = [0.9642, 1.0, 0.8249];
 const WHITE_D65_ROUNDED: [f64; 3] = [0.9505, 1.0, 1.0890];
 
 /// D65 chromaticity, **Rec. ITU-R BT.709-6 (06/2015) item 1.4** — the harness's
-/// own transcription of the constant `iccce_color::D65_XY` also carries.
+/// own transcription of the constant `icccer_color::D65_XY` also carries.
 const D65_XY_PUBLISHED: (f64, f64) = (0.3127, 0.3290);
 
 // ===========================================================================
@@ -193,7 +193,7 @@ const D65_XY_PUBLISHED: (f64, f64) = (0.3127, 0.3290);
 // derivation stops holding — which is exactly what §A.3 makes it do, by
 // recomputing all of them in f64 and grading the agreement.
 
-/// Signed per-cell prediction of `iccce − ICC published chad`, exact rational
+/// Signed per-cell prediction of `icccer − ICC published chad`, exact rational
 /// arithmetic. Max `|cell|` is `4.164937e-5` at `(0,0)`.
 const PREDICTED_CHAD_RESIDUAL: [[f64; 3]; 3] = [
     [4.164_936_613_631_601e-5, 1.978_412_469_348_972e-5, -9.447_570_128_005_676e-6],
@@ -202,7 +202,7 @@ const PREDICTED_CHAD_RESIDUAL: [[f64; 3]; 3] = [
 ];
 
 /// Signed per-cell prediction of
-/// `iccce_cmm::builtin::srgb().matrix() − ICC published colorants`, exact
+/// `icccer_cmm::builtin::srgb().matrix() − ICC published colorants`, exact
 /// rational arithmetic. Max `|cell|` is `4.607402e-5 = 3.020 ULP` at `(1,0)` —
 /// the figure `builtin.rs` declares as the model's named approximation.
 const PREDICTED_COLORANT_RESIDUAL: [[f64; 3]; 3] = [
@@ -219,7 +219,7 @@ const CONE_TERM_EXACT: f64 = 5.661_341_564_633_735e-6;
 /// (rounded D65), same cone matrix. Exact: `4.453187573657197e-5`.
 const WHITE_TERM_EXACT: f64 = 4.453_187_573_657_197e-5;
 
-/// Distance between iccce's matrix and the **named rival** (variant D: iccce's
+/// Distance between icccer's matrix and the **named rival** (variant D: icccer's
 /// white with ICC's `0.8950` cone cell). Exact: `5.662962099557275e-6`. A
 /// property of the published constants, not of any run — which is why the
 /// separations below use [`Separation::against_distance`] and not
@@ -271,13 +271,13 @@ const S15F16_ULP: f64 = 1.0 / 65536.0;
 const F64_NOISE: f64 = 1e-12;
 
 // ===========================================================================
-// The harness's own arithmetic — deliberately not iccce's
+// The harness's own arithmetic — deliberately not icccer's
 // ===========================================================================
 
 type Mat = [[f64; 3]; 3];
 
 /// 3×3 inverse by adjugate over determinant. Written here rather than reused
-/// from `iccce_color::Mat3` so that the prediction side of every comparison
+/// from `icccer_color::Mat3` so that the prediction side of every comparison
 /// contains none of the code under test.
 ///
 /// Returns `None` on a singular matrix rather than producing infinities; every
@@ -339,7 +339,7 @@ fn cat(cone: &Mat, white_src: [f64; 3], white_dst: [f64; 3]) -> Option<Mat> {
     Some(mul3(&cone_inv, &mul3(&diag, cone)))
 }
 
-/// xyY(Y = 1) → XYZ, the same three divisions `iccce_color::XyY::to_xyz`
+/// xyY(Y = 1) → XYZ, the same three divisions `icccer_color::XyY::to_xyz`
 /// performs. Present so that the harness can build the chromaticity-derived
 /// D65 without calling the crate under test.
 fn xy_to_xyz(xy: (f64, f64)) -> [f64; 3] {
@@ -369,7 +369,7 @@ fn max_cell(a: &Mat) -> (f64, usize, usize) {
     best
 }
 
-/// `s15Fixed16` encoding, round-half-away-from-zero, as `iccce-profile` writes
+/// `s15Fixed16` encoding, round-half-away-from-zero, as `icccer-profile` writes
 /// it. Used only to count how many cells would land on different **bytes**.
 #[expect(
     clippy::cast_possible_truncation,
@@ -390,20 +390,20 @@ fn enc_s15f16(v: f64) -> i32 {
 
 /// Everything Pass I measures, computed once.
 pub struct Analysis {
-    /// **A** — iccce as shipped: `adaptation_matrix(&BRADFORD, D65, D50)`.
-    pub iccce_chad: Mat,
+    /// **A** — icccer as shipped: `adaptation_matrix(&BRADFORD, D65, D50)`.
+    pub icccer_chad: Mat,
     /// **B** — harness CAT, E.3 Bradford (`0.8951`) at ICC's rounded white.
     pub variant_cone: Mat,
     /// **C** — harness CAT, recovered Bradford (`0.8950`) at ICC's rounded
     /// white: ICC's own construction.
     pub variant_icc: Mat,
-    /// **D** — harness CAT, recovered Bradford at iccce's chromaticity white:
+    /// **D** — harness CAT, recovered Bradford at icccer's chromaticity white:
     /// the named rival.
     pub variant_rival: Mat,
     /// The harness's f64 re-computation of variant A, used only to check the
     /// typed exact predictions have not gone stale.
     pub predicted_chad: Mat,
-    /// `iccce_cmm::builtin::srgb().matrix()` — the shipped construction.
+    /// `icccer_cmm::builtin::srgb().matrix()` — the shipped construction.
     pub shipped_colorants: Mat,
     /// How many of the nine `chad` cells encode to different `s15Fixed16`
     /// words, and the largest difference in LSBs.
@@ -429,16 +429,16 @@ pub struct Analysis {
 pub fn analyse() -> Analysis {
     let d65_chroma = xy_to_xyz(D65_XY_PUBLISHED);
 
-    // --- the subject: iccce's own code, its own constants -------------------
-    let iccce_d65 = iccce_color::XyY {
-        x: iccce_color::D65_XY.0,
-        y: iccce_color::D65_XY.1,
+    // --- the subject: icccer's own code, its own constants -------------------
+    let icccer_d65 = icccer_color::XyY {
+        x: icccer_color::D65_XY.0,
+        y: icccer_color::D65_XY.1,
         luma_y: 1.0,
     }
     .to_xyz()
-    .expect("iccce_color::D65_XY is a valid chromaticity");
-    let iccce_chad =
-        iccce_color::adaptation_matrix(&iccce_color::BRADFORD, iccce_d65, iccce_color::D50)
+    .expect("icccer_color::D65_XY is a valid chromaticity");
+    let icccer_chad =
+        icccer_color::adaptation_matrix(&icccer_color::BRADFORD, icccer_d65, icccer_color::D50)
             .expect("Bradford is invertible and neither white is degenerate")
             .rows;
 
@@ -452,7 +452,7 @@ pub fn analyse() -> Analysis {
     let predicted_chad =
         cat(&BRADFORD_E3, d65_chroma, WHITE_D50).expect("BRADFORD_E3 in this file is invertible");
 
-    let shipped_colorants = iccce_cmm::builtin::srgb().matrix().rows;
+    let shipped_colorants = icccer_cmm::builtin::srgb().matrix().rows;
 
     // --- encoding census ----------------------------------------------------
     let mut enc_cells_differing = 0usize;
@@ -460,7 +460,7 @@ pub fn analyse() -> Analysis {
     let mut enc_cells_differing_cone_only = 0usize;
     for i in 0..3 {
         for j in 0..3 {
-            let d = enc_s15f16(iccce_chad[i][j]) - enc_s15f16(PUBLISHED_CHAD[i][j]);
+            let d = enc_s15f16(icccer_chad[i][j]) - enc_s15f16(PUBLISHED_CHAD[i][j]);
             if d != 0 {
                 enc_cells_differing += 1;
                 if d.abs() > enc_max_lsb.abs() {
@@ -474,7 +474,7 @@ pub fn analyse() -> Analysis {
     }
 
     Analysis {
-        iccce_chad,
+        icccer_chad,
         variant_cone,
         variant_icc,
         variant_rival,
@@ -531,7 +531,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             format!(
                 "INSTRUMENT CHECK, and it is a ground-truth row in its own right. \
                  The harness's own CAT — its own typed digits, its own adjugate inverse, no \
-                 iccce code in the loop — is given ICC's own construction inputs \
+                 icccer code in the loop — is given ICC's own construction inputs \
                  (Bradford with M_A[0][0]=0.8950 as recovered by eigendecomposition, source \
                  white 0.9505/1/1.0890 from section A.4, destination 0.9642/1/0.8249) and must \
                  return the nine cells ICC printed. Max |cell| difference {a1:.6e} at \
@@ -568,7 +568,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
              tautology. Substituting ICC.1:2022 Annex E.3 Eq. (E.1)'s printed 0.8951 for the \
              recovered 0.8950, with every other input identical, moves the matrix by \
              {a2:.6e} (predicted exactly: {CONE_TERM_EXACT:.6e}). Two ICC publications, two \
-             Bradford matrices. iccce uses 0.8951 because that is what the specification prints; \
+             Bradford matrices. icccer uses 0.8951 because that is what the specification prints; \
              this row records the divergence and does not adjudicate it — see section D.",
         ),
     )
@@ -611,9 +611,9 @@ pub fn records(a: &Analysis) -> Vec<Record> {
     // §B — the graded claim: nine cells against ICC's published matrix.
     // -----------------------------------------------------------------------
 
-    let diff = sub3(&a.iccce_chad, &PUBLISHED_CHAD);
+    let diff = sub3(&a.icccer_chad, &PUBLISHED_CHAD);
     let rival_diff = sub3(&a.variant_rival, &PUBLISHED_CHAD);
-    let rival_dist = sub3(&a.iccce_chad, &a.variant_rival);
+    let rival_dist = sub3(&a.icccer_chad, &a.variant_rival);
     // First pass: how much of section B would the named rival actually break?
     // Computed before any row is built, because the answer appears in the rows'
     // own text and a number quoted in a detail string must be one the harness
@@ -648,23 +648,23 @@ pub fn records(a: &Analysis) -> Vec<Record> {
                         "The exactly-derived residual for this cell plus one f64 allowance. It \
                          is a PREDICTION, not an observation: the residual is the sum of two \
                          documented input differences — ICC built its chad with Bradford \
-                         M_A[0][0]=0.8950 while iccce uses ICC.1:2022 E.3's printed 0.8951 \
+                         M_A[0][0]=0.8950 while icccer uses ICC.1:2022 E.3's printed 0.8951 \
                          (5.661e-6), and ICC's chad adapts the 4-dp-rounded white 0.9505/1/1.0890 \
-                         while iccce derives D65 from BT.709-6's chromaticities (4.453e-5). Both \
+                         while icccer derives D65 from BT.709-6's chromaticities (4.453e-5). Both \
                          terms are computable in exact rational arithmetic from published \
                          constants alone, which is why this bound could be written down before \
                          the row was ever run. ONE-SIDED BY CONSTRUCTION: a change that moved \
-                         iccce TOWARD ICC's own construction would pass silently here — section \
+                         icccer TOWARD ICC's own construction would pass silently here — section \
                          C is the two-sided gate.",
                     ),
                     observed,
                     CITE,
                     format!(
-                        "iccce {:.15} vs ICC published {:.15}; signed residual {:+.6e} \
+                        "icccer {:.15} vs ICC published {:.15}; signed residual {:+.6e} \
                          ({:+.3} ULP of s15Fixed16). Predicted exactly {:+.6e}. \
                          GROUND TRUTH ABOUT AGREEMENT WITH A RECOMMENDATION, not about \
                          correctness: ICC.1 mandates no CAT at all (corpus A29), so what is \
-                         graded is that iccce's Bradford-derived matrix agrees with the one ICC \
+                         graded is that icccer's Bradford-derived matrix agrees with the one ICC \
                          recommends to the extent the two constructions' inputs entail. \
                          ★ READ THE BLIND FLAG CORRECTLY: the candidate distance ({:.6e}) is \
                          smaller than this bound ({:.6e}), so the mechanism reports BLIND — \
@@ -674,7 +674,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
                          cells anyway (worst exceedance {rival_worst_ratio:.3}x). The row that \
                          carries this power without needing an argument is passi/C, where the \
                          same separation is DISCRIMINATING by six orders.",
-                        a.iccce_chad[i][j],
+                        a.icccer_chad[i][j],
                         PUBLISHED_CHAD[i][j],
                         diff[i][j],
                         diff[i][j] / S15F16_ULP,
@@ -684,7 +684,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
                     ),
                 )
                 .with_separation(Separation::against_distance(
-                    "iccce built with ICC's own cone matrix (M_A[0][0] = 0.8950, recovered from \
+                    "icccer built with ICC's own cone matrix (M_A[0][0] = 0.8950, recovered from \
                      the published chad) instead of ICC.1:2022 E.3's printed 0.8951",
                     alt,
                     rival_dist[i][j].abs(),
@@ -710,7 +710,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             bmax,
             CITE,
             format!(
-                "THE HEADLINE. iccce's D65->D50 Bradford matrix differs from ICC's published \
+                "THE HEADLINE. icccer's D65->D50 Bradford matrix differs from ICC's published \
                  recommended chad by at most {bmax:.6e} ({:.3} ULP of s15Fixed16), at cell \
                  ({bmaxi},{bmaxj}); predicted exactly {pmax:.6e}. Decomposition, exact: the \
                  white-point term contributes {WHITE_TERM_EXACT:.6e} and the cone-matrix term \
@@ -723,7 +723,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
         )
         .with_separation(Separation::against_distance(
             format!(
-                "iccce built with ICC's own cone matrix (0.8950): the rival lands at {:.6e}, \
+                "icccer built with ICC's own cone matrix (0.8950): the rival lands at {:.6e}, \
                  which is {:.3}x this row's bound",
                 max_cell(&rival_diff).0,
                 max_cell(&rival_diff).0 / (pmax + F64_NOISE),
@@ -738,10 +738,10 @@ pub fn records(a: &Analysis) -> Vec<Record> {
     // §C — the two-sided regression gate, and the DL-018 sensitivity control.
     // -----------------------------------------------------------------------
 
-    let (cmax, cmaxi, cmaxj) = max_cell(&sub3(&a.iccce_chad, &a.predicted_chad));
+    let (cmax, cmaxi, cmaxj) = max_cell(&sub3(&a.icccer_chad, &a.predicted_chad));
     out.push(
         Record::graded(
-            "passi/C/iccce-matches-the-independent-prediction-two-sided",
+            "passi/C/icccer-matches-the-independent-prediction-two-sided",
             Kind::DerivedExpectation,
             Metric::AbsMaxComponent,
             Tolerance::new(
@@ -756,11 +756,11 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             ),
             cmax,
             "Independent f64 re-derivation in this file from the published constants; the \
-             prediction side contains no iccce code",
+             prediction side contains no icccer code",
             format!(
-                "REGRESSION GATE. iccce's matrix vs the harness's own construction from the same \
+                "REGRESSION GATE. icccer's matrix vs the harness's own construction from the same \
                  published inputs: worst cell {cmax:.6e} at ({cmaxi},{cmaxj}). \
-                 SENSITIVITY (DL-018): substituting ICC's own 0.8950 cone cell moves iccce's \
+                 SENSITIVITY (DL-018): substituting ICC's own 0.8950 cone cell moves icccer's \
                  matrix by {RIVAL_CONE_DISTANCE:.6e}, which is {:.2e}x this bound — the \
                  instrument can see the thing the pass is about, by six orders of magnitude. \
                  In section B the same substitution breaches {rival_breaches} of the 9 per-cell \
@@ -768,7 +768,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
                  on the cone cell too, if less emphatically. \
                  ★ WHAT THIS ROW CANNOT DO, stated because the observation is {cmax:.6e}: \
                  inv3() here is an adjugate-over-determinant inverse and so is \
-                 iccce_color::Mat3::inverse, and both evaluate M_A^-1 . (D . M_A) in that \
+                 icccer_color::Mat3::inverse, and both evaluate M_A^-1 . (D . M_A) in that \
                  association, so bit-for-bit agreement is EXPECTED and is not evidence that \
                  either implementation's arithmetic is well conditioned. Its power is against \
                  CHANGE — a constant, an operand order, a transposition — and the check that the \
@@ -777,7 +777,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             ),
         )
         .with_separation(Separation::against_distance(
-            "iccce built with ICC's own cone matrix (M_A[0][0] = 0.8950)",
+            "icccer built with ICC's own cone matrix (M_A[0][0] = 0.8950)",
             RIVAL_CONE_DISTANCE,
             RIVAL_CONE_DISTANCE,
             SepUnits::SameAsMetric,
@@ -785,7 +785,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
     );
 
     // -----------------------------------------------------------------------
-    // §D — REPORTED. Two ICC publications disagree; iccce records, not adjudicates.
+    // §D — REPORTED. Two ICC publications disagree; icccer records, not adjudicates.
     // -----------------------------------------------------------------------
 
     out.push(Record::graded(
@@ -798,7 +798,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
              ICC publications is the wrong one. ICC.1:2022 Annex E.3 Eq. (E.1) prints 0.8951; \
              ICC's own sRGB guidance computed its recommended chad with 0.8950. Annex E is \
              informative and ICC.1 mandates no CAT at all (A29), so neither value is required of \
-             anybody. iccce follows the printed specification. Grading this would mean this \
+             anybody. icccer follows the printed specification. Grading this would mean this \
              project deciding which ICC document is authoritative, which is not a decision a \
              conformance suite is entitled to make.",
         ),
@@ -827,7 +827,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             Tolerance::new(
                 f64::INFINITY,
                 "REPORTED. A count of encoding differences is not a conformance requirement: \
-                 iccce writes no chad tag for its built-in sRGB today, and no clause requires a \
+                 icccer writes no chad tag for its built-in sRGB today, and no clause requires a \
                  profile's chad to equal ICC's recommended one. It is emitted because it is the \
                  unit a profile author cares about and because it CORRECTS AN INFERENCE this \
                  project made in writing.",
@@ -839,7 +839,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             },
             CITE,
             format!(
-                "★ CORRECTION TO A COROLLARY, measured. {} of 9 cells of iccce's chad encode to \
+                "★ CORRECTION TO A COROLLARY, measured. {} of 9 cells of icccer's chad encode to \
                  a different s15Fixed16 word than ICC's published chad, largest difference {} \
                  LSB. And the corpus's own consequence note — that a chad recomputed from E.3 \
                  differs by 0.371 ULP and therefore 'the written tag bytes are identical' — does \
@@ -863,11 +863,11 @@ pub fn records(a: &Analysis) -> Vec<Record> {
     let (emax, emaxi, emaxj) = max_cell(&col_diff);
     let (epred, _, _) = max_cell(&PREDICTED_COLORANT_RESIDUAL);
 
-    // iccce's D65 RGB→XYZ matrix, recovered as `chad⁻¹ · colorants`. Used for
+    // icccer's D65 RGB→XYZ matrix, recovered as `chad⁻¹ · colorants`. Used for
     // the rival construction and for the attribution row below; legitimate
     // because the `chad` is far from singular and both uses are informational.
     let m_d65 = {
-        let inv_chad = inv3(&a.iccce_chad).expect("iccce's chad is invertible");
+        let inv_chad = inv3(&a.icccer_chad).expect("icccer's chad is invertible");
         mul3(&inv_chad, &a.shipped_colorants)
     };
     let col_rival = mul3(&a.variant_rival, &m_d65);
@@ -891,12 +891,12 @@ pub fn records(a: &Analysis) -> Vec<Record> {
         emax,
         CITE,
         format!(
-            "★ This row checks iccce's CONSTRUCTION against ICC's published colorants from the \
+            "★ This row checks icccer's CONSTRUCTION against ICC's published colorants from the \
              harness side. ★★ CORRECTED 2026-08-17, same day: this text claimed to be 'the only \
              place in the repository that checks ICC's published colorants', on a grep for \
              '0.436030...' that returned nothing under crates/. THAT GREP WAS DEFEATED BY RUST \
              NUMERIC SEPARATORS — the value is written 0.436_030_342_570_117 and is asserted at \
-             crates/iccce-cmm/src/builtin.rs by \
+             crates/icccer-cmm/src/builtin.rs by \
              matches_icc_published_colorants_within_stated_ulps, which bounds the same worst cell \
              at 4 ULP. The claim that builtin.rs's 'asserted in the tests' was untrue is \
              WITHDRAWN; it was true. ★ Worth keeping rather than deleting: a NEGATIVE finding \
@@ -905,7 +905,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
              its own auditor). Measured worst cell {emax:.6e} = {:.3} ULP at ({emaxi},{emaxj}); \
              predicted {epred:.6e}. This row remains valuable as an INDEPENDENT second check, in \
              a different crate and a different language of expression from builtin.rs's, and it \
-             puts iccce_cmm::builtin::srgb() — the construction the shipped binary uses — in the \
+             puts icccer_cmm::builtin::srgb() — the construction the shipped binary uses — in the \
              loop, which sections A to D do not.",
             emax / S15F16_ULP,
         ),
@@ -914,7 +914,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
         format!(
             "the same construction with ICC's own cone matrix (M_A[0][0] = 0.8950): the rival's \
              colorants land {col_rival_resid:.6e} from the published ones, i.e. FURTHER away \
-             than iccce's {emax:.6e} — adopting ICC's cone cell would make this row WORSE",
+             than icccer's {emax:.6e} — adopting ICC's cone cell would make this row WORSE",
         ),
         col_rival_resid,
         col_rival_dist,
@@ -923,7 +923,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
 
     // The decomposition of that residual, which is where the interesting
     // finding is: builtin.rs attributes it to one cause and there are two.
-    let chad_term = mul3(&sub3(&a.iccce_chad, &PUBLISHED_CHAD), &m_d65);
+    let chad_term = mul3(&sub3(&a.icccer_chad, &PUBLISHED_CHAD), &m_d65);
     let (ct, cti, ctj) = max_cell(&chad_term);
     out.push(Record::graded(
         "passi/E/colorant-residual-attribution",
@@ -940,7 +940,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
         format!(
             "★★ FINDING — builtin.rs says the colorant residual is 'entirely accounted for by \
              which D65 matrix each side starts from'. It is not. Exact decomposition of \
-             (iccce - ICC) into (iccce_chad - published_chad).M_d65 + published_chad.(M_d65 - \
+             (icccer - ICC) into (icccer_chad - published_chad).M_d65 + published_chad.(M_d65 - \
              inv(A.7)): the CHAD term reaches 2.482 ULP and the PRIMARIES term 2.480 ULP — the \
              same size. Worst chad-term cell measured here {ct:.6e} at ({cti},{ctj}). On \
              bXYZ.Z the two terms are -2.482 and +1.586 ULP and CANCEL to the -0.897 ULP the doc \
@@ -962,7 +962,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
         Metric::AbsMaxComponent,
         Tolerance::new(
             COLORANT_ROW_SUM_BOUND,
-            "A transcription guard on the REFERENCE DATA, not on iccce. ICC's own prose requires \
+            "A transcription guard on the REFERENCE DATA, not on icccer. ICC's own prose requires \
              these colorants to be D50-adapted, so their row sums must be D50 — but not exactly, \
              and the size of the miss is derivable rather than observable. ICC's colorants are \
              chad x inv(A.7), and A.7 is printed to SEVEN decimals, so each of its cells is known \
@@ -983,7 +983,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
              summarises them as reproducing D50 'to 9,3x10^-9' — that is the FIRST row's \
              residual quoted as though it were the maximum; the Z row is 8.5x larger. This bound \
              was first derived from the 9.3e-9 figure and FAILED at {white_err:.6e}, which is how \
-             the mis-summary was found. Neither iccce nor the published data is wrong; the \
+             the mis-summary was found. Neither icccer nor the published data is wrong; the \
              summary sentence was.",
             white_sum[0],
             white_sum[1],
@@ -1008,7 +1008,7 @@ pub fn run() -> (Analysis, Vec<Record>) {
 /// One line for the run's note block.
 #[must_use]
 pub fn note(a: &Analysis) -> String {
-    let (bmax, _, _) = max_cell(&sub3(&a.iccce_chad, &PUBLISHED_CHAD));
+    let (bmax, _, _) = max_cell(&sub3(&a.icccer_chad, &PUBLISHED_CHAD));
     let (emax, _, _) = max_cell(&sub3(&a.shipped_colorants, &PUBLISHED_COLORANTS));
     format!(
         "chad vs ICC published (srgb.pdf B.2): max cell {bmax:.6e} = {:.3} ULP \

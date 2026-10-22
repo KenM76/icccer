@@ -62,5 +62,5 @@ exemption offered in good faith by someone who is not the operator.
   per document?"* now has **no tracked answer** — `NUMERIC_CLAIMS.md`
   §7.29 item 2. Silence would have implied the measurement was never
   taken.
-- Related: [[iccce-gitignored-file-invisible-to-citation-sweep]] — §10
+- Related: [[icccer-gitignored-file-invisible-to-citation-sweep]] — §10
   lives in the file a default sweep cannot see. Search it **by name**.

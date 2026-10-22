@@ -1,14 +1,14 @@
-# iccce — workspace manifest
+# icccer — workspace manifest
 #
 # Five crates, per docs/ARCHITECTURE.md §1:
 #
-#   iccce-color    CIE colorimetry. INVARIANT: depends on nothing.
-#   iccce-profile  ICC profile parsing. INVARIANT: no colour maths.
-#   iccce-cmm      transforms — where profile and color meet, and where
+#   icccer-color    CIE colorimetry. INVARIANT: depends on nothing.
+#   icccer-profile  ICC profile parsing. INVARIANT: no colour maths.
+#   icccer-cmm      transforms — where profile and color meet, and where
 #                  every approximation lives.
-#   iccce-cli      the scriptable shell that makes the library verifiable
+#   icccer-cli      the scriptable shell that makes the library verifiable
 #                  without a GUI.
-#   iccce-measure  CGATS/IT8.7 measurement files. INVARIANT: no ICC AND
+#   icccer-measure  CGATS/IT8.7 measurement files. INVARIANT: no ICC AND
 #                  no colour maths — it reads numbers off a target, it
 #                  does not interpret them. Pass 10 pre-work, added
 #                  2026-08-12: the half of a profiler that needs no
@@ -18,8 +18,8 @@
 # The invariants above are the architecture. Each is a statement about
 # what a crate must NOT reach for, and each is checked by the fact that
 # the crate's [dependencies] section stays empty — three of the five
-# depend on nothing at all. A dependency added to iccce-color or
-# iccce-measure is an architectural change, not a convenience.
+# depend on nothing at all. A dependency added to icccer-color or
+# icccer-measure is an architectural change, not a convenience.
 #
 # tools/difftest (the lcms2 differential oracle) is deliberately NOT a
 # workspace member: lcms2 is an oracle, never a dependency, and keeping
@@ -29,15 +29,15 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/iccce-color",
-    "crates/iccce-profile",
-    "crates/iccce-cmm",
-    "crates/iccce-cli",
-    "crates/iccce-measure",
+    "crates/icccer-color",
+    "crates/icccer-profile",
+    "crates/icccer-cmm",
+    "crates/icccer-cli",
+    "crates/icccer-measure",
 ]
 
 [workspace.package]
-version = "0.3.1"
+version = "0.4.0"
 edition = "2024"
 rust-version = "1.85"
 license = "MIT"
@@ -55,7 +55,7 @@ authors = ["Ken Mantle"]
 # locally but makes the crate UNPUBLISHABLE, because `cargo package`
 # rejects it. That was found on 2026-08-17 by running `cargo package` on
 # all five crates rather than trusting a claim that the metadata was
-# ready; `iccce-cli` could not be packaged at all.
+# ready; `icccer-cli` could not be packaged at all.
 #
 # Before 2026-08-25 these literals lived in the member manifests, FIVE
 # copies of the version number, with a comment in two of them warning
@@ -70,9 +70,9 @@ authors = ["Ken Mantle"]
 # BOTH numbers in this file change, and nothing outside this file does.
 # ------------------------------------------------------------------------
 [workspace.dependencies]
-iccce-color = { path = "crates/iccce-color", version = "0.3.1" }
-iccce-profile = { path = "crates/iccce-profile", version = "0.3.1" }
-iccce-cmm = { path = "crates/iccce-cmm", version = "0.3.1" }
+icccer-color = { path = "crates/icccer-color", version = "0.4.0" }
+icccer-profile = { path = "crates/icccer-profile", version = "0.4.0" }
+icccer-cmm = { path = "crates/icccer-cmm", version = "0.4.0" }
 
 [workspace.lints.rust]
 # ARCHITECTURE.md §3.4: no `unsafe` without a written justification and a

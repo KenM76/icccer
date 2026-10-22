@@ -1,6 +1,6 @@
 ---
 name: project-passi-published-chad-findings
-description: Pass I graded iccce's chromatic adaptation against ICC's published D65-to-D50 chad — the bound the pass was COMMISSIONED with would have failed it at 7.4x because the dominant term was the white point, not the cone matrix; plus a one-sided ground-truth row proved powerless against an error moving toward the reference, and two clippy suggestions in tools/ would have injected defects.
+description: Pass I graded icccer's chromatic adaptation against ICC's published D65-to-D50 chad — the bound the pass was COMMISSIONED with would have failed it at 7.4x because the dominant term was the white point, not the cone matrix; plus a one-sided ground-truth row proved powerless against an error moving toward the reference, and two clippy suggestions in tools/ would have injected defects.
 metadata:
   type: project
 ---
@@ -9,7 +9,7 @@ metadata:
 green), instrument `src/bin/passi_probe.rs`, bounds `docs/TOLERANCES.md`
 **§3.9**, operational notes `tools/difftest/README.md` **§24**, named
 approximation **NA-010**. Suite `pass=274` → **`pass=293 fail=0 skip=9
-error=0`**. Subject: `iccce_color::adaptation_matrix(&BRADFORD, D65, D50)` vs
+error=0`**. Subject: `icccer_color::adaptation_matrix(&BRADFORD, D65, D50)` vs
 ICC's `srgb.pdf` §B.2 (Jack Holm, 2015-04-27) — third `published-ground-truth`
 subject, first for chromatic adaptation.
 
@@ -19,7 +19,7 @@ subject, first for chromatic adaptation.
   The brief said to derive it from the cone-matrix difference (ICC.1 E.3 prints
   Bradford `0.8951`, ICC's own chad was built with `0.8950`) — exactly
   `5.661342e-6`. The **dominant** term is the *white point*: ICC's chad adapts
-  the 4-dp-**rounded** `0.9505/1/1.0890` (= `chad⁻¹·D50`, exactly) while iccce
+  the 4-dp-**rounded** `0.9505/1/1.0890` (= `chad⁻¹·D50`, exactly) while icccer
   derives D65 from BT.709-6's chromaticities, worth `4.453188e-5`, **7.9×**
   larger. They partially cancel to **`4.164937e-5` = 2.730 ULP**. *Fourth
   instance of one shape*: **when a derivation names only the components the row
@@ -29,11 +29,11 @@ subject, first for chromatic adaptation.
   bound be a prediction rather than an observation (all nine cells landed on
   their predictions to f64 noise).
 - **★★★ A ONE-SIDED GROUND-TRUTH ROW IS NOT A REGRESSION GATE, and injection
-  proved it.** §B grades `|iccce − published| ≤ predicted`, which is the claim
-  worth publishing and has **no power against a change that moves iccce toward
+  proved it.** §B grades `|icccer − published| ≤ predicted`, which is the claim
+  worth publishing and has **no power against a change that moves icccer toward
   the reference**. Injecting CIE's 5-figure D65 (`0.31272/0.32903` — the
   "precision upgrade" trap) left **three §B cells PASSING because they got
-  closer to ICC's numbers**; §C — the two-sided `|iccce − independent
+  closer to ICC's numbers**; §C — the two-sided `|icccer − independent
   prediction| ≤ 1e-12` row — failed by eight orders. **Pair every
   published-ground-truth row with a two-sided derived-expectation row and say
   which is which**: the ground-truth row is the one people quote, the derived
@@ -41,7 +41,7 @@ subject, first for chromatic adaptation.
   `constructed_colorant_sum_is_d50` and NEXT_SESSION §5.2.
 - **★★ Build the harness's prediction side out of its OWN transcription and its
   OWN arithmetic.** `passi.rs` types its own copies of the published constants
-  and implements its own `inv3`/`cat`. Importing `iccce_color::BRADFORD` would
+  and implements its own `inv3`/`cat`. Importing `icccer_color::BRADFORD` would
   move both sides together under a corrupted constant and every row would stay
   green. The price is a second transcription that can be mistyped — pay it with
   an **instrument row (§A) that reproduces the published matrix from the
@@ -51,7 +51,7 @@ subject, first for chromatic adaptation.
 - **★★ SUB-ULP DOES NOT MEAN IDENTICAL BYTES.** The corpus inferred from a
   `0.371` ULP difference that *"the written tag bytes are identical"*. Measured
   exactly: **3 of 9** cells still encode to different `s15Fixed16` words in that
-  very case, **6 of 9** for iccce (max 3 LSB). Below one ULP bounds an encoding
+  very case, **6 of 9** for icccer (max 3 LSB). Below one ULP bounds an encoding
   difference at **one LSB**; it does not zero it. Any *"sub-ULP so nothing is
   observable"* claim must be **measured through the encoder**.
 - **★★ A tolerance derived from a corpus SUMMARY failed; the printed values in

@@ -13,7 +13,7 @@ Apparatus `tools/difftest/src/passl.rs` + `src/bin/passl_probe.rs`; record
 **The subject.** `ICC_Spec` row **`A57`**: ICC/W3C/Khronos print sRGB with
 `α = 1.055`, `d = 0.04045` (**C⁰**); `Rec. ITU-T H.273 (V4) | ISO/IEC 23091-2`
 clause 8.2 *defines* `TransferCharacteristics = 13`'s constants by **slope**
-continuity too (**C¹**, `α = 1.0550107189…`, `d = 0.0392933707`). `iccce` ships
+continuity too (**C¹**, `α = 1.0550107189…`, `d = 0.0392933707`). `icccer` ships
 both as `SrgbTrc`. **A57 stays OPEN** — Pass L measures an *implementation*.
 
 **Verdict: lcms2 implements C⁰.** Blackbox `max |lcms2−C0| = 5.300706e-5 L*`
@@ -69,7 +69,7 @@ points is an apparatus fault, not a finding.* Same shape as §19's `/100` bug
 implausible under every hypothesis is the apparatus.**
 
 Consequence: §C runs **entirely in process, in f64**. It has to anyway — ★ the
-shipped `iccce` binary **has no flag that selects `SrgbTrc`**, so the C¹
+shipped `icccer` binary **has no flag that selects `SrgbTrc`**, so the C¹
 reading is reachable *only* from the library API. Same precedent as pass5b.
 
 ## ★★★ "0 of 256 8-bit codes change" is true of sRGB and FALSE end-to-end

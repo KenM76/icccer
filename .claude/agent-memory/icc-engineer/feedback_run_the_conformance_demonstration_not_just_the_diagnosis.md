@@ -1,22 +1,22 @@
 ---
 name: run-the-conformance-demonstration-not-just-the-diagnosis
-description: When a consumer render looks wrong, Ken wants the measured proof that iccce does or does not fix it — not only the diagnosis of whose bug it is
+description: When a consumer render looks wrong, Ken wants the measured proof that icccer does or does not fix it — not only the diagnosis of whose bug it is
 metadata:
   type: feedback
 ---
 
 When Ken brings a rendering that looks wrong, **diagnosing whose defect it is
 is only half the answer he wants. Run the demonstration that measures whether
-iccce actually closes the gap.**
+icccer actually closes the gap.**
 
 **Why:** 2026-08-28 he sent an Acrobat/`pdfceGUI` pair of a customised
 print-conformance page. I answered with the diagnosis — the failure is
-`pdfce`'s missing CMM, iccce is not even linked into that render path — and
+`pdfce`'s missing CMM, icccer is not even linked into that render path — and
 his reply was *"If it would help and you can do it, please test your
 conformance."* ★ He was not asking for reassurance; the demonstration is what
 he considered the deliverable. It also turned out to be where the value was:
 it produced the fixture gap, a Tier-A reclassification, and the finding that
-**iccce fixes almost none of two of the four panels** — which is the opposite
+**icccer fixes almost none of two of the four panels** — which is the opposite
 of what the diagnosis alone implied and is the part that changes a consumer's
 planning.
 

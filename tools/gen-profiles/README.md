@@ -14,7 +14,7 @@ Owned by `icc-conformance`. Not shipped. Not a workspace member. Nothing under
 `docs/ROADMAP.md` records Pass 2's done-when clause 2 — *"a synthetic corpus
 covers each tag type"* — as **PARTIAL**, and states the gap precisely: every
 implemented tag type had byte-authored fixtures, but they lived **inside
-`iccce-profile`'s unit tests**. Those are tag-level, not profile-level. They
+`icccer-profile`'s unit tests**. Those are tag-level, not profile-level. They
 cannot cover header/tag-table/tag-data interaction, cross-tag consistency, or
 anything a consumer would open with `inspect`, and nothing outside
 `cargo test` can use them — not a differential run, not a fuzzing run, not an
@@ -53,9 +53,9 @@ So:
 * **The manifest is generated** (`gen-profiles manifest`), so the invocation
   recorded beside a fixture is by construction the invocation that produced it.
 
-### Why it has no dependencies — including on iccce
+### Why it has no dependencies — including on icccer
 
-`tools/difftest` path-depends on `iccce-color`, and that coupling is justified
+`tools/difftest` path-depends on `icccer-color`, and that coupling is justified
 at length in its own manifest. **No equivalent justification exists here, and
 none is intended.** A fixture written with the same encoder the parser was
 written against cannot detect a *shared misreading of the specification* — the
@@ -166,7 +166,7 @@ were authored to watch.**
 
 #### What happened
 
-On 2026-08-12 a real defect was found and fixed in `iccce-cmm`'s ISO/CD 18619
+On 2026-08-12 a real defect was found and fixed in `icccer-cmm`'s ISO/CD 18619
 **4.2.5.4** branch: it returned `outRamp[first]` where the clause says
 `InitialLab`. The two black-point arms of `tools/difftest`'s Pass 5c responded
 completely differently:
@@ -287,7 +287,7 @@ demonstrating itself live on the same run.
    the finding is `REPORTED`. "Differential" and "load-bearing" are different
    properties and this document ran them together.
 2. ~~"every remaining Pass 5c row would stay green through a full reversion"~~ is
-   true and was **misleading about the repository**. `cargo test -p iccce-cmm`
+   true and was **misleading about the repository**. `cargo test -p icccer-cmm`
    fails on that reversion — `straight_midrange_short_circuits_at_relative_only`
    and `straight_midrange_carries_chromatic_initial_lab_whole`, verified by
    running them against the injected defect. The clause was defended **as a
@@ -454,7 +454,7 @@ and not another one.*
 
 #### ★ Do not "simplify" these constants
 
-`crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs` asserts
+`crates/icccer-cmm/tests/b2a_intent_selection_is_separated.rs` asserts
 `K(Saturation) − K(MediaRelative) = 0.20` and
 `K(MediaRelative) − K(Perceptual) = 0.20` as **exact equalities** within
 `1×10⁻¹²`, and `docs/TOLERANCES.md` §3.12 derives its bounds from
@@ -480,24 +480,24 @@ a test that cannot tell them apart is.
 
 ---
 
-## 5. ★ FINDING GP-001 — `mBA ` curve counts: iccce disagrees with ICC.1:2022 and with lcms2
+## 5. ★ FINDING GP-001 — `mBA ` curve counts: icccer disagrees with ICC.1:2022 and with lcms2
 
 **Status: FIXED same day — commit `2e98cfd` (2026-08-11): the profile
 layer now counts per tag type (mBA B/M = input, A = output), the
 fixture's `B2A0` decodes B=3/M=3/A=4 with 0 malformations, and a
-`iccce-cmm` test cross-checks this README's own transicc value
+`icccer-cmm` test cross-checks this README's own transicc value
 (Lab(50,0,0) → K within 1e-3 of 49.6117%). Status line updated by
 `icc-engineer`; the finding text below is preserved as filed.**
 
 **Originally: open, filed 2026-08-11 by `icc-conformance`. This is a finding about
-`crates/iccce-profile`, produced by the fixture corpus on its first run. The
+`crates/icccer-profile`, produced by the fixture corpus on its first run. The
 fixture is correct and must not be changed to match the parser.**
 
 ### What happens
 
 `fixtures/synthetic/v4-cmyk-mab-lab.icc` is a v4.4 CMYK Output profile whose
 `B2A0` is a `lutBToAType` with `inputChan = 3` (Lab) and `outputChan = 4`
-(CMYK). `iccce inspect` reports:
+(CMYK). `icccer inspect` reports:
 
 ```text
 tag[4].decoded: REFUSED: 'mBA ': curve chain broken at element 3 (byte 68); later elements unreachable
@@ -528,9 +528,9 @@ entry side is counted by `inputChan` and the set at its exit side by
 `outputChan`**, and which letter that is depends on the direction the tag runs.
 For a CMYK `B2A0`: **B = 3, M = 3, A = 4.**
 
-### Why iccce produces the refusal
+### Why icccer produces the refusal
 
-`crates/iccce-profile/src/lut.rs`, `decode_lut_ab`, calls the chain decoder with
+`crates/icccer-profile/src/lut.rs`, `decode_lut_ab`, calls the chain decoder with
 `output_chan` for both B and M and `input_chan` for A — **for both tag types**.
 For `mAB ` that is correct. For `mBA ` it expects **four** B curves where the
 specification puts three, so it walks past the third into the matrix element at
@@ -567,7 +567,7 @@ lcms2 2.19.1 at the pin, `src/cmstypes.c`: `Type_LUTB2A_Read` reads B and M with
 `inputChan` and A with `outputChan`; `Type_LUTA2B_Read` reads A with `inputChan`
 and M and B with `outputChan`. Behaviourally, `transicc` converts
 **Lab(50, 0, 0) → CMYK(0, 0, 0, 49.6117 %)** through this fixture's `B2A0`,
-i.e. it parses and evaluates the tag iccce refuses.
+i.e. it parses and evaluates the tag icccer refuses.
 
 **This is a cross-check, not the ground truth.** The clause text above is the
 ground truth; lcms2 agreeing with it is corroboration that two readers of the
@@ -579,7 +579,7 @@ standard read it the same way.
 
 **Scope of this record, stated so it cannot be rounded up.** One machine
 (Windows 11, MSVC), one build of the consumer, one run, 2026-08-11. The
-consumer is the **shipped binary** `target/release/iccce.exe`, built from the
+consumer is the **shipped binary** `target/release/icccer.exe`, built from the
 working tree at commit `edce48b` (code identical to `d9e0b82`; the only working
 -tree modification was `docs/ROADMAP.md`). `rustc 1.97.1`. The oracle column is
 `transicc` from lcms2 **2.19.1** at the pin in `tools/difftest/lcms2.pin`.
@@ -594,7 +594,7 @@ they are **trackable**, which is the property that matters and the one a bare
 
 ### 6.1 Well-formed — 11 of 12 fully as specified
 
-| Fixture | iccce `inspect` | Verdict | transicc |
+| Fixture | icccer `inspect` | Verdict | transicc |
 |---|---|---|---|
 | `v4-rgb-matrix-trc` | exit 0, 0 malformations, 9 tags, `para funcType=0 params=2.000000`, colorants `0.4821/0.2500/0.1031` … | **PASS** | accepted |
 | `v4-rgb-para-type3` | exit 0, 0 malformations, `para funcType=3 params=2.399994,0.947861,0.052139,0.077393,0.040451` | **PASS** | accepted |
@@ -613,7 +613,7 @@ they are **trackable**, which is the property that matters and the one a bare
 
 Terminal refusals (exit 1, no partial result):
 
-| Fixture | iccce message | Verdict |
+| Fixture | icccer message | Verdict |
 |---|---|---|
 | `bad-magic` | `not an ICC profile: magic at offset 36 is 'nope', expected 'acsp'` | **PASS** |
 | `truncated-declared-size` | `truncated: header declares 712 bytes, only 648 present` | **PASS** |
@@ -672,7 +672,7 @@ plausible conversions through them. That is a cross-check: it says two
 independent implementations read these layouts the same way, which is weaker
 than the clause text and can be wrong in the same direction.
 
-Its behaviour on the malformed set is **not** a verdict on iccce and is recorded
+Its behaviour on the malformed set is **not** a verdict on icccer and is recorded
 only as an observation, because `transicc` is a *conversion* tool that reads
 lazily — a defect in a tag it never touches costs it nothing:
 
@@ -685,7 +685,7 @@ lazily — a defect in a tag it never touches costs it nothing:
   `mluc-record-size-16` and **`iccmax-version`**.
 
 ★ The last is worth one line on its own: **lcms2 does not refuse a major
-version 5 profile**, where iccce identifies and refuses iccMAX by name. That is
+version 5 profile**, where icccer identifies and refuses iccMAX by name. That is
 a deliberate divergence, not a defect on either side, and `iccmax-version.icc`
 is now the fixture that keeps it visible.
 
@@ -696,18 +696,18 @@ is now the fixture that keeps it visible.
 fixtures added on 2026-08-18.
 
 **Scope, so it cannot be rounded up.** One machine (Windows 11, MSVC), one run,
-2026-08-18. Consumer: `target/debug/iccce.exe` built from the working tree at
+2026-08-18. Consumer: `target/debug/icccer.exe` built from the working tree at
 `60c32dd` plus the uncommitted change that added these fixtures. Oracle:
 `tools/difftest/vendor/build-msvc/transicc.exe`, *ColorSpace conversion
 calculator 5.1 / LittleCMS 2.19*. Destination for every conversion:
 `v4-rgb-matrix-trc.icc`. Probe: one interior point.
 
-| Fixture | `iccce inspect` | Oracle |
+| Fixture | `icccer inspect` | Oracle |
 |---|---|---|
 | `v2-rgb-header-intent-perceptual` | parses; **0 malformations**; 5 tags; `header.intent: 0 (perceptual)`; both `A2B0` and `A2B1` decode as `lut16 in=3 out=3 clutPoints=2` | accepted; converts at every `-t0..-t3` |
 | `v2-rgb-header-intent-relative` | as above but `header.intent: 1 (media-relative)` | as above |
 
-**What the pair was built to measure, and the result.** `iccce transform` with
+**What the pair was built to measure, and the result.** `icccer transform` with
 no `--intent` gives **byte-identical output for the two members**; so does
 `transicc`, at every intent tried. **Neither engine's transform consumes the
 header field** on a non-DeviceLink profile.
@@ -717,7 +717,7 @@ requires, permits or forbids consuming the field when no intent is otherwise
 specified is **UNSOURCED as of 2026-08-18**; an `icc-spec-librarian` dispatch
 is outstanding. The full account — including the one place lcms2 *does* read
 the field (DeviceLink profiles, `src/cmsio1.c`) — is in
-`crates/iccce-cli/tests/header_rendering_intent_not_consumed.rs` and
+`crates/icccer-cli/tests/header_rendering_intent_not_consumed.rs` and
 `docs/TOLERANCES.md` §3.11.
 
 ---
@@ -741,7 +741,7 @@ selected the wrong one could not have been caught here.
 > absent, so the saturation arm of that selection remains uncovered"*, and
 > that is **no longer true**: `v2-cmyk-intent-separated-b2a` (§4.3) carries
 > **all three `A2Bx` and all three `B2Ax`** at six distinct offsets, and
-> `crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs` grades the
+> `crates/icccer-cmm/tests/b2a_intent_selection_is_separated.rs` grades the
 > selection in both directions. ★ The half that mattered more was never the
 > `A2Bx` one: the **destination** side (`B2Ax`) had no separating fixture
 > anywhere in the tree, in either direction, under any implementation —
@@ -755,7 +755,7 @@ lcms2 *does* read the header's rendering intent (§6.4).
 
 **Not covered, and named rather than implied:**
 
-* **Tag types iccce does not implement**: `link`/`abst`/`spac` classes, `pseq`,
+* **Tag types icccer does not implement**: `link`/`abst`/`spac` classes, `pseq`,
   `gamt`, `clrt`/`clot`, `meas`, `cicp`, `dict`, `mpet` (`D2Bx`/`B2Dx`), `ncol`
   (the obsolete v1 predecessor, which the corpus says to recognise and report).
   A generator can only usefully author what something can read.
@@ -787,10 +787,10 @@ lcms2 *does* read the header's rendering intent (§6.4).
   transforms plus `gamt` of a v4 Output profile. A validator must not flag it.
 
 **What the whole corpus does and does not establish.** It establishes that the
-shipped `iccce` binary, on this machine, on 2026-08-11, reads 11 of 12
+shipped `icccer` binary, on this machine, on 2026-08-11, reads 11 of 12
 well-formed layouts as specified and reports 26 of 26 authored defects exactly
 as intended, with one specification-backed disagreement recorded as GP-001. It
-is **not** "iccce parses ICC profiles correctly" and must never be rounded up to
+is **not** "icccer parses ICC profiles correctly" and must never be rounded up to
 that: files authored by one person from one corpus reading share whatever that
 reading got wrong, which is precisely why the lcms2 column and the clause
 citations are here. **The count is deliberately not stated in this sentence** —
@@ -799,19 +799,19 @@ about honesty is the fifth recorded instance of a stale literal in this
 repository (DL-034).
 
 ★ **Dated verification of the one fixture added since**
-(`icc-conformance`, 2026-08-17, Windows/MSVC, iccce at working tip,
+(`icc-conformance`, 2026-08-17, Windows/MSVC, icccer at working tip,
 lcms2 `21c582a`): `v2-cmyk-chromatic-neutral` — **three independent readings of
 the same K-only ramp agree.** The closed form derived from the recipe gives
 `0.420 700` of chromatic ink at `k = 1`; the harness's own byte-level
-evaluation of the committed CLUTs gives `0.420 705`; `iccce transform` gives
+evaluation of the committed CLUTs gives `0.420 705`; `icccer transform` gives
 `0.420 705`; `transicc -t1 -c0` gives `0.420 706`. Over 50 off-neutral probes
-iccce and lcms2 agree to `1.4×10⁻⁵` and iccce matches the byte-level derivation
+icccer and lcms2 agree to `1.4×10⁻⁵` and icccer matches the byte-level derivation
 to `5.0×10⁻⁷`. That is a **cross-check plus a derived expectation**, not ground
 truth: no standards body printed `0.420 7`, and the derivation and the fixture
 are both this project's reading of clause 10.10.
 
 ★ **Dated verification of the next fixture added** (`icc-conformance`,
-2026-09-01, Windows/MSVC, iccce at working tip):
+2026-09-01, Windows/MSVC, icccer at working tip):
 `v2-cmyk-intent-separated-b2a` — `gen-profiles verify` reports **48
 identical, 0 not identical**; `Profile::parse` reports **0 malformations**;
 the six `A2Bx`/`B2Ax` entries report six distinct offsets (500 / 4 332 /
@@ -831,7 +831,7 @@ them found defects in the assertions rather than in the code.**
 
 ## 8. Handover
 
-* **GP-001** is `icc-engineer`'s to fix in `crates/iccce-profile/src/lut.rs` and
+* **GP-001** is `icc-engineer`'s to fix in `crates/icccer-profile/src/lut.rs` and
   `icc-spec-librarian`'s to close in `icc__type__lutAtoB_lutBtoA.md` (per-type
   curve counts; A23's permitted element sets). The fixture stays as it is.
 * `docs/TOLERANCES.md` §3.2 (Pass 2) and §6's coverage table are

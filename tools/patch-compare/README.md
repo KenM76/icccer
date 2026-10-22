@@ -1,8 +1,8 @@
-# `tools/patch-compare` — comparing iccce against another renderer, on the record
+# `tools/patch-compare` — comparing icccer against another renderer, on the record
 
 A development tool. Not shipped, not a crate, not in `Cargo.lock`.
 
-It answers one recurring question — *"does `iccce` agree with some other
+It answers one recurring question — *"does `icccer` agree with some other
 renderer on this colour?"* — in a way that makes the answer citable: the
 comparison is written down as **data** (a *case file*), and the caveats are
 **printed by the program** rather than remembered by whoever ran it.
@@ -61,7 +61,7 @@ For a screen-capture reference this is a standing prohibition —
    asserts a colorimetric relationship that the artifact cannot support.
 2. **The value may be gamut-clamped.** ICC.1:2022 Annex F.8–F.16 clamps each
    linear component to `[0,1]` *before* its inverse TRC — see
-   `MatrixTrc::pcs_to_device` in `crates/iccce-cmm/src/matrix_trc.rs` and the
+   `MatrixTrc::pcs_to_device` in `crates/icccer-cmm/src/matrix_trc.rs` and the
    test `out_of_gamut_clamps_before_inverse_trc` beside it. When a colour is
    outside the destination gamut, a ΔE computed in that destination measures
    **the clamp**, not the colour.
@@ -74,7 +74,7 @@ rather than filling in a gap. The friction is the point.
 ## 3. Why it refuses to run without an evidence class
 
 `reference.evidence_class` is **mandatory and has no default**, because a
-defaulted evidence class is precisely how *"iccce matches the other one"* becomes a
+defaulted evidence class is precisely how *"icccer matches the other one"* becomes a
 claim nobody chose to make. The tool prints the declaration above every table.
 
 | class | what it means | strength |
@@ -101,7 +101,7 @@ display leg is unrecorded and unreproducible.
   // Destination profile. One, for the whole case.
   "destination": "C:/Windows/System32/spool/drivers/color/sRGB Color Space Profile.icm",
 
-  // Every intent is run against every source. Names as `iccce transform`
+  // Every intent is run against every source. Names as `icccer transform`
   // spells them: media-relative, perceptual, saturation, absolute.
   "intents": ["media-relative", "perceptual"],
 
@@ -254,12 +254,12 @@ Then point `reference.image` at a real render and drop `--dump-devices`.
 
 ```
 python tools/patch-compare/patch_compare.py --case <case.json> \
-       [--iccce target/release/iccce] [--patch <id>]... [--dump-devices]
+       [--icccer target/release/icccer] [--patch <id>]... [--dump-devices]
 ```
 
-Build the engine first: `cargo build --release -p iccce-cli`.
+Build the engine first: `cargo build --release -p icccer-cli`.
 
-★ `--iccce` defaults to `target/release/iccce`, and **two separate Windows
+★ `--icccer` defaults to `target/release/icccer`, and **two separate Windows
 behaviours** make that spelling fail with the same uninformative
 `[WinError 2] The system cannot find the file specified`:
 
@@ -268,7 +268,7 @@ behaviours** make that spelling fail with the same uninformative
 2. `CreateProcess` **does not accept a relative path written with forward
    slashes**. The identical path spelled absolutely works.
 
-`resolve_iccce()` handles both and fails with a sentence instead of an errno.
+`resolve_icccer()` handles both and fails with a sentence instead of an errno.
 This is recorded here because it cost real time to diagnose and looks like a
 missing build rather than a path-spelling quirk.
 
@@ -283,10 +283,10 @@ error or a case file that fails the schema.
 
 | tool | question it answers |
 |---|---|
-| `tools/difftest` | does iccce agree with **lcms2**, numerically, to a stated tolerance? |
+| `tools/difftest` | does icccer agree with **lcms2**, numerically, to a stated tolerance? |
 | `tools/gen-profiles` | synthetic fixtures with **known** contents |
 | `tools/suite/extract_icc.py` | what profiles do **real producers** actually embed? |
-| **`tools/patch-compare`** | does iccce agree with **another renderer's picture**, on colours a document actually paints? |
+| **`tools/patch-compare`** | does icccer agree with **another renderer's picture**, on colours a document actually paints? |
 
 `difftest` is the strong instrument and this is the weak one — but it reaches
 somewhere `difftest` cannot: a colour as a *document* specifies it, compared

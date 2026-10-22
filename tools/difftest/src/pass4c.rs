@@ -5,7 +5,7 @@
 //! apparatus. It closes the last measurement item of Pass 4 and it exists to
 //! answer one question that had been deferred through eight filings:
 //!
-//! > **Does iccce's ICC-absolute arithmetic agree with lcms2's, when the one
+//! > **Does icccer's ICC-absolute arithmetic agree with lcms2's, when the one
 //! > known policy difference between the two is not in the way?**
 //!
 //! ## Why the question could not previously be asked
@@ -30,7 +30,7 @@
 //! orders of magnitude. The only gate the ICC-absolute path had was
 //! **NC-054**, which grades a *model* — lcms2 re-predicted with the
 //! substitution and the CLUT geometry both emulated. A model can absorb a
-//! genuine arithmetic error in iccce's absolute path along with the policy
+//! genuine arithmetic error in icccer's absolute path along with the policy
 //! difference it was built to isolate, and nothing in the suite could tell.
 //!
 //! ## The clause, cited in the edition-stable form
@@ -84,7 +84,7 @@
 //! - A.3.1.1 is a `should`, and `ICC.1:2001-04` has no defined verbal-form
 //!   hierarchy — deontic weight **qualified**, not `shall`.
 //!
-//! The corpus's own action line for this project, verbatim: *"iccce action:
+//! The corpus's own action line for this project, verbatim: *"icccer action:
 //! keep `NA-007` (use `wtpt` as stored) and REPORT the mismatch; do not adopt
 //! lcms2's substitution."*
 //!
@@ -113,7 +113,7 @@
 //!
 //! Pass 4b established (`_cmsReadOutputLUT`) that lcms2 forces **trilinear**
 //! interpolation for any Lab-PCS output LUT, and trilinear over three inputs
-//! **is** `iccce-cmm`'s n-linear. So NA-006's interpolation-geometry cost is
+//! **is** `icccer-cmm`'s n-linear. So NA-006's interpolation-geometry cost is
 //! identically zero on the destination side of this pair. The source is
 //! matrix/TRC and has **no CLUT at all**. Neither of Pass 4's two large known
 //! divergences is present.
@@ -145,11 +145,11 @@
 //! for `WP_dst` the destination factor would become identity too** — and the
 //! ICC-absolute output would equal the media-relative output *exactly*.
 //!
-//! Therefore `iccce absolute vs iccce media-relative`, on this pair and this
+//! Therefore `icccer absolute vs icccer media-relative`, on this pair and this
 //! grid, is **not an approximation of the counterfactual — it is the
 //! counterfactual**, computed rather than assumed, and it is precisely the
 //! size the NC-053 substitution would have had here. Measured: **2.0558×10⁻¹
-//! device units**, against an observed iccce-vs-lcms2 residual of
+//! device units**, against an observed icccer-vs-lcms2 residual of
 //! **8.90×10⁻⁵**. The comparison can see the effect it is claiming to have
 //! ruled out, by a factor of ~2300.
 //!
@@ -167,7 +167,7 @@
 //!
 //! **The prediction was written before the run** (DL-023): the divergence
 //! should move to the source side and stay **large**, order 10⁻¹ device units,
-//! because iccce scales by `D65/D50 = (0.98579, 1.0, 1.32027)` where lcms2
+//! because icccer scales by `D65/D50 = (0.98579, 1.0, 1.32027)` where lcms2
 //! scales by identity. Had it come out small, the mechanism as recorded in
 //! NC-053 would have been wrong about its own generality, and that would have
 //! been the more interesting result — this project has already once predicted
@@ -184,7 +184,7 @@
 //!
 //! ## What this section does NOT claim
 //!
-//! - **Not that iccce's absolute arithmetic is correct.** Both rows are
+//! - **Not that icccer's absolute arithmetic is correct.** Both rows are
 //!   cross-checks. Two implementations can read 6.3.2.2 the same way and both
 //!   be wrong. There is no published value for this transform, and Pass 4c
 //!   does not create one. (`ICC.1:2022` Table D.2 *does* print an nCIEXYZ
@@ -214,10 +214,10 @@
 
 use std::path::{Path, PathBuf};
 
-use iccce_profile::Profile;
+use icccer_profile::Profile;
 
 use crate::{
-    Bpc, DiffError, Iccce, Intent, Kind, Metric, Oracle, Precalc, Record, Request, Space, Tolerance,
+    Bpc, DiffError, Icccer, Intent, Kind, Metric, Oracle, Precalc, Record, Request, Space, Tolerance,
 };
 
 // ===========================================================================
@@ -336,7 +336,7 @@ const SENSITIVITY_FLOOR: Tolerance = Tolerance::new(
 /// same boundary and agree perfectly while computing nothing.
 const DEGENERACY_GUARD: Tolerance = Tolerance::new(
     0.05,
-    "the FRACTION of grid points on which iccce's absolute output equals its media-relative \
+    "the FRACTION of grid points on which icccer's absolute output equals its media-relative \
      output to within 1e-9, i.e. points the absolute scaling did not move and which therefore \
      carry no evidence either way. A diagonal scaling fixes the origin, so device black is \
      expected here and is arithmetic, not a defect: 1/729 = 1.4e-3. 0.05 sits an order of \
@@ -352,7 +352,7 @@ const DEGENERACY_GUARD: Tolerance = Tolerance::new(
 ///
 /// Integer codes, so both implementations receive a value each can represent
 /// exactly; the driver hands `transicc` the integer in its own 0–255
-/// convention and hands `iccce transform` the f64 quotient, so no rounding
+/// convention and hands `icccer transform` the f64 quotient, so no rounding
 /// asymmetry is introduced by the harness itself. A grid of fractional codes
 /// would put a parsing difference into the residual and call it colour.
 ///
@@ -399,7 +399,7 @@ pub struct AbsAnalysis {
     /// The same count with lcms2's `&&` read as `||`. The third live reading,
     /// and the one §B is sensitive to.
     pub gate_count_disjunction: f64,
-    /// iccce vs lcms2 at ICC-absolute, max over components and rows,
+    /// icccer vs lcms2 at ICC-absolute, max over components and rows,
     /// normalised device units.
     pub abs_max: f64,
     pub abs_mean: f64,
@@ -407,7 +407,7 @@ pub struct AbsAnalysis {
     /// grid, this destination table.
     pub rel_max: f64,
     pub rel_mean: f64,
-    /// iccce absolute vs iccce media-relative. In §A this is the **exact**
+    /// icccer absolute vs icccer media-relative. In §A this is the **exact**
     /// counterfactual; in §B it is only the size of the absolute effect on
     /// one side, and §B's records say so.
     pub counterfactual: f64,
@@ -421,7 +421,7 @@ pub struct AbsAnalysis {
     /// Index into [`rgb_grid`] of the worst absolute-intent point, with both
     /// implementations' output there.
     pub worst_index: usize,
-    pub worst_iccce: Vec<f64>,
+    pub worst_icccer: Vec<f64>,
     pub worst_lcms2: Vec<f64>,
 }
 
@@ -498,7 +498,7 @@ fn is_display_class(p: &Profile) -> bool {
 /// Read from the file, never from this module's prose.
 fn wtpt_of(p: &Profile) -> String {
     const WTPT: u32 = 0x7774_7074; // 'wtpt'
-    use iccce_profile::tag_types::TagData;
+    use icccer_profile::tag_types::TagData;
     match p.tags.iter().find(|t| t.sig.0 == WTPT) {
         None => "absent".to_string(),
         Some(t) => match p.decode_tag(t) {
@@ -522,7 +522,7 @@ fn wtpt_of(p: &Profile) -> String {
 /// same grid, through both implementations.
 ///
 /// Both sides cross a process boundary. That is not incidental: an in-process
-/// call on iccce's side would make the two arms asymmetric, and this section's
+/// call on icccer's side would make the two arms asymmetric, and this section's
 /// whole content is a difference between two arms.
 fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<AbsAnalysis, Unavailable> {
     for p in [src_path, dst_path] {
@@ -577,17 +577,17 @@ fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<AbsAnaly
     );
 
     let grid = rgb_grid();
-    let iccce = Iccce::locate().map_err(|e| Unavailable::Error(e.to_string()))?;
-    let iccce = match iccce {
+    let icccer = Icccer::locate().map_err(|e| Unavailable::Error(e.to_string()))?;
+    let icccer = match icccer {
         None => {
             return Err(Unavailable::Skip(
-                "no iccce release binary — build it with `cargo build --release`".into(),
+                "no icccer release binary — build it with `cargo build --release`".into(),
             ));
         }
         Some(i) => i,
     };
 
-    // iccce takes 0..1; transicc takes RGB in 0..255. Same integer lattice
+    // icccer takes 0..1; transicc takes RGB in 0..255. Same integer lattice
     // both sides, expressed in each side's own convention, so the only
     // difference that can reach the residual is colour arithmetic.
     let rows: Vec<Vec<f64>> = grid
@@ -597,7 +597,7 @@ fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<AbsAnaly
 
     let mut out = Vec::new();
     for intent in [Intent::AbsoluteColorimetric, Intent::RelativeColorimetric] {
-        let mine = iccce.transform_rows_shaped(src_path, dst_path, intent, &rows, 4)?;
+        let mine = icccer.transform_rows_shaped(src_path, dst_path, intent, &rows, 4)?;
         let req = Request {
             input: Space::profile(src_path),
             output: Space::profile(dst_path),
@@ -616,7 +616,7 @@ fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<AbsAnaly
             .collect();
         if mine.len() != grid.len() || theirs.len() != grid.len() {
             return Err(Unavailable::Error(format!(
-                "row-count disagreement at {}: iccce {}, lcms2 {}, grid {}",
+                "row-count disagreement at {}: icccer {}, lcms2 {}, grid {}",
                 intent.name(),
                 mine.len(),
                 theirs.len(),
@@ -676,7 +676,7 @@ fn analyse(oracle: &Oracle, src_path: &Path, dst_path: &Path) -> Result<AbsAnaly
         counterfactual_mean,
         unmoved_fraction: unmoved as f64 / grid.len() as f64,
         worst_index,
-        worst_iccce: abs_mine[worst_index].clone(),
+        worst_icccer: abs_mine[worst_index].clone(),
         worst_lcms2: abs_theirs[worst_index].clone(),
     })
 }
@@ -806,7 +806,7 @@ fn section_a_records(a: &AbsAnalysis) -> Vec<Record> {
                 "★ THE MEASUREMENT. v4 matrix/TRC -> SWOP B2A1 at ICC-absolute, {n} RGB points \
                  (9x9x9 on the 8-bit lattice), -c0, no BPC either side. lcms2's wtpt \
                  substitution is STRUCTURALLY ABSENT (see the precondition row), and its forced \
-                 trilinear for a Lab-PCS output LUT IS iccce's n-linear, so NA-006 is zero here \
+                 trilinear for a Lab-PCS output LUT IS icccer's n-linear, so NA-006 is zero here \
                  too. The source has no CLUT"
             ),
             a.abs_max,
@@ -872,7 +872,7 @@ fn section_a_records(a: &AbsAnalysis) -> Vec<Record> {
              at media-relative both implementations normalise by white on both sides and the \
              predicate is never evaluated. The other candidate divergence for this direction, \
              NA-006's interpolation scheme, is structurally zero too: Pass 4b measured that lcms2 \
-             FORCES trilinear for a Lab-PCS output LUT, which is iccce's n-linear on a 3-input \
+             FORCES trilinear for a Lab-PCS output LUT, which is icccer's n-linear on a 3-input \
              table. What is left is 8-bit quantisation, and quantisation has one value, not two",
         )),
         pass_or_fail(
@@ -880,7 +880,7 @@ fn section_a_records(a: &AbsAnalysis) -> Vec<Record> {
             Kind::SelfConsistency,
             Metric::DeviceAbsMaxNormalised,
             REPORTED,
-            "computed from iccce alone, both arms; no oracle output in it",
+            "computed from icccer alone, both arms; no oracle output in it",
             format!(
                 "★ EXACT, not modelled. Because the source's stored wtpt IS D50, substituting \
                  D50 for the DESTINATION's wtpt collapses the whole 6.3.2.2 scaling diagonal to \
@@ -924,7 +924,7 @@ fn section_a_records(a: &AbsAnalysis) -> Vec<Record> {
         )
         .with_separation(crate::Separation::none(
             "considered, and there is none. Both terms of the ratio are measured in this run from \
-             iccce alone, and neither has a rival READING: the counterfactual is exact for the \
+             icccer alone, and neither has a rival READING: the counterfactual is exact for the \
              reason the row above states, and the observed residual is a subtraction. The only \
              alternative one could name is a different FLOOR than 100x - and that is a tolerance \
              question, answered in this row's `why` from Pass 4b's accepted 99x/139x/191x band, \
@@ -937,7 +937,7 @@ fn section_a_records(a: &AbsAnalysis) -> Vec<Record> {
             Kind::SelfConsistency,
             Metric::AbsMaxComponent,
             DEGENERACY_GUARD,
-            "computed from iccce alone, both arms",
+            "computed from icccer alone, both arms",
             format!(
                 "fraction of the {n} points where |absolute - media-relative| < 1e-9, i.e. \
                  points carrying no evidence. Observed {:.6e} = {} point(s): a diagonal scaling \
@@ -951,7 +951,7 @@ fn section_a_records(a: &AbsAnalysis) -> Vec<Record> {
             a.unmoved_fraction,
         )
         .with_separation(crate::Separation::none(
-            "considered, and there is none. This row counts points, from iccce's own two arms, \
+            "considered, and there is none. This row counts points, from icccer's own two arms, \
              against a threshold of 1e-9. A rival would have to be a rival READING of 'the \
              absolute scaling did not move this point', and there is not one - the 1e-9 is a \
              numerical-zero threshold, not an interpretation. The null the row guards against \
@@ -1017,7 +1017,7 @@ fn section_b_records(a: &AbsAnalysis) -> Vec<Record> {
                 "★ NC-053's MECHANISM, MEASURED IN THE OTHER DIRECTION (DL-021). NC-053 had the \
                  v2 'mntr' profile as DESTINATION and measured 11.217 dE2000; here the same \
                  file is the SOURCE and the gate fires on WP_src instead. Predicted before the \
-                 run to stay LARGE — iccce scales by D65/D50 = (0.98579, 1.0, 1.32027) where \
+                 run to stay LARGE — icccer scales by D65/D50 = (0.98579, 1.0, 1.32027) where \
                  lcms2 scales by identity. Observed {:.6e} device units over {n} points against \
                  a media-relative floor of {:.6e} on the same pair and grid: a factor of {:.0}. \
                  The policy is direction-symmetric",
@@ -1235,7 +1235,7 @@ mod tests {
             counterfactual_mean: 0.0,
             unmoved_fraction: 0.0,
             worst_index: 0,
-            worst_iccce: vec![],
+            worst_icccer: vec![],
             worst_lcms2: vec![],
         };
         assert!(a.ratio().is_infinite());

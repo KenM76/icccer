@@ -1,6 +1,6 @@
 ---
 name: project-oracle-and-tolerance-state
-description: iccce oracle/harness state — the harness drives transicc, the shipped iccce binary and `iccce bench`, computes ΔE2000 via a path dep on iccce-color, and TOLERANCES.md is filled through Pass 6 (§3.6 has TWO deliberate RED rows); what is still blank.
+description: icccer oracle/harness state — the harness drives transicc, the shipped icccer binary and `icccer bench`, computes ΔE2000 via a path dep on icccer-color, and TOLERANCES.md is filled through Pass 6 (§3.6 has TWO deliberate RED rows); what is still blank.
 metadata:
   type: project
 ---
@@ -46,9 +46,9 @@ holds except the two suite counts; add:
   ΔE gate on both probe populations, and **they are the correct state**: a
   shipped default grid does not meet a line derived from Pass 4's own measured
   number. `TOLERANCES.md` §3.6.1 states the remedy is the grid, not the number.
-- **New in the harness:** `pass6` needs **no oracle** (both arms are iccce) but
-  drives `iccce bench` as a subprocess and reproduces its probe sequence exactly;
-  `pass5b` drives `iccce_cmm::bpc` **in process** because the shipped chain
+- **New in the harness:** `pass6` needs **no oracle** (both arms are icccer) but
+  drives `icccer bench` as a subprocess and reproduces its probe sequence exactly;
+  `pass5b` drives `icccer_cmm::bpc` **in process** because the shipped chain
   cannot reach the ISO estimator.
 - Working practice: [[project-parallel-agent-build-collisions]].
 
@@ -60,7 +60,7 @@ holds except the two suite counts; add:
   clause 6.3.4.3** and against a Gaussian solve of Maria 2013's two
   constraints. **26 records, all pass.** Whole suite:
   **`pass=90 fail=0 skip=3 error=0`**.
-- **`Iccce::transform_rows_shaped_bpc(.., bpc: bool)`** was added to `lib.rs`;
+- **`Icccer::transform_rows_shaped_bpc(.., bpc: bool)`** was added to `lib.rs`;
   `transform_rows_shaped` delegates to it. A refusal surfaces as
   `DiffError::NonZeroExit` carrying stderr, and Pass 5 **grades two of them**.
 - **§A and S6 need neither a system profile nor the oracle** — the first graded
@@ -90,7 +90,7 @@ holds; add:
 - **The §3.4.3 "still blank" rows for the B2A direction and for a synthetic LUT
   fixture are now MEASURED.** The **published-value** row is still blank and
   Pass 4b does not close it.
-- **`Iccce::transform_rows_shaped`** (n in / m out) was added — Pass 4 could
+- **`Icccer::transform_rows_shaped`** (n in / m out) was added — Pass 4 could
   hard-code 3 outputs; a CMYK destination and a gray source cannot.
 - **Still blank and correctly so:** §3.2; any *published* ground-truth row for
   Passes 3/4/4b; saturation and ICC-absolute anywhere in Pass 4b; `lut8` with
@@ -110,7 +110,7 @@ add:
   and `--intent`, so the in-process fallback that had been planned was not
   needed. `Oracle::convert_batch_shaped(req, in, out)` was added because a
   4-in/3-out transform breaks the single-width `convert_batch`.
-- **Pass 4's done-when numbers:** iccce vs lcms2 **max 1.6590 ΔE2000**
+- **Pass 4's done-when numbers:** icccer vs lcms2 **max 1.6590 ΔE2000**
   (perceptual/saturation, tol 2.0 — a *structural* gate, not an agreement
   claim) and **0.252 94** (media-relative); with lcms2's own CLUT geometry
   emulated, **4.8154×10⁻³** (tol 2×10⁻²); at the 16 CLUT-node corners
@@ -129,31 +129,31 @@ add:
 Original entry follows.
 
 **Supersedes the earlier 2026-08-11 entry that said "no comparison between
-iccce and lcms2 exists".** State as of **2026-08-11 (Pass 3, commit
+icccer and lcms2 exists".** State as of **2026-08-11 (Pass 3, commit
 `051707f` of the code under test)**:
 
 - **The oracle exists and is pinned.** lcms2 `21c582a` (2.19.1),
   `tools/difftest/lcms2.pin`, MSVC build only. POSIX build script still
   never run.
 - **The harness now drives two subprocesses**, not one: `Oracle` →
-  `transicc`, and **`Iccce` → `target/release/iccce.exe`**. Both sides of
+  `transicc`, and **`Icccer` → `target/release/icccer.exe`**. Both sides of
   every Pass 3 comparison cross a process boundary, deliberately — an
-  in-process call on iccce's side would make the two sides asymmetric.
+  in-process call on icccer's side would make the two sides asymmetric.
   Batch mode (`convert_batch` / `transform_grid`) pushes a whole grid
   through **one** process; stdin is written on a **background thread**
   because a single-threaded write-then-wait deadlocks once the child's
   stdout buffer fills.
 - **★ The "no ΔE" policy was deliberately reversed.** `tools/difftest`
-  now path-depends on `iccce-color`, `iccce-profile`, `iccce-cmm`. The
+  now path-depends on `icccer-color`, `icccer-profile`, `icccer-cmm`. The
   four-part justification is in `tools/difftest/Cargo.toml`'s header and
   README §13.2 — arrow points harness→code-under-test; the ruler
   (`delta_e_2000`) is ground-truth-validated against 34/34 Sharma pairs;
   the CLAIM stays cross-check; answers still come from subprocesses. There
-  is also an **instrument check** that holds iccce's Lab ruler against
+  is also an **instrument check** that holds icccer's Lab ruler against
   lcms2's, so a bent ruler shows up as a number.
 - **`TOLERANCES.md` §3.1, §3.3, §4, §5 (NA-001..NA-004) and §6 are
   filled.** §3.2 (Pass 2) and §3.4–§3.6 remain blank and correctly so.
-- **Pass 3's two done-when numbers:** iccce vs lcms2 **max 3.476e-3
+- **Pass 3's two done-when numbers:** icccer vs lcms2 **max 3.476e-3
   ΔE2000** (tol 2e-2); round trip **max 1.8788e-2 ΔE2000** (tol 2.5e-2).
   Scope: sRGB→AdobeRGB1998 (both Windows system, both **v2.1**),
   media-relative only, 133-point deterministic grid, Windows/MSVC.

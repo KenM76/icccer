@@ -17,7 +17,7 @@ metadata:
 Upstream states this itself in `plugins/README.1ST`. **GitHub's licence
 badge says "MIT" and would have been incomplete.**
 
-**Why this matters:** iccce is MIT and the project has already paid once
+**Why this matters:** icccer is MIT and the project has already paid once
 for a licence claim nobody checked. It is also a *correctness* issue, not
 only a legal one — `fast_float` swaps in an approximate floating-point
 pipeline, and an oracle must be the reference implementation's most

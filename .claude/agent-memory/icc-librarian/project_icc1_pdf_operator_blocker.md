@@ -39,4 +39,4 @@ silently → **DL-002**, `LEGAL.md` §2.1–§2.3.
 - Still true: **do not re-attempt automated retrieval** of any
   color.org / archive.color.org document.
 
-Related: [[iccce-pass-status]], [[ken-terse-scope-decisions]].
+Related: [[icccer-pass-status]], [[ken-terse-scope-decisions]].

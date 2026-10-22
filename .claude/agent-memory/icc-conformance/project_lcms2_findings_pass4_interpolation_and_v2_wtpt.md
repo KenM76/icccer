@@ -25,19 +25,19 @@ tetrahedral is the *3-input* case only. Consequences:
   boundary *as well as* in the tone curves (the Pass 3 finding).
 - **Index conventions differ at the top of each axis**: lcms2 takes
   `k0 = floor(pk)` unclamped (`points−1` at 1.0, `rest = 0`) and collapses the
-  upper node; iccce clamps the index to `points−2` and lets the fraction reach
+  upper node; icccer clamps the index to `points−2` and lets the fraction reach
   1.0. Each is correct **with its own upper-node rule** and catastrophically
   wrong when mixed.
 
 **Measured cost of the method difference (this is NA-006, now measured):** max
 **1.5741 ΔE2000** on SWOP's `A2B0`, **0.254 23** on its `A2B1` — the two tables
 in one file differ by **6×**. Emulating lcms2's geometry in the harness
-collapses the iccce-vs-lcms2 residual by **326× / 55×** to ~4.8×10⁻³ ΔE00.
+collapses the icccer-vs-lcms2 residual by **326× / 55×** to ~4.8×10⁻³ ΔE00.
 
 **2. lcms2 substitutes D50 for the `wtpt` of a v2 DISPLAY-class profile.**
 `cmsio1.c` `_cmsReadMediaWhitePoint`: if `version < 0x4000000` and class is
 `mntr`, return `cmsD50_XYZ()` **whatever the tag says**. The Windows system
-sRGB profile's `wtpt` holds **D65** (0.950455, 1.0, 1.089050). iccce uses
+sRGB profile's `wtpt` holds **D65** (0.950455, 1.0, 1.089050). icccer uses
 `wtpt` as stored (NA-007). At ICC-absolute both apply the same D.6/D.7
 diagonal `WPin/WPout` — with different `WPout`, differing by `D65/D50` =
 (0.9858, 1.0, 1.3202), **a 32 % error in Z**. Measured **11.217 ΔE2000 max,
@@ -66,7 +66,7 @@ there is a fourth.
   belongs to the emulated-geometry and corner rows, 100× and 2000× tighter.
 - **Grade the apparatus.** The harness reimplements the `mft2` pipeline so the
   geometry can be substituted; its n-linear arm is held against
-  `iccce-cmm`'s evaluator on every point (observed 0.0, bit-identical) before
+  `icccer-cmm`'s evaluator on every point (observed 0.0, bit-identical) before
   any conclusion is drawn from it.
 - **A clause citation written from recollection is a claim, and later findings
   inherit its error.** NA-003 cited ICC.1:2022 6.4 for a *device*-value

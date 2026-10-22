@@ -24,7 +24,7 @@ written down.**
    DeviceCMYK` (`c=m=y=0`, **`k = 1.0 − gray`**) is `shall`-level **PDF**: ISO
    32000-1 **§10.3.3**, ISO 32000-2 **§10.4.2.3**; `Separation /Black` binds by
    **§8.6.6.4**. **All four "grays" agree inside the PDF processor before any
-   conversion** — `pdfce`'s job, same boundary class as overprint. **iccce owns
+   conversion** — `pdfce`'s job, same boundary class as overprint. **icccer owns
    only CMYK→CMYK and the non-CMYK-native device.** ★ PDF also names the harm:
    §8.6.5.7 NOTE 2, *"results in a loss of fidelity in the black component"*.
    **I had cited "PDF 32000-1 §8.6.4.4"; that is wrong.**
@@ -33,7 +33,7 @@ written down.**
    stays K-only*, a **CMYK→CMYK** rule and ours. *"Gray maps onto K alone"* is
    the PDF device rule. **And inside the first there are two definitions under
    one name**: lcms2 maps K by **equal `L*`** on the K ramp; **Cholewo (2000) by
-   the `K_MIN`/`K_MAX` ratio**. *State which iccce implements before any
+   the `K_MIN`/`K_MAX` ratio**. *State which icccer implements before any
    cross-check of the K value means anything.*
 4. ★ **"PCS 23.0 (Four different Grays)" is not a the suite's publisher requirement id.** PCS2022
    uses `Dxxx`/`Rxxx`; the four-way equivalence is **`D0013 "Black Colour"`**, a

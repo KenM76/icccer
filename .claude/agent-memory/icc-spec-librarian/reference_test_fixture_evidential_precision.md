@@ -25,7 +25,7 @@ Filed in the corpus as the evidence modifier **`machine_checked_to_stated_tolera
 A conformance-suite fixture is **not** `published_ground_truth` and is **not** simply `published_literature` either. Two independent reasons, and the second is the one usually missed:
 
 1. **The precision argument above** — "machine-checked" is true of the *feature* and false of the *digits*.
-2. **Its correctness criterion is agreement with implementations, not with the specification.** A value all engines produce is, for the suite's purpose, correct whether or not it is what the spec computes. Structurally that makes it a **cross-check against a CONSENSUS of implementations** (iccce project rule 3) — stronger evidence about the ecosystem than one implementation, and **no stronger at all about the standard.** Nearer to lcms2 than to ICC.1 Annex D.6.3.
+2. **Its correctness criterion is agreement with implementations, not with the specification.** A value all engines produce is, for the suite's purpose, correct whether or not it is what the spec computes. Structurally that makes it a **cross-check against a CONSENSUS of implementations** (icccer project rule 3) — stronger evidence about the ecosystem than one implementation, and **no stronger at all about the standard.** Nearer to lcms2 than to ICC.1 Annex D.6.3.
 
 **Symptom of getting this wrong: QUIET.** A suite that adopts a fixture value at a loose tolerance passes while enshrining a number nobody checked, and the next real regression of the same size hides behind it.
 

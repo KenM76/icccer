@@ -1,5 +1,5 @@
 ---
-name: iccce-words-humans-count-code
+name: icccer-words-humans-count-code
 description: DL-063 — the emitted STRINGS were already careful and that is WHY the mis-designed channel survived; only the COUNT crosses into a caller's control flow, and two files with identical bytes give the same count where one is conformant
 metadata:
   type: project
@@ -35,8 +35,8 @@ is not reported at all**, which is why the v2 high-bits fixture is `0`.)*
 **The durable reading, which belongs in any answer about
 `malformations`:**
 
-- **`N == 0` means iccce found nothing to say — NOT a conformance
-  certificate.** iccce checks the constraints it has *implemented*, not
+- **`N == 0` means icccer found nothing to say — NOT a conformance
+  certificate.** icccer checks the constraints it has *implemented*, not
   every clause of ICC.1.
 - **`N > 0` means there is something worth reading — NOT that the file
   is non-conforming.**
@@ -56,7 +56,7 @@ so it is documented rather than renamed.**
 carry** — both in `icc-engineer`'s tree, **reported not fixed**, and
 both worth re-checking before assuming the retraction is complete:
 `diag.rs:14` (module header still says *"the file violates a rule"*) and
-`iccce-cli/src/main.rs:237` (*"everything the file got wrong"*).
+`icccer-cli/src/main.rs:237` (*"everything the file got wrong"*).
 ★ **A retraction is not complete while the retracted sentence still has
 copies.**
 
@@ -65,14 +65,14 @@ time:** `fixtures/synthetic/MANIFEST.md:312` says *"THIS FILE VIOLATES
 NOTHING"* and names the cost exactly. **The filing did not discover the
 finding; it filed it** — nothing in this project's workflow reads a
 fixture manifest against a type's doc comment, which is
-[[iccce-documented-is-not-tested]]'s gap on a new axis.
+[[icccer-documented-is-not-tested]]'s gap on a new axis.
 
 **How to apply:** never quote `malformations: N` — or any count — as a
 conformance statement, and when reviewing a disclosure feature, **read
 the type and the count, not just the emitted string**. Care applied at
 the layer a reviewer reads does not transfer to the layer a program
-reads. Related: [[iccce-disclosure-is-not-enforcement]] (a field that
-gates nothing), [[iccce-count-needs-its-apparatus]] (a bare count is not
+reads. Related: [[icccer-disclosure-is-not-enforcement]] (a field that
+gates nothing), [[icccer-count-needs-its-apparatus]] (a bare count is not
 a claim), [[stale-citation-worse-than-stale-number]] (this entry
 discharged a forward reference from `diag.rs:147`–`:150` that had no
-destination), [[iccce-pass-status]].
+destination), [[icccer-pass-status]].

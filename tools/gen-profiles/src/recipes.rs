@@ -104,7 +104,7 @@ pub enum Category {
     /// **What does NOT put a fixture here**, both of which have been mistaken
     /// for it:
     ///
-    /// * *iccce's behaviour is believed wrong.* That is a defect, and the
+    /// * *icccer's behaviour is believed wrong.* That is a defect, and the
     ///   fixture is filed under what the **standard** says, which is what makes
     ///   the suite go red. A category is not a place to park a bug.
     /// * *the text has been read and licenses more than one consumer
@@ -113,7 +113,7 @@ pub enum Category {
     ///   *is*, and the project's own choice is recorded in the `expect` row as
     ///   a choice. `v2-rendering-intent-low-half` is the worked example.
     ///
-    /// A `Disputed` fixture's `expect` field records **what iccce does today,
+    /// A `Disputed` fixture's `expect` field records **what icccer does today,
     /// measured**, and names the outstanding question. It is a dated
     /// observation, not a requirement on a consumer. When the sourcing lands
     /// the fixture moves to `WellFormed` or `Malformed` and its `expect`
@@ -772,7 +772,7 @@ const CN_CHROMA: f64 = 0.25;
 ///
 /// ★ **The three zeros in the middle are the dead band**, and they are the
 /// reason every number Pass K §F asserts about the neutral axis is exact for
-/// *any* interpolation scheme rather than only for the one iccce happens to
+/// *any* interpolation scheme rather than only for the one icccer happens to
 /// use. See clause 2 of the recipe header for why `a* = 0` is not a node and
 /// why that would otherwise matter.
 #[expect(
@@ -1490,7 +1490,7 @@ fn v2_cmyk_warm_black() -> Vec<u8> {
 /// offsets cost no rounding at all.
 ///
 /// ★ **Do not change these without re-deriving
-/// `crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs`**, which
+/// `crates/icccer-cmm/tests/b2a_intent_selection_is_separated.rs`**, which
 /// asserts the differences as exact equalities and cites this constant by name,
 /// and `docs/TOLERANCES.md` §3.12.
 const IS_K_FLOOR: [f64; 3] = [0.0, 0.20, 0.40];
@@ -1817,7 +1817,7 @@ fn v2_rgb_mft2_lab() -> Vec<u8> {
 ///    corpus's standing trap.
 /// 2. **Every entry is well inside the sRGB gamut**, in the `L*` 45–80 /
 ///    chroma ~17 region. The pair's companion test chains these profiles into
-///    iccce's built-in sRGB destination, and a table whose entries clipped at
+///    icccer's built-in sRGB destination, and a table whose entries clipped at
 ///    the destination could have its separation *removed by the clip* — two
 ///    different PCS values landing on the same clipped device value. The
 ///    separation has to survive to the observable, or it is not a separation.
@@ -1879,7 +1879,7 @@ fn intent_split_mft2(perceptual: bool) -> Vec<u8> {
 /// an intent. **Which one governs, when the caller does not name one, is a
 /// question this corpus's companion test measures and deliberately does not
 /// answer.** See
-/// `crates/iccce-cmm/tests/header_rendering_intent_not_consumed.rs` for the
+/// `crates/icccer-cmm/tests/header_rendering_intent_not_consumed.rs` for the
 /// measured behaviour and for the statement of what is still unsourced.
 ///
 /// # Why the two members must differ in exactly one byte
@@ -2243,7 +2243,7 @@ fn lab_to_rgb_chromatic_black(l: f64, a_star: f64, b_star: f64) -> (f64, f64, f6
 ///
 /// ISO/CD 18619 **4.2.5.4** distinguishes two quantities: `InitialLab` (4.2.2.2's
 /// darkest device **vertex**, neutralised) and `outRamp[first]` (the floor of
-/// the monotonised round-trip ramp). On 2026-08-12 `iccce-cmm` was found to be
+/// the monotonised round-trip ramp). On 2026-08-12 `icccer-cmm` was found to be
 /// returning the second where the clause says the first, and the correction
 /// (`fd34a44`) moved the `USWebCoatedSWOP` arm by **4,717 441 `L*`**.
 ///
@@ -2410,7 +2410,7 @@ fn v4_rgb_mab_chromatic_black() -> Vec<u8> {
 /// `tools/gen-profiles/README.md` §4.1): on that fixture ISO/CD 18619
 /// **4.2.5.4**'s two candidate return values — `InitialLab` (4.2.2.2's darkest
 /// device **vertex**, neutralised by 4.2.3) and `outRamp[first]` (the floor of
-/// the monotonised round-trip ramp) — **are both `L* 20`**. iccce returned the
+/// the monotonised round-trip ramp) — **are both `L* 20`**. icccer returned the
 /// wrong one of the two for two sessions; the correction (`fd34a44`) moved the
 /// `USWebCoatedSWOP` arm by **4,717 441 `L*`** and moved that fixture by
 /// **exactly zero**.
@@ -2420,7 +2420,7 @@ fn v4_rgb_mab_chromatic_black() -> Vec<u8> {
 /// arm whose *numbers* move is `pass5c/swop/*`, and `USWebCoatedSWOP.icc` is
 /// `docs/LEGAL.md` §3 category **(c)** — never committed, absent on any machine
 /// without the Windows colour directory, where those rows skip. (The clause is
-/// not undefended: `crates/iccce-cmm/src/bpc.rs`'s own unit tests
+/// not undefended: `crates/icccer-cmm/src/bpc.rs`'s own unit tests
 /// `straight_midrange_short_circuits_at_relative_only` and
 /// `straight_midrange_carries_chromatic_initial_lab_whole` do fail on a
 /// reversion. What had no committed instrument was the clause exercised
@@ -2732,7 +2732,7 @@ fn v4_rgb_mab_floored_b2a() -> Vec<u8> {
 /// ★ Why this fixture matters more than its size suggests: `ncl2` is the one
 /// place the ≈0,4 % legacy/general error is least acceptable, because spot
 /// colours *are* brand matching — quiet symptom, expensive consequence — and
-/// because `docs/ROADMAP.md` records that iccce's `ncl2` legacy-Lab handling
+/// because `docs/ROADMAP.md` records that icccer's `ncl2` legacy-Lab handling
 /// "was **not** tested behaviourally against lcms2; that case rests on a source
 /// reading". This is the fixture that lets that stop being true.
 ///
@@ -2776,7 +2776,7 @@ fn v2_ncl2_named() -> Vec<u8> {
         b"ncl2",
         // nDeviceCoords must equal the header's device channel count — 4 for
         // CMYK. A mismatch is a malformation the consumer can only detect with
-        // the header in hand, which is why `iccce-profile` exposes it as a
+        // the header in hand, which is why `icccer-profile` exposes it as a
         // caller-invoked check rather than a decode-time one.
         tags::ncl2(0, 4, "ICCCE ", " (synthetic)", &entries),
     ));
@@ -2897,7 +2897,7 @@ fn header_reserved_nonzero() -> Vec<u8> {
 /// padded to a 4-byte boundary by the container, so `size` < stream length is
 /// *normal* there. A parser that treats it as an error rejects a large class of
 /// perfectly good embedded profiles — and `docs/ARCHITECTURE.md` cross-refers
-/// the PDF corpus at §8.6 precisely because that is where iccce will meet them.
+/// the PDF corpus at §8.6 precisely because that is where icccer will meet them.
 fn trailing_bytes() -> Vec<u8> {
     let mut p = v4_rgb_matrix_trc();
     p.extend_from_slice(&[0u8; 8]);
@@ -2908,7 +2908,7 @@ fn trailing_bytes() -> Vec<u8> {
 ///
 /// The low 16 bits say 1 (media-relative colorimetric); the high 16 are
 /// non-zero, and clause 7.2.15 says the high half "shall be set to zero".
-/// The value is chosen to probe ambiguity **A7** specifically: iccce reads all
+/// The value is chosen to probe ambiguity **A7** specifically: icccer reads all
 /// 32 bits and reports rather than masking, so a masking implementation would
 /// silently accept this and a reporting one must not.
 fn rendering_intent_high_bits() -> Vec<u8> {
@@ -2927,7 +2927,7 @@ fn rendering_intent_high_bits() -> Vec<u8> {
 /// The requirement its v4 sibling violates **does not exist in v2**, so the
 /// same four bytes at header offset 64 are a defect in one edition and
 /// ordinary vendor use in the other — and until this file existed nothing in
-/// the corpus could tell iccce's parser that.
+/// the corpus could tell icccer's parser that.
 ///
 /// ## The sourcing — SETTLED 2026-08-18, both halves
 ///
@@ -2962,7 +2962,7 @@ fn rendering_intent_high_bits() -> Vec<u8> {
 /// This fixture was the sole member of [`Category::Disputed`] from
 /// 2026-08-18 until the sourcing landed the same day. It is now
 /// **well-formed**, and the `expect` row says what a consumer must not do
-/// rather than what iccce happened to do. That transition — Disputed to a
+/// rather than what icccer happened to do. That transition — Disputed to a
 /// real claim, on the arrival of clause text and nothing else — is the event
 /// the third category was built to produce, and it is the only evidence that
 /// the category does anything.
@@ -2970,8 +2970,8 @@ fn rendering_intent_high_bits() -> Vec<u8> {
 /// ★ **What "well-formed" asserts here is narrow and worth stating.** It
 /// asserts the *file* violates no rule of its edition, hence that no consumer
 /// may truthfully report one against it. It does **not** assert that the
-/// bytes are ordinary, and it does not assert that iccce is silent because it
-/// understands them: iccce is silent because it has nothing to say. The value
+/// bytes are ordinary, and it does not assert that icccer is silent because it
+/// understands them: icccer is silent because it has nothing to say. The value
 /// `0x0001` in the high half means nothing to this project, and a consumer
 /// that needed to know what a vendor put there would have to ask the vendor.
 ///
@@ -2995,7 +2995,7 @@ fn rendering_intent_high_bits() -> Vec<u8> {
 /// `v2-rgb-matrix-trc-curv.icc`, differs from it in exactly the four bytes at
 /// offset 64 and reports **zero** malformations. That is a control by
 /// construction — it is the same generator call with one mutation — and it is
-/// asserted in `crates/iccce-profile/tests/rendering_intent_report_is_edition_specific.rs`.
+/// asserted in `crates/icccer-profile/tests/rendering_intent_report_is_edition_specific.rs`.
 ///
 /// Contrast the `probe_profile` pair (`v2-rgb-mft2-lab` / `v4-rgb-mft2-lab`),
 /// which *is* byte-identical apart from the version word: there the observable
@@ -3010,14 +3010,14 @@ fn v2_rendering_intent_high_bits() -> Vec<u8> {
 }
 
 /// Rendering intent `0x00000004` in a **v4** profile — the *other* half of
-/// the field, and the half whose prohibition iccce reaches by **inference**
+/// the field, and the half whose prohibition icccer reaches by **inference**
 /// rather than by quotation.
 ///
 /// ## Why this fixture had to exist
 ///
 /// `rendering-intent-high-bits` (the v4 sibling) sets the **high** half, and
 /// ICC.1:2022 7.2.15 forbids that in as many words: *"the most significant 16
-/// bits shall be set to zero"*. So every v4 report iccce has ever been tested
+/// bits shall be set to zero"*. So every v4 report icccer has ever been tested
 /// on rests on a **quoted `shall`**. The low half has no such sentence. The
 /// prohibition is reached only by chaining 7.2.15's *"The rendering intent
 /// field shall specify the rendering intent"* to *"These shall be identified
@@ -3025,7 +3025,7 @@ fn v2_rendering_intent_high_bits() -> Vec<u8> {
 /// specifies no intent. **Two steps, and the register labels it as such**
 /// (`A56`, "RESOLVED-BY-INFERENCE in v4").
 ///
-/// ★ Until this fixture, **the weaker of iccce's two v4 claims was the
+/// ★ Until this fixture, **the weaker of icccer's two v4 claims was the
 /// untested one.** That is the wrong way round: the arm most likely to be
 /// overturned by a later edition — `A56` names ICC.1:2010-12, which this
 /// corpus does not hold, as the plausible place for a wording change — was
@@ -3056,10 +3056,10 @@ fn v4_rendering_intent_low_half() -> Vec<u8> {
 ///
 /// ## The matrix this fixture completes
 ///
-/// The gate in `crates/iccce-profile/src/header.rs` is two conditions, which
+/// The gate in `crates/icccer-profile/src/header.rs` is two conditions, which
 /// makes four cells. Before 2026-08-18 the corpus held one of them.
 ///
-/// | edition | half mutated | iccce | what licenses that |
+/// | edition | half mutated | icccer | what licenses that |
 /// |---|---|---|---|
 /// | v4 | high — `rendering-intent-high-bits` | reports | **quoted** `shall`, 7.2.15 |
 /// | v4 | low — `v4-rendering-intent-low-half` | reports | **two-step inference**, `A56` |
@@ -3075,7 +3075,7 @@ fn v4_rendering_intent_low_half() -> Vec<u8> {
 ///
 /// ICC.1:2001-04 defines four values and forbids none (`A56`, and the full
 /// argument is on [`v2_rendering_intent_high_bits`]). A v2 profile carrying
-/// intent 4 therefore **violates nothing**, and iccce's report is not an
+/// intent 4 therefore **violates nothing**, and icccer's report is not an
 /// accusation — its own emitted text says so: *"unrecognised rendering intent
 /// value 0x00000004 (ICC.1:2001-04 6.1.11 / Table 18 define only 0..=3 and do
 /// not forbid others)"*.
@@ -3090,11 +3090,11 @@ fn v4_rendering_intent_low_half() -> Vec<u8> {
 /// distinction is load-bearing.
 ///
 /// ★ **The cost of that, stated rather than smoothed:** `Malformation` is
-/// the only disclosure channel `Profile` has, and `iccce inspect` prints
+/// the only disclosure channel `Profile` has, and `icccer inspect` prints
 /// `malformations: 1` for this file. A consumer that reads that count as a
 /// conformance verdict will call a conformant profile non-conformant. The
 /// *words* are careful and the *channel* is not. That is a finding filed
-/// against `iccce-profile`, not a property of these bytes, and this fixture
+/// against `icccer-profile`, not a property of these bytes, and this fixture
 /// is the input that makes it demonstrable rather than arguable.
 fn v2_rendering_intent_low_half() -> Vec<u8> {
     let mut p = v2_rgb_matrix_trc_curv();
@@ -3161,7 +3161,7 @@ fn tagbase_reserved_nonzero() -> Vec<u8> {
 /// Two `wtpt` entries in the directory, fully aliased onto one data element.
 ///
 /// ★ The **aliasing** is legal (clause 7.3.1) and `v2-rgb-shared-trc` proves
-/// iccce accepts it. What is malformed here is the **duplicate signature**:
+/// icccer accepts it. What is malformed here is the **duplicate signature**:
 /// "Duplicate tag signatures shall not be included." The pair of fixtures
 /// therefore separates two things that look identical in a naive
 /// implementation — same offset, different signatures (legal) versus same
@@ -3171,7 +3171,7 @@ fn tagbase_reserved_nonzero() -> Vec<u8> {
 /// Whether a duplicate is legal in **v2** is not sourced; the contiguity and
 /// uniqueness rules are listed in ICC.1:2022's Foreword as changes introduced
 /// in that edition, so v2 and v4.3 files in the wild may legitimately violate
-/// them. iccce reports and names the edition; it does not reject (**A13**).
+/// them. icccer reports and names the edition; it does not reject (**A13**).
 /// This fixture is a **v4.4** profile so the rule unambiguously applies.
 fn duplicate_tag_signature() -> Vec<u8> {
     let mut spec = v4_rgb_matrix_trc_spec();
@@ -3187,7 +3187,7 @@ fn duplicate_tag_signature() -> Vec<u8> {
 /// extra effort allows for future expansion of the record encoding … without
 /// having to define a new tag type" — so a consumer that assumes 12 misparses
 /// the day that expansion happens. lcms2 refuses outright
-/// (`"multiLocalizedUnicodeType of len != 12 is not supported."`); iccce
+/// (`"multiLocalizedUnicodeType of len != 12 is not supported."`); icccer
 /// report-and-refuses. **The refusal is the correct behaviour**, and this
 /// fixture is what stops it from silently becoming an assumption later.
 fn mluc_record_size_16() -> Vec<u8> {
@@ -3581,7 +3581,7 @@ pub fn all() -> Vec<Recipe> {
                      produced these numbers. The fixture is STRUCTURAL: it shows which byte block \
                      a consumer read, and nothing else. \
                      \u{2605} DO NOT change IS_K_FLOOR or IS_B_OFFSET: \
-                     crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs asserts these \
+                     crates/icccer-cmm/tests/b2a_intent_selection_is_separated.rs asserts these \
                      differences as EXACT equalities and TOLERANCES.md \u{a7}3.12 derives its \
                      bound from them. Every OTHER constant in this file may move without \
                      disturbing the graded quantity, which is the design.",
@@ -3634,7 +3634,7 @@ pub fn all() -> Vec<Recipe> {
             what: "v4.4.0.0 prtr CMYK, Lab PCS, A2B0 as mAB (4->3, 5x4x3x2 grid) and B2A0 as mBA (3->4, 3x3x3 grid), general PCSLAB encoding",
             expect: "parses; 0 malformations; lutAToB in=4 out=3 B=3 M=3 A=4 grid=5x4x3x2 matrix=3x4; \
                      lutBToA in=3 out=4 B=3 M=3 A=4 per clauses 10.13.2/10.13.4/10.13.6. \
-                     ★ AS OF 2026-08-11 ICCCE DOES NOT MEET THIS: it refuses the mBA tag with \
+                     ★ AS OF 2026-08-11 ICCCER DOES NOT MEET THIS: it refuses the mBA tag with \
                      \"curve chain broken at element 3 (byte 68)\" because it counts B and M curves by \
                      outputChan for both tag types. The fixture is correct per the primary spec (and per \
                      lcms2's Type_LUTB2A_Read at the pin); see tools/gen-profiles/README.md \u{a7}5 \
@@ -3775,7 +3775,7 @@ pub fn all() -> Vec<Recipe> {
             what: "v4 base with rendering intent 0x00010001 — low half legal (1, \
                    media-relative), high half non-zero",
             expect: "parses; exactly 1 malformation: rendering intent 0x00010001 is outside \
-                     the defined 0..=3 (ICC.1:2022 7.2.15 + Table 23). ★ This is iccce's \
+                     the defined 0..=3 (ICC.1:2022 7.2.15 + Table 23). ★ This is icccer's \
                      STRONGEST rendering-intent claim: ICC.1:2022 7.2.15 forbids a non-zero \
                      high half in as many words — 'the most significant 16 bits shall be set \
                      to zero'. Quoted, not inferred.",
@@ -3784,8 +3784,8 @@ pub fn all() -> Vec<Recipe> {
         Recipe {
             name: "v2-rendering-intent-high-bits",
             category: WellFormed,
-            covers: "the EDITION GATE on the rendering-intent check in iccce-profile's \
-                     Header::parse — a report iccce must NOT make (ambiguity A56, and A7 for \
+            covers: "the EDITION GATE on the rendering-intent check in icccer-profile's \
+                     Header::parse — a report icccer must NOT make (ambiguity A56, and A7 for \
                      the v4 rule this file does NOT break)",
             what: "v2.4 base (v2-rgb-matrix-trc-curv) with rendering intent 0x00010001 — the \
                    same four header bytes at offset 64 that its v4 sibling \
@@ -3831,14 +3831,14 @@ pub fn all() -> Vec<Recipe> {
             expect: "parses; exactly 1 malformation: unrecognised rendering intent value \
                      0x00000004 (ICC.1:2001-04 6.1.11 / Table 18 define only 0..=3 and do \
                      not forbid others). ★ THIS FILE VIOLATES NOTHING. v2 defines four \
-                     values and forbids none (A56), so the report is a DISCLOSURE that iccce \
+                     values and forbids none (A56), so the report is a DISCLOSURE that icccer \
                      cannot interpret the value, not an accusation against the file — and \
                      the emitted wording says so. It is filed malformed on the same footing \
                      as trailing-bytes, whose condition is likewise normal: this category \
                      has meant 'exactly one named report is required' since Pass 2, never \
-                     'the file is illegal'. ★ Known cost, filed against iccce-profile and \
+                     'the file is illegal'. ★ Known cost, filed against icccer-profile and \
                      not against these bytes: Malformation is the only disclosure channel \
-                     Profile has, so `iccce inspect` prints 'malformations: 1' for a \
+                     Profile has, so `icccer inspect` prints 'malformations: 1' for a \
                      conformant profile.",
             build: v2_rendering_intent_low_half,
         },

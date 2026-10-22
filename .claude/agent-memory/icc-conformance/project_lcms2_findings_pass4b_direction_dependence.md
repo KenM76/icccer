@@ -18,7 +18,7 @@ measured the other direction.**
 `cmsio1.c` `_cmsReadOutputLUT`: `if (cmsGetPCS(hProfile) == cmsSigLabData)
 ChangeInterpolationToTrilinear(Lut);` — sets `CMS_LERP_FLAGS_TRILINEAR` on
 *every* CLUT stage, bypassing `case 3`'s tetrahedral. Trilinear over 3 inputs
-**is** iccce's n-linear. So:
+**is** icccer's n-linear. So:
 
 - **NA-006's cost is ~1.6 ΔE2000 in the A2B direction and identically ZERO in
   the B2A direction.** Any statement of that cost that omits the direction is
@@ -50,9 +50,9 @@ a reproduction: **9.686×10⁻⁵ device → 2.121×10⁻⁷, a 457× collapse, 
 whose destination is a matrix/TRC profile with tabulated TRCs — it is why
 `fixture → sRGB` needed a different tolerance from `sRGB → fixture`.
 
-**4. One divergence found, and it is iccce's clamp against lcms2's:** at the
+**4. One divergence found, and it is icccer's clamp against lcms2's:** at the
 `mAB ` fixture's `K = 0` the 3×4 matrix's `+1/256` offset puts the encoded `L*`
-at **1.00390625**. iccce clamps (clause 10.18's curve domain, in `Trc::eval`) →
+at **1.00390625**. icccer clamps (clause 10.18's curve domain, in `Trc::eval`) →
 `L* = 100`; lcms2 does not (a `count=0` `curv` is a γ=1 parametric segment,
 domain ±10²²) → `L* = 100.390625`. **Cost 0.61 ΔE2000.** UNSETTLED —
 REPORTED, NOT GRADED, question written verbatim in README §15.3.3, dispatch to

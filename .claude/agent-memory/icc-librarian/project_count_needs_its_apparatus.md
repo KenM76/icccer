@@ -1,6 +1,6 @@
 ---
-name: iccce-count-needs-its-apparatus
-description: DL-031 — an unlabelled test/record count is not a claim because the apparatus is half the number; iccce has THREE runners (129 / 36 / 142) whose populations are disjoint, and two were briefly compared as a regression
+name: icccer-count-needs-its-apparatus
+description: DL-031 — an unlabelled test/record count is not a claim because the apparatus is half the number; icccer has THREE runners (129 / 36 / 142) whose populations are disjoint, and two were briefly compared as a regression
 metadata:
   type: project
 ---
@@ -18,7 +18,7 @@ else. Filed as `ARCHITECTURE.md` **DL-031**; the ledger gained an
 **`apparatus-census`** evidence class so a count can never sit beside a
 ΔE as though the two were comparable.
 
-**The three runners in iccce (as of 2026-08-12):**
+**The three runners in icccer (as of 2026-08-12):**
 
 | Command | Population | Result |
 |---|---|---|
@@ -40,7 +40,7 @@ that needs the record *shape* attached**, because rows get reformulated.
   lives in git history, where nothing names an apparatus and no dated
   note can ever be appended — the strongest argument for writing the
   command down the first time.
-- **A count is not an inventory.** `iccce-cli` contributes **0** tests
+- **A count is not an inventory.** `icccer-cli` contributes **0** tests
   and the total cannot notice. Corroborating a *per-crate* breakdown
   against `#[test]` declaration counts (which this filing did, matching
   on all five) validates the **denominator** — nothing was filtered or
@@ -49,7 +49,7 @@ that needs the record *shape* attached**, because rows get reformulated.
   never enumerated for three filings. ★ **Enumerated 2026-08-12 (tip
   `e26d9ba`): three rows, ONE cause** — the Pass 4 `icc-absolute`
   PCS-isolation rows, withheld because `transicc` applies the D.6/D.7
-  media-white scale on lcms2's side while iccce's A2Bx is media-relative
+  media-white scale on lcms2's side while icccer's A2Bx is media-relative
   by construction. Grading them would mean **modelling the oracle rather
   than measuring it**. **A principled refusal to grade, not a concealed
   failure** — and `fail=0` could never have said so. **Caveat that
@@ -74,17 +74,17 @@ the ledger as a gap rather than glossed.
 **★★ UPDATE 2026-08-17 (twentieth filing) — A THIRD COLLISION, and this
 one caused a WRONG CITATION in an outbound document.** An outbound
 request to `pdfce` cited `NUMERIC_CLAIMS.md:2529` as the basis of
-iccce's **33-node recommended grid**. That line carries a **different
+icccer's **33-node recommended grid**. That line carries a **different
 33** — `USWebCoatedSWOP.icc`'s **own `lut8` CLUT node count**, a vendor
 file's tag. (The companion citation `:2164` states the grid as **17**.)
 The real homes are **§3.19 / NC-145**, **§3.27**, and
-`crates/iccce-cmm/src/compiled.rs:77` (`recommended_grid_points`). ★ **A
+`crates/icccer-cmm/src/compiled.rs:77` (`recommended_grid_points`). ★ **A
 reader following the citation would have concluded the recommendation is
 a property of somebody else's profile.** ★★ **The argument was right and
 the citation was wrong** — which is the combination that survives review,
 and the reason to grep a number's real home before citing a line number.
 **Running tally of collisions in this project: `129`, `16`, `33`.**
 
-Related: [[iccce-pass-status]], [[iccce-verify-own-draft-too]],
-[[iccce-compatibility-not-certification]],
-[[iccce-git-files-readable-without-shell]].
+Related: [[icccer-pass-status]], [[icccer-verify-own-draft-too]],
+[[icccer-compatibility-not-certification]],
+[[icccer-git-files-readable-without-shell]].

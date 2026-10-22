@@ -1,5 +1,5 @@
 ---
-name: iccce-source-labelled-number
+name: icccer-source-labelled-number
 description: DL-061 — a number carrying a SOURCE LABEL makes two claims and only the value is ever tested; "the suite publisher's own patch value" was PRINTED INTO A REPORT for a figure the patch does not contain, and the artefact that would falsify it keeps its numbers in a FIGURE where no text tool can reach them
 metadata:
   type: project
@@ -23,19 +23,19 @@ value**"*, and **`:2446` printed that phrase into the Pass K report**.
 **★★★ Why it is worse than a bare number, and not a typo:**
 
 - **Nothing recomputes.** No ΔE, no tolerance. **A change ledger has
-  nothing to record** — [[iccce-gate-must-not-reward-deletion]]'s DL-055
+  nothing to record** — [[icccer-gate-must-not-reward-deletion]]'s DL-055
   shape, arriving in a doc comment.
 - **The label is what made it credible.** *"the suite publisher's own patch value"* is
   the sentence that stops a reader looking it up. **DL-057 said a wrong
   clause is worse than a vague one because the citation makes the
   argument persuasive** — same mechanism, applied to a number
-  ([[iccce-wrong-clause-refusal-and-discarded-halves]]).
+  ([[icccer-wrong-clause-refusal-and-discarded-halves]]).
 - **It LEAVES THE REPOSITORY.** DL-031's finding — a bare count in
   emitted text can never be corrected afterwards — applies to an
-  attribution exactly as to a count ([[iccce-count-needs-its-apparatus]]).
+  attribution exactly as to a count ([[icccer-count-needs-its-apparatus]]).
 - **No test can fail on it.** DL-051 established documentation is not
   tested; **an injection harness perturbs values, and this defect has no
-  value to perturb** ([[iccce-documented-is-not-tested]]).
+  value to perturb** ([[icccer-documented-is-not-tested]]).
 
 **★★ Where the wrong pair most plausibly came from — a mechanism, not an
 accusation.** `SUITE_COMPATIBILITY.md` **§3.3, one table after the wrong
@@ -64,9 +64,9 @@ which artefact states it** — and if the artefact's numbers live in a
 figure, **render it**, because every text tool in this project will
 return silence and the silence reads as absence.
 
-Related: [[iccce-patch-named-for-what-it-looks-at]] (DL-059 — this is its
-corroboration and its sequel), [[iccce-inferred-environment-constraint-is-a-reading]]
+Related: [[icccer-patch-named-for-what-it-looks-at]] (DL-059 — this is its
+corroboration and its sequel), [[icccer-inferred-environment-constraint-is-a-reading]]
 (DL-060 — the route that made the figure readable, and the second,
-broader failure mode it exposed), [[iccce-documented-is-not-tested]],
-[[iccce-disclosure-caught-a-bad-justification]],
-[[iccce-stale-citation-worse-than-stale-number]], [[iccce-pass-status]].
+broader failure mode it exposed), [[icccer-documented-is-not-tested]],
+[[icccer-disclosure-caught-a-bad-justification]],
+[[icccer-stale-citation-worse-than-stale-number]], [[icccer-pass-status]].

@@ -1,5 +1,5 @@
 ---
-name: iccce-fitted-table-cannot-express-a-clamp
+name: icccer-fitted-table-cannot-express-a-clamp
 description: DL-069/DL-070 (2026-08-25, PCS010) — two rival tables missing in OPPOSITE directions is the signature of a DISCONTINUITY, not bad fitting; and the reference was a screen capture, the weakest evidence class this ledger has ever admitted. ★ DL-070's boundary moved 2026-08-28: DL-074 put a ΔE WITHIN one capture outside it, then DL-075 ruled that BETWEEN TWO captures is INSIDE it — the rule attaches to the artifact — and left the two in tension.
 metadata:
   type: project
@@ -7,7 +7,7 @@ metadata:
 
 **A fitted interpolation table cannot reproduce a normative clamp,
 because a clamp is a DISCONTINUITY and an interpolant is defined by not
-having one — and the same argument runs against iccce's own CLUT path,
+having one — and the same argument runs against icccer's own CLUT path,
 one stage earlier.** `ARCHITECTURE.md` **DL-069**; rows `NC-301` …
 `NC-305` in `NUMERIC_CLAIMS.md` §3.38; narrative
 `SUITE_COMPATIBILITY.md` §4.7.
@@ -23,7 +23,7 @@ TRC (ICC.1:2022 **Annex F.8–F.16**, `MatrixTrc::pcs_to_device`) and lands
 on **exactly `0.000000`**. A 6×6×6×6 grid interpolates **smoothly** and
 can sit on the boundary or above it — **not both**.
 
-**★ The half that cuts at us.** iccce's LUT path interpolates the press
+**★ The half that cuts at us.** icccer's LUT path interpolates the press
 profile's `A2B0` CLUT (`clutPoints = 16`) and smooths across whatever
 discontinuities that data holds, **exactly like the fitted table**. The
 clamp survives only because it is applied **analytically, after every
@@ -54,14 +54,14 @@ filling a gap.
 
 **★★★ DL-070's BOUNDARY MOVED 2026-08-28 — read this before quoting the
 prohibition.** `DL-074` establishes that a ΔE taken **between two objects
-of ONE capture** is **outside** it: the class DL-070 names has **iccce's
+of ONE capture** is **outside** it: the class DL-070 names has **icccer's
 output on one side and capture pixels on the other**, whereas an
-intra-render differential has **neither side iccce and both sides from the
+intra-render differential has **neither side icccer and both sides from the
 same capture**, so the unknown display leg is common-mode and cancels.
 ★★★ **DECIDED LATER THE SAME DAY — `DL-075`: DL-070 DOES reach a ΔE between
 TWO DIFFERENT captures.** The prohibition attaches to the **ARTIFACT**, not
 to what sits opposite it (§1's class names *pixels read out of a capture* in
-its **head clause**; the iccce side is only the *"Here:"* instance). Two
+its **head clause**; the icccer side is only the *"Here:"* instance). Two
 unknown legs, nothing cancels, reason 1 applies *harder*. **Nothing widened,
 nothing exempted.** ★★ And it puts the sentence above under tension: the
 same-day withdrawal withdrew the **intra-render** ΔE too, so `DL-074`'s
@@ -69,13 +69,13 @@ carve-out **paragraph** may be too strong even though its **class** is
 untouched — `DL-075` §7 recommends reading reason 1 as being about the
 **UNIT** and leaves the choice open. **Do not state any capture-derived
 distance in ΔE; 8-bit counts only.**
-[[iccce-prohibition-buys-nameability-not-prevention]] carries the ruling and
+[[icccer-prohibition-buys-nameability-not-prevention]] carries the ruling and
 the bigger finding (the prohibition did **not** prevent the number — its
 author re-derived it, disclosed it as his own limit, and computed it anyway).
 ★ And DL-070's **reason 2 survives intact** and becomes
 `DL-074`'s one-sidedness: **a near-zero agreement may be the clamp
 collapsing two different colours together.** Full entry:
-[[iccce-intra-run-differential-outranks-cross-renderer]].
+[[icccer-intra-run-differential-outranks-cross-renderer]].
 
 **How to apply:**
 - Never let this be retold as an accuracy gain over `pdfce`'s tables —
@@ -87,7 +87,7 @@ collapsing two different colours together.** Full entry:
 - `NC-305` is a **negative**: `A2B0` and `A2B2` share tag offset 296, so
   correct selection and a silent fallback are **indistinguishable** on
   that profile — candidate separation zero
-  ([[iccce-agreement-can-be-the-symptom]], DL-033).
+  ([[icccer-agreement-can-be-the-symptom]], DL-033).
 - The case **can never become a committed fixture**: suite (licensed),
   Heidelberg (the embedded profile), Acrobat (a capture of a commercial
   product), Microsoft (the Windows colour profiles). It lives as a
@@ -96,8 +96,8 @@ collapsing two different colours together.** Full entry:
 - Cross-project twin:
   `C:\personal_rag\pdf\lesson_20260825_fitted_cmyk_table_cannot_reproduce_a_gamut_clamp_because_a_clamp_is_a_discontinuity.md`.
 
-Related: [[iccce-pass-status]],
-[[iccce-stale-citation-worse-than-stale-number]] (the harness names
+Related: [[icccer-pass-status]],
+[[icccer-stale-citation-worse-than-stale-number]] (the harness names
 `MatrixTrc::device_to_rgb`, which does not exist),
-[[iccce-compatibility-not-certification]],
-[[iccce-ground-truth-cannot-exist]], [[iccce-verify-own-draft-too]].
+[[icccer-compatibility-not-certification]],
+[[icccer-ground-truth-cannot-exist]], [[icccer-verify-own-draft-too]].

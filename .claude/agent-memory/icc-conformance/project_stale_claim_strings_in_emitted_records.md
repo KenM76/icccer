@@ -1,6 +1,6 @@
 ---
 name: project-stale-claim-strings-in-emitted-records
-description: On iccce, claim-bearing numbers typed into difftest `source`/context strings go stale within a day and are emitted into every conformance record as false facts — format them from the values the harness already computes, never spell them out in the prose beside the code.
+description: On icccer, claim-bearing numbers typed into difftest `source`/context strings go stale within a day and are emitted into every conformance record as false facts — format them from the values the harness already computes, never spell them out in the prose beside the code.
 metadata:
   type: project
 ---
@@ -27,7 +27,7 @@ the evidence.*
 
 ★ **A second, subtler error rides along with the first.** pass6's string also
 said *"the only grid `COMPILED_DE` is **derived** for"*, which was wrong on the
-day it was written. `COMPILED_DE` is Pass 4's iccce-vs-lcms2 maximum over 341
+day it was written. `COMPILED_DE` is Pass 4's icccer-vs-lcms2 maximum over 341
 CMYK points, and **Pass 4 never builds a `CompiledTransform`** — there is no
 grid in the bound at all. The grid governs the bound's **applicability** (the
 graded quantity is `O(h^1.32)`), never its derivation. When correcting a stale

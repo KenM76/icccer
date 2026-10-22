@@ -1,4 +1,4 @@
-# iccce CI — build and test on Linux AND Windows from the first commit.
+# icccer CI — build and test on Linux AND Windows from the first commit.
 #
 # WHY both from day one (ROADMAP.md Pass 0): the sibling project's
 # `main` did not compile on Linux for weeks because nothing checked.
@@ -38,10 +38,10 @@ jobs:
       - name: Build workspace
         run: cargo build --workspace --all-targets
       # ★ A GREEN TICK HERE DOES NOT EVIDENCE THE ANNEX D GROUND-TRUTH
-      # CLAIM. `crates/iccce-cmm/tests/annex_d_ground_truth.rs` reads
+      # CLAIM. `crates/icccer-cmm/tests/annex_d_ground_truth.rs` reads
       # ICC © 2022 published values that are deliberately NOT in this
       # repository (they are held locally; see that file's header). No
-      # runner has them and none sets $ICCCE_PRIVATE_FIXTURES, so that
+      # runner has them and none sets $ICCCER_PRIVATE_FIXTURES, so that
       # test is permanently in its SKIPPING case here — it prints a
       # loud SKIPPED banner to stderr and asserts nothing. That is by
       # design, and it is written down because a green badge covering a
@@ -126,7 +126,7 @@ jobs:
   #
   # So: **any dependency added to a library crate here can break a
   # consumer's CI gate, in their repository, on a commit they did not
-  # write.** Before this job existed, iccce could only offer a DATED
+  # write.** Before this job existed, icccer could only offer a DATED
   # OBSERVATION — "measured 2026-08-17 at tip e21154c, exit 0" — which
   # is not a guarantee, and which was reported to pdfce as explicitly
   # not one. It was recorded as owed across four consecutive filings.
@@ -135,7 +135,7 @@ jobs:
   # between telling a consumer "we checked once" and "we check every
   # time".
   #
-  # ★ WHY ONLY THE LIBRARY CRATES. `iccce-cli` is a binary: it reads
+  # ★ WHY ONLY THE LIBRARY CRATES. `icccer-cli` is a binary: it reads
   # files, writes stdout and returns an ExitCode, none of which exists
   # on `wasm32-unknown-unknown` as a bare target. It is not what a
   # consumer links, and requiring it to cross would force exactly the
@@ -166,13 +166,13 @@ jobs:
       - name: Build the library crates for wasm32
         run: >
           cargo build --target wasm32-unknown-unknown
-          -p iccce-color -p iccce-profile -p iccce-cmm -p iccce-measure
+          -p icccer-color -p icccer-profile -p icccer-cmm -p icccer-measure
       # ★ The dependency graph must stay OURS. Not "small" — ours.
       # `pdfce` takes no copyleft anywhere in a dependency tree and
       # classifies every dependency before adding it; the strongest
-      # thing iccce can offer is a tree with nothing in it to classify.
+      # thing icccer can offer is a tree with nothing in it to classify.
       #
-      # The gate is: every line of `cargo tree` names an `iccce-*` crate
+      # The gate is: every line of `cargo tree` names an `icccer-*` crate
       # AND carries a local path. Anything else — however permissive,
       # however small — is a decision that must be made deliberately by
       # a human reading a licence, not acquired by a `cargo add`. This
@@ -180,10 +180,10 @@ jobs:
       #
       # ★ THE PATTERN REQUIRES THE PARENTHESISED PATH, and that is not
       # decoration. The first version matched on the name alone
-      # (`^iccce-`), and injection testing found the hole: a crate
-      # PUBLISHED TO crates.io as `iccce-evil` would have passed, because
+      # (`^icccer-`), and injection testing found the hole: a crate
+      # PUBLISHED TO crates.io as `icccer-evil` would have passed, because
       # it is named like ours. `cargo tree` renders a path dependency as
-      #     iccce-cmm v0.0.1 (/path/to/crates/iccce-cmm)
+      #     icccer-cmm v0.0.1 (/path/to/crates/icccer-cmm)
       # and a registry dependency with no parenthesised location at all,
       # so requiring the path distinguishes "our crate" from "a crate
       # that chose our prefix". Name-based trust is exactly the
@@ -191,23 +191,23 @@ jobs:
       #
       # Verified by injection before this job was committed: a permissive
       # dep, a copyleft dep, a transitive dep, a prefix-lookalike
-      # (`iccceX-evil`) and a registry namesake (`iccce-evil`) are all
+      # (`icccerX-evil`) and a registry namesake (`icccer-evil`) are all
       # caught; the real tree stays green.
-      - name: The dependency tree contains only iccce crates
+      - name: The dependency tree contains only icccer crates
         run: |
           set -eu
           tree=$(cargo tree --workspace --target wasm32-unknown-unknown --prefix none --no-dedupe)
           echo "$tree"
-          foreign=$(echo "$tree" | awk 'NF && $0 !~ /^iccce-[a-z]+ v[0-9][0-9.]* \(/ {print $1}' | sort -u || true)
+          foreign=$(echo "$tree" | awk 'NF && $0 !~ /^icccer-[a-z]+ v[0-9][0-9.]* \(/ {print $1}' | sort -u || true)
           if [ -n "$foreign" ]; then
-            echo "::error::A non-iccce crate has entered the dependency tree:"
+            echo "::error::A non-icccer crate has entered the dependency tree:"
             echo "$foreign"
             echo "pdfce takes NO copyleft anywhere in a dependency tree and classifies every"
             echo "dependency before adding it. Adding one here is an operator decision (rule 8),"
             echo "not something acquired by a cargo add. If this is intended, update this job."
             exit 1
           fi
-          echo "OK: every crate in the tree is an iccce crate."
+          echo "OK: every crate in the tree is an icccer crate."
 
   # ===================================================================
   # tools/ — 71 tests that gated NOTHING until 2026-08-12
@@ -259,7 +259,7 @@ jobs:
   # SUBPROCESS (`transicc`), never linked — there is no build.rs, no
   # `links` key, and no lcms2 crate. Verified before writing this job,
   # as a DATED OBSERVATION rather than a live claim: at tip `2835d23`
-  # on 2026-08-12, with `ICCCE_TRANSICC` pointed at a non-existent
+  # on 2026-08-12, with `ICCCER_TRANSICC` pointed at a non-existent
   # path, `cargo test` in tools/difftest was 43 passed / 0 failed, exit
   # 0. (It is 47 at `6c7cda1`; the count moves, the PROPERTY does not,
   # and the property is what this paragraph is about.) The tests that
@@ -353,8 +353,8 @@ jobs:
         run: sh tools/difftest/build-lcms2.sh
       # The harness runs the SHIPPED binary as a subprocess, so it must
       # exist and must be the release build the records will name.
-      - name: Build the iccce CLI (release)
-        run: cargo build --release -p iccce-cli
+      - name: Build the icccer CLI (release)
+        run: cargo build --release -p icccer-cli
       # ★ ONE run, captured, with the BARE EXIT CODE still the gate.
       #
       # `cargo run | tee` would mask the status behind tee's, and three
@@ -481,7 +481,7 @@ jobs:
           executed=$((ran + fail))
           # RAISED 15 -> 22 on 2026-08-17: Pass K §F adds seven rows that
           # need no licensed corpus (three read the committed fixture's
-          # bytes and need not even the iccce binary; four drive it, and
+          # bytes and need not even the icccer binary; four drive it, and
           # one of those four drives lcms2).
           # RAISED 22 -> 23 on 2026-08-18: black preservation landed and §F
           # gained an eighth corpus-free row, F8, which runs the same 50

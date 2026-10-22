@@ -1,4 +1,4 @@
-# The default destination — iccce constructs sRGB when the caller
+# The default destination — icccer constructs sRGB when the caller
 # supplies none
 
 **Decided by the operator, 2026-08-17.** This file is the durable record
@@ -25,9 +25,9 @@ measurement changed.**
 
 | what | where |
 |---|---|
-| the constructed sRGB | `crates/iccce-cmm/src/builtin.rs` — `builtin::srgb()`, `SRGB_PRIMARIES_XY`, `SRGB_TRC_PARAMS`, `rgb_to_xyz()` |
-| the API §5.1 declined to decide | `crates/iccce-cmm/src/transform.rs` — `Destination`, `DestinationProvenance`, `Chain::with_destination`, `Chain::destination_provenance` |
-| the ΔE tests | `crates/iccce-cmm/tests/builtin_srgb_destination.rs` (6) and `builtin.rs`'s own module tests (8) |
+| the constructed sRGB | `crates/icccer-cmm/src/builtin.rs` — `builtin::srgb()`, `SRGB_PRIMARIES_XY`, `SRGB_TRC_PARAMS`, `rgb_to_xyz()` |
+| the API §5.1 declined to decide | `crates/icccer-cmm/src/transform.rs` — `Destination`, `DestinationProvenance`, `Chain::with_destination`, `Chain::destination_provenance` |
+| the ΔE tests | `crates/icccer-cmm/tests/builtin_srgb_destination.rs` (6) and `builtin.rs`'s own module tests (8) |
 
 **§5.1's API question is now decided, the way §2 argued:** a two-variant
 `Destination` enum, **not** a bare `Option<&Profile>` — because an
@@ -40,7 +40,7 @@ failed to get one"*, and the second must never trigger the fallback.
 1. **★ The ΔE cost is `0.033013 ΔE2000` maximum** against ICC's
    `sRGB2014.icc` over a 10-probe spread — 30× below the `1.0 ΔE2000`
    perceptibility threshold. **And the maximum is at pure white, where it
-   is not a fact about iccce at all:** our construction lands on ICC D50
+   is not a fact about icccer at all:** our construction lands on ICC D50
    exactly, and the reference file's colorant sum misses D50 by
    `1.9×10⁻⁴` in Z. Device **black is exact — `0.000000 ΔE2000`.**
 2. **★★ The tolerance is DERIVED, not chosen.** The first draft asserted
@@ -48,7 +48,7 @@ failed to get one"*, and the second must never trigger the fallback.
    moving the number (rule 5) produced a better test: the bound is now
    computed at run time as *the reference file's own white-point offset
    from D50*, and the assertion is that **no probe exceeds it** — i.e.
-   iccce adds no error beyond what the reference already carries. That is
+   icccer adds no error beyond what the reference already carries. That is
    falsifiable and tight; a flat number would have been neither.
 3. **★★ §4.3's "do not let the two uses blur" acquired a sharper
    instance. `sRGB2014.icc` is not a second source.** It looks like the
@@ -105,17 +105,17 @@ Matrix/TRC matrix at **15 decimal places**. The corpus's standing claim
 §B.2. `ICC_Spec` recorded ICC.1:2022 E.4.2 as pointing at "a separate ICC
 document, **not obtained**". **This is that document.**
 
-**3. ★★★ The 12-ULP blue-Z residual is the FILE's error, not iccce's.**
+**3. ★★★ The 12-ULP blue-Z residual is the FILE's error, not icccer's.**
 Measured against the published values *(exact rational arithmetic,
 2026-08-17)*:
 
 | | worst cell | `bXYZ.Z` |
 |---|---|---|
-| **iccce's construction** | **3.02 ULP** | **0.90 ULP** |
+| **icccer's construction** | **3.02 ULP** | **0.90 ULP** |
 | the shipped HP 1998 / `sRGB2014.icc` file | **11.13 ULP** | **11.13 ULP** |
 
 **The most widely deployed sRGB profile in the world disagrees with ICC's
-own published specification by 11 ULP in blue-Z, and iccce's
+own published specification by 11 ULP in blue-Z, and icccer's
 from-constants construction is four times closer to the published values
 than the file is.** Every earlier route "failed to close" the residual
 because it was being measured against an artifact that does not match the
@@ -134,8 +134,8 @@ exactly recoverable from ICC's own two printed matrices: their published
 `chad` × the inverse of their §A.7 XYZ(D65)→RGB matrix reproduces their
 published colorants to **`0.00 ULP`**. So the whole difference is *which
 D65 matrix each side starts from* — ICC inverts their own matrix as
-printed to 7 decimals; iccce builds it exactly from BT.709-6's
-chromaticities. iccce's route carries no rounded intermediate and is
+printed to 7 decimals; icccer builds it exactly from BT.709-6's
+chromaticities. icccer's route carries no rounded intermediate and is
 kept.
 
 **5. ★ ICC's published `chad` does not quite reach ICC's own D50.**
@@ -174,7 +174,7 @@ kind that propagate into implementations:
 > 2026-08-17.
 
 Today the answer is the opposite, **by omission rather than by
-decision**: `Chain::new` (`crates/iccce-cmm/src/transform.rs:246`)
+decision**: `Chain::new` (`crates/icccer-cmm/src/transform.rs:246`)
 demands two parsed `&Profile`s, and every `sRGB` anywhere in `crates/` is
 a **test** reading the Windows system `.icm` off disk. No code path
 constructs sRGB. That changes.
@@ -183,7 +183,7 @@ constructs sRGB. That changes.
 
 - When a caller supplies a destination profile, **that profile is used.
   Always. No exception, no override, no "improvement".**
-- When a caller supplies **no** destination, iccce constructs sRGB from
+- When a caller supplies **no** destination, icccer constructs sRGB from
   published constants and uses it.
 - The constructed sRGB is **computed, never loaded**. No file, no
   embedded profile blob, no redistribution of anybody's `.icc`.
@@ -217,9 +217,9 @@ A colour-managed document very often **declares** its destination. A
 PDF/X file's `/OutputIntents` names a print condition and embeds the
 destination profile; every ICC-CMS patch in the print-conformance suite embeds `ISO
 Coated v2 300% (ECI)` exactly this way
-(`docs/SUITE_COMPATIBILITY.md` §3.4). If a caller hands iccce a document
+(`docs/SUITE_COMPATIBILITY.md` §3.4). If a caller hands icccer a document
 whose declared destination **failed to parse**, or **was not looked
-for**, or **was found and then dropped**, and iccce quietly substitutes
+for**, or **was found and then dropped**, and icccer quietly substitutes
 sRGB, the result is:
 
 - a plausible-looking image,
@@ -241,7 +241,7 @@ suite **specifically to detect this failure in real workflows**.
   **named refusal** (`ChainError`), exactly as today. It is not a reason
   to substitute a different destination.
 - Choosing between those two situations is the **caller's** judgement,
-  because only the caller knows whether it looked. iccce's API must
+  because only the caller knows whether it looked. icccer's API must
   therefore make the caller *say* which case it is, rather than inferring
   it from an `Option` being `None` — an absent `Option` cannot
   distinguish "there was none" from "I failed to get it".
@@ -266,7 +266,7 @@ must be able to ask.** The fallback is not an error — the operator
 decided it should happen — but it is a fact about the conversion, and a
 consumer must be able to log it, surface it in a preflight report, or
 gate on it. A `pdfce` that cannot tell whether a page was rendered to a
-document-declared destination or to iccce's default cannot honestly
+document-declared destination or to icccer's default cannot honestly
 report what it did.
 
 This is the difference between a **default** and a **cover-up**, and it
@@ -288,7 +288,7 @@ frontmatter:
 
 **lcms2 is also this project's differential oracle.** Building a computed
 sRGB on those constants today would put the oracle's own white point
-underneath every conversion iccce then checks *against that oracle* —
+underneath every conversion icccer then checks *against that oracle* —
 and the resulting agreement would be evidence of nothing. That is exactly
 the defect class in `NEXT_SESSION.md` §5.2: **agreement with the oracle
 can be the symptom of a defect, not evidence against one.** A
@@ -297,7 +297,7 @@ answer while carrying a defect of 4.717 L\* — 57.8× the signal it
 produced — and the differential had no power against it.
 
 `NUMERIC_CLAIMS.md` records D65 as *"the weakest constant in
-`iccce-color`"* and the shared-misreading risk as **ELEVATED** for this
+`icccer-color`"* and the shared-misreading risk as **ELEVATED** for this
 precise reason.
 
 **The remedy is already in flight.** At the operator's suggestion,
@@ -376,8 +376,8 @@ it.
 >    publishes them at 15 decimal places.** See the `SUPERSEDED SAME DAY`
 >    block at the top of this file.
 > 2. *"Name the ~1.83×10⁻⁴ XYZ blue-Z difference as an approximation
->    under rule 4."* **That residual is the FILE's error, not iccce's.**
->    Measured against ICC's published values: iccce **3.02 ULP** worst
+>    under rule 4."* **That residual is the FILE's error, not icccer's.**
+>    Measured against ICC's published values: icccer **3.02 ULP** worst
 >    and **0.90 ULP** in `bXYZ.Z`; the shipped file **11.13 ULP**, all of
 >    it in `bXYZ.Z`. The instruction above would have had the
 >    implementation declare somebody else's defect as its own cost —
@@ -401,7 +401,7 @@ only a *file* does.~~ **← FALSE; see the box above.**
 Consequences, binding:
 
 - **Do not write a byte-equality test against the HP profile.** It would
-  be testing HP's 1998 arithmetic, not iccce's correctness. **Still
+  be testing HP's 1998 arithmetic, not icccer's correctness. **Still
   binding.**
 - Test with a **ΔE round-trip**, stated tolerance, named oracle. **Still
   binding**, and now joined by a direct assertion against ICC's published
@@ -416,7 +416,7 @@ Consequences, binding:
 `sRGB IEC61966-2.1` files — and the canonical HP one — encode `wtpt` =
 **D65** with **no `chad`**, which ICC.1 A.3.1.1 makes a defect. **The
 most-deployed sRGB profile in the world does not comply.** It is a fine
-test that iccce parses what real files contain and a **bad** reference
+test that icccer parses what real files contain and a **bad** reference
 for what a constructed profile's white point should be.
 
 **Build order, therefore:**
@@ -440,7 +440,7 @@ constants rather than a check against a published example.
 IEC61966-2.1` files are **defectively authored**: they encode `wtpt` =
 D65 while their colorants sum to D50 with **no `chad`**, which ICC.1
 Annex A.3.1.1 makes a defect (`SUITE_COMPATIBILITY.md` §4.5b). They are
-therefore a fine test that iccce *parses what real files contain*, and a
+therefore a fine test that icccer *parses what real files contain*, and a
 **bad** reference for what the constructed profile's white point should
 be. Do not let the two uses blur.
 
@@ -456,17 +456,17 @@ be. Do not let the two uses blur.
    right for `pdfce`, which rasterises to an sRGB pixmap. A caller
    converting for press wants its own output intent, and §2's rule is
    what protects that case.
-3. ~~**Anything about `/N` validation** … **iccce currently exposes no
+3. ~~**Anything about `/N` validation** … **icccer currently exposes no
    public signature→component-count helper**~~ ★ **CLOSED, and this
    paragraph was stale.** Re-measured 2026-08-21: the helper exists as
-   `iccce_profile::colour_space::components()`
-   (`crates/iccce-profile/src/colour_space.rs:181`), returning a
+   `icccer_profile::colour_space::components()`
+   (`crates/icccer-profile/src/colour_space.rs:181`), returning a
    `ComponentCount`, and it does **not** require building a chain. The
    text above was written when it was true and was never revisited.
    **Left struck rather than deleted**, because the gap is cited from
    the request channel and a reader arriving from there needs to see
    that it closed rather than find no trace of it.
-4. **Whether `pdfce` should route `/OutputIntents` CMYK through iccce**,
+4. **Whether `pdfce` should route `/OutputIntents` CMYK through icccer**,
    which is the *other* owed design question and is a **conformance**
    argument, never an accuracy one.
 5. ★★ **That this space is fit to COMPOSITE in. It is a destination, and
@@ -485,8 +485,8 @@ be. Do not let the two uses blur.
    building a transparency-group buffer is exactly the caller that would
    reach for the destination it already holds. **The failure mode is a
    page that renders and looks plausible.** Disclosed at the definition
-   site too (`crates/iccce-cmm/src/builtin.rs` module doc). ★ **It is a
-   disclosure and not a guard** — nothing in iccce can see what a caller
+   site too (`crates/icccer-cmm/src/builtin.rs` module doc). ★ **It is a
+   disclosure and not a guard** — nothing in icccer can see what a caller
    does with the model it returns, and nothing pretends to.
 
    Sourced 2026-08-21 from `PDF_Spec\_sources\`, printed p. 426,

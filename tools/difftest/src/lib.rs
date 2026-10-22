@@ -1,4 +1,4 @@
-//! # `iccce-difftest` — driving the oracle, and grading what it says
+//! # `icccer-difftest` — driving the oracle, and grading what it says
 //!
 //! This library is the programmatic half of `tools/difftest`. The other half
 //! — the pin, the fetch script and the build scripts — puts a known build of
@@ -43,27 +43,27 @@
 //! ## ★ What changed on 2026-08-11 (Pass 3): ΔE is now computable, deliberately
 //!
 //! Until Pass 3 this header said the harness *cannot* compute ΔE, on the
-//! grounds that doing so would mean either depending on `iccce-color` — which
-//! is grading iccce with iccce's own arithmetic — or writing a second ΔE2000
+//! grounds that doing so would mean either depending on `icccer-color` — which
+//! is grading icccer with icccer's own arithmetic — or writing a second ΔE2000
 //! to get subtly wrong. It also said the coupling **"must be a deliberate,
 //! documented decision rather than a convenience"**. Pass 3 needs a perceptual
-//! statement about an iccce-vs-lcms2 disagreement, so the decision has been
+//! statement about an icccer-vs-lcms2 disagreement, so the decision has been
 //! taken and is recorded in `Cargo.toml`'s header and in README §13.2. In one
 //! paragraph:
 //!
-//! - The metric (`iccce_color::delta_e_2000`) is graded against **all 34
+//! - The metric (`icccer_color::delta_e_2000`) is graded against **all 34
 //!   published pairs of Sharma, Wu & Dalal (2005)** at 1×10⁻⁴ — the one
 //!   ground-truth row in `TOLERANCES.md` §3.1.1. It is a ruler checked
 //!   against the literature, not against itself.
-//! - **The claim is unchanged.** Every iccce-vs-lcms2 record is
+//! - **The claim is unchanged.** Every icccer-vs-lcms2 record is
 //!   [`Kind::CrossCheck`] regardless of how well-validated the ΔE code is.
 //!   A good ruler does not turn a cross-check into ground truth.
-//! - **The answers still come from subprocesses.** iccce's numbers come from
-//!   running the shipped `iccce transform` binary ([`Iccce`]), lcms2's from
+//! - **The answers still come from subprocesses.** icccer's numbers come from
+//!   running the shipped `icccer transform` binary ([`Icccer`]), lcms2's from
 //!   running `transicc` ([`Oracle`]). The linked crates are the *instrument*,
 //!   never the *subject*.
 //! - The instrument is itself cross-checked: `pass3` carries both sides'
-//!   device outputs into Lab twice — once through iccce's own destination
+//!   device outputs into Lab twice — once through icccer's own destination
 //!   model, once through the oracle — and reports the disagreement between
 //!   the two rulers.
 //!
@@ -191,7 +191,7 @@ pub mod pass6;
 // ★ Pass G — the print-conformance suite population sample. The first differential grading
 // this project has done against profiles a *real document producer* embeds,
 // rather than synthetic, OS-shipped or standards-body-issued ones. It reads a
-// **licensed, uncommittable** corpus via `$ICCCE_PRIVATE_FIXTURES` and skips
+// **licensed, uncommittable** corpus via `$ICCCER_PRIVATE_FIXTURES` and skips
 // with a reason when it is absent, which is the permanent state in CI. The
 // licensing rules that bind anyone editing it are in the module's own header.
 //
@@ -206,12 +206,12 @@ pub mod passg;
 // expected outputs — DL-041) but **which files are accepted, which are refused,
 // and whether a refusal says why**. It carries the first `Kind::GroundTruth`
 // rows in this crate, sourced from the ICC's published Probe-profile readme.
-// Same licensing posture and same `$ICCCE_PRIVATE_FIXTURES` resolution as Pass
+// Same licensing posture and same `$ICCCER_PRIVATE_FIXTURES` resolution as Pass
 // G; same `//`-not-`///` reason as the comment above.
 pub mod passh;
 
 // ★ Pass I — ICC's PUBLISHED chromatic-adaptation matrix, graded cell by cell
-// against `iccce_color::adaptation_matrix`. The project's third
+// against `icccer_color::adaptation_matrix`. The project's third
 // `published-ground-truth` subject and the first for chromatic adaptation,
 // resting on the document ICC.1:2022 Annex E.4.2 points at and this project
 // recorded as not obtained until 2026-08-17.
@@ -283,7 +283,7 @@ pub struct Oracle {
 impl Oracle {
     /// Find `transicc`, in this order:
     ///
-    /// 1. `$ICCCE_TRANSICC`, if set — the escape hatch for a CI runner that
+    /// 1. `$ICCCER_TRANSICC`, if set — the escape hatch for a CI runner that
     ///    builds lcms2 somewhere else. If it is set and does not exist, that
     ///    is an error rather than a fall-through: an operator who set the
     ///    variable meant it, and silently using a different binary than the
@@ -297,7 +297,7 @@ impl Oracle {
     /// condition and not an error: a machine with no C toolchain can still
     /// check out this repository.
     pub fn locate() -> Result<Option<Oracle>, DiffError> {
-        if let Some(v) = std::env::var_os("ICCCE_TRANSICC") {
+        if let Some(v) = std::env::var_os("ICCCER_TRANSICC") {
             let p = PathBuf::from(v);
             if p.is_file() {
                 return Ok(Some(Oracle { exe: p }));
@@ -643,26 +643,26 @@ pub fn parse_values(stdout: &str) -> Option<Vec<f64>> {
 }
 
 // ===========================================================================
-// Driving iccce — the OTHER subprocess
+// Driving icccer — the OTHER subprocess
 // ===========================================================================
 
-/// A located `iccce` executable: **the code under test, invoked exactly the
+/// A located `icccer` executable: **the code under test, invoked exactly the
 /// way the oracle is invoked.**
 ///
 /// ## Why a subprocess and not a function call
 ///
-/// This crate links `iccce-cmm` (see `Cargo.toml`'s header), so calling
+/// This crate links `icccer-cmm` (see `Cargo.toml`'s header), so calling
 /// `MatrixTrcTransform::convert` in-process would be one line shorter. It is
 /// forbidden here, for two reasons that are the whole point of the harness:
 ///
 /// 1. **Symmetry.** lcms2's answer crosses a process boundary, is printed as
-///    text, and is parsed back. If iccce's answer did not, the two sides
+///    text, and is parsed back. If icccer's answer did not, the two sides
 ///    would differ in more than the arithmetic — printing, rounding and
 ///    argument handling would all be exercised on one side only, and a bug in
-///    the *shipped* surface (`iccce transform`) would be invisible to the very
+///    the *shipped* surface (`icccer transform`) would be invisible to the very
 ///    test that exists to find it.
-/// 2. **What is actually shipped.** `target/release/iccce.exe` is the
-///    artefact a user runs. Testing a library call and reporting it as "iccce
+/// 2. **What is actually shipped.** `target/release/icccer.exe` is the
+///    artefact a user runs. Testing a library call and reporting it as "icccer
 ///    agrees with lcms2" would be a claim about code that is one wrapper away
 ///    from the claim's subject.
 ///
@@ -671,7 +671,7 @@ pub fn parse_values(stdout: &str) -> Option<Vec<f64>> {
 ///
 /// ## The wire format, which is not the oracle's
 ///
-/// `iccce transform` reads **one whitespace-separated triple per line, floats
+/// `icccer transform` reads **one whitespace-separated triple per line, floats
 /// in 0..1**, and writes one converted triple per line at **6 decimals**.
 /// `transicc` reads **one component per line in the device's own range**
 /// (0–255 for 8-bit RGB) and prints **4 decimals**. The two conventions are
@@ -680,7 +680,7 @@ pub fn parse_values(stdout: &str) -> Option<Vec<f64>> {
 /// looks like a catastrophic colour error rather than a units bug and wastes
 /// an afternoon.
 #[derive(Debug, Clone)]
-pub struct Iccce {
+pub struct Icccer {
     exe: PathBuf,
 }
 
@@ -707,9 +707,9 @@ pub struct InspectRun {
 }
 
 impl InspectRun {
-    /// The value of a `key: value` line in `iccce inspect`'s stdout, whose
+    /// The value of a `key: value` line in `icccer inspect`'s stdout, whose
     /// format is deliberately a diff surface rather than a human UI
-    /// (`crates/iccce-cli/src/main.rs`).
+    /// (`crates/icccer-cli/src/main.rs`).
     #[must_use]
     pub fn field(&self, key: &str) -> Option<&str> {
         self.stdout
@@ -718,7 +718,7 @@ impl InspectRun {
     }
 }
 
-/// The optional flags `iccce transform` accepts, as one value.
+/// The optional flags `icccer transform` accepts, as one value.
 ///
 /// ## Why a struct and not a tail of positional parameters
 ///
@@ -755,15 +755,15 @@ pub struct TransformOpts<'a> {
     pub preserve_black: Option<&'a str>,
 }
 
-impl Iccce {
-    /// Find the `iccce` binary, in this order:
+impl Icccer {
+    /// Find the `icccer` binary, in this order:
     ///
-    /// 1. `$ICCCE_BIN`, if set. As with `$ICCCE_TRANSICC`, a variable that is
+    /// 1. `$ICCCER_BIN`, if set. As with `$ICCCER_TRANSICC`, a variable that is
     ///    set but names a non-file is an **error**, not a fall-through: an
     ///    operator who named a binary meant that binary.
-    /// 2. `../../target/release/iccce{.exe}` — what
-    ///    `cargo build --release -p iccce-cli` produces at the workspace root.
-    /// 3. `../../target/debug/iccce{.exe}`.
+    /// 2. `../../target/release/icccer{.exe}` — what
+    ///    `cargo build --release -p icccer-cli` produces at the workspace root.
+    /// 3. `../../target/debug/icccer{.exe}`.
     ///
     /// **The release build is preferred and that is deliberate**, so the
     /// numbers recorded describe the artefact users run. If only a debug build
@@ -773,31 +773,31 @@ impl Iccce {
     ///
     /// `Ok(None)` means no binary was found, which is a **skip**, not an
     /// error: a fresh checkout has not been built yet.
-    pub fn locate() -> Result<Option<Iccce>, DiffError> {
-        if let Some(v) = std::env::var_os("ICCCE_BIN") {
+    pub fn locate() -> Result<Option<Icccer>, DiffError> {
+        if let Some(v) = std::env::var_os("ICCCER_BIN") {
             let p = PathBuf::from(v);
             if p.is_file() {
-                return Ok(Some(Iccce { exe: p }));
+                return Ok(Some(Icccer { exe: p }));
             }
             return Err(DiffError::OracleNamedButMissing(p));
         }
         let root = Path::new(env!("CARGO_MANIFEST_DIR"));
         for rel in [
-            "../../target/release/iccce.exe",
-            "../../target/release/iccce",
-            "../../target/debug/iccce.exe",
-            "../../target/debug/iccce",
+            "../../target/release/icccer.exe",
+            "../../target/release/icccer",
+            "../../target/debug/icccer.exe",
+            "../../target/debug/icccer",
         ] {
             let c = root.join(rel);
             if c.is_file() {
-                return Ok(Some(Iccce { exe: c }));
+                return Ok(Some(Icccer { exe: c }));
             }
         }
         Ok(None)
     }
 
     /// The binary that will be invoked. Print it in any report, for the same
-    /// reason [`Oracle::path`] is printed: "iccce agrees with lcms2" is not
+    /// reason [`Oracle::path`] is printed: "icccer agrees with lcms2" is not
     /// falsifiable unless the reader can tell which build said so.
     pub fn path(&self) -> &Path {
         &self.exe
@@ -810,7 +810,7 @@ impl Iccce {
             .any(|c| c.as_os_str().eq_ignore_ascii_case("debug"))
     }
 
-    /// ★ **Added 2026-08-17 for Pass H.** Run `iccce inspect <profile>` and
+    /// ★ **Added 2026-08-17 for Pass H.** Run `icccer inspect <profile>` and
     /// return **everything the process said**, unparsed and ungraded.
     ///
     /// ## Why this returns a struct instead of a `Result`
@@ -820,9 +820,9 @@ impl Iccce {
     /// no answer came back. Pass H inverts that: **the refusal IS the answer**,
     /// and the thing being graded is its exit code, its message and the absence
     /// of any stdout. Folding a refusal into an error type would force every
-    /// caller to unpick it out of a `Display` string, and would make "iccce
+    /// caller to unpick it out of a `Display` string, and would make "icccer
     /// refused, saying why" indistinguishable from "the harness could not run
-    /// iccce at all". Those are different facts and this type keeps them apart:
+    /// icccer at all". Those are different facts and this type keeps them apart:
     /// a genuine spawn failure is still `Err`.
     ///
     /// ## What the caller must NOT do with the result
@@ -848,7 +848,7 @@ impl Iccce {
         })
     }
 
-    /// ★ **Added 2026-08-17 for Pass H.** Run `iccce bench` and return the raw
+    /// ★ **Added 2026-08-17 for Pass H.** Run `icccer bench` and return the raw
     /// exit status, for a row whose subject is **whether the process survives
     /// at all**.
     ///
@@ -874,7 +874,7 @@ impl Iccce {
         })
     }
 
-    /// Run `iccce transform --src <src> --dst <dst>` over a grid of RGB
+    /// Run `icccer transform --src <src> --dst <dst>` over a grid of RGB
     /// triples **in 0..1**, returning one output triple per input triple.
     ///
     /// The intent is not a parameter because the shipped binary implements
@@ -909,7 +909,7 @@ impl Iccce {
 
         let mut buf = String::with_capacity(grid.len() * 32);
         for t in grid {
-            // Full round-trip precision on the way in. `iccce transform`
+            // Full round-trip precision on the way in. `icccer transform`
             // parses with str::parse::<f64>, so this is lossless — the input
             // side of the comparison must not be where precision is lost.
             buf.push_str(&format!("{} {} {}\n", t[0], t[1], t[2]));
@@ -958,11 +958,11 @@ impl Iccce {
         Ok(rows.into_iter().map(|r| [r[0], r[1], r[2]]).collect())
     }
 
-    /// ★ **Added 2026-08-11 for Pass 4.** Run `iccce transform` over a grid of
+    /// ★ **Added 2026-08-11 for Pass 4.** Run `icccer transform` over a grid of
     /// **n-channel** source device values at a **named intent**, returning one
     /// output triple per input row.
     ///
-    /// [`Iccce::transform_grid`] above is the Pass 3 shape: three components
+    /// [`Icccer::transform_grid`] above is the Pass 3 shape: three components
     /// in, no intent, because the binary at commit `051707f` accepted neither.
     /// Commit **`490191b`** ("cli: transform upgraded to the Chain — N-channel
     /// input, four intents") changed both, so a CMYK source can now be pushed
@@ -993,7 +993,7 @@ impl Iccce {
         Ok(out.into_iter().map(|r| [r[0], r[1], r[2]]).collect())
     }
 
-    /// ★ **Added 2026-08-11 for Pass 4b.** As [`Iccce::transform_rows`], but
+    /// ★ **Added 2026-08-11 for Pass 4b.** As [`Icccer::transform_rows`], but
     /// for a destination whose channel count is **not three**.
     ///
     /// Pass 4 only ever converted *into* an RGB destination, so the output
@@ -1018,7 +1018,7 @@ impl Iccce {
         self.transform_rows_shaped_bpc(src, dst, intent, rows, out_channels, false)
     }
 
-    /// ★ **Added 2026-08-11 for Pass 5.** As [`Iccce::transform_rows_shaped`],
+    /// ★ **Added 2026-08-11 for Pass 5.** As [`Icccer::transform_rows_shaped`],
     /// but with the shipped binary's **`--bpc`** flag optionally set.
     ///
     /// ## Why the flag is a parameter and not a second entry point
@@ -1032,7 +1032,7 @@ impl Iccce {
     ///
     /// ## What a refusal looks like, and why it is returned rather than hidden
     ///
-    /// `iccce transform --bpc` **exits 1 with a named reason** when the chain
+    /// `icccer transform --bpc` **exits 1 with a named reason** when the chain
     /// is outside its black-point estimation subset (`ChainError::
     /// BpcNotApplicable` at ICC-absolute, `ChainError::BpcEstimationUnsupported`
     /// for e.g. a v2 LUT side). That surfaces here as
@@ -1064,7 +1064,7 @@ impl Iccce {
     }
 
     /// ★ **Added 2026-08-18 for Pass K's post-feature repointing.** As
-    /// [`Iccce::transform_rows_shaped_bpc`], but with the shipped binary's
+    /// [`Icccer::transform_rows_shaped_bpc`], but with the shipped binary's
     /// **`--preserve-black <policy>`** flag optionally set.
     ///
     /// ## Why the policy is a `&str` and not an enum
@@ -1080,7 +1080,7 @@ impl Iccce {
     ///
     /// ## Why this is a parameter and not a second entry point
     ///
-    /// The same argument [`Iccce::transform_rows_shaped_bpc`] makes for
+    /// The same argument [`Icccer::transform_rows_shaped_bpc`] makes for
     /// `--bpc`, and it matters more here: Pass K's post-feature regression
     /// guards compare **the same probe set through the same function with the
     /// flag on and off**, and a bit-identical result is the observation. Two
@@ -1090,7 +1090,7 @@ impl Iccce {
     ///
     /// ## What a refusal looks like
     ///
-    /// `iccce transform --preserve-black` **exits 1 with a named reason** for
+    /// `icccer transform --preserve-black` **exits 1 with a named reason** for
     /// each of its five refusals (absolute intent; either side not 4-channel;
     /// no destination `A2B`; a non-monotonic K ramp; an unimplemented
     /// mapping). That surfaces here as [`DiffError::NonZeroExit`] carrying the
@@ -1098,7 +1098,7 @@ impl Iccce {
     /// wants to grade the refusal reads the message off it.
     ///
     /// # Errors
-    /// As [`Iccce::transform_rows_shaped_bpc`].
+    /// As [`Icccer::transform_rows_shaped_bpc`].
     pub fn transform_rows_shaped_preserve_black(
         &self,
         src: &Path,
@@ -1121,7 +1121,7 @@ impl Iccce {
         )
     }
 
-    /// The one place `iccce transform` is actually spawned for a row grid.
+    /// The one place `icccer transform` is actually spawned for a row grid.
     ///
     /// Every optional flag is a parameter of this single function so that two
     /// invocations differing in one flag cannot differ in anything else. See
@@ -1284,7 +1284,7 @@ impl Space {
 /// The four ICC rendering intents, and only those.
 ///
 /// lcms2 additionally accepts 10–15 (black-ink-preserving extensions). They
-/// are **not ICC intents**; iccce implements 0–3, and a difftest that used
+/// are **not ICC intents**; icccer implements 0–3, and a difftest that used
 /// 10–15 could not describe its result as a conformance check. There is no
 /// variant for them and no `from_u32`, so the omission cannot be undone by
 /// accident.
@@ -1488,10 +1488,10 @@ pub enum Kind {
     /// lcms2's — is retained to catch, which is why every row of this kind in
     /// Pass 4b is paired with a [`Kind::CrossCheck`] row over the same points.
     DerivedExpectation,
-    /// Agreement between iccce and lcms2. Evidence that two implementations
+    /// Agreement between icccer and lcms2. Evidence that two implementations
     /// read a clause the same way; two implementations can share a misreading.
     CrossCheck,
-    /// Both sides are iccce (round trip, compiled-vs-reference). Prices an
+    /// Both sides are icccer (round trip, compiled-vs-reference). Prices an
     /// approximation; worthless as correctness evidence.
     SelfConsistency,
     /// **Both sides are lcms2**: today's oracle output against a previously
@@ -1530,14 +1530,14 @@ pub enum Metric {
     AbsMaxComponent,
     /// Maximum absolute difference over every component of every row of a
     /// grid, expressed in **normalised device units (0..1)**. The unit matters:
-    /// `transicc` prints device values in 0..255, `iccce transform` in 0..1,
+    /// `transicc` prints device values in 0..255, `icccer transform` in 0..1,
     /// and a number quoted without its scale is wrong by 255.
     DeviceAbsMaxNormalised,
     /// Mean absolute difference over every component of every row, normalised
     /// device units. Reported **alongside** the max, never instead of it.
     DeviceAbsMeanNormalised,
     /// Maximum CIEDE2000 over the rows of a grid, `kL=kC=kH=1`, computed in
-    /// D50 CIELAB. The formula is `iccce_color::delta_e_2000` — validated
+    /// D50 CIELAB. The formula is `icccer_color::delta_e_2000` — validated
     /// against all 34 Sharma, Wu & Dalal (2005) pairs (`TOLERANCES.md`
     /// §3.1.1). Using a validated ruler does **not** make the record ground
     /// truth; see [`Kind`].
@@ -2371,7 +2371,7 @@ pub fn sanitise(s: &str) -> String {
 /// enough context to diagnose it without re-running by hand.
 #[derive(Debug)]
 pub enum DiffError {
-    /// `$ICCCE_TRANSICC` was set to a path that is not a file. Deliberately
+    /// `$ICCCER_TRANSICC` was set to a path that is not a file. Deliberately
     /// an error and not a fall-through — see [`Oracle::locate`].
     OracleNamedButMissing(PathBuf),
     Spawn(PathBuf, io::Error),
@@ -2404,7 +2404,7 @@ impl fmt::Display for DiffError {
         match self {
             DiffError::OracleNamedButMissing(p) => write!(
                 f,
-                "ICCCE_TRANSICC is set to {} but that is not a file",
+                "ICCCER_TRANSICC is set to {} but that is not a file",
                 p.display()
             ),
             DiffError::Spawn(p, e) => write!(f, "could not run {}: {e}", p.display()),

@@ -43,7 +43,7 @@ enumerated.
   `12` — every instance sits inside a Flate-compressed object. **Inflate
   first.** Both hazards are owed an escalation to `D:\dev\rag\rust\` and
   `C:\personal_rag\pdf\`; **not done as of 2026-08-25.**
-- Related: [[iccce-documented-is-not-tested]] (`DL-051`) — the same shape,
+- Related: [[icccer-documented-is-not-tested]] (`DL-051`) — the same shape,
   where a well-explained thing reads as protected; and
-  [[iccce-unfailable-row-protected-only-by-siblings]] (`DL-066`) — a
+  [[icccer-unfailable-row-protected-only-by-siblings]] (`DL-066`) — a
   one-sided check is blind to half the defects.

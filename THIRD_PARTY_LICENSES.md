@@ -11,23 +11,23 @@
 <!--       -o THIRD_PARTY_LICENSES.md                              -->
 <!-- ============================================================= -->
 
-Every crate in the `iccce` workspace's **resolved dependency graph**,
+Every crate in the `icccer` workspace's **resolved dependency graph**,
 grouped by licence, with the full text of each licence. Regenerated from
 the lockfile by `cargo-about`; not a summary anyone maintains by hand.
 
 **How to read the listing.** cargo-about reports the whole graph and has
-no notion of "first party", so this file names iccce's own crates too.
-**Every crate listed below whose name begins with `iccce-` is this
+no notion of "first party", so this file names icccer's own crates too.
+**Every crate listed below whose name begins with `icccer-` is this
 project** — those carry the project's own MIT licence (`LICENSE`, MIT,
 Copyright (c) 2026 Ken Mantle), and the workspace's membership list in
 the root `Cargo.toml` is their authoritative enumeration. **Every crate
-whose name does not begin with `iccce-` is a third-party dependency**,
-and its licence text is reproduced here because iccce redistributes it.
+whose name does not begin with `icccer-` is a third-party dependency**,
+and its licence text is reproduced here because icccer redistributes it.
 The rule is stated as a prefix rather than as a list of names so that
 adding a workspace crate cannot silently falsify this paragraph.
 
 **Scope, stated because a generated file cannot state its own limits.**
-This manifest covers Cargo dependencies of the `iccce-` workspace
+This manifest covers Cargo dependencies of the `icccer-` workspace
 crates and nothing else. In particular it does **not** cover **lcms2**, which is not
 a dependency of any of them: lcms2 is an out-of-tree differential-test
 oracle driven as a separate process from `tools/difftest`, which is
@@ -43,11 +43,11 @@ not the whole licence story.
 
 Used by:
 
-- [iccce-cli 0.3.0](https://github.com/KenM76/iccce)
-- [iccce-cmm 0.3.0](https://github.com/KenM76/iccce)
-- [iccce-color 0.3.0](https://github.com/KenM76/iccce)
-- [iccce-measure 0.3.0](https://github.com/KenM76/iccce)
-- [iccce-profile 0.3.0](https://github.com/KenM76/iccce)
+- [icccer-cli 0.3.0](https://github.com/KenM76/iccce)
+- [icccer-cmm 0.3.0](https://github.com/KenM76/iccce)
+- [icccer-color 0.3.0](https://github.com/KenM76/iccce)
+- [icccer-measure 0.3.0](https://github.com/KenM76/iccce)
+- [icccer-profile 0.3.0](https://github.com/KenM76/iccce)
 
 ```text
 MIT License

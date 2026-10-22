@@ -1,12 +1,12 @@
 ---
 name: project-conformance-can-worsen-the-crosscheck
-description: Measured on iccce 2026-08-12 — fixing iccce's non-conformant ISO 4.2.5.4 branch made the lcms2 cross-check 58.8x WORSE (0.0817 to 4.799 dE76); the defect had been masking a real spec-vs-lcms2 disagreement, and "this defect explains the whole gap" is not the same claim as "fixing it ends the gap".
+description: Measured on icccer 2026-08-12 — fixing icccer's non-conformant ISO 4.2.5.4 branch made the lcms2 cross-check 58.8x WORSE (0.0817 to 4.799 dE76); the defect had been masking a real spec-vs-lcms2 disagreement, and "this defect explains the whole gap" is not the same claim as "fixing it ends the gap".
 metadata:
   type: project
 ---
 
 **The measurement.** `pass5c/swop/estimators/black-points-in-lab`, harness
-`cc03f3d`, `iccce-cmm` carrying `fd34a44`, oracle pin `21c582a`.
+`cc03f3d`, `icccer-cmm` carrying `fd34a44`, oracle pin `21c582a`.
 
 | | before `fd34a44` | after |
 |---|---|---|
@@ -22,7 +22,7 @@ mean different things by one name. Neither is a bug.
 
 **How to apply.**
 
-- **Agreement with an oracle can be the SYMPTOM of a defect.** iccce's
+- **Agreement with an oracle can be the SYMPTOM of a defect.** icccer's
   non-conformant return (`outRamp[first] = MinL = 16.489806`, which is not a
   black-point candidate in any branch of 4.2.5) sat 0.082 `L*` from lcms2's
   answer; the conformant one sits 4.799 away. The defect's own magnitude is

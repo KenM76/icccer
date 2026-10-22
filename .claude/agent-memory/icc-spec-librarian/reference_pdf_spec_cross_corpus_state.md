@@ -1,6 +1,6 @@
 ---
 name: pdf-spec-cross-corpus-state
-description: The sibling PDF_Spec RAG HOLDS both ISO 32000-1:2008 (free) and ISO 32000-2:2020 primary PDFs — 32000-2 is licensed_primary_private_rag, its errata are unapplied ANNOTATIONS, pypdf emits INTRA-WORD SPACES so whitespace-normalised fragment search still needs two engines, and §11.7.2 (filed 2026-08-21) says sRGB — iccce's default — can be unsuitable as a transparency-group BLENDING space
+description: The sibling PDF_Spec RAG HOLDS both ISO 32000-1:2008 (free) and ISO 32000-2:2020 primary PDFs — 32000-2 is licensed_primary_private_rag, its errata are unapplied ANNOTATIONS, pypdf emits INTRA-WORD SPACES so whitespace-normalised fragment search still needs two engines, and §11.7.2 (filed 2026-08-21) says sRGB — icccer's default — can be unsuitable as a transparency-group BLENDING space
 metadata:
   type: reference
 ---
@@ -27,7 +27,7 @@ Footer on **every page**: *"Sold by the PDF Association to Ken Mantle 20699 |
   are **facts** and are freely usable.
 - The file **must never leave `_sources\`** — no `R:\` (a Dropbox subst alias
   = "networking"), no repo, no release asset.
-- **ICC_Spec and iccce are MIT and public; that changes nothing.** MIT is our
+- **ICC_Spec and icccer are MIT and public; that changes nothing.** MIT is our
   licence on our text, not a licence on ISO's.
 
 ⟹ When a dispatch asks for ISO 32000-2 text, deliver **sentence-level quotes +
@@ -85,7 +85,7 @@ only §11.7.3/.4).
   blending and compositing computations shall be done in that space**. Every
   blend formula in the corpus is a formula *in the group space*.
 - **★★ `GCS-15`** — NOTE 4, **both editions**: **sRGB is nonlinear and "can be
-  unsuitable for use as a group colour space."** That is **iccce's default
+  unsuitable for use as a group colour space."** That is **icccer's default
   destination**. Destination use fine; **blending** use is the flagged case.
 - **`GCS-14`** — NOTE 3, the linearity acknowledgement. **The nearest thing in
   ISO 32000 to a non-commutativity statement, and it is NOT one** — do not quote

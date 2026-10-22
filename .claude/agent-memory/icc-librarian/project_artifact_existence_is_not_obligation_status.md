@@ -1,5 +1,5 @@
 ---
-name: iccce-artifact-existence-is-not-obligation-status
+name: icccer-artifact-existence-is-not-obligation-status
 description: DL-058 — a file with the right name at the right path is not the status of the obligation that asked for it; a GENERATED file goes quietly wrong while staying well-formed, and "unchecked" is a status that survives by being copied
 metadata:
   type: project
@@ -34,7 +34,7 @@ own comment calls *"worse than publishing nothing."*
   GENERATION.** It does not become malformed when the tree moves on; it
   becomes **quietly wrong while staying well-formed and confident.**
   Check its emitted data (versions, member lists) against the live
-  manifest, not its header banner. `[[iccce-stale-citation-worse-than-stale-number]]`
+  manifest, not its header banner. `[[icccer-stale-citation-worse-than-stale-number]]`
   is the same mechanism — the right name at the right path invites the
   reader to accept the destination.
 - **★ A generation rule needs a REGENERATION TRIGGER to be complete.**
@@ -42,7 +42,7 @@ own comment calls *"worse than publishing nothing."*
   a rule about **how**, silent on **when**. It was fully honoured and
   still produced a stale manifest. `about.toml`'s stated trigger is
   *"after ANY dependency change"*, and **adding a workspace member is
-  not one** — exactly the gap `iccce-measure` fell through.
+  not one** — exactly the gap `icccer-measure` fell through.
 - **A crates.io name check is a DATED OBSERVATION WITH AN EXPIRY, never
   a reservation.** crates.io has no reservation mechanism; names go to
   the first successful publish. *"The names were checked"* is the shape
@@ -52,10 +52,10 @@ own comment calls *"worse than publishing nothing."*
   DL-009 are untouched by a free name.
 - **Check the query's population, not just its results.** The check used
   DL-009's name list of 2026-08-11 and so covered **five of six**
-  candidate names — `iccce-measure` was never queried, and `iccce` (a
+  candidate names — `icccer-measure` was never queried, and `icccer` (a
   facade name that is not a workspace member) was. **A stale enumeration
   copied into a query returns clean results and looks complete**
-  — `[[iccce-count-from-a-sample-is-not-the-population]]`.
+  — `[[icccer-count-from-a-sample-is-not-the-population]]`.
 - **Not everything true belongs in the ledger.** No NC row and no §7.20
   status pass was opened: `NUMERIC_CLAIMS.md`'s subject is tolerances and
   measured errors, an HTTP response body carries no evidence class, and
@@ -63,9 +63,9 @@ own comment calls *"worse than publishing nothing."*
   an item it has never carried. Recorded as a judgement so it can be
   overturned by argument rather than discovered as an absence.
 
-Related: [[iccce-pass-status]],
-[[iccce-stale-citation-worse-than-stale-number]],
-[[iccce-count-from-a-sample-is-not-the-population]],
-[[iccce-count-needs-its-apparatus]],
-[[iccce-absence-of-publication-is-not-evidence]],
-[[iccce-negative-finding-removes-its-auditor]].
+Related: [[icccer-pass-status]],
+[[icccer-stale-citation-worse-than-stale-number]],
+[[icccer-count-from-a-sample-is-not-the-population]],
+[[icccer-count-needs-its-apparatus]],
+[[icccer-absence-of-publication-is-not-evidence]],
+[[icccer-negative-finding-removes-its-auditor]].

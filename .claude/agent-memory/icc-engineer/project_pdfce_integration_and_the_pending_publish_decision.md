@@ -1,20 +1,20 @@
 ---
 name: pdfce-integration-and-the-pending-publish-decision
-description: pdfce is actively integrating iccce as of 2026-09-01; it wants a pinned git rev, and a crates.io release is an open operator decision Ken has not ruled on
+description: pdfce is actively integrating icccer as of 2026-09-01; it wants a pinned git rev, and a crates.io release is an open operator decision Ken has not ruled on
 metadata:
   type: project
 ---
 
-**As of 2026-09-01 `pdfce` has stopped asking whether `iccce` can do the job
+**As of 2026-09-01 `pdfce` has stopped asking whether `icccer` can do the job
 and started asking how to depend on it.** It diagnosed a real rendering
 defect (a print-conformance patch failing 15 of 16 cells), attributed it to
-its own round-trip sRGB→CMYK transform, and named `iccce` as the
+its own round-trip sRGB→CMYK transform, and named `icccer` as the
 replacement. It offered three dependency shapes — pinned git `rev`,
 crates.io release, or vendoring — and stated its own bias for the pinned
 `rev`.
 
 **Why:** `pdfce` will not grow a CMM (its `ARCHITECTURE.md` decision 064
-puts conversion on iccce's side of the boundary permanently), so this is the
+puts conversion on icccer's side of the boundary permanently), so this is the
 first real consumer arriving at the seam rather than a hypothetical one.
 
 **How to apply:**

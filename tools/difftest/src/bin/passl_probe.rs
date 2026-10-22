@@ -1,6 +1,6 @@
 //! # `passl_probe` — Pass L on its own, with the tables the suite cannot print
 //!
-//! The suite runner emits one TSV row per [`iccce_difftest::Record`]. Pass L's
+//! The suite runner emits one TSV row per [`icccer_difftest::Record`]. Pass L's
 //! subject is a pair of curves that differ by `4.8×10⁻⁶`, and the things a
 //! reader actually wants — *where* the two instruments' maxima are, *how many*
 //! printed quanta each one buys, and the probe-by-probe residual against both
@@ -13,12 +13,12 @@
 //! **Exit code:** the `Report`'s — `0` if every Pass L row passed. Do not read
 //! a `0` here as the suite passing; it says nothing about Passes 3–K.
 //!
-//! ★ It runs §C even with **no oracle on the machine**, because §C is iccce
-//! against iccce and needs none. §A and §B then skip with a reason.
+//! ★ It runs §C even with **no oracle on the machine**, because §C is icccer
+//! against icccer and needs none. §A and §B then skip with a reason.
 
 use std::io::Write;
 
-use iccce_difftest::{Oracle, Report, passl};
+use icccer_difftest::{Oracle, Report, passl};
 
 fn main() {
     let oracle = match Oracle::locate() {
@@ -136,7 +136,7 @@ fn main() {
         println!();
     }
 
-    println!("=== §C - what the choice costs (self-comparison, iccce vs iccce) =====");
+    println!("=== §C - what the choice costs (self-comparison, icccer vs icccer) =====");
     println!(
         "PCS dE2000  max {:.6e}  at rgb ({:.9}, {:.9}, {:.9}) = codes ({:.4}, {:.4}, {:.4})",
         a.pcs_de_max,

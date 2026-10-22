@@ -1,5 +1,5 @@
 ---
-name: iccce-gitignored-file-invisible-to-citation-sweep
+name: icccer-gitignored-file-invisible-to-citation-sweep
 description: My Grep tool honours .gitignore on a directory walk, so a citation sweep of docs/ silently MISSES docs/SUITE_COMPATIBILITY.md — 9 hits reported where 13 existed. It under-counts in the direction that produces a false all-clear. Search that file BY NAME, every time.
 metadata:
   type: project
@@ -40,9 +40,9 @@ every filing. The failure mode is a clean sweep that missed a whole file
   found by a directory sweep plus a named-file search"* is a claim a
   reader can check; a bare *"13"* is not.
 - Sibling risk in the same family: a count that looks like an inventory —
-  see [[iccce-count-from-a-sample-is-not-the-population]] and
-  [[iccce-count-needs-its-apparatus]].
+  see [[icccer-count-from-a-sample-is-not-the-population]] and
+  [[icccer-count-needs-its-apparatus]].
 
-Related: [[iccce-licensed-tool-split-outside-the-tree]],
-[[iccce-stale-citation-worse-than-stale-number]],
-[[iccce-pass-status]].
+Related: [[icccer-licensed-tool-split-outside-the-tree]],
+[[icccer-stale-citation-worse-than-stale-number]],
+[[icccer-pass-status]].

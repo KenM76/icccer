@@ -1,4 +1,4 @@
-# Memory index — `icc-librarian` (iccce)
+# Memory index — `icc-librarian` (icccer)
 
 - [Cite by §/NC, never by line](project_stale_citation_worse_than_stale_number.md) — 6/6 stale, a 7th with no document at all; DL-048 filed, all discharged. A wrong pointer authenticates the destination.
 - [A green row inside an unsupportable bound](project_disclosure_caught_a_bad_justification.md) — DL-049: `BLIND` gates nothing and still caught a defect in a TOLERANCE'S JUSTIFICATION, not in a candidate.
@@ -31,7 +31,7 @@
 - [A count from a sample is not the population](project_count_from_a_sample_is_not_the_population.md) — DL-053: "two iccMAX" was TEN; [VERIFIED] certifies the measurement happened, never what it ranged over.
 
 - [ICC.1 PDF blocker — cleared](project_icc1_pdf_operator_blocker.md) — resolved 2026-08-11; the lasting lesson is that "free download" never implies "automated retrieval permitted" (ITU-R is next).
-- [iccce Pass status](project_iccce_pass_status.md) — to §7.37 (2026-09-01, 8th PARTIAL): NC-319 pinned, correction refused, tip run id in; next free NC-320/NA-013/DL-083.
+- [icccer Pass status](project_icccer_pass_status.md) — to §7.37 (2026-09-01, 8th PARTIAL): NC-319 pinned, correction refused, tip run id in; next free NC-320/NA-013/DL-083.
 - [A release range is not the dispatch's list](project_release_range_is_not_the_dispatch_list.md) — Pass G/H were named as 0.2.0 content and shipped in 0.1.0; and a tag ref is an ANNOTATED TAG OBJECT, not the commit.
 - [An unowned refusal is a slow deletion](project_unowned_refusal_is_a_slow_deletion.md) — DL-079: v0.2.0 got NO release record because two correct refusals were never re-asked. Name the owner in the same paragraph.
 - [A tool that quotes licensed material gets SPLIT](project_licensed_tool_split_outside_the_tree.md) — DL-071: the case file lives OUTSIDE the repo, not gitignored inside it; and the deleted predecessor took the only auditor of its own numbers.
@@ -42,12 +42,12 @@
 - [The measurement under the guards](project_measurement_under_the_guards.md) — DL-038/040/043: the distance is the FIXTURE's not the RUN's; a big UNGRADED separation buys a fixture; exemptions are declared, never acquired.
 - [Agreement can be the symptom](project_agreement_can_be_the_symptom.md) — DL-033 + DL-056: a differential is BLIND toward its reference; name the ABSOLUTE assertion covering that direction or it deletes invisibly.
 - [Disclosure is not enforcement](project_disclosure_is_not_enforcement.md) — DL-037: the guard ORDER is the decision, BLIND deliberately does not gate; never quote `blind=0` or `16` without its denominator AND its filing.
-- [Rule 7 can run against us](project_rule7_can_run_against_us.md) — DL-030: iccce shipped non-conformant code and lcms2 was right; withholding attribution is what made the measurement usable.
+- [Rule 7 can run against us](project_rule7_can_run_against_us.md) — DL-030: icccer shipped non-conformant code and lcms2 was right; withholding attribution is what made the measurement usable.
 - [A count needs its apparatus](project_count_needs_its_apparatus.md) — DL-031: 129, 36 and 142 are three runners, not a trend; a commit message's bare count can never be corrected.
 - [A residual under every hypothesis](project_apparatus_fault_under_every_hypothesis.md) — DL-028: two candidates or no discrimination; and an error bar the same order as its effect may BE the measurement (98.3%).
 - [.git files are readable without a shell](reference_git_files_readable_without_shell.md) — reflog/refs/config are plain text; they corroborate hashes, pushes and dates — but never contents, visibility, or a commit count.
 - [A control is only as good as its fixture](project_control_only_as_good_as_its_fixture.md) — DL-025: an identity fixture nullified the control (1.1e-15); a kink made h² the wrong law. Instruments catch errors, re-reading never does.
-- [What were they free to disagree about?](project_free_to_disagree.md) — DL-023: pre-register the negative result from both sources; DL-022: iccce never forces BPC, 3,137 L*, reported not graded.
+- [What were they free to disagree about?](project_free_to_disagree.md) — DL-023: pre-register the negative result from both sources; DL-022: icccer never forces BPC, 3,137 L*, reported not graded.
 - [Say which direction — and which profile class](project_direction_scoped_behaviour.md) — DL-021 + DL-027: direction, path AND class; lcms2's two black-point estimators are picked by the destination's header.
 - [Refuse, then let a fixture decide](project_refusal_discharged_by_fixture.md) — DL-020: refuse what the corpus can't supply; only an independently authored fixture discharges the doubt (GP-001).
 - [A tolerance can't swallow and claim](project_tolerance_cannot_swallow_and_claim.md) — DL-019: wide structural gate + tight gate with the difference switched off; report-not-grade what nobody can adjudicate.

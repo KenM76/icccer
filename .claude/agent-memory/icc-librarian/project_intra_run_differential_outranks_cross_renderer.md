@@ -1,5 +1,5 @@
 ---
-name: iccce-intra-run-differential-outranks-cross-renderer
+name: icccer-intra-run-differential-outranks-cross-renderer
 description: DL-077 GENERALISES this — a differential subtracts everything its two arms SHARE, non-selectively; shared observation path = the method's whole value, shared MECHANISM UNDER TEST = a test that cannot fail for the reason it is named after; so ENUMERATE WHAT THE TWO ARMS SHARE before trusting one. DL-074 — an equality the TEST MATERIAL'S AUTHOR asserts, measured between two objects of ONE render, beats a comparison between two renders because the uncontrolled path cancels; but it is ONE-SIDED (failure yes, conformance no), and an OBSERVED failure corroborates a classification without attributing a LAYER. ★ SETTLED by DL-076: the class survives INTACT, its carve-out paragraph is NARROWED — cancellation licenses the COMPARISON, never the UNIT, so a capture-derived result is stated in 8-bit counts.
 metadata:
   type: project
@@ -32,20 +32,20 @@ whether an oracle was load-bearing.
   saturate or quantise two genuinely different colours onto one value. ⇒
   **State a FAILURE of the declared relation; never certify that it HOLDS.**
   That is `DL-069`/`DL-070`'s clamp argument inside one render, and
-  [[iccce-agreement-can-be-the-symptom]] in a new place. **The direction a
+  [[icccer-agreement-can-be-the-symptom]] in a new place. **The direction a
   demonstration usually hopes for is the weak one.**
 - ★★★ **DECIDED THE SAME DAY, `DL-075`: `DL-070` REACHES a ΔE between TWO
   DIFFERENT captures** — the prohibition attaches to the **ARTIFACT**, not to
   what sits opposite it (§1's class names *pixels read out of a capture* in
-  its head clause; the `iccce` side is only the *"Here:"* instance). Two
+  its head clause; the `icccer` side is only the *"Here:"* instance). Two
   captures = two unknown display legs, nothing cancels, reason 1 applies
   *harder*. **Nothing widened, nothing exempted; decided by `icc-engineer`,
   no operator words carried — sufficient in the contraction direction only.**
   The escalation was still right: *widening a prohibition and exempting from
   it are both DECISIONS, not filings* — refuse and record, and this is what
   the record produced. See
-  [[iccce-prohibition-buys-nameability-not-prevention]] and
-  [[iccce-fitted-table-cannot-express-a-clamp]].
+  [[icccer-prohibition-buys-nameability-not-prevention]] and
+  [[icccer-fitted-table-cannot-express-a-clamp]].
 - ★★★ **SETTLED THE SAME DAY, `DL-076` (reading 2): `DL-070`'s reason 1 is
   about the UNIT, so it reaches EVERY ΔE with a capture pixel on either side —
   INCLUDING an intra-render one.** `icc-engineer`: *"a capture-derived
@@ -105,8 +105,8 @@ produce the same visible failure on the same page**, which is exactly how
 that table's withdrawn row came to be misclassified. ⇒ Record such a result
 as **one row of five, corroborated by observation** — never as the table
 vindicated — and **leave §7.20 owed for all five, including the observed
-one.** See [[iccce-patch-named-for-what-it-looks-at]] and
-[[iccce-compatibility-not-certification]].
+one.** See [[icccer-patch-named-for-what-it-looks-at]] and
+[[icccer-compatibility-not-certification]].
 
 **★★ A rule-11 observation raised to the operator and NOT acted on.**
 `NUMERIC_CLAIMS.md` §3.39.3 states *"Those numbers are not reproduced here"*
@@ -118,7 +118,7 @@ decides **how tightly rule 11 binds the next filing**: if a *qualitative*
 finding counts as a measurement, the boundary is tighter than the ledger has
 been applying. ★ **Write to the tighter reading** — §3.40 carries no finding
 of any kind and is safe under either. Adjacent to §7.28 item 6; filed as
-§7.30 item 4. See [[iccce-producer-census-is-not-a-consumer-fact]].
+§7.30 item 4. See [[icccer-producer-census-is-not-a-consumer-fact]].
 
 **★ Mechanical note for anything written into this repository, including
 these memory files:** `tools/check-suite-name-absent.py` forbids two

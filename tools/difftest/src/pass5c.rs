@@ -80,11 +80,11 @@
 //! With both `InitialLab`s neutral the two ramps are pointwise identical, so
 //! what is left is small, enumerable, and **testable**:
 //!
-//! | | ISO/CD 18619 4.2.5 (`iccce_cmm::bpc`) | lcms2 2.19.1 `cmssamp.c` |
+//! | | ISO/CD 18619 4.2.5 (`icccer_cmm::bpc`) | lcms2 2.19.1 `cmssamp.c` |
 //! |---|---|---|
 //! | `InitialLab` (rel-col) | darkest **vertex** (4.2.2.2) → neutralise+clip (4.2.3) | `BlackPointUsingPerceptualBlack` = `A2B1(B2A0(Lab 0,0,0))`, `L*` clipped to 50, chroma **forced to 0** |
 //! | monotonic pass | `for i in (0..255).rev()` — **includes index 0** | `for (l = 254; l > 0; --l)` — **index 0 is never touched** (L505) |
-//! | straight-midrange return | **`InitialLab`** — 4.2.5.4 final paragraph, *"shall be the same as InitialLab"* (**corrected `fd34a44`**; iccce returned `outRamp[first]` here until 2026-08-12 and that had no textual support in any branch of 4.2.5) | **`InitialLab`** (L536), i.e. **its own**, from a *different* round trip |
+//! | straight-midrange return | **`InitialLab`** — 4.2.5.4 final paragraph, *"shall be the same as InitialLab"* (**corrected `fd34a44`**; icccer returned `outRamp[first]` here until 2026-08-12 and that had no textual support in any branch of 4.2.5) | **`InitialLab`** (L536), i.e. **its own**, from a *different* round trip |
 //! | minimum shadow points | `xs.len() < 3` → give up | caller checks `n < 3`, but `RootOfLeastSquaresFitQuadraticCurve` **returns 0 for `n < 4`** (L317) |
 //! | near-linear fallback | `b == 0.0` → 0 | `fabs(b) < 1.0E-10` → 0 |
 //! | singular normal equations | rejected on the determinant of the Gaussian solve | `_cmsMAT3inverse` rejects on `fabs(det) < 1.0E-4` (`lcms2_internal.h` L142) |
@@ -97,7 +97,7 @@
 //! **perceptual black round trip** (`L* 16,571 474`). Row 1 of this table was
 //! always the real difference; row 3 used to hide it, because the
 //! non-conformant `outRamp[first]` happened to land 0,082 `L*` from lcms2's
-//! answer. **Conformance moved iccce 59× further from the oracle.**
+//! answer. **Conformance moved icccer 59× further from the oracle.**
 //!
 //! The first three are the substantive ones. The monotonic-pass difference is
 //! a genuine off-by-one in lcms2 with a real consequence: `outRamp[0]` is
@@ -112,10 +112,10 @@
 //! `CreateRoundtripXForm` (L40) — `cmsCreateExtendedTransform` over
 //! `[Lab4, profile, profile, Lab4]` with `NOOPTIMIZE|NOCACHE` — and evaluates
 //! it through lcms2's 16-bit machinery, whereas the `bt` handed to both arms
-//! here is iccce's `Lut16Model` in `f64`. That is **deliberate and is the
+//! here is icccer's `Lut16Model` in `f64`. That is **deliberate and is the
 //! point**: feeding both estimators the *same* round trip isolates the
 //! algorithm difference, which is the only thing under test. The residual
-//! pipeline difference is separately bounded by Pass 4b §A (iccce against
+//! pipeline difference is separately bounded by Pass 4b §A (icccer against
 //! lcms2 on this exact `B2A1` table, 1,330×10⁻⁴ device) and is checked here
 //! end to end against the real `transicc` in §B.
 //!
@@ -133,20 +133,20 @@
 
 use std::path::{Path, PathBuf};
 
-use iccce_cmm::bpc::{
+use icccer_cmm::bpc::{
     EstimationIntent, darkest_vertex, estimate_lut_destination_black, neutralise_and_clip,
 };
-use iccce_cmm::lut_ab::LutAbModel;
-use iccce_cmm::lut_transform::{Lut16Model, PcsKind, PcsValue};
-use iccce_color::Lab;
-use iccce_profile::Profile;
-use iccce_profile::num::Signature;
-use iccce_profile::tag_types::TagData;
+use icccer_cmm::lut_ab::LutAbModel;
+use icccer_cmm::lut_transform::{Lut16Model, PcsKind, PcsValue};
+use icccer_color::Lab;
+use icccer_profile::Profile;
+use icccer_profile::num::Signature;
+use icccer_profile::tag_types::TagData;
 
 use crate::{Kind, Metric, Record, SepUnits, Separation, Tolerance};
 
 pub mod tag {
-    use iccce_profile::num::Signature;
+    use icccer_profile::num::Signature;
     pub const A2B0: Signature = Signature(0x4132_4230);
     pub const A2B1: Signature = Signature(0x4132_4231);
     pub const B2A0: Signature = Signature(0x4232_4130);
@@ -178,7 +178,7 @@ pub struct Lcms2Detect {
     /// Did the mid-range straightness test fire? If it did, **both sides
     /// return their own `InitialLab`** (lcms2 `cmssamp.c` L536; ISO/CD 18619
     /// 4.2.5.4 final paragraph, since `fd34a44` — before that correction
-    /// iccce returned `outRamp[first]` here) — a divergence with a completely
+    /// icccer returned `outRamp[first]` here) — a divergence with a completely
     /// different mechanism from the fit, and on `swop` the *only* one.
     pub nearly_straight: bool,
     /// How many shadow points landed in `[lo, hi)`.
@@ -629,7 +629,7 @@ fn mat3_solve(m: &[[f64; 3]; 3], v: &[f64; 3]) -> Option<[f64; 3]> {
 // Fixture plumbing
 // ===========================================================================
 
-fn read_lut16(p: &Profile, sig: Signature) -> Option<iccce_profile::lut::Lut16> {
+fn read_lut16(p: &Profile, sig: Signature) -> Option<icccer_profile::lut::Lut16> {
     let e = p.tags.iter().find(|t| t.sig == sig)?;
     match p.decode_tag(e) {
         Some(Ok(d)) => match d.data {
@@ -640,7 +640,7 @@ fn read_lut16(p: &Profile, sig: Signature) -> Option<iccce_profile::lut::Lut16> 
     }
 }
 
-fn read_lut8(p: &Profile, sig: Signature) -> Option<iccce_profile::lut::Lut8> {
+fn read_lut8(p: &Profile, sig: Signature) -> Option<icccer_profile::lut::Lut8> {
     let e = p.tags.iter().find(|t| t.sig == sig)?;
     match p.decode_tag(e) {
         Some(Ok(d)) => match d.data {
@@ -724,7 +724,7 @@ fn model(p: &Profile, sig: Signature, a_to_b: bool) -> Option<TagModel> {
     }
 }
 
-fn read_lut_ab(p: &Profile, sig: Signature) -> Option<iccce_profile::lut::LutAB> {
+fn read_lut_ab(p: &Profile, sig: Signature) -> Option<icccer_profile::lut::LutAB> {
     let e = p.tags.iter().find(|t| t.sig == sig)?;
     match p.decode_tag(e) {
         Some(Ok(d)) => match d.data {
@@ -897,7 +897,7 @@ pub struct Analysis {
     /// §B: `B2A1(black)` for each candidate black point.
     pub predicted_from_lcms2: Vec<f64>,
     pub predicted_from_iso: Vec<f64>,
-    /// §B: what the SHIPPED `iccce transform --bpc` emits, now that the ISO
+    /// §B: what the SHIPPED `icccer transform --bpc` emits, now that the ISO
     /// estimator has a caller.
     pub shipped_device: Option<Vec<f64>>,
     pub shipped_error: Option<String>,
@@ -1129,8 +1129,8 @@ impl From<crate::DiffError> for Unavailable {
 /// Run Pass 5c.
 ///
 /// §A needs no oracle at all — both black points are computed here, one by
-/// `iccce_cmm::bpc` and one by this file's reimplementation, on the *same*
-/// round trip. §B needs `transicc` and the shipped `iccce` binary.
+/// `icccer_cmm::bpc` and one by this file's reimplementation, on the *same*
+/// round trip. §B needs `transicc` and the shipped `icccer` binary.
 ///
 /// # Errors
 /// [`Unavailable::Skip`] when a profile or a binary is absent (a machine
@@ -1151,11 +1151,11 @@ pub fn analyse(
             )));
         }
     }
-    let iccce = match crate::Iccce::locate() {
+    let icccer = match crate::Icccer::locate() {
         Err(e) => return Err(Unavailable::Error(e.to_string())),
         Ok(None) => {
             return Err(Unavailable::Skip(
-                "iccce binary not found: run `cargo build --release -p iccce-cli`".into(),
+                "icccer binary not found: run `cargo build --release -p icccer-cli`".into(),
             ));
         }
         Ok(Some(i)) => i,
@@ -1200,7 +1200,7 @@ pub fn analyse(
         .unwrap_or_default();
 
     // The shipped binary's ISO arm, reachable since the estimator was wired.
-    let (shipped_device, shipped_error) = match iccce.transform_rows_shaped_bpc(
+    let (shipped_device, shipped_error) = match icccer.transform_rows_shaped_bpc(
         src_path,
         dst_path,
         crate::Intent::RelativeColorimetric,
@@ -1235,7 +1235,7 @@ pub fn analyse(
         "arm={arm} | dst {} (output_class={}, ink_space={} -> lcms2 InitialLab branch {:?}) | src \
          sRGB v2.1 matrix/TRC | media-relative | lcms2's estimator REIMPLEMENTED from cmssamp.c \
          at pin 21c582a (source-read, no lcms2 binary in section A); ISO/CD 18619 4.2.5 from \
-         iccce_cmm::bpc. Both driven on the SAME round trip, in f64",
+         icccer_cmm::bpc. Both driven on the SAME round trip, in f64",
         f.describe,
         f.is_output_class,
         f.is_ink_space,
@@ -1331,7 +1331,7 @@ pub const DEVICE_OBSERVABLE: &[(&str, bool)] = &[
 
 /// The cutoff for "observable", in normalised device units per `L*`.
 ///
-/// **Derived from the shipped surface, not chosen.** `iccce transform` prints
+/// **Derived from the shipped surface, not chosen.** `icccer transform` prints
 /// device values to six decimals, so one printed lsb is `10⁻⁶` — the same
 /// constant [`SHIPPED_MATCHES_LIBRARY`] rests on. A sensitivity below it means
 /// a whole `L*` of black-point error moves the printed output by less than one
@@ -1493,7 +1493,7 @@ pub const BRANCH_EXACT: Tolerance = Tolerance::new(
 /// and must be read as such. **Note the direction of the evidence.** The
 /// smaller this ratio, the further apart the candidates are — so a run in
 /// which it *improves* is not necessarily a run in which anything got better.
-/// On 2026-08-12 it improved from 1,715×10⁻¹ to 4,258×10⁻² **because iccce's
+/// On 2026-08-12 it improved from 1,715×10⁻¹ to 4,258×10⁻² **because icccer's
 /// own estimate moved away from lcms2's**, which is a finding and not a
 /// success. Read it with row `estimators/black-points-in-lab` beside it.
 pub const DISCRIMINATES: Tolerance = Tolerance::new(
@@ -1520,7 +1520,7 @@ pub const DISCRIMINATES: Tolerance = Tolerance::new(
 /// The denominator is §B's own `L*` bound rather than a chosen constant:
 /// **an explanation accounts for an effect when what is left over is inside
 /// the uncertainty of the explanation.** It is a slightly *strict* denominator
-/// — the true uncertainty on `BT(black)` also contains iccce's and lcms2's
+/// — the true uncertainty on `BT(black)` also contains icccer's and lcms2's
 /// disagreement about the two tables — and being strict in the direction that
 /// could only fail the row is the right way round.
 pub const RECOVERY_EXPLAINED: Tolerance = Tolerance::new(
@@ -1533,7 +1533,7 @@ pub const RECOVERY_EXPLAINED: Tolerance = Tolerance::new(
      direction that can only fail the row is the right way round",
 );
 
-/// **§B, the shipped surface.** `iccce transform --bpc` against the same ISO
+/// **§B, the shipped surface.** `icccer transform --bpc` against the same ISO
 /// black driven in process, in device units.
 ///
 /// Pass 5b's row Q8 graded this case as a **refusal**: the ISO estimator had
@@ -1565,7 +1565,7 @@ pub const RECOVERY_EXPLAINED: Tolerance = Tolerance::new(
 /// run of the field that computes it.
 pub const SHIPPED_MATCHES_LIBRARY: Tolerance = Tolerance::new(
     1e-6,
-    "the shipped `iccce transform --bpc` against B2A1(ISO black) computed in process. The CLI \
+    "the shipped `icccer transform --bpc` against B2A1(ISO black) computed in process. The CLI \
      prints device values to six decimals, so one printed lsb is 1e-6 and the bound is that and \
      nothing else. It CANNOT absorb a different black point, and the distance to the rival \
      candidate - the shipped binary reaching lcms2's black instead - is PRINTED as this row's \
@@ -1597,8 +1597,8 @@ pub const REPORTED: Tolerance = Tolerance::new(
 ///    calls `InitialLab`, and the two documents mean different things by the
 ///    name: ISO/CD 18619 4.2.2.2's darkest device vertex, and lcms2's perceptual
 ///    round trip. **No clause requires them to agree**, and grading their
-///    difference would be grading iccce against lcms2's reading of a document
-///    iccce does not implement — exactly what `CLAUDE.md` rule 7 forbids and
+///    difference would be grading icccer against lcms2's reading of a document
+///    icccer does not implement — exactly what `CLAUDE.md` rule 7 forbids and
 ///    what `TOLERANCES.md` §1 means by a weak claim quoted as a strong one.
 /// 2. **A bound derived from the separation would be a number tuned to one
 ///    known defect.** Any value below `4,717 441` would have failed the
@@ -1806,7 +1806,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
                  trip A2B1(B2A0(Lab 0,0,0)) with chroma forced to 0 at L174, L*={:.6}. ISO/CD \
                  18619 4.2.5.4 returns its InitialLab = 4.2.2.2's darkest DEVICE VERTEX carried \
                  through A2B1 and neutralised by 4.2.3, L*={:.6}. NOT outRamp[first]/MinL \
-                 ({:.6} on lcms2's ramp, {:.6} on ISO's) - that is what iccce returned here \
+                 ({:.6} on lcms2's ramp, {:.6} on ISO's) - that is what icccer returned here \
                  until fd34a44 and it has no textual support in 4.2.5 in any branch. \
                  SEPARATION OF THE TWO CANDIDATES: {:.6} L*",
                 a.lcms2.nearly_straight,
@@ -1844,7 +1844,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
              at cc03f3d) AND THE swop FIGURE DID NOT COLLAPSE - IT GREW 58.8x, from 8.1668e-2 \
              to 4.799109 dE76, still 100% L*. ** The collapse was predicted because the \
              pre-correction gap had been attributed in full to the 4.2.5.4 defect. That \
-             attribution was right about the CAUSE and wrong about the CONSEQUENCE: iccce's \
+             attribution was right about the CAUSE and wrong about the CONSEQUENCE: icccer's \
              non-conformant return value (outRamp[first] = MinL = 16.489806) sat 0.0817 L* from \
              lcms2's answer, and the CONFORMANT return value (InitialLab = 11.772365) sits \
              4.7991 L* from it. The defect's own magnitude - how far the old code was from the \
@@ -1955,7 +1955,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
                 "{ctx} | {:.6e} device, against Pass 4b A's 1.330e-4 maximum over ITS points. \
                  The residue is the pipeline difference, not the black point: lcms2 evaluates its \
                  round trip through the 16-bit machinery (cmsCreateExtendedTransform with \
-                 NOOPTIMIZE) and this harness evaluates iccce's Lut16Model in f64",
+                 NOOPTIMIZE) and this harness evaluates icccer's Lut16Model in f64",
                 a.device_residual_lcms2()
             ),
         )
@@ -2001,8 +2001,8 @@ pub fn records(a: &Analysis) -> Vec<Record> {
              own error bar. That is the attribution row: 0.858 dE76 of 'estimator divergence' was \
              0.082 of estimator and the rest of round trip, and it is now shown rather than \
              suspected. BOTH SIDES OF THIS ROW ARE lcms2's, so commit fd34a44's correction to \
-             iccce's 4.2.5.4 does not touch it and the decomposition stands as measured. The \
-             0.082 in it is the estimator divergence AS ICCCE THEN COMPUTED IT, before that \
+             icccer's 4.2.5.4 does not touch it and the decomposition stands as measured. The \
+             0.082 in it is the estimator divergence AS ICCCER THEN COMPUTED IT, before that \
              correction; the conformant divergence is on row estimators/black-points-in-lab and \
              is 59x larger, and it is NOT a term in Pass 5b's 0.858",
             format!(
@@ -2039,7 +2039,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             Metric::DeviceAbsMaxNormalised,
             SHIPPED_MATCHES_LIBRARY,
             max_abs(dev, &a.predicted_from_iso),
-            "SUPERSEDES Pass 5b row Q8. That row graded `iccce transform --bpc` REFUSING this \
+            "SUPERSEDES Pass 5b row Q8. That row graded `icccer transform --bpc` REFUSING this \
              exact case, because bpc::estimate_lut_destination_black had no caller. It has since \
              been wired into Chain::estimate_dst_black, the binary converts, and what is worth \
              grading now is that it reaches the SAME black point the library function does - a \
@@ -2463,7 +2463,7 @@ pub const FIXTURE_SEPARATION_AS_DESIGNED: Tolerance = Tolerance::new(
 /// to state `outRamp[first]` — **the rival return value** — independently of
 /// the code being graded.
 ///
-/// It is a deliberate duplication of twelve lines of `iccce_cmm::bpc`. Calling
+/// It is a deliberate duplication of twelve lines of `icccer_cmm::bpc`. Calling
 /// that crate for the rival would mean a build in which the estimator is broken
 /// reports its own broken rival, and the separation would move in lockstep with
 /// the observation it is supposed to bound. A harness must be able to say how
@@ -2500,7 +2500,7 @@ pub fn iso_out_ramp_first(initial_lab: Lab, bt: impl Fn(Lab) -> Lab) -> f64 {
 /// `analyse` needs three things this does not: the **system sRGB profile**
 /// (`LEGAL.md` §3 category (c) — absent on any machine without the Windows
 /// colour directory), the **`transicc` oracle** (a vendored build, not
-/// committed), and the **shipped `iccce` binary** (a release build). Any one of
+/// committed), and the **shipped `icccer` binary** (a release build). Any one of
 /// them missing skips the whole arm, which is correct for a cross-check and
 /// wrong for this.
 ///
@@ -2514,7 +2514,7 @@ pub fn iso_out_ramp_first(initial_lab: Lab, bt: impl Fn(Lab) -> Lab) -> f64 {
 /// the reason the function exists: as of `e26d9ba`, **a full reversion of
 /// `fd34a44` turned no row of this suite red on any machine.** `pass5c/swop/*`
 /// moved its reported numbers and stayed green; `pass5c/synthetic/*` did not
-/// move at all. (The clause was not undefended — `iccce_cmm::bpc`'s own unit
+/// move at all. (The clause was not undefended — `icccer_cmm::bpc`'s own unit
 /// tests fail on that reversion — but nothing exercised it through a parsed
 /// profile, which is where a wiring defect between `Chain` and the estimator
 /// would live.)
@@ -2602,7 +2602,7 @@ pub fn clause_records(arm: &'static str, path: &Path, authored: Authored) -> Vec
              then the DestinationBlackPoint shall be the same as InitialLab.' Graded against the \
              fixture's AUTHORED device black neutralised by 4.2.3 - a constant in recipes.rs and a \
              clause, with no implementation's output in the expectation and no oracle, no system \
-             profile and no network in the loop. It runs on a bare checkout. iccce returned \
+             profile and no network in the loop. It runs on a bare checkout. icccer returned \
              outRamp[first] here until commit fd34a44 and NO ROW OF THIS SUITE WENT RED; this is \
              the row that would have",
             format!(
@@ -2752,7 +2752,7 @@ mod tests {
     /// ISO/CD 18619 **4.2.5.4** through a parsed profile: *"the
     /// DestinationBlackPoint shall be the same as InitialLab"*.
     ///
-    /// `iccce_cmm::bpc`'s own unit tests already assert this on a synthetic
+    /// `icccer_cmm::bpc`'s own unit tests already assert this on a synthetic
     /// closure and they are what caught the injected reversion on 2026-08-12.
     /// What they cannot reach is the clause exercised through the **parse → LUT
     /// model → estimator** path, which is where a wiring defect lives — and on

@@ -1,5 +1,5 @@
 ---
-name: iccce-measurement-under-the-guards
+name: icccer-measurement-under-the-guards
 description: DL-038/DL-040/DL-043 — the separation DISTANCE must be a property of the FIXTURE not the RUN (it printed ZERO-SEPARATION on a row that was failing); a big separation on an UNGRADED row buys a fixture, not a bound; an exemption is declared, never acquired
 metadata:
   type: project
@@ -79,7 +79,7 @@ admissible moves are **declare the exemption** or **fix the arm** —
 never widen the constant. When a separation is large on a row nothing
 grades, file it as **owed fixture work**.
 
-Related: [[iccce-disclosure-is-not-enforcement]] (DL-037, the guards),
-[[iccce-agreement-can-be-the-symptom]] (DL-033, the rule underneath),
-[[iccce-control-only-as-good-as-its-fixture]],
-[[iccce-gate-must-not-reward-deletion]], [[iccce-pass-status]].
+Related: [[icccer-disclosure-is-not-enforcement]] (DL-037, the guards),
+[[icccer-agreement-can-be-the-symptom]] (DL-033, the rule underneath),
+[[icccer-control-only-as-good-as-its-fixture]],
+[[icccer-gate-must-not-reward-deletion]], [[icccer-pass-status]].

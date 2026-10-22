@@ -1,6 +1,6 @@
 ---
-name: iccce-absence-of-publication-is-not-evidence
-description: DL-054 — an ACCESS boundary (color.org's robot bar) got recorded as an EXISTENCE fact ("NO document publishes them"), so the shipped sRGB file was promoted to ground truth by elimination; the ~12 ULP blue-Z residual was the FILE's, not iccce's, and the mis-attribution survived because the NUMBER was correct
+name: icccer-absence-of-publication-is-not-evidence
+description: DL-054 — an ACCESS boundary (color.org's robot bar) got recorded as an EXISTENCE fact ("NO document publishes them"), so the shipped sRGB file was promoted to ground truth by elimination; the ~12 ULP blue-Z residual was the FILE's, not icccer's, and the mis-attribution survived because the NUMBER was correct
 metadata:
   type: project
 ---
@@ -13,7 +13,7 @@ hold IS the reference.** Filed 2026-08-17 as `ARCHITECTURE.md`
 **Why:** for the life of this project's sRGB work, reconstructing the
 shipped HP 1998 profile's colorants from sourced chromaticities missed
 `bXYZ.Z` by **~12 ULP**. Three routes failed to close it. The residual
-was registered as **iccce's** rule-4 approximation and asserted to stay
+was registered as **icccer's** rule-4 approximation and asserted to stay
 in `11.0..13.0` ULP.
 
 The operator then downloaded, **in a browser**, ICC's own **"How to
@@ -24,10 +24,10 @@ decimal places.**
 
 | | worst cell | `bXYZ.Z` |
 |---|---|---|
-| **iccce's from-constants construction** | **3.02 ULP** | **0.90 ULP** |
+| **icccer's from-constants construction** | **3.02 ULP** | **0.90 ULP** |
 | the shipped HP 1998 / `sRGB2014.icc` file | **11.13 ULP** | **11.13 ULP** |
 
-★★★ **The residual was the FILE's.** iccce is ~3.7× closer to ICC's
+★★★ **The residual was the FILE's.** icccer is ~3.7× closer to ICC's
 published values than the world's most-deployed sRGB profile is.
 
 **Why it survived, and it is not "nobody checked": the NUMBER was
@@ -43,7 +43,7 @@ it must never be de-prioritised by reasoning.
    sat behind `color.org`'s robot bar. *"No agent may fetch it"* →
    *"it is not fetched"* → *"nothing publishes these values."* ★★★ This
    is **DL-041's taxonomy failing in practice for the first time**
-   ([[iccce-ground-truth-cannot-exist]]): *existence*, *availability* and
+   ([[icccer-ground-truth-cannot-exist]]): *existence*, *availability* and
    *access terms* are three different blockers, and the LUT path's
    absence is **structural** while this one was merely **unfetched**.
 2. **Both registers lived in ONE corpus file and the flat one
@@ -94,13 +94,13 @@ document states them"* at three places (owed to `icc-spec-librarian`);
 UNBLOCKED and merely undone — and it must be a RASTER, not a fourth text
 extraction, because a 15-dp table in a Symbol-font document is exactly
 where text engines fail TOGETHER.** See
-[[iccce-inferred-environment-constraint-is-a-reading]]); the document
+[[icccer-inferred-environment-constraint-is-a-reading]]); the document
 contains **two transcription defects in §B.1**; and **the ground-truth
 row for chromatic adaptation moves from BLOCKED to
 AVAILABLE-AND-UNMEASURED**, because ICC's recommended `chad` is in the
-same §B.2 — DL-042's rule working ([[iccce-negative-finding-removes-its-auditor]]).
+same §B.2 — DL-042's rule working ([[icccer-negative-finding-removes-its-auditor]]).
 
-Related: [[iccce-pass-status]], [[iccce-ground-truth-cannot-exist]],
-[[iccce-compatibility-not-certification]],
-[[iccce-stale-citation-worse-than-stale-number]],
-[[iccce-count-from-a-sample-is-not-the-population]].
+Related: [[icccer-pass-status]], [[icccer-ground-truth-cannot-exist]],
+[[icccer-compatibility-not-certification]],
+[[icccer-stale-citation-worse-than-stale-number]],
+[[icccer-count-from-a-sample-is-not-the-population]].

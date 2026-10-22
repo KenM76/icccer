@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-patch_compare.py — compare `iccce transform` output against pixel regions of a
+patch_compare.py — compare `icccer transform` output against pixel regions of a
 reference render, for a set of device-colour patches described by a CASE FILE.
 
 WHAT THIS IS FOR
 ================
-The question "does iccce agree with some other renderer on this colour?" keeps
+The question "does icccer agree with some other renderer on this colour?" keeps
 recurring, and answering it by hand each time invites two failures this project
 cares about: the comparison gets described loosely ("close enough"), and the
 evidence class gets forgotten ("matches the other renderer" said as though it
@@ -15,7 +15,7 @@ remembered by the operator.
 
 It does exactly three things:
 
-  1. Converts a list of device colours through `iccce transform`, for every
+  1. Converts a list of device colours through `icccer transform`, for every
      (source profile x rendering intent) pair the case file names.
   2. Samples a reference image over the regions the case file names.
   3. Prints both, side by side, in 8-bit channel counts.
@@ -52,8 +52,8 @@ EVIDENCE CLASS — THE PART THE PROGRAM WILL NOT LET YOU SKIP
 ===========================================================
 A case file MUST declare `reference.evidence_class`, and the tool prints that
 declaration above every table. There is no default, because a defaulted
-evidence class is exactly how "iccce matches X" turns into a claim nobody
-chose to make. `iccce`'s ledger recognises, from strongest to weakest:
+evidence class is exactly how "icccer matches X" turns into a claim nobody
+chose to make. `icccer`'s ledger recognises, from strongest to weakest:
 
     published-ground-truth              a value from the literature
     implementation-cross-check          e.g. lcms2, whose path is pinned
@@ -153,14 +153,14 @@ nothing — the cheap way to check a case file says what you meant.
 
 DEPENDENCIES
 ============
-`numpy` and `Pillow`, plus a built `iccce` binary (`--iccce`, default
-`target/release/iccce`). None of these enter the crate graph; this is a
+`numpy` and `Pillow`, plus a built `icccer` binary (`--icccer`, default
+`target/release/icccer`). None of these enter the crate graph; this is a
 development tool and `Cargo.lock` is unaffected.
 
 EXIT CODES
 ==========
     0  every requested comparison ran
-    1  an input was missing, or `iccce transform` refused a request
+    1  an input was missing, or `icccer transform` refused a request
     2  usage error, or a case file that does not satisfy the schema
 """
 
@@ -179,7 +179,7 @@ class UsageError(Exception):
     """A case file or command line that does not satisfy the schema.
 
     Separated from operational failure so the exit code can match the
-    engine's own convention (`crates/iccce-cli/src/main.rs`): **2 means the
+    engine's own convention (`crates/icccer-cli/src/main.rs`): **2 means the
     caller asked for something malformed, 1 means the request was well formed
     and could not be carried out.** Python's bare `raise SystemExit("msg")`
     exits 1 for both, which silently collapses that distinction — it did here,
@@ -264,10 +264,10 @@ def resolve_sources(case):
 # Conversion
 # --------------------------------------------------------------------------
 
-def resolve_iccce(path):
+def resolve_icccer(path):
     """Find the engine binary, tolerating a missing `.exe` on Windows.
 
-    Two Windows behaviours make the obvious `target/release/iccce` fail, both
+    Two Windows behaviours make the obvious `target/release/icccer` fail, both
     with the same uninformative "cannot find the file specified":
 
     * `subprocess` does NOT apply PATHEXT to a path containing a separator, so
@@ -282,20 +282,20 @@ def resolve_iccce(path):
     for cand in (path, path + ".exe"):
         if os.path.isfile(cand):
             return os.path.abspath(cand)
-    raise OperationalError("iccce binary not found at %r (nor %r). Build it "
-                           "with `cargo build --release -p iccce-cli`, or pass "
-                           "--iccce." % (path, path + ".exe"))
+    raise OperationalError("icccer binary not found at %r (nor %r). Build it "
+                           "with `cargo build --release -p icccer-cli`, or pass "
+                           "--icccer." % (path, path + ".exe"))
 
 
-def convert(iccce, src, dst, intent, lines):
-    """Run `iccce transform` over newline-separated device values.
+def convert(icccer, src, dst, intent, lines):
+    """Run `icccer transform` over newline-separated device values.
 
     Returns `(array_of_rgb_floats, None)` or `(None, first_line_of_stderr)`.
 
     ★ Values come back exactly as the engine printed them. The clamp that
     matters has already happened inside the engine — each linear component
     clamped to [0,1] BEFORE its inverse TRC, ICC.1:2022 Annex F.8-F.16, see
-    `MatrixTrc::pcs_to_device` in `crates/iccce-cmm/src/matrix_trc.rs` and the
+    `MatrixTrc::pcs_to_device` in `crates/icccer-cmm/src/matrix_trc.rs` and the
     test `out_of_gamut_clamps_before_inverse_trc` beside it. Nothing here
     re-clamps, so a channel sitting at exactly 0 or exactly 1 is the engine's
     normative gamut clamp and not this script tidying up. That distinction is
@@ -303,7 +303,7 @@ def convert(iccce, src, dst, intent, lines):
     destination gamut" and "the tool rounded".
     """
     p = subprocess.run(
-        [iccce, "transform", "--src", src, "--dst", dst, "--intent", intent],
+        [icccer, "transform", "--src", src, "--dst", dst, "--intent", intent],
         input=lines, capture_output=True, text=True)
     if p.returncode != 0:
         return None, (p.stderr.strip().splitlines() or ["refused"])[0]
@@ -420,10 +420,10 @@ def wpct(values, weights, p):
 # Reporting
 # --------------------------------------------------------------------------
 
-def report_constant(patch, sources, case, iccce_bin):
+def report_constant(patch, sources, case, icccer_bin):
     """Print one constant patch. Returns the number of REFUSED conversions.
 
-    A refusal is printed and the sweep continues — `iccce transform` refuses
+    A refusal is printed and the sweep continues — `icccer transform` refuses
     by design in places (`--bpc` outside the estimable subset, an unknown
     intent), and those refusals are exactly what a sweep is for. But the run
     is then incomplete, so the count is propagated and turns into exit 1 at
@@ -442,7 +442,7 @@ def report_constant(patch, sources, case, iccce_bin):
     lines, _ = patch_devices(patch)
     for label, path in sources:
         for intent in case["intents"]:
-            rgb, err = convert(iccce_bin, path, case["destination"],
+            rgb, err = convert(icccer_bin, path, case["destination"],
                                intent, lines)
             if rgb is None:
                 print("  %-22s%-16s  refused: %s" % (label, intent, err))
@@ -454,7 +454,7 @@ def report_constant(patch, sources, case, iccce_bin):
     return refused
 
 
-def report_ramp(patch, sources, case, iccce_bin):
+def report_ramp(patch, sources, case, icccer_bin):
     """Print one ramp patch. Returns the number of REFUSED conversions."""
     refused = 0
     px = sample_region(case["reference"]["image"], patch["region"])
@@ -470,7 +470,7 @@ def report_ramp(patch, sources, case, iccce_bin):
     lines, w = patch_devices(patch)
     for label, path in sources:
         for intent in case["intents"]:
-            rgb, err = convert(iccce_bin, path, case["destination"],
+            rgb, err = convert(icccer_bin, path, case["destination"],
                                intent, lines)
             if rgb is None:
                 print("  %-22s%-16s  refused: %s" % (label, intent, err))
@@ -505,11 +505,11 @@ def validate(case):
 
 def main():
     ap = argparse.ArgumentParser(
-        description="Compare iccce transform output against a reference "
+        description="Compare icccer transform output against a reference "
                     "render, for the patches a case file describes.")
     ap.add_argument("--case", required=True, help="path to a case JSON file")
-    ap.add_argument("--iccce", default="target/release/iccce",
-                    help="path to the built iccce binary")
+    ap.add_argument("--icccer", default="target/release/icccer",
+                    help="path to the built icccer binary")
     ap.add_argument("--patch", action="append",
                     help="only this patch id (repeatable)")
     ap.add_argument("--dump-devices", action="store_true",
@@ -548,7 +548,7 @@ def main():
           "file's header and ARCHITECTURE.md DL-070.")
     print("")
 
-    iccce_bin = resolve_iccce(args.iccce)
+    icccer_bin = resolve_icccer(args.icccer)
     sources = resolve_sources(case)
     refused = 0
     for patch in patches:
@@ -561,9 +561,9 @@ def main():
                   "weighting is an ASSUMPTION about geometry rather than a "
                   "fact read out of a document. Add one.")
         if kind == "constant":
-            refused += report_constant(patch, sources, case, iccce_bin)
+            refused += report_constant(patch, sources, case, icccer_bin)
         else:
-            refused += report_ramp(patch, sources, case, iccce_bin)
+            refused += report_ramp(patch, sources, case, icccer_bin)
         print("")
     if refused:
         print("%d conversion(s) were REFUSED; this sweep is incomplete."

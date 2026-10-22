@@ -47,7 +47,7 @@ was careless; the divergence is created by `-A` and frozen by the message.
   correction for a commit that mixed two changesets must not mix two
   changesets.
 
-**Not a duplicate of [[iccce-count-needs-its-apparatus]] (`DL-031`)**,
+**Not a duplicate of [[icccer-count-needs-its-apparatus]] (`DL-031`)**,
 which is about a *count* in a commit message whose apparatus was omitted.
 Here there is no number: the claim is *scope*, and its truth lived in the
 index rather than in the author's terminal. The shared property, and the
@@ -100,5 +100,5 @@ only) and reported OK on a tree whose *untracked* new files violated the
 rule — **a gate whose input set is "what is already committed" cannot see
 the commit you are about to make.** Same lesson from the other end: the
 index and the work are not the same set. See
-[[iccce-stale-status-decays-faster-than-a-number]] for the general habit
+[[icccer-stale-status-decays-faster-than-a-number]] for the general habit
 of carrying a dated reading instead of a remembered state.

@@ -1,6 +1,6 @@
 ---
 name: project-synthetic-fixture-corpus-and-gp001
-description: fixtures/synthetic now exists (39 profiles from tools/gen-profiles, verify-able byte-for-byte); building it produced FINDING GP-001 (iccce mis-counts mBA curve sets), three ICC_Spec corpus gaps, and GP-002 — a round-valued fixture makes distinct quantities coincide and has zero power.
+description: fixtures/synthetic now exists (39 profiles from tools/gen-profiles, verify-able byte-for-byte); building it produced FINDING GP-001 (icccer mis-counts mBA curve sets), three ICC_Spec corpus gaps, and GP-002 — a round-valued fixture makes distinct quantities coincide and has zero power.
 metadata:
   type: project
 ---
@@ -19,9 +19,9 @@ tag-level and unusable outside `cargo test`.
 - `gen-profiles verify <dir>` regenerates in memory and compares byte for
   byte; it is the reason nothing in that crate may read a clock, an env var,
   or an RNG. `MANIFEST.md` is generated, never hand-edited.
-- The crate must **never** gain a dependency on `iccce-*`. A fixture written
+- The crate must **never** gain a dependency on `icccer-*`. A fixture written
   with the parser's own encoder cannot detect a *shared* misreading of the
-  spec. (`tools/difftest`'s path-dep on `iccce-color` is a different case and
+  spec. (`tools/difftest`'s path-dep on `icccer-color` is a different case and
   is justified in its manifest; do not reason by analogy.)
 - Nothing in that corpus is a colorimetric reference. Colorants are an
   arbitrary split of the *encoded* D50 white chosen so the integers sum to it
@@ -37,7 +37,7 @@ CMYK on purpose: lcms2 only keeps a black point's chroma when the destination is
 CLUT is its **exact closed-form inverse**, so multilinear interpolation
 reproduces it exactly and NA-006 is not a confound. All three Lab values encode
 **exactly** in the general 16-bit PCSLAB encoding. `verify` clean, 18 608 bytes,
-`iccce inspect` reports 0 malformations. Being square (3→3) it **cannot** catch
+`icccer inspect` reports 0 malformations. Being square (3→3) it **cannot** catch
 GP-001, and its recipe says so. See
 [[project-pass5c-estimator-branch-finding]].
 
@@ -75,7 +75,7 @@ neutralised vertex. On a real ink set none of the three holds exactly.
 
 1. **GP-001 is fixed and now has a regression that is not an oracle.**
    `v4-cmyk-mab-lab.icc` is driven in both directions in `difftest`'s §B, and
-   iccce reproduces a **closed form derived from 10.12/10.13** to `f64` noise
+   icccer reproduces a **closed form derived from 10.12/10.13** to `f64` noise
    (2.8×10⁻¹⁴ `L*`, 2.2×10⁻¹⁶ device). The `mBA ` counts (B=3, M=3, A=4) are
    what make the chain evaluate at all, so that row *is* GP-001's regression.
 2. **The fixture is not merely convenient — it is the only instrument.** All
@@ -87,16 +87,16 @@ neutralised vertex. On a real ink set none of the three holds exactly.
 3. **★ The fixture caught a defect it was not designed for.** Its 3×4 matrix
    offsets exist because *dropping* them is the classic misread. They also push
    the encoded `L*` to **1.00390625** at `K = 0` — outside the encodable PCS
-   range — where **iccce clamps and lcms2 does not, worth 0.61 ΔE2000**. The
+   range — where **icccer clamps and lcms2 does not, worth 0.61 ΔE2000**. The
    best argument on file for authoring fixtures with awkward values rather than
    tidy ones. Unsettled; see
    [[project-lcms2-findings-pass4b-direction-dependence]].
 
-**★ FINDING GP-001 (open at filing).** `crates/iccce-profile/src/lut.rs`
+**★ FINDING GP-001 (open at filing).** `crates/icccer-profile/src/lut.rs`
 `decode_lut_ab` counts **B and M by `output_chan` and A by `input_chan` for
 BOTH tag types**. Correct for `mAB `; wrong for `mBA `. ICC.1:2022 **10.13.2 /
 10.13.4** say B and M are counted by **input** channels and **10.13.6** says A
-by **output** — so a CMYK `B2A0` (3 in, 4 out) has B=3, M=3, A=4. iccce refuses
+by **output** — so a CMYK `B2A0` (3 in, 4 out) has B=3, M=3, A=4. icccer refuses
 it with `curve chain broken at element 3 (byte 68)`. lcms2 agrees with the spec
 (`Type_LUTB2A_Read`) and converts through the same fixture. **The defect is
 invisible whenever `inputChan == outputChan`, i.e. on every square LUT, and
@@ -122,5 +122,5 @@ selector is `header.version`**, contradicting the A1 resolution at the top of
 the same file. See [[project-lcms2-findings-legacy-lab-and-forced-bpc]].
 
 **One divergence the corpus now pins:** lcms2's `transicc` **accepts** a major
-version 5 profile (`iccmax-version.icc`); iccce refuses iccMAX by name. Not a
+version 5 profile (`iccmax-version.icc`); icccer refuses iccMAX by name. Not a
 defect on either side — a deliberate difference that now has a fixture.

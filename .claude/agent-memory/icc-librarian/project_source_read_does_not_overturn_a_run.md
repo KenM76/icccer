@@ -61,7 +61,7 @@ rank.**
 accepted on citations — grep `NUMERIC_CLAIMS.md` for an executed row
 (`NC-078`, `NC-093`, `NC-095`, `NC-100`, `NC-101`, `NC-102` are the
 forced-BPC ones; §10's invalidation table already indexes them together
-under *"iccce ever forcing BPC, or lcms2 ceasing to"* — the index this
+under *"icccer ever forcing BPC, or lcms2 ceasing to"* — the index this
 check needs, built for another purpose). (2) A dispatch's account of
 **where its own wrong words live** is a claim like any other: this one
 said "the channel reply and the dispatch" and the wording was in **three
@@ -74,4 +74,4 @@ family — carry the hash), [[provenance-is-a-different-axis-from-evidence-class
 (better instrument, same `[REPORTED]` class),
 [[wrong-clause-refusal-and-discarded-halves]] (a wrong clause is worse
 than no clause; a correct citation on the wrong subject invites
-acceptance), [[iccce-pass-status]].
+acceptance), [[icccer-pass-status]].

@@ -1,6 +1,6 @@
 ---
-name: iccce-fabricated-value-is-a-forged-credential
-description: DL-067 (2026-08-20) — iccce printed a plausible profileID for v2 profiles that have no such field, with malformations:0. A fabricated value is WORSE than a false accusation: an accusation is loud and arguable, a well-formed value invites VERIFICATION. Same commit refused the same defect in an API — a conformance bool whose third answer would have had to be invented
+name: icccer-fabricated-value-is-a-forged-credential
+description: DL-067 (2026-08-20) — icccer printed a plausible profileID for v2 profiles that have no such field, with malformations:0. A fabricated value is WORSE than a false accusation: an accusation is loud and arguable, a well-formed value invites VERIFICATION. Same commit refused the same defect in an API — a conformance bool whose third answer would have had to be invented
 metadata:
   type: project
 ---
@@ -15,7 +15,7 @@ in**.
 **Why:** `profileID` was added in **v4**. ICC.1:2001-04 Table 9 makes
 header bytes `84..127` **one 44-byte reserved block** — *"44 bytes
 reserved for future expansion"*, the only mention in the document.
-**iccce read `84..100` as a `profileID` regardless of edition**, so a v2
+**icccer read `84..100` as a `profileID` regardless of edition**, so a v2
 profile carrying arbitrary bytes printed
 `header.id: deadbeefdeadbeefdeadbeefdeadbeef` **and `malformations: 0`
 beside it**. Fixed in `0a88ad6`; the range is now edition-gated
@@ -69,7 +69,7 @@ size"*; *"a byte that does not exist has not been set to 0"* is an
 > fabrication moved from a hex string into a `bool`.
 
 Shipped as `Violation / NotAViolation / Unsourced { register_id }`.
-★ **`Unsourced` means *iccce has not established the modality* — NOT that
+★ **`Unsourced` means *icccer has not established the modality* — NOT that
 the file is fine.** It is a statement about this project's knowledge.
 ★ **The edition must be supplied**: exactly **3 of the 9 variants split by
 edition**, so *"is this malformation a violation?"* is not a well-formed
@@ -93,7 +93,7 @@ stated RATIONALE was false; DL-003's *"revisit if"* has fired.**
 ★★★ **A right decision resting on a wrong reason is the hardest defect
 class to find**, because the thing that would prompt review — a bad
 outcome — never occurs. DL-042's shape in a *decision* rather than a debt.
-`TagTooSmall`'s cited validation table was written as *"checks iccce
+`TagTooSmall`'s cited validation table was written as *"checks icccer
 should perform and REPORT"* — **no row of it was ever a quotation of a
 requirement.**
 
@@ -102,9 +102,9 @@ logic (`NC-299`, `[REPORTED]`). **The third was not shown to be
 discriminating** — do not round `2 of 3` up to *"proven by mutation"*
 (DL-051).
 
-Related: [[iccce-words-humans-count-code]] (DL-063 — the count is the
-channel a program reads), [[iccce-source-labelled-number]] (a label
+Related: [[icccer-words-humans-count-code]] (DL-063 — the count is the
+channel a program reads), [[icccer-source-labelled-number]] (a label
 answers the question a reader would otherwise ask),
-[[iccce-documented-is-not-tested]],
-[[iccce-negative-finding-removes-its-auditor]],
-[[iccce-pass-status]].
+[[icccer-documented-is-not-tested]],
+[[icccer-negative-finding-removes-its-auditor]],
+[[icccer-pass-status]].

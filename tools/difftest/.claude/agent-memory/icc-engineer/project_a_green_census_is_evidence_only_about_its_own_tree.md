@@ -19,7 +19,7 @@ none re-ran it.
 ★ **The failing row was itself the interesting part.** It graded
 `malformations:` — a count of *disclosures* — and so accused five
 **ICC-published** profiles that violate nothing. Its own text offered two
-hypotheses (*"either iccce over-reports or a published ICC profile is
+hypotheses (*"either icccer over-reports or a published ICC profile is
 defective"*) and **the answer was a third it did not name: the row was
 counting the wrong quantity.** When a conformance row goes red, check what it
 measures before adjudicating between the hypotheses it hands you.

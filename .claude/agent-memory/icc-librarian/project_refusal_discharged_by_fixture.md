@@ -1,5 +1,5 @@
 ---
-name: iccce-refusal-discharged-by-fixture
+name: icccer-refusal-discharged-by-fixture
 description: DL-020 — a rule the corpus can't supply is refused by name, not guessed, and only an independently authored fixture can discharge the doubt (the GP-001 arc)
 metadata:
   type: project
@@ -40,5 +40,5 @@ wrong colour looks exactly like a right one.
   misreading. That guards the code, **not** the reading: 38 files from
   one person's corpus reading share whatever it got wrong.
 
-Related: [[iccce-pass-status]], [[iccce-verify-own-draft-too]],
-[[iccce-predicted-divergence-must-be-measured]].
+Related: [[icccer-pass-status]], [[icccer-verify-own-draft-too]],
+[[icccer-predicted-divergence-must-be-measured]].

@@ -1,4 +1,4 @@
-# FEATURES — what iccce can actually do today
+# FEATURES — what icccer can actually do today
 
 **Created 2026-08-18.** This file did not exist before; `README.md`
 §Status carried a Pass-by-Pass summary, which answers *"how far along is
@@ -17,12 +17,12 @@ vocabulary (`CLAUDE.md` rule 3):
 
 | class | what it means | what it does NOT mean |
 |---|---|---|
-| **self-comparison** | iccce agreed with iccce — e.g. the compiled path matches the reference path | nothing at all about whether either is colorimetrically right |
-| **cross-check** | iccce agreed with **lcms2**, our pinned oracle, within a stated tolerance | that either is right. lcms2 is an implementation, not the standard (rule 7) |
-| **derived-expectation** | iccce agreed with a value computed **by algebra** from a fixture's own authored bytes | that a real profile behaves this way |
-| **published-ground-truth** | iccce agreed with a number a standards body published | — |
+| **self-comparison** | icccer agreed with icccer — e.g. the compiled path matches the reference path | nothing at all about whether either is colorimetrically right |
+| **cross-check** | icccer agreed with **lcms2**, our pinned oracle, within a stated tolerance | that either is right. lcms2 is an implementation, not the standard (rule 7) |
+| **derived-expectation** | icccer agreed with a value computed **by algebra** from a fixture's own authored bytes | that a real profile behaves this way |
+| **published-ground-truth** | icccer agreed with a number a standards body published | — |
 
-★★★ **iccce has NO `published-ground-truth` row for any transform, and
+★★★ **icccer has NO `published-ground-truth` row for any transform, and
 that is the single most important sentence in this file.** Every
 conversion claim below is a cross-check, a derived expectation, or a
 self-comparison. The reasons are structural and are recorded in
@@ -33,7 +33,7 @@ a paywall that free restatements (W3C CSS Color 4, web-platform-tests)
 cannot substitute for, because they are downstream of the same document
 and assert three orders of magnitude coarser than the question needs.
 
-**A consumer should therefore read "cross-check against lcms2" as: iccce
+**A consumer should therefore read "cross-check against lcms2" as: icccer
 will not surprise you relative to the engine you were probably already
 using — not as: this is measured against truth.**
 
@@ -41,9 +41,9 @@ using — not as: this is measured against truth.**
 
 ## 1. Command-line surface
 
-Built from `crates/iccce-cli`. Binary name `iccce`.
+Built from `crates/icccer-cli`. Binary name `icccer`.
 
-### `iccce inspect <profile>`
+### `icccer inspect <profile>`
 
 Prints the header field by field, then the tag table, decoding each tag
 type it knows, then a malformation list.
@@ -59,7 +59,7 @@ type it knows, then a malformation list.
   container-embedded profiles; and the v2 unrecognised-intent report).
   A consumer must not treat `N > 0` as "this file is broken".
 
-### `iccce transform --src <p> --dst <p> [--intent i] [--bpc] [--preserve-black policy]`
+### `icccer transform --src <p> --dst <p> [--intent i] [--bpc] [--preserve-black policy]`
 
 Reads device values from stdin, one set per line, floats in `0..1`,
 whitespace-separated, count = source channel count. Writes one converted
@@ -87,7 +87,7 @@ set per line at 6 decimals.
 - `--preserve-black <policy>` — **required argument, no default.** See
   §3.
 
-### `iccce bench --src <p> --dst <p> [--grid N] [--pixels N]`
+### `icccer bench --src <p> --dst <p> [--grid N] [--pixels N]`
 
 Times a page-sized conversion through the compiled path. Defaults to a
 300 DPI A4 raster (2481×3507 = 8 700 867 px) and to the recommended grid
@@ -102,11 +102,11 @@ is the point, and is why the benchmark is not merely a timing tool.
 
 | crate | owns | depends on |
 |---|---|---|
-| `iccce-color` | CIE colorimetry | **nothing** — no siblings, no third-party crates. This is a load-bearing invariant, not an accident |
-| `iccce-profile` | ICC v2/v4 parsing | — |
-| `iccce-cmm` | transforms | `iccce-color`, `iccce-profile` |
-| `iccce-measure` | CGATS/IT8.7 measurement files | — |
-| `iccce-cli` | the shell | all of the above |
+| `icccer-color` | CIE colorimetry | **nothing** — no siblings, no third-party crates. This is a load-bearing invariant, not an accident |
+| `icccer-profile` | ICC v2/v4 parsing | — |
+| `icccer-cmm` | transforms | `icccer-color`, `icccer-profile` |
+| `icccer-measure` | CGATS/IT8.7 measurement files | — |
+| `icccer-cli` | the shell | all of the above |
 
 **The whole dependency tree is five packages and all of them are ours.**
 That satisfies `pdfce`'s three hard gates today — no copyleft anywhere,
@@ -114,11 +114,11 @@ no network client, and nothing that would break a `wasm32` build.
 
 ★★ **Two of those three are CI-enforced here, and this paragraph said
 otherwise until 2026-08-25.** `.github/workflows/ci.yml`'s `wasm32` job
-builds `iccce-color`, `iccce-profile`, `iccce-cmm` and `iccce-measure`
+builds `icccer-color`, `icccer-profile`, `icccer-cmm` and `icccer-measure`
 for `wasm32-unknown-unknown` on every push to `master`, and a companion
 step fails the build unless **every** line of `cargo tree` names an
-`iccce-*` crate carrying a local path. Both landed in `68d4601`, before
-`v0.1.0`. The retracted sentence — *"iccce does not gate `wasm32` in
+`icccer-*` crate carrying a local path. Both landed in `68d4601`, before
+`v0.1.0`. The retracted sentence — *"icccer does not gate `wasm32` in
 CI"* — was wrong when written and was quoted to `pdfce` as a caveat.
 
 ★ What remains a **dated observation rather than a standing guarantee**
@@ -127,7 +127,7 @@ dependency gate is a gate on the tree, not a promise about the future:
 it forces a human to read a licence before a dependency lands, which is
 the intended friction, not a guarantee that none ever will.
 
-### Colorimetry — `iccce-color`
+### Colorimetry — `icccer-color`
 
 **Implemented:** XYZ, xyY, Lab, LCh; Bradford chromatic adaptation;
 ΔE76; ΔE2000 (CIEDE2000).
@@ -139,7 +139,7 @@ observer colour-matching-function tables are absent; and **the von Kries
 USE.** That last one is a trap for anyone reading the source for
 available matrices.
 
-### Parsing — `iccce-profile`
+### Parsing — `icccer-profile`
 
 Header and tag table for **ICC v2 and v4**. Tag types decoded include
 `text`, `desc`, `mluc`, `XYZ`, `curv`, `para`, `mft1`, `mft2`, `mAB`/`mBA`,
@@ -153,7 +153,7 @@ flags. So the same bytes are reported differently — and in v2 a
 high-half value is **not reported at all**, because doing so would make
 a false statement about that edition.
 
-### Transforms — `iccce-cmm`
+### Transforms — `icccer-cmm`
 
 Matrix/TRC and LUT paths; all four rendering intents; a compiled
 (grid-interpolated) fast path; black point compensation; K-only black
@@ -179,14 +179,14 @@ at grid 17, with the non-qualifying control at **exactly `0.0`**.
 
 ★ **The reason it survived so long is worth a consumer's attention more
 than the bug is:** the only in-repository caller of `convert_buffer` is
-`iccce bench`, and `bench` cannot request black preservation — so the
+`icccer bench`, and `bench` cannot request black preservation — so the
 defect was **unreachable from the CLI, and `difftest` drives the CLI**.
 *A defect that only a library consumer can reach is invisible to a
 CLI-driven suite, however green it is.* The guarantee is now asserted by
 bit-equality in
-`crates/iccce-cmm/tests/compiled_buffer_agrees_with_single_pixel.rs`.
+`crates/icccer-cmm/tests/compiled_buffer_agrees_with_single_pixel.rs`.
 
-### Measurement — `iccce-measure`
+### Measurement — `icccer-measure`
 
 Reads CGATS/IT8.7 measurement-data files. No ICC, no colour maths.
 
@@ -194,7 +194,7 @@ Reads CGATS/IT8.7 measurement-data files. No ICC, no colour maths.
 
 ## 3. Named policies — the things that are NOT conformance features
 
-These are places where iccce does something ICC.1 does not specify. Each
+These are places where icccer does something ICC.1 does not specify. Each
 is a **named choice with the alternative stated**, never a default that
 quietly picks a side.
 
@@ -203,7 +203,7 @@ quietly picks a side.
 `--preserve-black <policy>`, **and the argument is mandatory.**
 
 There is no default **because two published definitions disagree by up
-to `4.9e-2`**, so a default would be iccce choosing one and reporting it
+to `4.9e-2`**, so a default would be icccer choosing one and reporting it
 under a name that means both.
 
 | policy | status |
@@ -229,8 +229,8 @@ UNMEASURED", which was true when written and is now false)*:
 **Read the number with all four of these, because each of them changes
 what it means:**
 
-- **Its oracle is ITSELF.** This is a **self-comparison** — iccce's
-  preserved answer against iccce's own colorimetric answer. ICC.1
+- **Its oracle is ITSELF.** This is a **self-comparison** — icccer's
+  preserved answer against icccer's own colorimetric answer. ICC.1
   specifies **no** black-preservation construct, so no published value
   for what preservation *should* return can exist. That is the ceiling
   the question admits, not a gap in the measurement.
@@ -259,14 +259,14 @@ consumer, not to this library.
 
 ### The default rendering intent
 
-iccce defaults to **media-relative**. ICC.1's only word on a default is
+icccer defaults to **media-relative**. ICC.1's only word on a default is
 an **informative NOTE** (9.2.39) and it favours **perceptual**, which is
 lcms2's choice. Neither is required or forbidden — so this is a
 disclosed divergence, not a standard being followed.
 
 ### ★★★ An unrecognised intent NAME is refused, not substituted — and that is a **CLI** decision that a library API may not inherit
 
-`iccce transform --intent <name>` accepts exactly `media-relative`,
+`icccer transform --intent <name>` accepts exactly `media-relative`,
 `perceptual`, `saturation` and `absolute`. **Anything else exits `2`**,
 and the reason is in the source: *"Refuse an unknown name rather than
 substituting: a substituted intent produces plausible wrong colour."*
@@ -345,11 +345,11 @@ wrong.
 
 ---
 
-## 5. What iccce does NOT do — read this before adopting
+## 5. What icccer does NOT do — read this before adopting
 
 - **Overprint. This is `pdfce`'s, not ours** — it is *compositing, not
   conversion*, deciding which colorant channels a paint operation writes
-  to, in a device space, *before* any conversion. iccce supplies the
+  to, in a device space, *before* any conversion. icccer supplies the
   conversion at the end of that pipeline and owns none of the
   compositing in front of it. This is the boundary most likely to be
   mis-filed.
@@ -362,11 +362,11 @@ wrong.
   linear combinations and assumes linear components. ★ The `should` is
   **normative body text in 2.0 and an informative NOTE in 2008**, so
   whether a processor is deviating depends on the edition. **Disclosed,
-  not guarded**: iccce cannot see what a caller does with the model it
-  returns. Full statement at `crates/iccce-cmm/src/builtin.rs` and
+  not guarded**: icccer cannot see what a caller does with the model it
+  returns. Full statement at `crates/icccer-cmm/src/builtin.rs` and
   `docs/DEFAULT_DESTINATION.md` §5.5.
 - **★ Evaluate in `f32` or `u8`.** Every evaluation surface is `f64` —
-  measured 2026-08-21, `grep -rn "f32" crates/iccce-cmm/src` returns
+  measured 2026-08-21, `grep -rn "f32" crates/icccer-cmm/src` returns
   **nothing**. A consumer whose raster is `f32` (which a compositing
   buffer generally is) pays a widen on the way in and a narrow on the
   way out for every pixel. **This is a known, requested and unbuilt

@@ -8,7 +8,7 @@
 //!
 //! Two things have since changed:
 //!
-//! 1. The operator obtained **ISO/CD 18619:2013**, and `crates/iccce-cmm`'s
+//! 1. The operator obtained **ISO/CD 18619:2013**, and `crates/icccer-cmm`'s
 //!    `bpc.rs` now implements clause 4.2.5's estimation procedure in full —
 //!    ramp, monotonic pass, validity test, root-not-vertex, guards.
 //! 2. The corpus recorded a **prediction, before this ran**:
@@ -46,20 +46,20 @@
 //! the ISO work has and has not landed.
 //!
 //! **Consequence for what this module is allowed to claim.** §A and §B grade
-//! `iccce_cmm::bpc`'s **library function**, in process, against lcms2's shipped
-//! behaviour. They do **not** grade the shipped `iccce transform --bpc`, which
+//! `icccer_cmm::bpc`'s **library function**, in process, against lcms2's shipped
+//! behaviour. They do **not** grade the shipped `icccer transform --bpc`, which
 //! cannot reach this path. That is the same distinction Pass 4b §A draws
 //! between its end-to-end rows and its PCS-side row, and it is stated on every
 //! record rather than left to a reader.
 //!
 //! ## The two estimators, read at the pin before anything was run
 //!
-//! | | ISO/CD 18619 4.2.5 (iccce) | lcms2 2.19.1 `cmssamp.c` |
+//! | | ISO/CD 18619 4.2.5 (icccer) | lcms2 2.19.1 `cmssamp.c` |
 //! |---|---|---|
 //! | ramp chroma | **ramps to zero**: `(t·100, ka(1−t), kb(1−t))` | **held constant**: `Lab.a = clamp(±50, InitialLab.a)` for every sample (L455–500) |
 //! | samples | 256 | 256 |
 //! | monotonic pass | downward, preserving the lightest | `outRamp[l] = min(outRamp[l], outRamp[l+1])` — identical |
-//! | fit | least squares quadratic, **root** | `RootOfLeastSquaresFitQuadraticCurve` — **also the root**, so iccce's "root not vertex" correction of *Adobe* is not a divergence from *lcms2* |
+//! | fit | least squares quadratic, **root** | `RootOfLeastSquaresFitQuadraticCurve` — **also the root**, so icccer's "root not vertex" correction of *Adobe* is not a divergence from *lcms2* |
 //! | returned chroma | **`(L, 0, 0)` — neutral** (4.2.3) | **`Lab.a = InitialLab.a; Lab.b = InitialLab.b`** (L592) — the initial black's chroma, retained |
 //!
 //! **The prediction's mechanism is therefore confirmed by reading, not
@@ -81,31 +81,31 @@
 //! currently return a constant. It is **not** needed here: SWOP's darkest
 //! colorant is emphatically not `XYZ(0,0,0)`, and media-relative with a
 //! v2 CMYK LUT destination is precisely lcms2's method-4 territory — the one
-//! Pass 5 could not reach because iccce refused. The ISO function can now be
+//! Pass 5 could not reach because icccer refused. The ISO function can now be
 //! driven directly, so the discriminating measurement is available on a real
 //! profile today.
 
 use std::path::Path;
 
-use iccce_cmm::bpc::{
+use icccer_cmm::bpc::{
     BpcScale, EstimationIntent, darkest_vertex, estimate_lut_destination_black, neutralise_and_clip,
 };
-use iccce_cmm::lut_transform::{Lut16Model, PcsKind, PcsValue};
-use iccce_cmm::matrix_trc::MatrixTrc;
-use iccce_color::{D50, Lab, Xyz, delta_e_2000};
-use iccce_profile::Profile;
-use iccce_profile::num::Signature;
-use iccce_profile::tag_types::TagData;
+use icccer_cmm::lut_transform::{Lut16Model, PcsKind, PcsValue};
+use icccer_cmm::matrix_trc::MatrixTrc;
+use icccer_color::{D50, Lab, Xyz, delta_e_2000};
+use icccer_profile::Profile;
+use icccer_profile::num::Signature;
+use icccer_profile::tag_types::TagData;
 
 use crate::{
-    Bpc, Iccce, Intent, Kind, Metric, Oracle, Precalc, Record, Request, Space, Tolerance,
+    Bpc, Icccer, Intent, Kind, Metric, Oracle, Precalc, Record, Request, Space, Tolerance,
 };
 
 const SWOP: &str = r"C:\Windows\System32\spool\drivers\color\USWebCoatedSWOP.icc";
 const SRGB: &str = r"C:\Windows\System32\spool\drivers\color\sRGB Color Space Profile.icm";
 
 mod tag {
-    use iccce_profile::num::Signature;
+    use icccer_profile::num::Signature;
     pub const A2B1: Signature = Signature(0x4132_4231);
     pub const B2A1: Signature = Signature(0x4232_4131);
 }
@@ -163,7 +163,7 @@ pub const APPARATUS_RATIO: Tolerance = Tolerance::new(
 /// This constant grades the one that did: the **chroma component** of the two
 /// estimators' black-point divergence is the detected black's chroma.
 ///
-/// `1×10⁻¹²`, and the row is labelled **structural on iccce's side**: ISO 4.2.3
+/// `1×10⁻¹²`, and the row is labelled **structural on icccer's side**: ISO 4.2.3
 /// returns `(L, 0, 0)`, so `Δa* = −a*_lcms2` and `Δb* = −b*_lcms2`
 /// *identically*, and the residual is `f64` noise. **What it therefore grades
 /// is that `neutralise_and_clip` and `estimate_lut_destination_black` really do
@@ -173,7 +173,7 @@ pub const APPARATUS_RATIO: Tolerance = Tolerance::new(
 /// row.
 pub const MECHANISM_EXACT: Tolerance = Tolerance::new(
     1e-12,
-    "STRUCTURAL on iccce's side: ISO/CD 18619 4.2.3 returns a NEUTRAL black, so the chroma      component of the divergence is the detected black's chroma identically and the residual is      f64 noise. It grades that clause 4.2.3 is implemented - a build that kept the chroma fails      it - NOT that the prediction's magnitude or shape were right, both of which were falsified.      1e-12 is ~4 orders above f64 noise on this arithmetic and ~10 below the effect",
+    "STRUCTURAL on icccer's side: ISO/CD 18619 4.2.3 returns a NEUTRAL black, so the chroma      component of the divergence is the detected black's chroma identically and the residual is      f64 noise. It grades that clause 4.2.3 is implemented - a build that kept the chroma fails      it - NOT that the prediction's magnitude or shape were right, both of which were falsified.      1e-12 is ~4 orders above f64 noise on this arithmetic and ~10 below the effect",
 );
 
 /// **§B, the decay.** The prediction's second half: the divergence decays to
@@ -188,7 +188,7 @@ pub const MECHANISM_EXACT: Tolerance = Tolerance::new(
 ///
 /// `5×10⁻² ΔE76` at device white. The residual there is not zero because the
 /// two arms still differ in the B2A evaluation itself: Pass 4b §A measured
-/// iccce against lcms2 on this exact table at **1,330×10⁻⁴ device**, and
+/// icccer against lcms2 on this exact table at **1,330×10⁻⁴ device**, and
 /// row `DE_B2A_ROUNDTRIP`'s chain carries that to ≈1,8×10⁻² ΔE00 through
 /// `A2B1`. `5×10⁻²` is ~2,8× that — **the same constant Pass 4b's row A4 uses,
 /// deliberately unchanged**, because the quantity at white *is* Pass 4b's row
@@ -204,7 +204,7 @@ pub const DECAYS_TO_ZERO: Tolerance = Tolerance::new(
 /// **§C - INVERTED 2026-08-12.** The shipped binary must now **convert**.
 ///
 /// This row was written when `bpc::estimate_lut_destination_black` had no
-/// caller: it graded that `iccce transform --bpc` refused, by name, exactly
+/// caller: it graded that `icccer transform --bpc` refused, by name, exactly
 /// the case ISO/CD 18619 4.2.5 exists for. That finding was acted on -
 /// commit `c268261` wired the estimator into `Chain::estimate_dst_black` -
 /// so the refusal no longer happens and the row premise is gone.
@@ -223,14 +223,14 @@ pub const DECAYS_TO_ZERO: Tolerance = Tolerance::new(
 /// ## What the row asserted when it was the other way round, kept for the record
 ///
 ///
-/// `iccce transform --bpc` into a v2 CMYK LUT destination at media-relative is
+/// `icccer transform --bpc` into a v2 CMYK LUT destination at media-relative is
 /// the case ISO/CD 18619 4.2.5 exists for, and `Chain::estimate_dst_black` does
 /// not call the ISO estimator, so it refuses. **That refusal is graded rather
 /// than reported**, for the reason Pass 5's row P19 gives: a build that quietly
 /// substituted a zero black for an unestimable one would produce plausible
 /// colour and pass every other row in this suite.
 ///
-/// The needle is the **exact wording** iccce prints, not a paraphrase — Pass 5
+/// The needle is the **exact wording** icccer prints, not a paraphrase — Pass 5
 /// row P20 failed on that distinction and it is not repeated here.
 ///
 /// `0,0 — exact`: the quantity is `0` if the refusal matched and `1` if it did
@@ -238,7 +238,7 @@ pub const DECAYS_TO_ZERO: Tolerance = Tolerance::new(
 pub const NOW_CONVERTS: Tolerance = Tolerance::new(
     0.0,
     "0 if the shipped binary CONVERTS this case, 1 if it refuses. INVERTED 2026-08-12 and \
-     deliberately not deleted. Until commit c268261 this row graded the opposite - that `iccce \
+     deliberately not deleted. Until commit c268261 this row graded the opposite - that `icccer \
      transform --bpc` REFUSED a v2 CMYK LUT destination at media-relative, on the exact \
      Display wording, because bpc::estimate_lut_destination_black had no caller. Pass 5b \
      found the missing caller, the engineer wired it into Chain::estimate_dst_black, and the \
@@ -339,7 +339,7 @@ impl Analysis {
         .sqrt()
     }
     /// §B's graded residual: does the chroma component equal the detected
-    /// black's chroma? Zero by construction on iccce's side.
+    /// black's chroma? Zero by construction on icccer's side.
     #[must_use]
     pub fn mechanism_residual(&self) -> f64 {
         (self.divergence_chroma() - self.lcms2_chroma).abs()
@@ -372,7 +372,7 @@ fn de76(a: Lab, b: Lab) -> f64 {
     ((a.l - b.l).powi(2) + (a.a - b.a).powi(2) + (a.b - b.b).powi(2)).sqrt()
 }
 
-fn read_lut16(p: &Profile, sig: Signature) -> Option<iccce_profile::lut::Lut16> {
+fn read_lut16(p: &Profile, sig: Signature) -> Option<icccer_profile::lut::Lut16> {
     let e = p.tags.iter().find(|t| t.sig == sig)?;
     match p.decode_tag(e) {
         Some(Ok(d)) => match d.data {
@@ -383,7 +383,7 @@ fn read_lut16(p: &Profile, sig: Signature) -> Option<iccce_profile::lut::Lut16> 
     }
 }
 
-fn read_lut8(p: &Profile, sig: Signature) -> Option<iccce_profile::lut::Lut8> {
+fn read_lut8(p: &Profile, sig: Signature) -> Option<icccer_profile::lut::Lut8> {
     let e = p.tags.iter().find(|t| t.sig == sig)?;
     match p.decode_tag(e) {
         Some(Ok(d)) => match d.data {
@@ -417,11 +417,11 @@ pub fn analyse(oracle: &Oracle) -> Result<Analysis, Unavailable> {
             )));
         }
     }
-    let iccce = match Iccce::locate() {
+    let icccer = match Icccer::locate() {
         Err(e) => return Err(Unavailable::Error(e.to_string())),
         Ok(None) => {
             return Err(Unavailable::Skip(
-                "iccce binary not found: run `cargo build --release -p iccce-cli`".into(),
+                "icccer binary not found: run `cargo build --release -p icccer-cli`".into(),
             ));
         }
         Ok(Some(i)) => i,
@@ -553,7 +553,7 @@ pub fn analyse(oracle: &Oracle) -> Result<Analysis, Unavailable> {
     let local_lcms2 = de76(bt(lcms2_black), lcms2_black);
     let roundtrip_error = local_iso.max(local_lcms2);
 
-    // --- iccce's ISO arm, built in the harness -------------------------------
+    // --- icccer's ISO arm, built in the harness -------------------------------
     // The map is `BpcScale`, graded by Pass 5 §A against ICC.1:2022 6.3.4.3 at
     // 1,11e-16; the B2A evaluation is `Lut16Model`, graded by Pass 4b §A
     // against lcms2 at 1,33e-4 device. Neither is new here — what is new is
@@ -588,7 +588,7 @@ pub fn analyse(oracle: &Oracle) -> Result<Analysis, Unavailable> {
     }
 
     // --- §C: does the shipped binary still refuse? ---------------------------
-    let refusal = iccce
+    let refusal = icccer
         .transform_rows_shaped_bpc(
             src_path,
             dst_path,
@@ -601,7 +601,7 @@ pub fn analyse(oracle: &Oracle) -> Result<Analysis, Unavailable> {
         .map(|e| e.to_string())
         .unwrap_or_else(|| "NO REFUSAL: the transform succeeded".to_string());
     let refusal_matched =
-        refusal.contains("black point not estimable within iccce's named subset (A42)");
+        refusal.contains("black point not estimable within icccer's named subset (A42)");
 
     let structure = format!(
         "dst v{:08X} {} {}->{} B2A1 mft1 3->4 33 pts, A2B1 mft2 4->3 9 pts | src v{:08X} {} \
@@ -671,7 +671,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             Metric::AbsMaxComponent,
             APPARATUS_RATIO,
             a.apparatus_ratio(),
-            "iccce's own A2B1(B2A1(Lab)) over the IN-GAMUT neutral shadow above the estimated \
+            "icccer's own A2B1(B2A1(Lab)) over the IN-GAMUT neutral shadow above the estimated \
              black, divided by the black-point divergence it is the error bar for. Both sides \
              computed in this run; no lcms2 output in it",
             format!(
@@ -694,7 +694,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             Metric::AbsMaxComponent,
             REPORTED,
             a.black_point_divergence(),
-            "REPORTED: ISO/CD 18619 4.2.5's estimate (iccce_cmm::bpc, in process) against lcms2 \
+            "REPORTED: ISO/CD 18619 4.2.5's estimate (icccer_cmm::bpc, in process) against lcms2 \
              2.19.1's, recovered from its own BPC output because transicc cannot print one. \
              THE FIRST ROW IN THIS SUITE THAT DISCRIMINATES THE TWO ESTIMATORS - Pass 5's \
              coverage statement said no row did",
@@ -772,7 +772,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
                  falsification survives the bar. The ORACLE-FREE sensitivity that does not \
                  depend on the recovery at all: running the same ISO function on the \
                  UNNEUTRALISED darkest colorant moves the fitted root from {:.4} to {:.4}, so \
-                 the ramp's chroma is worth {:.4} L* in iccce's own arithmetic with no lcms2 \
+                 the ramp's chroma is worth {:.4} L* in icccer's own arithmetic with no lcms2 \
                  output in it",
                 a.divergence_lightness(),
                 a.divergence_chroma(),
@@ -835,7 +835,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             "INVERTED 2026-08-12. This row used to grade a REFUSAL: \
              bpc::estimate_lut_destination_black was implemented, unit tested and had NO \
              CALLER - Chain::estimate_dst_black still carried the pre-ISO subset - so the \
-             shipped `iccce transform --bpc` refused exactly the case ISO/CD 18619 4.2.5 \
+             shipped `icccer transform --bpc` refused exactly the case ISO/CD 18619 4.2.5 \
              exists for. Pass 5b found that; commit c268261 wired it; the refusal is gone. \
              The row is kept, INVERTED, so the transition stays in the record stream and a \
              regression that unwires the estimator still fails something. Pass 5c grades \

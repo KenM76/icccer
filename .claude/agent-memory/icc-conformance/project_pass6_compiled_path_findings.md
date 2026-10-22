@@ -1,27 +1,27 @@
 ---
 name: project-pass6-compiled-path-findings
-description: Pass 6 findings — the compiled path's cost is 0.297 dE2000 at the shipped grid 17, ABOVE the 0.253 iccce-vs-lcms2 line (suite deliberately RED); its convergence order is 1.32 not 2; and max-of-max is the wrong estimator for an h-squared control.
+description: Pass 6 findings — the compiled path's cost is 0.297 dE2000 at the shipped grid 17, ABOVE the 0.253 icccer-vs-lcms2 line (suite deliberately RED); its convergence order is 1.32 not 2; and max-of-max is the wrong estimator for an h-squared control.
 metadata:
   type: project
 ---
 
-Measured **2026-08-12** at pin `21c582a`, iccce commit `3502cb7`/`5867f1a`.
+Measured **2026-08-12** at pin `21c582a`, icccer commit `3502cb7`/`5867f1a`.
 Apparatus `tools/difftest/src/pass6.rs`; record `tools/difftest/README.md`
 **§18**; tolerances `docs/TOLERANCES.md` **§3.6**. Pair: `USWebCoatedSWOP A2B1`
-(`mft2`, 4-D, 9 CLUT nodes/axis) → system sRGB, media-relative, on `iccce
+(`mft2`, 4-D, 9 CLUT nodes/axis) → system sRGB, media-relative, on `icccer
 bench`'s own 513 sampled probes.
 
-**★★ RESOLVED 2026-08-12 (same day).** Commit `189e732` moved `recommended_grid_points` from 17 to **33** for 3-D and 4-D. **Both gate rows now PASS — 1,677×10⁻¹ (bench probes) and 9,349×10⁻² (Pass 4 grid) — against the IDENTICAL 2,5×10⁻¹.** Two things the transition added: `pass6.rs`'s `DEFAULT_GRID` must track the shipped default (the apparatus row caught the drift by failing at 1,576×10⁻³, which is the gap between the grids, not an error), and at 33 the two probe populations **stop agreeing** — 1,79× apart — so quoting either alone is now a population claim. The 14 s build moves `iccce bench`'s break-even from ≈70 000 px to **≈1,19 M px**. See [[project-pass5c-estimator-branch-finding]].
+**★★ RESOLVED 2026-08-12 (same day).** Commit `189e732` moved `recommended_grid_points` from 17 to **33** for 3-D and 4-D. **Both gate rows now PASS — 1,677×10⁻¹ (bench probes) and 9,349×10⁻² (Pass 4 grid) — against the IDENTICAL 2,5×10⁻¹.** Two things the transition added: `pass6.rs`'s `DEFAULT_GRID` must track the shipped default (the apparatus row caught the drift by failing at 1,576×10⁻³, which is the gap between the grids, not an error), and at 33 the two probe populations **stop agreeing** — 1,79× apart — so quoting either alone is now a population claim. The 14 s build moves `icccer bench`'s break-even from ≈70 000 px to **≈1,19 M px**. See [[project-pass5c-estimator-branch-finding]].
 
 **★★ THE GATE FAILS AND THE SUITE IS DELIBERATELY RED.** Tolerance
-**2,5×10⁻¹ ΔE2000** = Pass 4's measured iccce-vs-lcms2 figure on this exact pair
+**2,5×10⁻¹ ΔE2000** = Pass 4's measured icccer-vs-lcms2 figure on this exact pair
 (0,252 94), to one significant figure, **no free parameter**. Observed
 **2,970 17×10⁻¹** on the bench probes and **2,962 90×10⁻¹** on Pass 4's own
 341-point grid — the same within 0,25 %, so it is a property of the transform,
 not of a probe set. **The remedy is the grid (33 measures 0,167 7), not the
 number.** Do NOT widen it: it is Pass 4's number and has nothing in it to move.
 
-**The device figure `iccce bench` prints looks negligible and is not.**
+**The device figure `icccer bench` prints looks negligible and is not.**
 3,588 962×10⁻³ device carries to 17 % *above the entire
 implementation-to-implementation spread*. That is the whole reason a device
 number is not a colour claim.

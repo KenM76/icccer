@@ -1,9 +1,9 @@
 //! # Pass G — the print-conformance suite population sample, graded
 //!
-//! Every profile iccce had been differentially tested against before this pass
+//! Every profile icccer had been differentially tested against before this pass
 //! was **synthetic** (`tools/gen-profiles`), **OS-shipped** (the Windows colour
 //! directory) or **standards-body-issued** (FOGRA51). None of them is what a
-//! real document producer embeds. This pass grades iccce against the pinned
+//! real document producer embeds. This pass grades icccer against the pinned
 //! lcms2 oracle over **profiles extracted from the print-conformance suite
 //! 5.0** — a graphic-arts PDF/X test corpus written by Adobe InDesign CS6 and
 //! imposed by Callas pdfToolbox, in which 20 distinct ICC profiles appear
@@ -12,7 +12,7 @@
 //! **This is a compatibility exercise, not a conformance certification.**
 //! Nothing here was measured with a spectrophotometer or proofed on a press,
 //! and no row claims otherwise. The strongest claim any oracle row in this
-//! module makes is *"iccce and lcms2 read this profile the same way"*, which
+//! module makes is *"icccer and lcms2 read this profile the same way"*, which
 //! `docs/TOLERANCES.md` §1 ranks below the two rows here that are
 //! [`Kind::DerivedExpectation`] and far below published ground truth, of which
 //! this pass has none.
@@ -36,7 +36,7 @@
 //!   it, and structural facts (a grid size, a tag signature, a device class)
 //!   which are format metadata rather than colour data.
 //!
-//! The corpus is resolved from `$ICCCE_PRIVATE_FIXTURES`, then from the
+//! The corpus is resolved from `$ICCCER_PRIVATE_FIXTURES`, then from the
 //! default path, and **every row SKIPs with a reason when it is absent** —
 //! exactly as the existing private-fixture tests do. CI is permanently in the
 //! skipping case. ★ A green CI run is therefore **not** evidence that anything
@@ -51,7 +51,7 @@
 //! | **C** | **`eciRGB v2` in its v2.4 and v4.2 encodings**, same vendor, same declared colour space | corpus + shipped binary |
 //! | **D** | the **two the suite's publisher trap profiles**, whose correct answer is known *without* measurement because the swap is the profile's declared content | corpus (+ oracle for the cross-check arm only) |
 //!
-//! §A was the reason for the dispatch. **Every v4 LUT profile iccce had been
+//! §A was the reason for the dispatch. **Every v4 LUT profile icccer had been
 //! graded against until now came from `tools/gen-profiles` — that is, from
 //! us**, so a shared misreading between the fixture generator and the engine
 //! would have been invisible. X-Rite authored this one.
@@ -74,7 +74,7 @@
 //!    colorants sum to D50 and they carry no `chad`.** Under
 //!    ICC.1:2001-04 A.3.1.1 that is a **non-compliant author**, not an
 //!    alternative reading (see §B's `wtpt` rows). It is the mechanism of the
-//!    only large iccce/lcms2 disagreement in the sweep, and the finding the
+//!    only large icccer/lcms2 disagreement in the sweep, and the finding the
 //!    population sample makes possible is that it is not a one-off system
 //!    profile: it is what a real producer embeds, 121 times.
 //! 4. **`eciRGB v2`'s two encodings are NOT the clean version isolator they
@@ -98,16 +98,16 @@
 
 use std::path::{Path, PathBuf};
 
-use iccce_cmm::MatrixTrc;
-use iccce_color::{Lab, Xyz, delta_e_2000};
-use iccce_profile::Profile;
-use iccce_profile::lut::{ClutSamples, CurveElement, LutAB};
-use iccce_profile::num::Signature;
-use iccce_profile::tag_types::{Curve, TagData};
+use icccer_cmm::MatrixTrc;
+use icccer_color::{Lab, Xyz, delta_e_2000};
+use icccer_profile::Profile;
+use icccer_profile::lut::{ClutSamples, CurveElement, LutAB};
+use icccer_profile::num::Signature;
+use icccer_profile::tag_types::{Curve, TagData};
 
 use crate::pass4b::{HarnessClut, Scheme};
 use crate::{
-    Bpc, Iccce, Intent, Kind, Metric, Oracle, Precalc, Record, Request, SepUnits, Separation,
+    Bpc, Icccer, Intent, Kind, Metric, Oracle, Precalc, Record, Request, SepUnits, Separation,
     Space, Tolerance,
 };
 
@@ -125,7 +125,7 @@ use crate::{
 /// nothing.
 #[must_use]
 pub fn corpus_dir() -> PathBuf {
-    std::env::var_os("ICCCE_PRIVATE_FIXTURES")
+    std::env::var_os("ICCCER_PRIVATE_FIXTURES")
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from(r"D:\Dev\iccce-private-fixtures"))
         .join("suite-v50")
@@ -172,7 +172,7 @@ mod file {
 }
 
 mod tag {
-    use iccce_profile::num::Signature;
+    use icccer_profile::num::Signature;
     pub const A2B0: Signature = Signature(0x4132_4230);
     pub const A2B1: Signature = Signature(0x4132_4231);
     pub const A2B2: Signature = Signature(0x4132_4232);
@@ -191,7 +191,7 @@ mod tag {
 
 /// **§A, the wide structural gate on the v4 `mAB ` PCS comparison.**
 ///
-/// Metric: max ΔE2000 between the harness's `mAB ` pipeline under **iccce's**
+/// Metric: max ΔE2000 between the harness's `mAB ` pipeline under **icccer's**
 /// n-linear geometry and `transicc -o*Lab{2,4} -c0`.
 ///
 /// ## This number is not a constant — it is computed per tag, at run time
@@ -201,7 +201,7 @@ mod tag {
 /// never sees (a different suite profile, a re-issued X-Rite one) would
 /// silently inherit a bound derived from another. [`XriteArm::method_envelope`]
 /// evaluates the profile's own CLUT under **both** published geometries —
-/// iccce's n-linear and lcms2's `Eval4Inputs` hybrid (linear along the leading
+/// icccer's n-linear and lcms2's `Eval4Inputs` hybrid (linear along the leading
 /// channel, Sakamoto tetrahedral over the trailing three) — over the same grid
 /// the comparison uses, and takes the maximum ΔE2000. **No lcms2 output enters
 /// that computation**; it is arithmetic on the file's bytes and on two
@@ -290,14 +290,14 @@ pub fn emulated_tolerance() -> Tolerance {
 ///
 /// **That is true of `A2B1` and false of `A2B0`, and the suite said so**: the
 /// `A2B1` arm measured 6.07×10⁻⁵ (the print floor, as predicted) and the
-/// `A2B0` arm **FAILED at 1.112×10⁻³**. The cause is not a defect in iccce and
+/// `A2B0` arm **FAILED at 1.112×10⁻³**. The cause is not a defect in icccer and
 /// it is not a number that wants widening — it is a **term the derivation
 /// omitted**. `A2B1`'s B curves are `curv` tables `(0x0000, 0xFFFF)`, the exact
 /// identity, so lcms2's `cmsEvalToneCurveFloat` round-trip through `u16` is
 /// lossless. `A2B0`'s `L*` B curve is `(0x0808, 0xFFFF)` — a *non-identity*
 /// affine map encoding this profile's declared perceptual black — and lcms2
 /// evaluates it through `cmsEvalToneCurve16`, rounding **twice**: input to
-/// `u16` (lossless at a node) and output to `u16` (not). iccce and the harness
+/// `u16` (lossless at a node) and output to `u16` (not). icccer and the harness
 /// evaluate it in `f64`.
 ///
 /// So the floor is **the print floor when every B curve is the identity, and
@@ -335,7 +335,7 @@ pub fn corner_tolerance(b_curves_are_identity: bool) -> Tolerance {
             "as the identity case, PLUS the term that case does not have: this tag's B curves are \
              NOT (0x0000,0xFFFF) - checked from the bytes - so lcms2 evaluates a non-identity \
              affine 2-entry curve through cmsEvalToneCurve16 and rounds TWICE (input to u16, \
-             lossless at a node; output to u16, not), where iccce and the harness use f64. Two \
+             lossless at a node; output to u16, not), where icccer and the harness use f64. Two \
              roundings of <=1/2 lsb is <=1 lsb, and one lsb of encoded output is 100/65535 = \
              1.526e-3 in L*; S_L >= 1 off mid-lightness, so the dE00 bound is <=1.526e-3. 2e-3 is \
              that plus the print floor. THE FIRST DRAFT OF THIS TOLERANCE OMITTED THE TERM AND \
@@ -345,7 +345,7 @@ pub fn corner_tolerance(b_curves_are_identity: bool) -> Tolerance {
 }
 
 /// **§A and §D, the apparatus.** The harness's own `mAB ` reimplementation
-/// against `iccce-cmm`'s `LutAbModel`, exact arithmetic, every grid point.
+/// against `icccer-cmm`'s `LutAbModel`, exact arithmetic, every grid point.
 ///
 /// Everything in §A that substitutes one geometry for another is void if this
 /// fails, because the substitution cannot be made inside `crates/` — the
@@ -355,7 +355,7 @@ pub fn corner_tolerance(b_curves_are_identity: bool) -> Tolerance {
 /// rounding.
 pub const APPARATUS: Tolerance = Tolerance::new(
     1e-9,
-    "harness reimplementation against iccce-cmm's own model, same operations, f64: ~7 orders \
+    "harness reimplementation against icccer-cmm's own model, same operations, f64: ~7 orders \
      above f64 noise on this arithmetic and ~5 below anything colorimetric, so it can neither \
      pass a real divergence nor fail on rounding. Every geometry-substitution row in this \
      section is void if it fails",
@@ -371,7 +371,7 @@ pub const APPARATUS: Tolerance = Tolerance::new(
 /// Every destination in §B is a CMYK or Lab-PCS **output** LUT, and
 /// `cmsio1.c`'s `_cmsReadOutputLUT` does
 /// `if (cmsGetPCS(hProfile) == cmsSigLabData) ChangeInterpolationToTrilinear(Lut);`
-/// — so lcms2 evaluates these tables with *iccce's* geometry and the
+/// — so lcms2 evaluates these tables with *icccer's* geometry and the
 /// interpolation-method envelope is **identically zero in this direction**
 /// (Pass 4b finding 1). That removes the term that dominates Pass 4, and it
 /// also removes the obvious way to derive a bound.
@@ -429,11 +429,11 @@ pub const SWEEP_DEVICE: Tolerance = Tolerance::new(
 ///
 /// 1. **ICC-absolute out of `sRGB` or `Adobe RGB (1998)`.** The two
 ///    implementations use *different destination media whites* there, because
-///    lcms2 substitutes D50 for a v2 display profile's `wtpt` and iccce uses the
+///    lcms2 substitutes D50 for a v2 display profile's `wtpt` and icccer uses the
 ///    encoded value. That is not an arithmetic disagreement to be gated; it is a
 ///    policy difference whose mechanism §B grades separately, on the profile's
 ///    own bytes, in `authoring/colorants-sum-to-d50`.
-/// 2. **Anything with `--bpc`.** iccce estimates the destination black point by
+/// 2. **Anything with `--bpc`.** icccer estimates the destination black point by
 ///    ISO/CD 18619 4.2.5 and lcms2 by `cmsDetectDestinationBlackPoint`; the two
 ///    are different functions, ICC.1 has **no normative BPC text at all**
 ///    (corpus A27/A42), and Pass 5b/5c established that they disagree. Gating
@@ -446,7 +446,7 @@ pub const REPORTED: Tolerance = Tolerance::new(
     f64::INFINITY,
     "REPORTED, NOT GRADED. Either the two implementations use different destination media whites \
      (lcms2 substitutes D50 for a v2 display profile's wtpt; the MECHANISM is graded separately \
-     on the profile's own bytes) or the row requests BPC, where iccce uses ISO/CD 18619 4.2.5 \
+     on the profile's own bytes) or the row requests BPC, where icccer uses ISO/CD 18619 4.2.5 \
      and lcms2 uses cmsDetectDestinationBlackPoint and ICC.1 has NO normative BPC text (A27/A42). \
      Gating either would gate a choice no standard makes",
 );
@@ -463,7 +463,7 @@ pub const REPORTED: Tolerance = Tolerance::new(
 /// `4.6×10⁻⁵`, and the PCS white itself is stated to four decimals in Table 14
 /// so it is only known to ±5×10⁻⁵ per component. `2×10⁻⁴` is ≈2× that sum.
 ///
-/// **Why this row exists.** It is what turns "iccce and lcms2 disagree at
+/// **Why this row exists.** It is what turns "icccer and lcms2 disagree at
 /// ICC-absolute" from an unresolved oracle divergence into a settled finding.
 /// If the colorants sum to D50 then the profile's PCS data *is* D50-adapted;
 /// ICC.1:2001-04 Annex A.3.1.1 says that when chromatic adaptation is applied
@@ -668,7 +668,7 @@ fn raw_xyz(bytes: &[u8], sig: Signature) -> Option<Xyz> {
 /// to the code under test made for the benefit of the test.
 ///
 /// Its correctness is not assumed — [`XriteArm::apparatus`] grades it against
-/// `iccce-cmm`'s `LutAbModel` over the same grid, and every geometry-substitution
+/// `icccer-cmm`'s `LutAbModel` over the same grid, and every geometry-substitution
 /// row in §A is void if that row fails.
 struct MabPipeline {
     clut: HarnessClut,
@@ -744,7 +744,7 @@ pub struct XriteArm {
     /// for perceptual into a v4 destination, so the perceptual arm uses `*Lab2`
     /// to keep the gate shut. See [`Section`]'s `forced_bpc_l_star`.
     pub pcs: &'static str,
-    /// max ΔE2000, harness under **iccce's** n-linear geometry vs the oracle.
+    /// max ΔE2000, harness under **icccer's** n-linear geometry vs the oracle.
     pub raw: f64,
     /// max ΔE2000, harness under **lcms2's** geometry vs the oracle.
     pub emulated: f64,
@@ -755,7 +755,7 @@ pub struct XriteArm {
     pub corner_envelope: f64,
     /// max ΔE2000 at those corners, harness vs oracle.
     pub corners: f64,
-    /// max ΔE2000, harness n-linear vs `iccce-cmm`'s `LutAbModel`.
+    /// max ΔE2000, harness n-linear vs `icccer-cmm`'s `LutAbModel`.
     pub apparatus: f64,
     /// The A curves' first and last decoded values — `(0.0, 1.0)` is what makes
     /// the corners exact nodes, and it is checked rather than assumed.
@@ -833,7 +833,7 @@ pub fn propagated_gate(envelope: f64) -> Tolerance {
     Tolerance::new(
         envelope * 1.25 + 1e-4,
         "the CLUT INTERPOLATION-METHOD envelope PROPAGATED through the actual destination model \
-         point by point (iccce's n-linear against lcms2's Eval4Inputs hybrid, both pushed through \
+         point by point (icccer's n-linear against lcms2's Eval4Inputs hybrid, both pushed through \
          MatrixTrc::pcs_to_device for the destination file), x1.25 for between-point maxima and \
          lcms2's fixed-point arithmetic, plus 1e-4 for transicc's print floor. NO lcms2 output \
          enters the derivation. This is the A2B direction, where the method envelope is the \
@@ -852,12 +852,12 @@ pub fn propagated_gate(envelope: f64) -> Tolerance {
 /// [`Unavailable::Error`] when a profile present on disk cannot be parsed or
 /// the oracle fails, because at that point something is wrong that a skip would
 /// conceal.
-pub fn analyse_xrite(oracle: &Oracle, iccce: &Iccce) -> Result<Section, Unavailable> {
+pub fn analyse_xrite(oracle: &Oracle, icccer: &Icccer) -> Result<Section, Unavailable> {
     let dir = corpus_dir();
     let path = dir.join(file::XRITE_V4);
     let bytes = std::fs::read(&path).map_err(|e| {
         Unavailable::Skip(format!(
-            "suite-v50 corpus not present ({}): set $ICCCE_PRIVATE_FIXTURES. \
+            "suite-v50 corpus not present ({}): set $ICCCER_PRIVATE_FIXTURES. \
              It is licensed and cannot be committed, so absence is the normal case",
             e
         ))
@@ -889,9 +889,9 @@ pub fn analyse_xrite(oracle: &Oracle, iccce: &Iccce) -> Result<Section, Unavaila
         let lut = read_lut_ab(&profile, sig)
             .ok_or_else(|| Unavailable::Error(format!("{tag_name} is not a decodable mAB")))?;
         let pipe = MabPipeline::build(&lut).map_err(Unavailable::Error)?;
-        let model = iccce_cmm::lut_ab::LutAbModel::from_lut_ab(
+        let model = icccer_cmm::lut_ab::LutAbModel::from_lut_ab(
             &lut,
-            iccce_cmm::lut_transform::PcsKind::Lab,
+            icccer_cmm::lut_transform::PcsKind::Lab,
         )
         .map_err(|e| Unavailable::Error(format!("{tag_name} LutAbModel: {e}")))?;
 
@@ -902,12 +902,12 @@ pub fn analyse_xrite(oracle: &Oracle, iccce: &Iccce) -> Result<Section, Unavaila
             let l = pipe.eval(q, Scheme::Lcms2Default);
             envelope = envelope.max(delta_e_2000(n, l));
             match model.device_to_pcs(q) {
-                Some(iccce_cmm::lut_transform::PcsValue::Lab(m)) => {
+                Some(icccer_cmm::lut_transform::PcsValue::Lab(m)) => {
                     apparatus = apparatus.max(delta_e_2000(n, m));
                 }
                 _ => {
                     return Err(Unavailable::Error(format!(
-                        "iccce-cmm's LutAbModel refused a CMYK grid point on {tag_name}"
+                        "icccer-cmm's LutAbModel refused a CMYK grid point on {tag_name}"
                     )));
                 }
             }
@@ -1068,8 +1068,8 @@ pub fn analyse_xrite(oracle: &Oracle, iccce: &Iccce) -> Result<Section, Unavaila
         let pipe = MabPipeline::build(&lut).map_err(Unavailable::Error)?;
         let mut worst = 0.0f64;
         for q in &grid {
-            let n = pipe.eval(q, Scheme::NLinear).to_xyz(iccce_color::D50);
-            let l = pipe.eval(q, Scheme::Lcms2Default).to_xyz(iccce_color::D50);
+            let n = pipe.eval(q, Scheme::NLinear).to_xyz(icccer_color::D50);
+            let l = pipe.eval(q, Scheme::Lcms2Default).to_xyz(icccer_color::D50);
             if let (Ok(a), Ok(b)) = (dst_model.pcs_to_device(n), dst_model.pcs_to_device(l)) {
                 for (x, y) in a.iter().zip(&b) {
                     worst = worst.max((x - y).abs());
@@ -1085,7 +1085,7 @@ pub fn analyse_xrite(oracle: &Oracle, iccce: &Iccce) -> Result<Section, Unavaila
     for intent in ALL_INTENTS {
         for bpc in [Bpc::Off, Bpc::On] {
             match measure_device(
-                oracle, iccce, &path, &srgb, &rows, 100.0, 3, true, intent, bpc,
+                oracle, icccer, &path, &srgb, &rows, 100.0, 3, true, intent, bpc,
             ) {
                 Ok((max, mean)) => end_to_end.push((intent, bpc, max, mean, None)),
                 Err(refusal) => end_to_end.push((intent, bpc, f64::NAN, f64::NAN, Some(refusal))),
@@ -1135,7 +1135,7 @@ const ALL_INTENTS: [Intent; 4] = [
 #[allow(clippy::too_many_arguments)]
 fn measure_device(
     oracle: &Oracle,
-    iccce: &Iccce,
+    icccer: &Icccer,
     src: &Path,
     dst: &Path,
     rows: &[Vec<f64>],
@@ -1156,7 +1156,7 @@ fn measure_device(
     let theirs = oracle
         .convert_batch_shaped(&req, rows[0].len(), out_channels)
         .map_err(|e| format!("oracle: {e}"))?;
-    let mine = iccce
+    let mine = icccer
         .transform_rows_shaped_bpc(src, dst, intent, rows, out_channels, bpc == Bpc::On)
         .map_err(|e| {
             // A refusal is a deliverable, not harness breakage: an engine that
@@ -1186,13 +1186,13 @@ pub fn xrite_records(s: &Section) -> Vec<Record> {
     let mut out = Vec::new();
     for a in &s.arms {
         out.push(Record::graded(
-            format!("passg/xrite-v4/{}/apparatus-harness-mab-matches-iccce-cmm", a.tag),
+            format!("passg/xrite-v4/{}/apparatus-harness-mab-matches-icccer-cmm", a.tag),
             Kind::SelfConsistency,
             Metric::DeltaE2000Max,
             APPARATUS,
             a.apparatus,
             "both sides computed in this run: passg::MabPipeline (n-linear) against \
-             iccce_cmm::lut_ab::LutAbModel over the same points",
+             icccer_cmm::lut_ab::LutAbModel over the same points",
             format!(
                 "{} pts, {} | the harness mAB reimplementation exists because the shipped engine \
                  has ONE interpolation scheme by design; every geometry-substitution row below is \
@@ -1211,7 +1211,7 @@ pub fn xrite_records(s: &Section) -> Vec<Record> {
             Tolerance::new(
                 structural_tolerance_from(a.method_envelope),
                 "the CLUT INTERPOLATION-METHOD envelope computed at run time from THIS tag's own \
-                 7^4 table and the two published algorithms alone (iccce's n-linear against \
+                 7^4 table and the two published algorithms alone (icccer's n-linear against \
                  lcms2's Eval4Inputs hybrid), x1.25 for between-point maxima and for lcms2's \
                  fixed-point arithmetic. NO lcms2 output enters the derivation. ICC.1 is SILENT \
                  on interpolation (A16), so this admits the whole legitimate difference and \
@@ -1221,7 +1221,7 @@ pub fn xrite_records(s: &Section) -> Vec<Record> {
             ),
             a.raw,
             format!(
-                "iccce's geometry vs lcms2 via {} at {}; envelope {:.6} dE00 computed from the \
+                "icccer's geometry vs lcms2 via {} at {}; envelope {:.6} dE00 computed from the \
                  CLUT bytes",
                 a.pcs,
                 a.intent.name(),
@@ -1253,7 +1253,7 @@ pub fn xrite_records(s: &Section) -> Vec<Record> {
                 a.raw / a.emulated
             ),
         ).with_separation(Separation::against_distance(
-            "iccce's n-linear geometry retained instead of lcms2's - i.e. the row above, which is \
+            "icccer's n-linear geometry retained instead of lcms2's - i.e. the row above, which is \
              what this row would observe if the geometry substitution were a no-op",
             a.raw,
             // ★ Supplied, not derived. The distance between the two candidate
@@ -1377,8 +1377,8 @@ pub fn xrite_records(s: &Section) -> Vec<Record> {
                 0.0,
                 "the shipped binary's own exit status and stderr",
                 format!(
-                    "iccce REFUSED BY NAME and did not guess: {r} | the v4 mAB source is outside \
-                     iccce's named black-point estimation subset (A42). Coverage statement: this \
+                    "icccer REFUSED BY NAME and did not guess: {r} | the v4 mAB source is outside \
+                     icccer's named black-point estimation subset (A42). Coverage statement: this \
                      combination is NOT differentially tested, and that is disclosed rather than \
                      absorbed",
                 ),
@@ -1413,7 +1413,7 @@ pub fn xrite_records(s: &Section) -> Vec<Record> {
                 propagated_gate(env)
             },
             *max,
-            "both sides computed in this run: the shipped iccce binary and transicc -c0, each in \
+            "both sides computed in this run: the shipped icccer binary and transicc -c0, each in \
              its own process",
             format!(
                 "341 CMYK points -> suite sRGB, mean {:.6e}; propagated method envelope for the \
@@ -1422,7 +1422,7 @@ pub fn xrite_records(s: &Section) -> Vec<Record> {
                 env,
                 if absolute {
                     ". ICC-ABSOLUTE: the destination is a v2 mntr profile whose wtpt is D65 while \
-                     its colorants sum to D50, so lcms2 substitutes D50 and iccce uses the encoded \
+                     its colorants sum to D50, so lcms2 substitutes D50 and icccer uses the encoded \
                      value. The mechanism is graded in passg/authoring/*"
                 } else {
                     ""
@@ -1460,7 +1460,7 @@ pub struct SweepArm {
     /// `(intent, bpc, max, mean, refusal)`.
     pub rows: Vec<(Intent, Bpc, f64, f64, Option<String>)>,
     /// ★ **The named rival, computed from the destination's own `B2A1` table:**
-    /// the largest device difference between iccce's n-linear geometry and
+    /// the largest device difference between icccer's n-linear geometry and
     /// lcms2's *default* tetrahedral one. lcms2 does not take that path here —
     /// `_cmsReadOutputLUT` forces trilinear for a Lab PCS — so this is what the
     /// comparison **would** have seen had the forcing not been there, and it is
@@ -1478,7 +1478,7 @@ pub struct Sweep {
     /// grades. All three numbers are computed from the file's own raw tag bytes
     /// and ICC.1:2022 Table 14's normative PCS white; **no third white point
     /// appears in the derivation**, which matters because D65 is recorded as
-    /// the weakest constant in `iccce-color` and importing it here would put
+    /// the weakest constant in `icccer-color` and importing it here would put
     /// that weakness underneath a conformance claim.
     pub authoring: Vec<(&'static str, f64, f64, f64)>,
     /// `(profile label, ISO black L*, lcms2 black L*)` on three real print
@@ -1491,11 +1491,11 @@ pub struct Sweep {
 ///
 /// # Errors
 /// As [`analyse_xrite`].
-pub fn analyse_sweep(oracle: &Oracle, iccce: &Iccce) -> Result<Sweep, Unavailable> {
+pub fn analyse_sweep(oracle: &Oracle, icccer: &Icccer) -> Result<Sweep, Unavailable> {
     let dir = corpus_dir();
     if !dir.is_dir() {
         return Err(Unavailable::Skip(format!(
-            "suite-v50 corpus not present at {}: set $ICCCE_PRIVATE_FIXTURES. It is licensed and \
+            "suite-v50 corpus not present at {}: set $ICCCER_PRIVATE_FIXTURES. It is licensed and \
              cannot be committed, so absence is the normal case and a green run here is evidence \
              that nothing ran",
             dir.display()
@@ -1557,7 +1557,7 @@ pub fn analyse_sweep(oracle: &Oracle, iccce: &Iccce) -> Result<Sweep, Unavailabl
         let mut measured = Vec::new();
         for intent in ALL_INTENTS {
             for bpc in [Bpc::Off, Bpc::On] {
-                match measure_device(oracle, iccce, &sp, &dp, rows, 255.0, 4, false, intent, bpc) {
+                match measure_device(oracle, icccer, &sp, &dp, rows, 255.0, 4, false, intent, bpc) {
                     Ok((max, mean)) => measured.push((intent, bpc, max, mean, None)),
                     Err(r) => measured.push((intent, bpc, f64::NAN, f64::NAN, Some(r))),
                 }
@@ -1726,7 +1726,7 @@ pub fn sweep_records(s: &Sweep) -> Vec<Record> {
                         ),
                         0.0,
                         "the shipped binary's own exit status and stderr",
-                        format!("iccce REFUSED BY NAME and did not guess: {r}"),
+                        format!("icccer REFUSED BY NAME and did not guess: {r}"),
                     )
                     .with_separation(Separation::none(
                         "the rival to a named refusal is a silent plausible answer, which has no \
@@ -1749,17 +1749,17 @@ pub fn sweep_records(s: &Sweep) -> Vec<Record> {
                 Metric::DeviceAbsMaxNormalised,
                 tol,
                 *max,
-                "both sides computed in this run: the shipped iccce binary and transicc -c0, each \
+                "both sides computed in this run: the shipped icccer binary and transicc -c0, each \
                  in its own process, on profiles extracted from production PDF/X files",
                 format!(
                     "mean {mean:.6e}{}",
                     if absolute_and_exposed {
                         ". ICC-ABSOLUTE out of a v2 mntr profile whose wtpt is D65 while its \
                          colorants sum to D50: lcms2 substitutes D50 (ICC.1:2001-04 A.3.1.1's own \
-                         recommendation), iccce uses the encoded value. The mechanism is graded in \
+                         recommendation), icccer uses the encoded value. The mechanism is graded in \
                          passg/authoring/*, on the profile's own bytes"
                     } else if *bpc == Bpc::On {
-                        ". --bpc: iccce estimates the destination black by ISO/CD 18619 4.2.5 and \
+                        ". --bpc: icccer estimates the destination black by ISO/CD 18619 4.2.5 and \
                          lcms2 by cmsDetectDestinationBlackPoint. ICC.1 has NO normative BPC text \
                          (A27/A42), so this is a difference between two choices, not a defect"
                     } else if *intent == Intent::AbsoluteColorimetric {
@@ -1885,7 +1885,7 @@ pub fn sweep_records(s: &Sweep) -> Vec<Record> {
             Metric::AbsMaxComponent,
             REPORTED,
             (iso_l - lcms2_l).abs(),
-            "iccce's ISO/CD 18619 4.2.5 estimator against pass5c's reimplementation of lcms2's \
+            "icccer's ISO/CD 18619 4.2.5 estimator against pass5c's reimplementation of lcms2's \
              cmsDetectDestinationBlackPoint, both run in process on this profile",
             format!(
                 "ISO estimator L* {iso_l:.6} vs lcms2 L* {lcms2_l:.6}. This is the mechanism \
@@ -1908,7 +1908,7 @@ pub fn sweep_records(s: &Sweep) -> Vec<Record> {
 
 /// The v2/v4 pair, and the two reasons it is a weaker instrument than it looks.
 pub struct EciArm {
-    /// max |Δ| device, both encodings through the same destination, **iccce on
+    /// max |Δ| device, both encodings through the same destination, **icccer on
     /// both sides**.
     pub max: f64,
     pub mean: f64,
@@ -1926,11 +1926,11 @@ pub struct EciArm {
 ///
 /// # Errors
 /// As [`analyse_xrite`].
-pub fn analyse_eci(oracle: &Oracle, iccce: &Iccce) -> Result<EciArm, Unavailable> {
+pub fn analyse_eci(oracle: &Oracle, icccer: &Icccer) -> Result<EciArm, Unavailable> {
     let dir = corpus_dir();
     if !dir.is_dir() {
         return Err(Unavailable::Skip(
-            "suite-v50 corpus not present: set $ICCCE_PRIVATE_FIXTURES".into(),
+            "suite-v50 corpus not present: set $ICCCER_PRIVATE_FIXTURES".into(),
         ));
     }
     let v2 = dir.join(file::ECIRGB_V2);
@@ -1942,7 +1942,7 @@ pub fn analyse_eci(oracle: &Oracle, iccce: &Iccce) -> Result<EciArm, Unavailable
         .collect();
 
     let mine = |p: &Path| {
-        iccce
+        icccer
             .transform_rows_shaped(p, &dst, Intent::RelativeColorimetric, &rgb, 4)
             .map_err(|e| Unavailable::Error(e.to_string()))
     };
@@ -2015,22 +2015,22 @@ pub fn analyse_eci(oracle: &Oracle, iccce: &Iccce) -> Result<EciArm, Unavailable
 /// `CLAUDE.md` rule 5 forbids.
 ///
 /// ★ **What this row is worth, stated on the row.** It is
-/// [`Kind::SelfConsistency`]: *both sides are iccce*, on two files from one
+/// [`Kind::SelfConsistency`]: *both sides are icccer*, on two files from one
 /// vendor. It prices a representation change; it is **not** evidence that
 /// either answer is right, and it is weaker than a cross-check because there is
 /// only one lineage in it. A companion row runs the identical comparison with
 /// **lcms2 on both sides**, so that a green line here says something about the
-/// two files rather than about iccce's handling of them.
+/// two files rather than about icccer's handling of them.
 #[must_use]
 pub fn eci_records(e: &EciArm) -> Vec<Record> {
     vec![
         Record::graded(
-            "passg/ecirgb-v2-vs-v4/iccce-both-sides",
+            "passg/ecirgb-v2-vs-v4/icccer-both-sides",
             Kind::SelfConsistency,
             Metric::DeviceAbsMaxNormalised,
             SWEEP_DEVICE,
             e.max,
-            "both sides are iccce: the same engine, the same destination file, the same grid, \
+            "both sides are icccer: the same engine, the same destination file, the same grid, \
              differing only in which of two vendor files describes the source",
             format!(
                 "{} RGB points -> ISO Coated v2, media-relative; mean {:.6e}. \
@@ -2055,11 +2055,11 @@ pub fn eci_records(e: &EciArm) -> Vec<Record> {
             Metric::DeviceAbsMaxNormalised,
             SWEEP_DEVICE,
             e.oracle_max,
-            "BOTH SIDES ARE LCMS2. Says nothing whatever about iccce; it establishes that the two \
+            "BOTH SIDES ARE LCMS2. Says nothing whatever about icccer; it establishes that the two \
              vendor files describe the same colour space to a second implementation as well",
             format!(
                 "{} RGB points. Its purpose is to stop the row above being read as a property of \
-                 iccce when it is a property of the two files",
+                 icccer when it is a property of the two files",
                 e.points
             ),
         )
@@ -2105,7 +2105,7 @@ pub fn eci_records(e: &EciArm) -> Vec<Record> {
 /// "red in, green out" is checkable against the profile's tags rather than
 /// against an oracle.
 pub struct TrapArm {
-    /// max |Δ| between iccce's PCS `XYZ` for device `(1,0,0)` and the `rXYZ`
+    /// max |Δ| between icccer's PCS `XYZ` for device `(1,0,0)` and the `rXYZ`
     /// tag's own three numbers.
     pub red_matches_rxyz: f64,
     /// The same for `(0,1,0)` against `gXYZ`.
@@ -2134,7 +2134,7 @@ pub struct TrapArm {
     pub duplicate_delta: f64,
     /// Whether the two files' colour-bearing tags are byte-identical.
     pub duplicate_tags_identical: bool,
-    /// max |Δ| device, iccce vs lcms2, through the RGB trap into suite sRGB.
+    /// max |Δ| device, icccer vs lcms2, through the RGB trap into suite sRGB.
     pub cross_check: f64,
     /// The CMYK trap's `B2A0` vs `B2A2` raw-byte difference — a second vendor
     /// aliasing, and a second null that must be identified before collection.
@@ -2145,7 +2145,7 @@ pub struct TrapArm {
 ///
 /// # Errors
 /// As [`analyse_xrite`].
-pub fn analyse_traps(oracle: &Oracle, iccce: &Iccce) -> Result<TrapArm, Unavailable> {
+pub fn analyse_traps(oracle: &Oracle, icccer: &Icccer) -> Result<TrapArm, Unavailable> {
     let dir = corpus_dir();
     let p1 = dir.join(file::TRAP_RGB);
     let b1 = std::fs::read(&p1)
@@ -2169,7 +2169,7 @@ pub fn analyse_traps(oracle: &Oracle, iccce: &Iccce) -> Result<TrapArm, Unavaila
     // The separation, in the metric a colour engineer can read: how far apart
     // the two candidate answers are. Computed from the tags themselves, so it
     // is a property of the FIXTURE and does not move with the engine's answer.
-    let to_lab = |v: Xyz| Lab::from_xyz(v, iccce_color::D50);
+    let to_lab = |v: Xyz| Lab::from_xyz(v, icccer_color::D50);
     let primary_separation = delta_e_2000(to_lab(rx), to_lab(gx));
 
     let chroma = |v: Xyz| {
@@ -2190,10 +2190,10 @@ pub fn analyse_traps(oracle: &Oracle, iccce: &Iccce) -> Result<TrapArm, Unavaila
         .into_iter()
         .map(|t| t.to_vec())
         .collect();
-    let one = iccce
+    let one = icccer
         .transform_rows_shaped(&p1, &srgb, Intent::RelativeColorimetric, &probes, 3)
         .map_err(|e| Unavailable::Error(e.to_string()))?;
-    let two = iccce
+    let two = icccer
         .transform_rows_shaped(&p2, &srgb, Intent::RelativeColorimetric, &probes, 3)
         .map_err(|e| Unavailable::Error(e.to_string()))?;
     let duplicate_delta = one
@@ -2209,7 +2209,7 @@ pub fn analyse_traps(oracle: &Oracle, iccce: &Iccce) -> Result<TrapArm, Unavaila
 
     let (cross_check, _) = measure_device(
         oracle,
-        iccce,
+        icccer,
         &p1,
         &srgb,
         &probes,
@@ -2304,7 +2304,7 @@ pub fn trap_records(t: &TrapArm) -> Vec<Record> {
             Metric::DeviceAbsMaxNormalised,
             DUPLICATE_EXACT,
             t.duplicate_delta,
-            "both sides are iccce, on two corpus files carrying the SAME desc string and \
+            "both sides are icccer, on two corpus files carrying the SAME desc string and \
              DIFFERENT SHA-256s",
             format!(
                 "their colour-bearing tags (rXYZ/gXYZ/bXYZ/wtpt) are byte-identical: {}. \
@@ -2323,9 +2323,9 @@ pub fn trap_records(t: &TrapArm) -> Vec<Record> {
             Metric::DeviceAbsMaxNormalised,
             SWEEP_DEVICE,
             t.cross_check,
-            "both sides computed in this run: the shipped iccce binary and transicc -c0",
+            "both sides computed in this run: the shipped icccer binary and transicc -c0",
             "the trap through the suite's sRGB, media-relative. The derived rows above establish that \
-             iccce honours the swap; this one establishes that lcms2 honours the SAME swap, so \
+             icccer honours the swap; this one establishes that lcms2 honours the SAME swap, so \
              the two engines would render the suite's publisher test page identically",
         )
         .with_separation(Separation::none(
@@ -2398,11 +2398,11 @@ pub struct Bundle {
 #[must_use]
 pub fn run(oracle: &Oracle) -> (Bundle, Vec<Record>) {
     let mut records = Vec::new();
-    let iccce = match Iccce::locate() {
+    let icccer = match Icccer::locate() {
         Ok(Some(i)) => i,
         Ok(None) => {
             let u = Unavailable::Skip(
-                "iccce binary not found: run `cargo build --release -p iccce-cli`".into(),
+                "icccer binary not found: run `cargo build --release -p icccer-cli`".into(),
             );
             for s in ["xrite-v4", "sweep", "ecirgb", "traps"] {
                 records.extend(unavailable_records(&u, s));
@@ -2434,7 +2434,7 @@ pub fn run(oracle: &Oracle) -> (Bundle, Vec<Record>) {
         }
     };
 
-    let xrite = match analyse_xrite(oracle, &iccce) {
+    let xrite = match analyse_xrite(oracle, &icccer) {
         Ok(s) => {
             records.extend(xrite_records(&s));
             Some(s)
@@ -2444,7 +2444,7 @@ pub fn run(oracle: &Oracle) -> (Bundle, Vec<Record>) {
             None
         }
     };
-    let sweep = match analyse_sweep(oracle, &iccce) {
+    let sweep = match analyse_sweep(oracle, &icccer) {
         Ok(s) => {
             records.extend(sweep_records(&s));
             Some(s)
@@ -2454,7 +2454,7 @@ pub fn run(oracle: &Oracle) -> (Bundle, Vec<Record>) {
             None
         }
     };
-    let eci = match analyse_eci(oracle, &iccce) {
+    let eci = match analyse_eci(oracle, &icccer) {
         Ok(e) => {
             records.extend(eci_records(&e));
             Some(e)
@@ -2464,7 +2464,7 @@ pub fn run(oracle: &Oracle) -> (Bundle, Vec<Record>) {
             None
         }
     };
-    let traps = match analyse_traps(oracle, &iccce) {
+    let traps = match analyse_traps(oracle, &icccer) {
         Ok(t) => {
             records.extend(trap_records(&t));
             Some(t)

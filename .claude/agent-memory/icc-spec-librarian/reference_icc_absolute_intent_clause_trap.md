@@ -7,7 +7,7 @@ metadata:
 
 **ICC-absolute colorimetric material lives in
 `D:\Dev\Rag-Specialized\ICC_Spec\icc\icc__s__rendering_intents.md`** (built
-2026-08-11, 4th pass, to close the remainder iccce's Pass 3 recorded).
+2026-08-11, 4th pass, to close the remainder icccer's Pass 3 recorded).
 It carries the equations, the `wtpt` clause, the `chad` answer, Table 25 in
 full, and the `shall`-level intent-fallback order (8.10.2).
 

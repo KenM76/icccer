@@ -1,11 +1,11 @@
 ---
 name: project-lcms2-findings-pass5-bpc
-description: Pass 5 (BPC) findings — lcms2 silently drops BPC below a 0.002 IsEmptyLayer threshold (~0.41 L*, a constant not in the corpus); the v4 matrix-shaper escape makes forced BPC cost exactly zero; and the structural fact that iccce's and lcms2's black-point ESTIMATORS cannot be discriminated by any scenario in reach.
+description: Pass 5 (BPC) findings — lcms2 silently drops BPC below a 0.002 IsEmptyLayer threshold (~0.41 L*, a constant not in the corpus); the v4 matrix-shaper escape makes forced BPC cost exactly zero; and the structural fact that icccer's and lcms2's black-point ESTIMATORS cannot be discriminated by any scenario in reach.
 metadata:
   type: project
 ---
 
-All measured **2026-08-11** at pin `21c582a`, iccce at commit `46f16e8`. Full
+All measured **2026-08-11** at pin `21c582a`, icccer at commit `46f16e8`. Full
 record: `tools/difftest/README.md` **§16**; tolerances `docs/TOLERANCES.md`
 **§3.5**; method lessons **§6.5** there. Suite after Pass 5:
 `pass=90 fail=0 skip=3 error=0` (Pass 5 contributes 21 graded + 5
@@ -19,11 +19,11 @@ reported-only).
 > synthetic non-zero-black v4 LUT fixture are still untouched.
 
 **★ THE HEADLINE IS A NEGATIVE RESULT, AND IT WAS PREDICTED BEFORE THE RUN.**
-*Everywhere iccce will do BPC at all, lcms2's estimator reduces to the same two
+*Everywhere icccer will do BPC at all, lcms2's estimator reduces to the same two
 values* — zero on a matrix/TRC or gray side (its darkest-colorant estimate is
 device black through the profile, and every TRC in the corpus has `trc(0)=0`),
 and the A41 triple on a v4 LUT side at perceptual (its guard 3 constant is the
-one iccce hard-codes). **So Pass 5 grades the SCALING MAP, the DIRECTION and
+one icccer hard-codes). **So Pass 5 grades the SCALING MAP, the DIRECTION and
 the POLICY. No row discriminates the two ESTIMATORS.** lcms2's methods 3 and 4
 (ink round trip, least-squares quadratic fit) are untested against anything.
 Closing that needs a synthetic v4 **LUT** fixture with a **non-zero** device
@@ -33,7 +33,7 @@ black — none exists.
 corpus.** `cmscnvrt.c` L327–348 `IsEmptyLayer` sums `Σ|m−I| + Σ|off|` (offsets
 already ÷ `MAX_ENCODEABLE_XYZ`) and `AddConversion` inserts the stage only if
 that is **≥ 0.002**. Solving: **lcms2 stops doing BPC once the two blacks are
-within ≈0.41 `L*`.** iccce has no such threshold. `ICC_Spec` §7.2's list of
+within ≈0.41 `L*`.** icccer has no such threshold. `ICC_Spec` §7.2's list of
 unattributed constants does **not** contain it — that list came from
 `cmssamp.c`, this is in `cmscnvrt.c`. **READ, not RUN** (no pair in reach
 triggers it; the S2/S3 map sits at 0.015342, 7.7× the threshold).
@@ -44,7 +44,7 @@ the source's, so `ComputeConversion`'s `BlackPointIn != BlackPointOut` test
 fails and no stage is inserted. Anyone expecting M2's ≈3.15 `L*` on *every* v4
 perceptual profile reads this correct null as an anomaly.
 
-**3. The policy difference measured, and D11 answered with its sign.** iccce
+**3. The policy difference measured, and D11 answered with its sign.** icccer
 never forces; lcms2 forces for a v4 **destination**. Same pair, neither side
 asked: **3.1373e-2 device = 3.137348 `L*`**, lcms2 lighter — against the PRM
 black's 3.137254 and the A41 triple's 3.137238, a match to 1.1e-4. **The sign

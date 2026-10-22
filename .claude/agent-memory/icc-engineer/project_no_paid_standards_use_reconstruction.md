@@ -11,7 +11,7 @@ transform). Instead: *"do your best guess using what is available online,
 make a rag of the best guess of the standard and use it, refine it if more
 information becomes available."*
 
-He also accepted, explicitly, that iccce's honest public claim stays
+He also accepted, explicitly, that icccer's honest public claim stays
 **"matches lcms2 within a stated tolerance"** rather than "provably
 correct" — offered as a plain-language trade and chosen deliberately.
 
@@ -23,14 +23,14 @@ nothing is blocked by its absence.
 
 - **Do not re-open the purchase as a recommendation.** It stays recorded as
   an available upgrade path in `would_be_upgraded_by:` fields, and that is
-  the right place for it. Raise it again only if Ken signals iccce is
+  the right place for it. Raise it again only if Ken signals icccer is
   becoming something third parties depend on.
 - ★ **The reconstruction gets its OWN evidence class, never
   `published-ground-truth`.** A value assembled from secondary sources is
   not read from the normative text. The class is weaker than ground truth
   but **not** weaker than cross-check-against-an-implementation, and is
   stronger in one specific way: being implementation-independent, it can
-  catch an error lcms2 and iccce make *together*. That is the entire value
+  catch an error lcms2 and icccer make *together*. That is the entire value
   of the exercise and the reason it is worth doing at all.
 - **Strength scales with source independence**, so the source count and
   whether the sources actually derive from one another is part of every

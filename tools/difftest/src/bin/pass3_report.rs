@@ -12,7 +12,7 @@
 //! This binary answers that. It re-runs exactly the same experiment
 //! (`crate::pass3::analyse`) and prints:
 //!
-//! 1. **Provenance** — which `iccce`, which `transicc`, which profiles.
+//! 1. **Provenance** — which `icccer`, which `transicc`, which profiles.
 //! 2. **The reductions**, max and mean together, in both device units and
 //!    ΔE2000.
 //! 3. **The ten worst points of each comparison**, with their inputs and both
@@ -33,7 +33,7 @@
 //! ## ★ Why the quantisation experiment is here
 //!
 //! `pass3::DEVICE_CROSSCHECK`'s justification asserts that the dominant
-//! iccce-vs-lcms2 disagreement on this pair is **lcms2's own 16-bit
+//! icccer-vs-lcms2 disagreement on this pair is **lcms2's own 16-bit
 //! quantisation of tabulated tone curves** (`cmsEvalToneCurveFloat` rounds
 //! both the input to and the output of a segment-free curve to 1/65535).
 //!
@@ -43,7 +43,7 @@
 //! confound appears, predict it quantitatively from the other
 //! implementation's own arithmetic.*
 //!
-//! The prediction is built by emulating lcms2's evaluation inside iccce's
+//! The prediction is built by emulating lcms2's evaluation inside icccer's
 //! model:
 //!
 //! ```text
@@ -58,7 +58,7 @@
 //! - The residual **collapses** toward `transicc`'s print floor → the model
 //!   is confirmed, the tolerance's justification stands, and the disagreement
 //!   is attributable to a named approximation in the oracle rather than to
-//!   anything of iccce's.
+//!   anything of icccer's.
 //! - The residual **does not collapse** → the justification is wrong and must
 //!   be rewritten before the tolerance is quoted anywhere. It would not mean
 //!   the tolerance is wrong; it would mean nobody knows why it is right,
@@ -69,23 +69,23 @@
 //! fixed point (`cmsInterpFunction` → `LinLerp1D` with
 //! `_cmsQuickSaturateWord`), while this emulation interpolates in `f64` and
 //! rounds once at the end; the two can differ by ±1 lsb. (ii) lcms2 carries
-//! the pipeline in `cmsFloat32Number` between stages, iccce in `f64`, which
+//! the pipeline in `cmsFloat32Number` between stages, icccer in `f64`, which
 //! is a further ~6×10⁻⁸ of relative noise. So a residual of a few lsb is the
 //! *expected* floor of this experiment, not a failure of it.
 //!
 //! ## Exit codes
 //!
 //! `0` the analysis ran; `3` it could not (skip — a category (c) profile or
-//! the `iccce` binary absent); `2` something errored. **3 is not 0**, for the
+//! the `icccer` binary absent); `2` something errored. **3 is not 0**, for the
 //! reason `lib.rs` gives.
 
 use std::io::Write;
 
-use iccce_cmm::{MatrixTrc, Trc};
-use iccce_color::{D50, Lab, delta_e_2000};
-use iccce_difftest::pass3::{self, ADOBE_RGB, Analysis, SRGB, Unavailable};
-use iccce_difftest::{Oracle, Record, Report};
-use iccce_profile::Profile;
+use icccer_cmm::{MatrixTrc, Trc};
+use icccer_color::{D50, Lab, delta_e_2000};
+use icccer_difftest::pass3::{self, ADOBE_RGB, Analysis, SRGB, Unavailable};
+use icccer_difftest::{Oracle, Record, Report};
+use icccer_profile::Profile;
 
 fn main() {
     let mut out = std::io::stdout().lock();
@@ -97,7 +97,7 @@ fn main() {
         }
         Ok(None) => {
             println!(
-                "note\tno transicc found: set ICCCE_TRANSICC, or run fetch-lcms2.sh + \
+                "note\tno transicc found: set ICCCER_TRANSICC, or run fetch-lcms2.sh + \
                  build-lcms2.{{ps1,sh}}"
             );
             println!("summary\tpass=0\tfail=0\tskip=6\terror=0");
@@ -138,7 +138,7 @@ fn main() {
     let mut report = Report::new();
     report.note(format!("oracle: {}", oracle.path().display()));
     report.note(format!("banner: {}", analysis.oracle_banner));
-    report.note(format!("iccce:  {}", analysis.iccce_exe.display()));
+    report.note(format!("icccer:  {}", analysis.icccer_exe.display()));
     for r in pass3::records(&analysis) {
         report.push_record(r);
     }
@@ -148,15 +148,15 @@ fn main() {
 }
 
 fn print_header(a: &Analysis) {
-    println!("=== Pass 3 — matrix/TRC differential, iccce vs lcms2 ===\n");
+    println!("=== Pass 3 — matrix/TRC differential, icccer vs lcms2 ===\n");
     println!("source profile : {}", a.src_path.display());
     println!("dest   profile : {}", a.dst_path.display());
-    println!("intent         : media-relative colorimetric (the only one iccce implements)");
+    println!("intent         : media-relative colorimetric (the only one icccer implements)");
     println!("precalc        : -c0 (cmsFLAGS_NOOPTIMIZE) — lcms2's most accurate path");
     println!("bpc            : not requested (and unreachable: media-relative, v2.1 profiles)");
     println!("grid           : {} points, deterministic", a.grid.len());
-    println!("iccce binary   : {}", a.iccce_exe.display());
-    if a.iccce_is_debug {
+    println!("icccer binary   : {}", a.icccer_exe.display());
+    if a.icccer_is_debug {
         println!("               : ⚠ DEBUG BUILD — not the shipped artefact");
     }
     println!("oracle banner  : {}", a.oracle_banner);
@@ -183,7 +183,7 @@ fn print_reductions(a: &Analysis) {
     println!("{}", "-".repeat(82));
     println!(
         "{:<52} {:>14.6e} {:>14.6e}",
-        "iccce vs lcms2, device (0..1), lcms2 clamped", dm, dmean
+        "icccer vs lcms2, device (0..1), lcms2 clamped", dm, dmean
     );
     println!(
         "{:<52} {:>14.6e} {:>14.6e}",
@@ -197,7 +197,7 @@ fn print_reductions(a: &Analysis) {
     );
     println!(
         "{:<52} {:>14.6e} {:>14.6e}",
-        "iccce vs lcms2, dE2000 (D50 Lab)", em, emean
+        "icccer vs lcms2, dE2000 (D50 Lab)", em, emean
     );
     println!(
         "{:<52} {:>14.6e} {:>14.6e}",
@@ -209,7 +209,7 @@ fn print_reductions(a: &Analysis) {
     );
     println!(
         "{:<52} {:>14.6e} {:>14.6e}",
-        "INSTRUMENT: Lab ruler, iccce vs lcms2, dE2000", im, imean
+        "INSTRUMENT: Lab ruler, icccer vs lcms2, dE2000", im, imean
     );
     println!();
 }
@@ -225,41 +225,41 @@ fn worst(v: &[f64], n: usize) -> Vec<(usize, f64)> {
 fn print_worst(a: &Analysis) {
     println!("=== 2. worst points ===\n");
 
-    println!("--- device-space disagreement, iccce vs lcms2 (top 10) ---");
+    println!("--- device-space disagreement, icccer vs lcms2 (top 10) ---");
     println!(
         "{:>4}  {:<26} {:<26} {:<26} {:>12}",
-        "#", "input RGB (0..1)", "iccce out (0..1)", "lcms2 out (0..1)", "max |d|"
+        "#", "input RGB (0..1)", "icccer out (0..1)", "lcms2 out (0..1)", "max |d|"
     );
     for (i, d) in worst(&a.device_dev_clamped, 10) {
         println!(
             "{:>4}  {:<26} {:<26} {:<26} {:>12.4e}",
             i,
             fmt3(a.grid[i]),
-            fmt3(a.iccce_out[i]),
+            fmt3(a.icccer_out[i]),
             fmt3(a.lcms2_out[i]),
             d
         );
     }
     println!();
 
-    println!("--- dE2000 disagreement, iccce vs lcms2 (top 10) ---");
+    println!("--- dE2000 disagreement, icccer vs lcms2 (top 10) ---");
     println!(
         "{:>4}  {:<26} {:<26} {:<26} {:>12}",
-        "#", "input RGB (0..1)", "iccce out (0..1)", "lcms2 out (0..1)", "dE2000"
+        "#", "input RGB (0..1)", "icccer out (0..1)", "lcms2 out (0..1)", "dE2000"
     );
     for (i, d) in worst(&a.de_crosscheck, 10) {
         println!(
             "{:>4}  {:<26} {:<26} {:<26} {:>12.4e}",
             i,
             fmt3(a.grid[i]),
-            fmt3(a.iccce_out[i]),
+            fmt3(a.icccer_out[i]),
             fmt3(a.lcms2_out[i]),
             d
         );
     }
     println!();
 
-    println!("--- round trip sRGB->AdobeRGB->sRGB, iccce alone (top 10 by dE2000) ---");
+    println!("--- round trip sRGB->AdobeRGB->sRGB, icccer alone (top 10 by dE2000) ---");
     println!(
         "{:>4}  {:<26} {:<26} {:>12} {:>12}",
         "#", "input RGB (0..1)", "round-tripped (0..1)", "dE2000", "max |d|dev"
@@ -276,22 +276,22 @@ fn print_worst(a: &Analysis) {
     }
     println!();
 
-    println!("--- INSTRUMENT: Lab of the same device value, iccce's model vs lcms2 (top 10) ---");
+    println!("--- INSTRUMENT: Lab of the same device value, icccer's model vs lcms2 (top 10) ---");
     println!(
         "{:>4}  {:<26} {:<30} {:<30} {:>12}",
-        "#", "AdobeRGB device (0..1)", "iccce Lab", "lcms2 Lab", "dE2000"
+        "#", "AdobeRGB device (0..1)", "icccer Lab", "lcms2 Lab", "dE2000"
     );
     let dst_model = model(&a.dst_path);
     for (i, d) in worst(&a.de_instrument, 10) {
         let li = dst_model
             .as_ref()
-            .map(|m| Lab::from_xyz(m.device_to_pcs(a.iccce_out[i]), D50));
+            .map(|m| Lab::from_xyz(m.device_to_pcs(a.icccer_out[i]), D50));
         println!(
             "{:>4}  {:<26} {:<30} {:<30} {:>12.4e}",
             i,
-            fmt3(a.iccce_out[i]),
+            fmt3(a.icccer_out[i]),
             li.map_or_else(|| "-".into(), fmt_lab),
-            fmt_lab(a.lcms2_lab_of_iccce_out[i]),
+            fmt_lab(a.lcms2_lab_of_icccer_out[i]),
             d
         );
     }
@@ -315,7 +315,7 @@ fn print_out_of_range(a: &Analysis) {
     println!(
         "\nICC.1:2022 Annex F.8-F.16 (NORMATIVE) clamps each linear component to [0,1] BEFORE"
     );
-    println!("the inverse TRC. iccce does; lcms2 evidently does not on the high side when the");
+    println!("the inverse TRC. icccer does; lcms2 evidently does not on the high side when the");
     println!("destination TRC's inverse is ANALYTIC (a gamma), because pow(1.0001, 1/g) is");
     println!("perfectly finite and nothing forces it back. Measured 2026-08-11 in the other");
     println!("direction (AdobeRGB -> sRGB, whose inverse TRC is a TABULATED reverse curve),");
@@ -349,7 +349,7 @@ fn model(path: &std::path::Path) -> Option<MatrixTrc> {
 }
 
 /// See the module header. Predicts lcms2's output by emulating its 16-bit
-/// tabulated-curve evaluation inside iccce's model, then reports how much of
+/// tabulated-curve evaluation inside icccer's model, then reports how much of
 /// the measured disagreement that accounts for.
 fn quantisation_experiment(a: &Analysis) {
     println!("=== 4. ★ the quantisation experiment ===\n");
@@ -391,7 +391,7 @@ fn quantisation_experiment(a: &Analysis) {
 
     for (i, x) in a.grid.iter().enumerate() {
         // Emulate lcms2: quantise the curve input, evaluate, quantise the
-        // curve output. Everything downstream is iccce's own arithmetic, so
+        // curve output. Everything downstream is icccer's own arithmetic, so
         // the ONLY variable is the quantisation.
         let linear = [
             q16(src.trc[0].eval(q16(x[0]))),
@@ -399,7 +399,7 @@ fn quantisation_experiment(a: &Analysis) {
             q16(src.trc[2].eval(q16(x[2]))),
         ];
         let xyz_v = src.matrix().apply(linear);
-        let xyz = iccce_color::Xyz {
+        let xyz = icccer_color::Xyz {
             x: xyz_v[0],
             y: xyz_v[1],
             z: xyz_v[2],
@@ -409,9 +409,9 @@ fn quantisation_experiment(a: &Analysis) {
         };
 
         let meas = a.lcms2_out[i];
-        let icc = a.iccce_out[i];
+        let icc = a.icccer_out[i];
 
-        // "before" = the real disagreement (iccce as shipped vs lcms2).
+        // "before" = the real disagreement (icccer as shipped vs lcms2).
         // "after"  = what is LEFT once lcms2's quantisation is modelled.
         // Both compare against the SAME measured lcms2 output, clamped the
         // same way, so the two numbers are commensurable.
@@ -442,7 +442,7 @@ fn quantisation_experiment(a: &Analysis) {
     println!("{}", "-".repeat(76));
     println!(
         "{:<46} {:>14.6e} {:>14.6e}",
-        "device (0..1), iccce as shipped", b_max, b_mean
+        "device (0..1), icccer as shipped", b_max, b_mean
     );
     println!(
         "{:<46} {:>14.6e} {:>14.6e}",
@@ -450,7 +450,7 @@ fn quantisation_experiment(a: &Analysis) {
     );
     println!(
         "{:<46} {:>14.6e} {:>14.6e}",
-        "dE2000, iccce as shipped", dbe_max, dbe_mean
+        "dE2000, icccer as shipped", dbe_max, dbe_mean
     );
     println!(
         "{:<46} {:>14.6e} {:>14.6e}",
@@ -536,7 +536,7 @@ fn white_point_clamp_experiment(a: &Analysis) {
     println!(
         "\nICC's own 4-figure D50 is X=0.9642 Y=1.0000 Z=0.8249. Neither file's colorant\n\
          sum equals it exactly, and the two files do not equal each other. That is the\n\
-         1998/2000 authors' s15Fixed16 rounding — a fact about the FILES, not about iccce."
+         1998/2000 authors' s15Fixed16 rounding — a fact about the FILES, not about icccer."
     );
 
     // Predict the round trip at device white, using ONLY the matrices and
@@ -572,7 +572,7 @@ fn white_point_clamp_experiment(a: &Analysis) {
     );
 
     let lab_src_white = Lab::from_xyz(
-        iccce_color::Xyz {
+        icccer_color::Xyz {
             x: sw[0],
             y: sw[1],
             z: sw[2],
@@ -580,7 +580,7 @@ fn white_point_clamp_experiment(a: &Analysis) {
         D50,
     );
     let lab_back = Lab::from_xyz(
-        iccce_color::Xyz {
+        icccer_color::Xyz {
             x: back[0],
             y: back[1],
             z: back[2],
@@ -622,7 +622,7 @@ fn white_point_clamp_experiment(a: &Analysis) {
         "\nreading: {}",
         if rel < 0.05 {
             "★ MECHANISM ESTABLISHED. The round-trip maximum is the range clamp \
-             discarding the two files' encoded white-point difference. iccce is doing what \
+             discarding the two files' encoded white-point difference. icccer is doing what \
              the normative annex requires; the ORIGINAL TOLERANCE'S JUSTIFICATION was wrong \
              (it assumed nothing was clipped), and re-deriving it from this fact is a \
              correction, not a widening."
@@ -636,22 +636,22 @@ fn white_point_clamp_experiment(a: &Analysis) {
     //
     // "An apparatus not shown able to detect the effect it is looking for is
     // not an experiment" (README §12.4's method note). WHITE_CLAMP_PREDICTION
-    // claims it would fail if iccce stopped clamping. Show the number that
+    // claims it would fail if icccer stopped clamping. Show the number that
     // claim rests on, rather than asserting it: with NO clamping anywhere,
     // M_dst · (M_dst^-1 · W_src) is the identity and the observed cost is
     // exactly zero, so the check's metric would read |predicted - 0|.
     let no_clamp_observed = 0.0_f64;
     let would_read = (predicted - no_clamp_observed).abs();
-    println!("\n--- sensitivity control: what if iccce did not clamp at all? ---");
+    println!("\n--- sensitivity control: what if icccer did not clamp at all? ---");
     println!("  round trip without any clamping is the exact identity, so the observed");
     println!("  cost would be {no_clamp_observed:.6e} and the check's metric would read {would_read:.6e},");
     println!(
         "  against a tolerance of {:.1e} — it would FAIL by {:.0}x. The apparatus can",
-        iccce_difftest::pass3::WHITE_CLAMP_PREDICTION.value,
-        would_read / iccce_difftest::pass3::WHITE_CLAMP_PREDICTION.value
+        icccer_difftest::pass3::WHITE_CLAMP_PREDICTION.value,
+        would_read / icccer_difftest::pass3::WHITE_CLAMP_PREDICTION.value
     );
     println!("  detect the effect it is looking for.");
-    println!("\n  SCOPE, and it is narrower than it first looks: iccce clamps at THREE");
+    println!("\n  SCOPE, and it is narrower than it first looks: icccer clamps at THREE");
     println!("  independent sites (F.8-F.16 in pcs_to_device, 10.18's domain in Trc::eval,");
     println!("  F.1(b) in eval_inverse/invert_table). Removing the F.8-F.16 clamp ALONE");
     println!("  changes nothing observable here, because the other two catch it. This");

@@ -1,9 +1,9 @@
 //! # `passh_probe` — the instrument behind Pass H
 //!
-//! Pass H's §D grades iccce against the **ICC's own published statement of what
+//! Pass H's §D grades icccer against the **ICC's own published statement of what
 //! its Probe profiles do** (`Probe2 Profile Readme June 1, 2007`, shipped inside
 //! `Probev2.zip`). This binary is the exploratory instrument the tolerances in
-//! [`iccce_difftest::passh`] were derived from, and it stays in the tree for the
+//! [`icccer_difftest::passh`] were derived from, and it stays in the tree for the
 //! same reason `suite_probe` does: **a tolerance derived from a measurement
 //! nobody can re-take is a tolerance nobody can check.**
 //!
@@ -30,11 +30,11 @@
 
 use std::collections::BTreeMap;
 
-use iccce_color::Lab;
-use iccce_profile::Profile;
-use iccce_profile::num::Signature;
+use icccer_color::Lab;
+use icccer_profile::Profile;
+use icccer_profile::num::Signature;
 
-use iccce_difftest::passh::{
+use icccer_difftest::passh::{
     A2B_BANDS, AB_PROBES, B2A_COLORANT, TagEval, channels_of, corpus_dir, device_grid,
     lightness_sweep, raw_version,
 };
@@ -45,7 +45,7 @@ fn main() {
     let dir = corpus_dir();
     println!("corpus: {}", dir.display());
     if !dir.is_dir() {
-        println!("ABSENT — set ICCCE_PRIVATE_FIXTURES or place the corpus at the default path");
+        println!("ABSENT — set ICCCER_PRIVATE_FIXTURES or place the corpus at the default path");
         return;
     }
 
@@ -56,7 +56,7 @@ fn main() {
             continue;
         };
         let Ok(p) = Profile::parse(&bytes) else {
-            println!("\n### {name}: REFUSED by iccce");
+            println!("\n### {name}: REFUSED by icccer");
             continue;
         };
         println!(

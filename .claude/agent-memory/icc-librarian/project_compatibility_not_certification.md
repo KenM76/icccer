@@ -1,5 +1,5 @@
 ---
-name: iccce-compatibility-not-certification
+name: icccer-compatibility-not-certification
 description: DL-045/046/047 — "cannot be certified" was being read as "cannot be checked"; a third-party corpus can supply a CATEGORICAL expectation with no oracle and no instrument, but never a numeric one; and a [REPORTED] claim is promoted only by re-running the shipped code WITH a control
 metadata:
   type: project
@@ -80,10 +80,10 @@ should NOT have moved?*
   licences). ★ A *"yes"* to the standing operator question about
   published numbers in an MIT repo **would not extend to this one**.
 
-Related: [[iccce-pass-status]],
-[[iccce-ground-truth-cannot-exist]],
-[[iccce-agreement-can-be-the-symptom]],
-[[iccce-control-only-as-good-as-its-fixture]],
-[[iccce-refusal-discharged-by-fixture]],
-[[iccce-count-needs-its-apparatus]],
-[[iccce-verify-own-draft-too]].
+Related: [[icccer-pass-status]],
+[[icccer-ground-truth-cannot-exist]],
+[[icccer-agreement-can-be-the-symptom]],
+[[icccer-control-only-as-good-as-its-fixture]],
+[[icccer-refusal-discharged-by-fixture]],
+[[icccer-count-needs-its-apparatus]],
+[[icccer-verify-own-draft-too]].

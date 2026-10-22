@@ -1,8 +1,8 @@
 //! # Pass 6 — the compiled path, graded
 //!
-//! `crates/iccce-cmm/src/compiled.rs` folds a whole [`Chain`] into one
+//! `crates/icccer-cmm/src/compiled.rs` folds a whole [`Chain`] into one
 //! device→device grid so a page-sized raster does not re-walk curves,
-//! matrices, CLUTs and BPC per pixel. `iccce bench` prints what that costs and
+//! matrices, CLUTs and BPC per pixel. `icccer bench` prints what that costs and
 //! what it buys. **This module is the grading of those numbers**, and it exists
 //! because three things about the engineer's measurement are not, on their own,
 //! claims this project is allowed to make:
@@ -26,7 +26,7 @@
 //!
 //! `USWebCoatedSWOP.icc` `A2B1` (`mft2`, 4-D CMYK, 9 nodes per axis, `Lab `
 //! PCS) → the system sRGB profile, **media-relative colorimetric**. That is
-//! `iccce bench`'s own default pair, Pass 4's pair, and the pair
+//! `icccer bench`'s own default pair, Pass 4's pair, and the pair
 //! `compiled.rs::tests::cmyk_compiled_cost_is_bounded_off_node` uses. **The
 //! direction and the tag type are part of the claim**: an error measured
 //! compiling a CMYK→RGB `A2B` path says nothing whatever about the `B2A` path
@@ -35,7 +35,7 @@
 //!
 //! ## The probe population is the benchmark's own, deliberately
 //!
-//! `iccce bench` samples its synthetic raster at
+//! `icccer bench` samples its synthetic raster at
 //! `v = ((p·7 + c·131) mod 1024) / 1023`, every `pixels/512`-th pixel. This
 //! module **reproduces that sequence exactly** rather than inventing a grid of
 //! its own, so that the ΔE reported here is a translation of *the number the
@@ -54,10 +54,10 @@
 //!
 //! ## What class every number here is
 //!
-//! **self-consistency.** Both arms are iccce; the compiled grid is *built by
+//! **self-consistency.** Both arms are icccer; the compiled grid is *built by
 //! sampling* the reference path. No row in this module is evidence that either
 //! arm is correct — Pass 4 is what says the reference path agrees with lcms2 on
-//! this pair, and Pass 6 is only ever about the distance between iccce's two
+//! this pair, and Pass 6 is only ever about the distance between icccer's two
 //! arms. `NUMERIC_CLAIMS.md` §1 and `TOLERANCES.md` §1 both say a
 //! self-consistency figure is worthless as correctness evidence however small;
 //! that is not a hedge, it is the reason §A's tolerance is derived from Pass
@@ -66,22 +66,22 @@
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use iccce_cmm::compiled::CompiledTransform;
-use iccce_cmm::matrix_trc::{Intent as CmmIntent, MatrixTrc};
-use iccce_cmm::transform::Chain;
-use iccce_color::{D50, Lab, delta_e_2000};
-use iccce_profile::Profile;
+use icccer_cmm::compiled::CompiledTransform;
+use icccer_cmm::matrix_trc::{Intent as CmmIntent, MatrixTrc};
+use icccer_cmm::transform::Chain;
+use icccer_color::{D50, Lab, delta_e_2000};
+use icccer_profile::Profile;
 
-use crate::{Iccce, Kind, Metric, Record, Tolerance};
+use crate::{Icccer, Kind, Metric, Record, Tolerance};
 
 /// `LEGAL.md` §3 category **(c)**: read from the local system, never
 /// committed, never a required input.
 const SWOP: &str = r"C:\Windows\System32\spool\drivers\color\USWebCoatedSWOP.icc";
 const SRGB: &str = r"C:\Windows\System32\spool\drivers\color\sRGB Color Space Profile.icm";
 
-/// `iccce bench`'s default raster: 2481 × 3507, a 300 DPI A4 page.
+/// `icccer bench`'s default raster: 2481 × 3507, a 300 DPI A4 page.
 const BENCH_PIXELS: usize = 2481 * 3507;
-/// `iccce bench`'s default grid, i.e. `compiled::recommended_grid_points(4)`.
+/// `icccer bench`'s default grid, i.e. `compiled::recommended_grid_points(4)`.
 ///
 /// ##  Moved 17 -> 33 on 2026-08-12, and this constant is downstream of that
 ///
@@ -92,7 +92,7 @@ const BENCH_PIXELS: usize = 2481 * 3507;
 ///
 /// **This constant must track the shipped default and nothing else.** If it
 /// is ever set to a value the binary does not use, `APPARATUS_BENCH` fails -
-/// by design: the harness arm and the `iccce bench` arm would be measuring
+/// by design: the harness arm and the `icccer bench` arm would be measuring
 /// different transforms and every number below would stop being a
 /// translation of what the binary prints. That is exactly how the move was
 /// detected: the suite went red at 1,576x10^-3 on the apparatus row, which
@@ -140,7 +140,7 @@ const SRGB_BREAKPOINT: f64 = 0.040_45;
 /// > already differ on the same transform.**
 ///
 /// Pass 4 measured `USWebCoatedSWOP → sRGB`, **media-relative**, 341 CMYK
-/// points, iccce against lcms2 2.19.1: **0,252 94 ΔE2000** (`TOLERANCES.md`
+/// points, icccer against lcms2 2.19.1: **0,252 94 ΔE2000** (`TOLERANCES.md`
 /// §3.4.1, `README.md` §14.7). This tolerance is that number, rounded down to
 /// one significant figure — `2,5×10⁻¹`. There is nothing else in it: no
 /// headroom factor, no safety multiple, no anchor.
@@ -152,7 +152,7 @@ const SRGB_BREAKPOINT: f64 = 0.040_45;
 /// 0,5 %. It is a different quantity and this tolerance must not be re-derived
 /// from it:
 ///
-/// - **`0,252 94` (this one)** is the **observed residual** between iccce and
+/// - **`0,252 94` (this one)** is the **observed residual** between icccer and
 ///   lcms2 — two programs, both run, outputs compared. That is the right base
 ///   for this tolerance, because the requirement is *"compiling must not move
 ///   the result further than the two implementations already differ"*, and
@@ -168,8 +168,8 @@ const SRGB_BREAKPOINT: f64 = 0.040_45;
 /// carries the mirror of this warning.
 ///
 /// **What it means to fail it.** Above this line, compiling is the *dominant*
-/// error term on this transform: the difference between a compiled iccce and an
-/// uncompiled one would exceed the difference between iccce and the reference
+/// error term on this transform: the difference between a compiled icccer and an
+/// uncompiled one would exceed the difference between icccer and the reference
 /// implementation, so a user comparing outputs could not tell an engine choice
 /// from an optimisation. That is a shippability statement, and it is the one a
 /// compiled path actually has to satisfy.
@@ -186,7 +186,7 @@ const SRGB_BREAKPOINT: f64 = 0.040_45;
 pub const COMPILED_DE: Tolerance = Tolerance::new(
     2.5e-1,
     "compiling must not move the result further than the two implementations already differ on \
-     the same transform: Pass 4 measured iccce vs lcms2 2.19.1 at 0.25294 dE2000 on this exact \
+     the same transform: Pass 4 measured icccer vs lcms2 2.19.1 at 0.25294 dE2000 on this exact \
      pair (USWebCoatedSWOP -> sRGB, media-relative, 341 CMYK points, TOLERANCES.md 3.4.1), and \
      this is that number to one significant figure with NO headroom factor and NO free \
      parameter. Deliberately NOT derived from the 1.0 dE2000 perceptibility anchor: NA-006 \
@@ -197,7 +197,7 @@ pub const COMPILED_DE: Tolerance = Tolerance::new(
 );
 
 /// **§A, the device row**, kept beside the ΔE one because it is the quantity
-/// `iccce bench` prints and the quantity a caller sizing a buffer cares about.
+/// `icccer bench` prints and the quantity a caller sizing a buffer cares about.
 ///
 /// The bound is the ΔE bound divided by the **largest** device→ΔE sensitivity
 /// this destination has anywhere on the axis, so that the two rows cannot
@@ -224,7 +224,7 @@ pub const REPORTED: Tolerance = Tolerance::new(
 );
 
 /// **§A, apparatus.** The harness's in-process off-node device maximum at the
-/// shipped default grid against the number `iccce bench` prints.
+/// shipped default grid against the number `icccer bench` prints.
 ///
 /// ★ **This row is what caught the default moving from 17 to 33.** When
 /// `recommended_grid_points` changed in commit `189e732` and `DEFAULT_GRID`
@@ -236,7 +236,7 @@ pub const REPORTED: Tolerance = Tolerance::new(
 /// The precondition for §A being a *translation* of the benchmark rather than a
 /// second, differently-shaped measurement that happens to concern the same
 /// subject. If these two disagree, the ΔE figure below belongs to a probe
-/// population nobody has published and the comparison to `iccce bench` is
+/// population nobody has published and the comparison to `icccer bench` is
 /// rhetorical.
 ///
 /// `1×10⁻⁹` is the CLI's own print floor: `error.max_device_offnode` is printed
@@ -245,7 +245,7 @@ pub const REPORTED: Tolerance = Tolerance::new(
 /// different intent, all of which move this quantity by ≥10⁻⁴.
 pub const APPARATUS_BENCH: Tolerance = Tolerance::new(
     1e-9,
-    "iccce bench prints error.max_device_offnode to 9 decimals, so one printed lsb is 1e-9; the \
+    "icccer bench prints error.max_device_offnode to 9 decimals, so one printed lsb is 1e-9; the \
      harness must reproduce the shipped binary's number to its own print floor or section A is \
      not a translation of it. Cannot absorb a different probe set, grid or intent - each moves \
      this quantity by 1e-4 or more",
@@ -334,12 +334,12 @@ pub const H2_BAND: Tolerance = Tolerance::new(
 );
 
 // ===========================================================================
-// The probe population — iccce bench's own, reproduced
+// The probe population — icccer bench's own, reproduced
 // ===========================================================================
 
-/// Reproduce `iccce bench`'s sampled probe set exactly.
+/// Reproduce `icccer bench`'s sampled probe set exactly.
 ///
-/// `iccce bench` builds a raster of `pixels × channels` with
+/// `icccer bench` builds a raster of `pixels × channels` with
 /// `v = ((p·7 + c·131) mod 1024) / 1023` and then walks it in strides of
 /// `max(1, pixels/512)`, checking the compiled result against the reference at
 /// each stop. This returns those stops' device vectors, in order.
@@ -457,7 +457,7 @@ fn cell_is_smooth(chain: &Chain, probe: &[f64], n: usize, out_ch: usize) -> bool
     true
 }
 
-/// What `iccce bench` printed, parsed from the shipped binary's stdout.
+/// What `icccer bench` printed, parsed from the shipped binary's stdout.
 #[derive(Debug, Clone)]
 pub struct BenchOutput {
     pub grid_points: usize,
@@ -586,7 +586,7 @@ impl std::fmt::Display for Unavailable {
     }
 }
 
-/// Parse one `key: value` line out of `iccce bench`'s output.
+/// Parse one `key: value` line out of `icccer bench`'s output.
 fn field(stdout: &str, key: &str) -> Option<String> {
     stdout.lines().find_map(|l| {
         let (k, v) = l.split_once(':')?;
@@ -596,7 +596,7 @@ fn field(stdout: &str, key: &str) -> Option<String> {
 
 /// Run Pass 6.
 ///
-/// **No oracle.** Both arms are iccce, so `transicc` is not consulted and this
+/// **No oracle.** Both arms are icccer, so `transicc` is not consulted and this
 /// section runs on a machine with no lcms2 build — but it still needs the two
 /// system profiles (category (c)) and the shipped binary, and skips with a
 /// reason when either is absent.
@@ -612,11 +612,11 @@ pub fn analyse() -> Result<Analysis, Unavailable> {
             )));
         }
     }
-    let iccce = match Iccce::locate() {
+    let icccer = match Icccer::locate() {
         Err(e) => return Err(Unavailable::Error(e.to_string())),
         Ok(None) => {
             return Err(Unavailable::Skip(
-                "iccce binary not found: run `cargo build --release -p iccce-cli`".to_string(),
+                "icccer binary not found: run `cargo build --release -p icccer-cli`".to_string(),
             ));
         }
         Ok(Some(i)) => i,
@@ -624,9 +624,9 @@ pub fn analyse() -> Result<Analysis, Unavailable> {
 
     // --- the shipped binary's own benchmark, as a subprocess -----------------
     // Deliberately the CLI and not an in-process call: the numbers this pass
-    // grades are the numbers `iccce bench` prints, and a reader must be able to
+    // grades are the numbers `icccer bench` prints, and a reader must be able to
     // reproduce them by running that command.
-    let out = Command::new(iccce.path())
+    let out = Command::new(icccer.path())
         .args([
             "bench",
             "--src",
@@ -635,10 +635,10 @@ pub fn analyse() -> Result<Analysis, Unavailable> {
             &dst_path.display().to_string(),
         ])
         .output()
-        .map_err(|e| Unavailable::Error(format!("cannot run `iccce bench`: {e}")))?;
+        .map_err(|e| Unavailable::Error(format!("cannot run `icccer bench`: {e}")))?;
     if !out.status.success() {
         return Err(Unavailable::Error(format!(
-            "`iccce bench` exited {:?}: {}",
+            "`icccer bench` exited {:?}: {}",
             out.status.code(),
             String::from_utf8_lossy(&out.stderr).trim()
         )));
@@ -647,7 +647,7 @@ pub fn analyse() -> Result<Analysis, Unavailable> {
     let num = |k: &str| -> Result<f64, Unavailable> {
         field(&so, k)
             .and_then(|v| v.parse::<f64>().ok())
-            .ok_or_else(|| Unavailable::Error(format!("`iccce bench` printed no parsable `{k}`")))
+            .ok_or_else(|| Unavailable::Error(format!("`icccer bench` printed no parsable `{k}`")))
     };
     #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
     let bench = BenchOutput {
@@ -660,8 +660,8 @@ pub fn analyse() -> Result<Analysis, Unavailable> {
         speedup: num("speedup.compiled_over_reference")?,
         error_samples: num("error.samples")? as usize,
         error_max_device_offnode: num("error.max_device_offnode")?,
-        exe: iccce.path().to_path_buf(),
-        is_debug: iccce.is_debug_build(),
+        exe: icccer.path().to_path_buf(),
+        is_debug: icccer.is_debug_build(),
     };
 
     // --- the same chain, in process ------------------------------------------
@@ -717,7 +717,7 @@ pub fn analyse() -> Result<Analysis, Unavailable> {
 
     let structure = format!(
         "src v{:08X} {} {}->{} A2B1 mft2 4->3 9 nodes/axis | dst v{:08X} {} {}->{} matrix/TRC | \
-         media-relative | {in_ch}->{out_ch} | {} probes = iccce bench's own sampled raster",
+         media-relative | {in_ch}->{out_ch} | {} probes = icccer bench's own sampled raster",
         src.header.version.raw,
         src.header.device_class,
         src.header.color_space,
@@ -882,7 +882,7 @@ pub fn analyse() -> Result<Analysis, Unavailable> {
 #[must_use]
 pub fn records(a: &Analysis) -> Vec<Record> {
     let ctx = format!(
-        "{} | iccce={} ({}) | bench: grid={} raster={} px, build={:.3}s convert={:.3}s \
+        "{} | icccer={} ({}) | bench: grid={} raster={} px, build={:.3}s convert={:.3}s \
          {:.3} Mpix/s vs reference {:.3} Mpix/s = {:.2}x, break-even at {:.0} px",
         a.structure,
         a.bench.exe.display(),
@@ -911,7 +911,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             APPARATUS_BENCH,
             (d.device_max - a.bench.error_max_device_offnode).abs(),
             "the harness's in-process off-node maximum at grid 17 against the number the SHIPPED \
-             `iccce bench` prints, across a process boundary - the precondition for the dE row \
+             `icccer bench` prints, across a process boundary - the precondition for the dE row \
              below being a TRANSLATION of the benchmark rather than a different measurement",
             format!(
                 "{ctx} | harness={:.9} bench={:.9} over {} probes (bench sampled {})",
@@ -937,7 +937,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             Metric::DeltaE2000Max,
             COMPILED_DE,
             d.de_max,
-            "both arms are iccce, both computed in this run: CompiledTransform at grid 17 against \
+            "both arms are icccer, both computed in this run: CompiledTransform at grid 17 against \
              Chain::convert, carried into D50 CIELAB through the DESTINATION profile's own \
              matrix/TRC model",
             format!(
@@ -959,7 +959,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             Metric::DeviceAbsMaxNormalised,
             REPORTED,
             d.device_max,
-            "the quantity `iccce bench` prints. REPORTED, NOT GRADED: the device bound implied by \
+            "the quantity `icccer bench` prints. REPORTED, NOT GRADED: the device bound implied by \
              the dE tolerance (2.5e-1 / 136 = 1.84e-3, using sRGB's shadow sensitivity) is \
              TIGHTER than the observed value, and the observed maximum is not in the shadow - so \
              grading it would assert something neither row means",
@@ -1086,7 +1086,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
     // ★ It also said "the only grid COMPILED_DE is DERIVED for", which was
     // wrong on the day it was written and is worth correcting rather than
     // merely re-dating. COMPILED_DE has no compiled grid in its derivation
-    // at all: it is Pass 4's iccce-vs-lcms2 maximum over a 341-point CMYK
+    // at all: it is Pass 4's icccer-vs-lcms2 maximum over a 341-point CMYK
     // grid, and Pass 4 compares the REFERENCE path against the oracle - it
     // never builds a `CompiledTransform`. The grid enters the OBSERVATION
     // and never the BOUND. What is true of the bound is narrower and is
@@ -1103,7 +1103,7 @@ pub fn records(a: &Analysis) -> Vec<Record> {
             REPORTED,
             r.de_max,
             format!(
-                "both arms are iccce. REPORTED, NOT GRADED: {DEFAULT_GRID} is the shipped default \
+                "both arms are icccer. REPORTED, NOT GRADED: {DEFAULT_GRID} is the shipped default \
                  (compiled::recommended_grid_points(4)) and the only grid COMPILED_DE is GRADED \
                  at; these say what the alternatives cost. COMPILED_DE is not DERIVED from any \
                  grid - its derivation population is Pass 4's 341-point CMYK comparison of the \
@@ -1206,7 +1206,7 @@ pub fn unavailable_records(u: &Unavailable) -> Vec<Record> {
     specs
         .into_iter()
         .map(|(id, kind, metric, tol)| {
-            let source = "both arms are iccce (compiled vs reference); no oracle is consulted";
+            let source = "both arms are icccer (compiled vs reference); no oracle is consulted";
             match u {
                 Unavailable::Skip(_) => {
                     Record::skipped(id, kind, metric, tol, source, reason.clone())

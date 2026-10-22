@@ -1,6 +1,6 @@
 ---
 name: reference-request-channel-polling
-description: Ken wants the pdfce↔iccce request channel polled every ~15 minutes during a session, not only at session start
+description: Ken wants the pdfce↔icccer request channel polled every ~15 minutes during a session, not only at session start
 metadata:
   type: reference
 ---
@@ -34,7 +34,7 @@ turn. This matters because **requests flow both ways**, so an event is
 direction, and both sides use `note_*` and `request_*`. Before acting on
 an event, read the file's `**from:**` header line, which every file in
 that folder carries. Cheapest fix if the noise ever matters: filter the
-poll on `grep -L '^\*\*from:\*\* iccce'`. Left unfiltered so far
+poll on `grep -L '^\*\*from:\*\* icccer'`. Left unfiltered so far
 because a self-echo fires once per file and is obvious in the moment —
 it is a *future* session, reading the event without the context of having
 written the file, that would misread it.

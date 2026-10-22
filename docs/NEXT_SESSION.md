@@ -2,6 +2,18 @@
 
 ---
 
+# HANDOFF — 2026-10-22 (later). Renamed to `icccer`, `v0.4.0`; four renames outside the tree await Ken
+
+See `ARCHITECTURE.md` `DL-084`. Crates, binary and prose are `icccer`. Still
+named `iccce`, on purpose, until Ken OKs each: the GitHub repo, the
+`D:\Dev\iccce` folder, `D:\Dev\iccce-private-fixtures`, and the channel folder
+`iccce_FeatureRequests`. When one moves, replace its remaining path strings
+(`git grep -n "Dev.iccce\|KenM76/iccce\|iccce_FeatureRequests"`). Fixture
+byte-strings saying "iccce" stay forever. pdfcer was sent migration steps in
+the channel. crates.io: still unpublished, still Ken's call.
+
+---
+
 # HANDOFF — 2026-10-22. `v0.3.1` tagged: crates.io-READY, still NOT PUBLISHED
 
 `pdfcer` (the PDF engine, now spelled with an `r`) asked for publish-readiness
@@ -15,7 +27,7 @@ supersedes the 2026-09-01 one only on tip, version and the channel state; the
 rest below still stands.
 
 Channel: reply filed as `open/reply_crates_io_ready_and_the_version_to_pin.md`
-to `open/request_get_iccce_crates_io_ready.md`; left open until `pdfcer`
+to `open/request_get_icccer_crates_io_ready.md`; left open until `pdfcer`
 acknowledges.
 
 ---
@@ -36,7 +48,7 @@ tag, and above all not a publish (rule 9).
 
 ## ★★★ THE ONE THING THAT IS OWED TO THE OPERATOR AND TO NOBODY ELSE
 
-> **Should `iccce` be published to crates.io?**
+> **Should `icccer` be published to crates.io?**
 
 `icc-engineer` put it to Ken on 2026-09-01 as a single question with three
 options and a recommendation (**stay on the pinned git rev**), and
@@ -152,7 +164,7 @@ do not cover — as it always was.
    written and are now FALSE.** `f4ca7c0` committed
    `fixtures/synthetic/v2-cmyk-intent-separated-b2a.icc` — six `mft2` tags
    at six distinct offsets — and
-   `crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs`
+   `crates/icccer-cmm/tests/b2a_intent_selection_is_separated.rs`
    *(**[VERIFIED]** — both files read at this filing)*. **Three of the
    five done-when conditions are MET**; see the dated update in
    `ROADMAP.md`'s fixture-gap section.
@@ -171,8 +183,8 @@ do not cover — as it always was.
 ★ **What in that block is still good and must be kept:** ★★★ **both of
 its "two things a future session would otherwise get wrong"** — the
 `DL-070`/`DL-076` **unit** rule (a capture-derived comparison is stated in
-8-bit counts, never a ΔE), and **"iccce is closer to the reference" must
-never harden into "tune iccce toward the reference"**. Also its open-item
+8-bit counts, never a ΔE), and **"icccer is closer to the reference" must
+never harden into "tune icccer toward the reference"**. Also its open-item
 1 (the A42 black-point refusal is an **ABSTENTION, not an ERROR** — a
 refusal and a wrong answer look identical in a results table) and its
 statement that a green census is evidence about **the tree it was measured
@@ -409,16 +421,16 @@ disclosed limit, and computed the figure anyway. **A prohibition buys
 NAMEABILITY afterwards, not prevention.**
 
 ★ A ΔE stays lawful where **no capture is anywhere in the path**. §11.6,
-§11.10's iccce column and all of §12 are computed through profiles, not off
+§11.10's icccer column and all of §12 are computed through profiles, not off
 pixels, and are unaffected.
 
-### 2. ★★★ "iccce is closer to the reference" must NEVER harden into "tune iccce toward the reference"
+### 2. ★★★ "icccer is closer to the reference" must NEVER harden into "tune icccer toward the reference"
 
 **This is the single most likely misreading of this session's output.**
 
-`SUITE_COMPATIBILITY.md` §11.9 and §11.10 both contain columns where **iccce
+`SUITE_COMPATIBILITY.md` §11.9 and §11.10 both contain columns where **icccer
 is closer to a commercial renderer's capture** than the consumer is. §11.10
-also contains a region where **iccce is FURTHER and the consumer is closer**.
+also contains a region where **icccer is FURTHER and the consumer is closer**.
 
 > ★★★ **The capture is a REFERENCE, never a TARGET.** Rule 3 inverted —
 > treating another implementation's output as the thing to converge on — is
@@ -441,7 +453,7 @@ filing average it into one.
    **A future session reading only the numbers will file this as a bug.** It
    is rule 6's posture applied to estimation, and rule 4 is what requires the
    *absence* of the approximation to be named beside the number. The open
-   question is whether iccce should offer an estimator here **at all** — an
+   question is whether icccer should offer an estimator here **at all** — an
    engineering and clause question, **not** a defect to fix.
 2. ★★ **The `B2A0`/`B2A1` destination-side fixture gap** — see the next
    section. Highest-value *buildable* item, and the only one with a written
@@ -474,7 +486,7 @@ would have been acted on:
 - *"No committed fixture carries an `A2B1` or a `B2A1`"* — **four carry
   `A2B1`; two carry `B2A1`.**
 - *"Intent→tag selection has zero regression coverage"* — **a separation-floor
-  control already exists** (`crates/iccce-cli/tests/header_rendering_intent_not_consumed.rs`),
+  control already exists** (`crates/icccer-cli/tests/header_rendering_intent_not_consumed.rs`),
   was built for exactly this hazard, and **was proved capable of failing by
   injection** roughly ten days before the theorem it implements was written
   down.
@@ -625,11 +637,11 @@ and supports **no** publication claim beyond it.
    a buffer did not. **`7.195269e-1` of ink apart at `[0,0,0,1]`, with the
    non-qualifying control at exactly `0.0`.** Fixed by delegation, so there is
    no second place for a future policy to be forgotten.
-   ★★ **The transferable half:** the only caller was `iccce bench`, which
+   ★★ **The transferable half:** the only caller was `icccer bench`, which
    cannot request preservation, and difftest drives the CLI — so *a defect that
    only a LIBRARY consumer can reach is invisible to a CLI-driven suite,
    however green that suite is.*
-2. **★★ `iccce inspect` now prints `violations: N` beside
+2. **★★ `icccer inspect` now prints `violations: N` beside
    `malformations: N`.** `DL-063` established the distinction and recorded it
    in three doc comments — **nowhere a program could read.**
 3. **★★ `passh/B` repointed. The bound did not move** (`0` before, `0`
@@ -648,7 +660,7 @@ and supports **no** publication claim beyond it.
 ## ★★ WHAT TO DO NEXT
 
 1. **★★★ The compiled path STILL has no difftest row, and it is no longer
-   a tidiness item.** `iccce bench` cannot reach `--preserve-black`, and **that
+   a tidiness item.** `icccer bench` cannot reach `--preserve-black`, and **that
    is precisely what hid the `convert_buffer` defect for its entire life.** The
    gap has now demonstrably cost a real bug. *Needs a CLI flag first
    (`icc-engineer`), then the row (`icc-conformance`).*
@@ -676,7 +688,7 @@ and supports **no** publication claim beyond it.
    as a **question, not a plan**.
 6. **★ The `f32`/`u8` evaluation surface** — the last open one of the four
    capability gaps `pdfce` named on 2026-08-17; the other three are closed.
-   Every surface is `f64`; measured, `grep -rn "f32" crates/iccce-cmm/src`
+   Every surface is `f64`; measured, `grep -rn "f32" crates/icccer-cmm/src`
    returns nothing.
 
 **Housekeeping owed:** three `[REPORTED]` clause facts from the `pdfce`
@@ -751,12 +763,12 @@ accurate and still the reference — but **its "WHAT TO DO NEXT" items 1,
 
 | its item | status now |
 |---|---|
-| 1. Verify the `pdfce` link | ★ **DONE — still NOT linked.** The grep returns only *comments*. `pdfce`'s own `crates/pdfce-core/build.rs` now reports `iccce: not-linked-yet` **structurally**, and documents it as unstarted work rather than a decision to stay apart. Nothing here reaches `pdfce`. |
-| 2. The CLI's `header.intent` line has no test | ★ **DONE** — `crates/iccce-cli/tests/cli_header_intent_line.rs`, commit `19d36e9`. Five tests, and the `& 0xFFFF` masking edit was **applied** to confirm three of them turn red, then reverted. |
+| 1. Verify the `pdfce` link | ★ **DONE — still NOT linked.** The grep returns only *comments*. `pdfce`'s own `crates/pdfce-core/build.rs` now reports `icccer: not-linked-yet` **structurally**, and documents it as unstarted work rather than a decision to stay apart. Nothing here reaches `pdfce`. |
+| 2. The CLI's `header.intent` line has no test | ★ **DONE** — `crates/icccer-cli/tests/cli_header_intent_line.rs`, commit `19d36e9`. Five tests, and the `& 0xFFFF` masking edit was **applied** to confirm three of them turn red, then reverted. |
 | 3. `Malformation`'s doc comment is falsified | ★ **DONE** — **DL-063**, commit `abdf445`. Three sites carried the false reading, not one; all corrected. |
 | 4. No `published-ground-truth` row for any transform | **UNCHANGED — operator decision.** CHF 210 for IEC 61966-2-1 pp. 16–51 is still the only route. |
 | 5. The perceptual cost of black preservation | ★★★ **DONE — `NA-012` retired.** `3.681203` ΔE2000 max / `1.580674` mean, `ISO Coated v2 300% (ECI)` → `PCS_GenericCMYK`, media-relative. Commit `3c93b62`, Pass K **§G**, `NC-269 … NC-280`. |
-| 6. No difftest row for the compiled path | **UNCHANGED, and now sharper**: every §G row drives the **CLI**, and `iccce bench` still cannot reach `--preserve-black`. |
+| 6. No difftest row for the compiled path | **UNCHANGED, and now sharper**: every §G row drives the **CLI**, and `icccer bench` still cannot reach `--preserve-black`. |
 | 7. `blind = 11`, Pass I `chad` rows | **UNCHANGED** — still judged intrinsic, still leave alone. |
 
 ## ★★ WHAT TO DO NEXT — the new list
@@ -851,7 +863,7 @@ is clean, the suite is green, and nothing is half-applied.
 | **ahead of `origin/master`** | ★★ **14 commits. NOTHING IS PUSHED.** |
 | `cargo test --workspace` | **185 passed, 0 failed** |
 | `cargo fmt --all --check` / `clippy --workspace --all-targets -D warnings` | **exit 0** — measured, not asserted |
-| release build | `target/release/iccce.exe`, 377 344 bytes, exit 0 |
+| release build | `target/release/icccer.exe`, 377 344 bytes, exit 0 |
 | synthetic fixtures | **46** (18 well-formed / 28 malformed / 0 disputed) |
 
 ★ **`cargo fmt --all` does NOT cover `tools/gen-profiles`** — it is not a
@@ -866,8 +878,8 @@ a backlog to clear on your own initiative.
 Both were stated on 2026-08-18 and both were checked, not assumed. They
 are first because acting on either without re-checking wastes a session.
 
-1. **"pdfce consumes iccce by path."** ★ **It does not, as of
-   2026-08-18.** `grep -rn 'iccce' /d/Dev/pdfce --include=Cargo.toml
+1. **"pdfce consumes icccer by path."** ★ **It does not, as of
+   2026-08-18.** `grep -rn 'icccer' /d/Dev/pdfce --include=Cargo.toml
    --include=Cargo.lock --include=*.rs` returns **nothing** — no path
    dependency, no lockfile entry, no source reference. So **no commit or
    build in this repository currently reaches `pdfce` or any GUI built
@@ -927,7 +939,7 @@ them.**
    malformations** — correct output, but from an **unnamed mechanism**.
    A later tidy-up masking to `& 0xFFFF` would print `media-relative`,
    silently deleting the disclosure, **with a green suite**. One file in
-   `crates/iccce-cli/tests/`, five minutes. Deliberately not written,
+   `crates/icccer-cli/tests/`, five minutes. Deliberately not written,
    because writing it decides the question.
 3. **★★ `Malformation`'s doc comment is falsified by two of its own
    variants.** It says *"A rule violation the file carries"*; both
@@ -1015,7 +1027,7 @@ and `request_header_tag_channel_disagreement.md`.
 
 ★ **Not yet written, and it should be**: a note correcting pdfce's belief
 that PCS130 carries *"two deliberately corrupted profiles"*. It carries
-**four**, iccce reports `malformations: 0` on **all** of them, and the
+**four**, icccer reports `malformations: 0` on **all** of them, and the
 trap is **semantic, not structural** — the colorants are channel-permuted
 (red↔green in RGB, magenta↔cyan in CMYK), which was confirmed in the
 running transform, not read off a tag table. **PCS130 is therefore
@@ -1063,7 +1075,7 @@ left half-applied.
 | difftest, licensed corpus present | **`pass=337 fail=0 skip=9 error=0`** |
 | difftest, corpus genuinely absent (CI shape) | **`pass=184 fail=0 skip=94 error=0`** |
 
-★ **"Corpus absent" means an EMPTY `$ICCCE_PRIVATE_FIXTURES`, not an
+★ **"Corpus absent" means an EMPTY `$ICCCER_PRIVATE_FIXTURES`, not an
 unset one** — the resolver falls back to a default path that exists on
 this machine, so `env -u` proves nothing. That mistake was made and
 caught here; do not repeat it.
@@ -1073,10 +1085,10 @@ is a state, not a backlog to clear on your own initiative.
 
 ## What landed
 
-- **★★★ K-only black preservation** (`crates/iccce-cmm/src/black_preserve.rs`).
+- **★★★ K-only black preservation** (`crates/icccer-cmm/src/black_preserve.rs`).
   Opt-in named policy, five named refusals, `--preserve-black <policy>`
   on the CLI with **no default** (two published definitions disagree by
-  up to `4.9e-2`, so a default would be iccce choosing one and reporting
+  up to `4.9e-2`, so a default would be icccer choosing one and reporting
   it under a name that means both). Exactly zero chromatic ink on all
   ten CMYK destinations; K genuinely re-mapped (`0.366689` at `K_in=0.5`
   on the furthest cross-press pair), which is what distinguishes it from
@@ -1088,7 +1100,7 @@ is a state, not a backlog to clear on your own initiative.
   via `pypdfium2`; only `pdftoppm` is missing. DL-060.
 - **DL-059 / DL-061**: the suite's publisher patch 23.0 is PDF device routing, not a CMM
   problem — we had claimed it. Four independent confirmations.
-- **Licence manifest fixed** — `iccce-measure` had no `clarify` block and
+- **Licence manifest fixed** — `icccer-measure` had no `clarify` block and
   would have shipped `Copyright (c) <year> <copyright holders>`.
 
 ## ★★ WHAT TO DO NEXT
@@ -1179,7 +1191,7 @@ apart).
 ★ **`reply_suite_render_harness.md` is the highest-value thing in that
 folder.** pdfce built the harness and measured: **22 of 51 suite patches
 show a trap X, 20 of them pdfce's own features, and zero attributable to
-an iccce defect.** Overprint is 10 of the 22 — the largest bucket by
+an icccer defect.** Overprint is 10 of the 22 — the largest bucket by
 nearly two, and the first *evidence* for the boundary note's claimed
 ordering rather than an assertion of it.
 
@@ -1270,7 +1282,7 @@ retrospective subsection.
 TWO WERE TESTED; TEN ARE PRESENT.**
 
 > **Measured over all 50 `.icc` files** *(`icc-engineer`, **[VERIFIED —
-> header bytes 8..12 across all 50, then `iccce inspect` over all 50
+> header bytes 8..12 across all 50, then `icccer inspect` over all 50
 > reading `$?` per file, bare, no pipe]**)*: **40 parse, exit 0,
 > `malformations: 0`; 10 are REFUSED BY NAME, exit 1**, iccMAX
 > `0x05000000`, with the version in every refusal message. **The ten:**
@@ -1319,7 +1331,7 @@ now a **population** result, **NC-219**, not two files.
   cross-check** (§3.32.1). **Max `0.033013` ΔE2000 at white; black
   exact.**
 - **★★ The `/N` accessor is BUILT** — `colour_space.rs`. **A48: ICC.1 is
-  SILENT on header/tag channel agreement**, so iccce **discloses** and
+  SILENT on header/tag channel agreement**, so icccer **discloses** and
   does not declare non-conformance. **A50: the count is a TWO-TABLE JOIN;
   ICC.1 publishes no `Signature → count` map** — cite as derived.
   **60 profiles, zero unrecognised, zero PCS-field violations.**
@@ -1335,7 +1347,7 @@ now a **population** result, **NC-219**, not two files.
 - **★★ `sRGB2014.icc` is NOT a second source** — its colorants and all
   three TRC tables are **byte-identical** to the HP 1998 file's.
   **Exactly one lineage. The gap is NOT closed.**
-- **★★ NC-213's open question is DISCHARGED by decision** — iccce uses
+- **★★ NC-213's open question is DISCHARGED by decision** — icccer uses
   `wtpt` **as stored** and **discloses** (A4c / NA-007), **verified in the
   running thing**. **6 of 60 disclose; all six hand-audited are true
   positives.** ★ **NC-213 the ROW is untouched and was never pending.**
@@ -1343,7 +1355,7 @@ now a **population** result, **NC-219**, not two files.
   **doc example** failing with `E0277` (**DL-052**).
 - **Gates:** `cargo test --workspace` **154 passed, exit 0** (was 132);
   clippy / `fmt` / `doc` / **`wasm32` over 4 library crates** all exit 0.
-  ★ **iccce still does not GATE `wasm32` in CI** — a **consumer's** gate.
+  ★ **icccer still does not GATE `wasm32` in CI** — a **consumer's** gate.
 
 ### ★★★ THE QUEUE, REWRITTEN
 
@@ -1358,7 +1370,7 @@ says no 8-bit code lands in the window, and cites the measurement.*
 **2. ★★★ Assert NC-227, or delete the number.** The 1 020-corruption
 enumeration is real, but **the survivor count reaches a `println!` and
 the in-loop assertion compares a call with its own result — it cannot
-fail** (`crates/iccce-profile/src/colour_space.rs`). ★★ **This is
+fail** (`crates/icccer-profile/src/colour_space.rs`). ★★ **This is
 DL-051 recurring inside the same session, in the module that documents
 the hazard at greatest length.** *Done when: the count is asserted and an
 injection turns it red.*
@@ -1371,7 +1383,7 @@ ledger now has rows in **three** runners.
 
 **4. ★★ Answer `pdfce` — the channel still owes a reply**, and today's
 work is most of the answer. `request_iccbased_colour_spaces.md`'s design
-question (*does iccce construct sRGB, or demand a caller-supplied
+question (*does icccer construct sRGB, or demand a caller-supplied
 destination?*) **is now ANSWERED**: **both**, with the distinction carried
 by **DL-050**'s enum. ★★★ **Frame the adoption case as CONFORMANCE, never
 accuracy** (DL-044/DL-047) — and say plainly that the new destination's
@@ -1431,7 +1443,7 @@ Fogra39L/47L VIGC, APTEC).
 
 ★ **Two of them correctly FAILED** [VERIFIED by me]:
 `sRGB_ISO22028.icc` and `sRGB_D65_colorimetric.icc` are **iccMAX (ICC.2,
-version `0x05000000`)** and iccce refused by name, exit 1, no repair.
+version `0x05000000`)** and icccer refused by name, exit 1, no repair.
 That is rule 6 demonstrated on real ICC-published files rather than
 synthetic ones — **worth a graded row**, and it does not exist yet.
 
@@ -1461,10 +1473,10 @@ rule-4 approximation.
 > is. The paragraph is left standing as the record of what was
 > instructed.** ICC's own **"How to interpret the sRGB color space …"**
 > (Holm, ICC, 2015-04-27) **publishes the D50-adapted colorants at 15
-> decimal places** (§B.2). Measured against them: **iccce's construction
+> decimal places** (§B.2). Measured against them: **icccer's construction
 > 3.02 ULP worst / 0.90 in `bXYZ.Z`; the shipped HP 1998 /
 > `sRGB2014.icc` file 11.13 ULP.** ★★★ **The ~12 ULP blue-`Z` residual is
-> the FILE's error, not iccce's** — `NUMERIC_CLAIMS.md` **§3.33 /
+> the FILE's error, not icccer's** — `NUMERIC_CLAIMS.md` **§3.33 /
 > NC-230, NC-231**, **§4's NA-011**, `ARCHITECTURE.md` **DL-054**. ★ **The
 > two instructions that were RIGHT are still right**: no byte-equality
 > against a shipped profile (better justified now — the file does not
@@ -1472,7 +1484,7 @@ rule-4 approximation.
 > **which is NA-011, registered late because the obligation had been
 > discharged against a doc comment while the register was empty.**
 
-**3. NC-213 is owed BY ME, not by the librarian.** Does iccce follow
+**3. NC-213 is owed BY ME, not by the librarian.** Does icccer follow
 lcms2 and substitute D50 for a mis-authored `wtpt`? Today it does not;
 **leaving it undecided is a position and it is the shipped behaviour.**
 My provisional answer is **report, don't substitute** (rule 6). It was
@@ -1481,7 +1493,7 @@ it can be settled.** See `SUITE_COMPATIBILITY.md` §8.1 and §4.5b.
 
 **4. The `/N` gap, re-scoped — my earlier scoping of it was wrong.**
 `Chain::input_channels()` exists and is public (in
-`crates/iccce-cmm/src/transform.rs` — ★ **cited by symbol, not by line;
+`crates/icccer-cmm/src/transform.rs` — ★ **cited by symbol, not by line;
 the `:632` this once carried is now `:952`** *(verified at the tip,
 2026-08-17)*, which is DL-048's decay caught a second time in one
 document) but
@@ -1500,7 +1512,7 @@ were verified stale by me; `:5788` is a blank line.
 CMYK print profiles (see above); the `f32`/`u8` evaluation surface
 (`f64`-only today, so an 8 Mpix CMYK page is 256 MB in / 192 MB out);
 `ChainError` still does not implement `std::error::Error` while
-`ParseError` does (`crates/iccce-profile/src/diag.rs:83`).
+`ParseError` does (`crates/icccer-profile/src/diag.rs:83`).
 
 ## Owed to the operator — do not decide these
 
@@ -1580,19 +1592,19 @@ them owed to us:
 
 | file | what it is |
 |---|---|
-| `request_pdf_output_intent_cmyk.md` | `pdfce` ignores PDF/X `/OutputIntents` entirely and converts CMYK through a **pdfium-fitted baked table**. Asks whether iccce can take the document's own embedded destination profile instead |
-| `request_iccbased_colour_spaces.md` | `pdfce` parses `ICCBased` in full and then renders through Table 66's `/Alternate` fallback. **Carries the one design question that must be settled before any code**: does iccce construct sRGB internally, or demand a caller-supplied destination profile every time? |
+| `request_pdf_output_intent_cmyk.md` | `pdfce` ignores PDF/X `/OutputIntents` entirely and converts CMYK through a **pdfium-fitted baked table**. Asks whether icccer can take the document's own embedded destination profile instead |
+| `request_iccbased_colour_spaces.md` | `pdfce` parses `ICCBased` in full and then renders through Table 66's `/Alternate` fallback. **Carries the one design question that must be settled before any code**: does icccer construct sRGB internally, or demand a caller-supplied destination profile every time? |
 | `note_boundary_and_overprint.md` | informational, no reply owed. Splits a real failing conformance file by owner. **Overprint is `pdfce`'s** — compositing, not conversion |
 | `reply_capability_status.md` | **written by this project, 2026-08-17.** Answers *only* what exists today, with `file:line` citations. **It deliberately does not answer either design question** |
 
 **What that reply established, so it is in git and not only in a folder
 that is in no repository:**
 
-- **Parsing from `&[u8]` is built** — `crates/iccce-profile/src/lib.rs:80`.
-  **Per-pixel evaluation is built** — `crates/iccce-cmm/src/compiled.rs:171`
+- **Parsing from `&[u8]` is built** — `crates/icccer-profile/src/lib.rs:80`.
+  **Per-pixel evaluation is built** — `crates/icccer-cmm/src/compiled.rs:171`
   and `:180`, allocation-free. **Named refusal is built** — `ParseError`,
   `Malformation`, `ChainError`.
-- **★★ iccce constructs NO sRGB destination.** `Chain::new`
+- **★★ icccer constructs NO sRGB destination.** `Chain::new`
   (`transform.rs:246`) demands two parsed `&Profile`s. Every `sRGB` in
   `crates/` is a **test** reading the Windows system `.icm` off disk. The
   blocker is not mechanical — a computed destination needs no file and no
@@ -1624,10 +1636,10 @@ that is in no repository:**
   all four library crates, **exit 0, measured 2026-08-17 at tip
   `e21154c`**. It passes structurally: `Cargo.lock` is **five packages,
   all ours**, and every `std::fs` in a library crate is inside
-  `#[cfg(test)]`. ★ **But iccce does not gate wasm32 in CI** — that is a
+  `#[cfg(test)]`. ★ **But icccer does not gate wasm32 in CI** — that is a
   dated observation, not a guarantee, and a future dependency could break
   a consumer's CI silently.
-- **★★ Q5, the important one:** adopting iccce would be a **lateral move
+- **★★ Q5, the important one:** adopting icccer would be a **lateral move
   in evidence class** for `pdfce`, and the reason is **structural, not a
   gap effort would close.** ICC.1 mandates no interpolation method, so
   **no published ground truth for a LUT path can exist even in principle**
@@ -1636,7 +1648,7 @@ that is in no repository:**
   the boxed *"WHAT THIS IS NOT"* and the paragraph under it — *"`RunTests.sh`
   compares nothing; `ApplyDataFiles/` holds inputs only"* — generalised as
   **`ARCHITECTURE.md` DL-041**; and
-  `crates/iccce-cmm/tests/annex_d_ground_truth.rs:29-32`). iccce's oracle for SWOP→sRGB is
+  `crates/icccer-cmm/tests/annex_d_ground_truth.rs:29-32`). icccer's oracle for SWOP→sRGB is
   lcms2 (NC-048 **0.25294** ΔE2000 media-relative, NC-049 **1.6590**
   perceptual). **The honest case for adoption is CONFORMANCE — the
   document's declared output intent being honoured at all — never
@@ -1646,9 +1658,9 @@ that is in no repository:**
 (scoping them is work; this session was told not to): no computed sRGB
 destination; no `f32`/`u8` evaluation surface; **`ChainError` does not
 implement `std::error::Error`** while `ParseError` does
-(**`crates/iccce-profile/src/diag.rs:83`** — the full path matters:
+(**`crates/icccer-profile/src/diag.rs:83`** — the full path matters:
 **there are TWO distinct `ParseError` types in this workspace**,
-`crates/iccce-measure/src/lib.rs:221` and this one, and **both** implement
+`crates/icccer-measure/src/lib.rs:221` and this one, and **both** implement
 `Error`, so a bare filename names neither the crate nor the type
 *(`icc-engineer`, [VERIFIED — read this session]; `ChainError` has no
 `Error` impl anywhere under `crates/`)*);
@@ -1691,7 +1703,7 @@ zero-separation=2 blind=0 discriminating=16 sep-broken=0`.
 > **discriminating=42** sep-broken=0` *(`icc-engineer`, **[VERIFIED — ran
 > the gate bare, redirected to a file, read `$?`]**; this librarian ran
 > nothing)*. **Corpus-absent behaviour: `pass=157 skip=7`, exit 0**, four
-> labelled SKIP rows — so a machine without `$ICCCE_PRIVATE_FIXTURES`
+> labelled SKIP rows — so a machine without `$ICCCER_PRIVATE_FIXTURES`
 > reproduces the old pass count exactly, and **a green line there means
 > Pass G did not run.**
 >
@@ -1715,7 +1727,7 @@ grade*, not a concealed failure:
 `pass4/swop-to-srgb/icc-absolute/{pcs-lab-vs-lcms2,
 pcs-lab-emulated-geometry, pcs-lab-corners-interpolation-free}`. `transicc
 -o*Lab4 -t3` applies the D.6/D.7 media-white scale to the PCS on lcms2's
-side while iccce's `A2Bx` evaluation is media-relative by construction, so
+side while icccer's `A2Bx` evaluation is media-relative by construction, so
 the two arms are not measuring the same quantity. Comparing them would
 mean *modelling* the oracle rather than *measuring* it.
 
@@ -1756,7 +1768,7 @@ them.
   therefore protects against accidental *commit*, not against *sync*. Do
   not raise this again as a new discovery; if it ever needs closing, the
   fix is to move the folder outside `D:\Dev` (the `D:\` root is not itself
-  a mirror) and repoint `$ICCCE_PRIVATE_FIXTURES`.
+  a mirror) and repoint `$ICCCER_PRIVATE_FIXTURES`.
 
 ---
 
@@ -1772,7 +1784,7 @@ priority call has been made.** Nobody has decided whether these preempt
 §3.1; `reply_capability_status.md` answered *what exists* and explicitly
 declined both design questions. Read §0, then choose.
 
-1. **Does iccce construct sRGB, or demand a caller-supplied destination
+1. **Does icccer construct sRGB, or demand a caller-supplied destination
    profile?** This is the load-bearing one and it **sets the API before
    a consumer shapes itself around whatever it finds**. Today it is the
    latter, by omission rather than by decision. ★ **Do not scope this as
@@ -1783,7 +1795,7 @@ declined both design questions. Read §0, then choose.
    **The cheap independent lever is ITU-R BT.709, free from ITU and never
    fetched.** And **do not write the constants from memory** (§5.1) —
    this is precisely the rule's case.
-2. **Should `pdfce` route `/OutputIntents` CMYK through iccce at all?**
+2. **Should `pdfce` route `/OutputIntents` CMYK through icccer at all?**
    Answer it as a **conformance** question (the document's declared print
    condition gets honoured) — **never as an accuracy question**, because
    §0 records why that framing is unsupportable on today's evidence.
@@ -1796,9 +1808,9 @@ already on the table is a census across `pdfce`'s ~6,000-file corpus —
 pair, one direction, one tag type** — `NUMERIC_CLAIMS.md` **§3.19 /
 NC-145** (which grades the compiled path at the shipped default grid 33,
 and records that grid 17 **failed**) and **§3.27**; the constant itself is
-`iccce_cmm::compiled::recommended_grid_points` in
-**`crates/iccce-cmm/src/compiled.rs`**, called from the `bench` path in
-**`crates/iccce-cli/src/main.rs`** — and
+`icccer_cmm::compiled::recommended_grid_points` in
+**`crates/icccer-cmm/src/compiled.rs`**, called from the `bench` path in
+**`crates/icccer-cli/src/main.rs`** — and
 DL-021 says direction and tag type are part of that claim.
 
 > **★★ Citation repaired 2026-08-17 (supplementary filing), and the
@@ -1825,7 +1837,7 @@ naming where the durable answer lives**.
 ### 3.1 Export an 8-bit Lab codec, and extend the ground-truth test
 
 **Bounded, and it buys published ground truth.** The Annex D test
-(`crates/iccce-cmm/tests/annex_d_ground_truth.rs`) currently asserts
+(`crates/icccer-cmm/tests/annex_d_ground_truth.rs`) currently asserts
 **twelve** exact published integers. Table D.5 prints **six more** as
 8-bit codes (`255,128,128` white / `30,128,128` black) which are held in
 the fixture, **unused**, because this crate exposes no public 8-bit Lab
@@ -1903,7 +1915,7 @@ incompatible share-alike grant**, the hardest of the three); and FOGRA51
 via `pso-coated_v3.zip` (ECI's `cprt` **contradicts itself**; the
 restrictive reading was taken).
 
-**Tests resolve them via `$ICCCE_PRIVATE_FIXTURES`, then the default path,
+**Tests resolve them via `$ICCCER_PRIVATE_FIXTURES`, then the default path,
 then SKIP.** ★ A green run on a machine without them is **not** evidence
 that those checks passed — it is evidence they did not run. CI is
 permanently in the skipping case, by design and by written note in
@@ -2021,7 +2033,7 @@ failing.
 **The instance, 2026-08-17.** §3.0 cited the 33-node recommended-grid
 constant as `NUMERIC_CLAIMS.md:2164, :2529`. Neither line carried it.
 `:2529` described **`USWebCoatedSWOP.icc`'s own `lut8` CLUT, which happens
-to have 33 nodes — a different 33**: a vendor file's tag, not iccce's
+to have 33 nodes — a different 33**: a vendor file's tag, not icccer's
 recommendation. A reader at `pdfce` following it would have concluded the
 recommendation is a property of somebody else's profile. **The line was
 copied out of this file into an outbound cross-project request without
@@ -2046,7 +2058,7 @@ line. For **source files** a `path:line` citation is acceptable and has
 held up — the same sweep found `lib.rs:80`, `compiled.rs:171`/`:180`,
 `transform.rs:246` and `diag.rs:83` all exact — but **give the full path
 from the repo root**: §0's bare `diag.rs:83` is right about
-`crates/iccce-profile/src/diag.rs` and names neither the crate nor the
+`crates/icccer-profile/src/diag.rs` and names neither the crate nor the
 `src/`.
 
 ★★ **DISCHARGED 2026-08-17 at the Pass G filing — all five remaining
@@ -2129,7 +2141,7 @@ transforms, all four rendering intents in both directions, black point
 compensation (ISO/CD 18619 4.2.5, with a conformance defect of our own
 found and fixed), the compiled fast path, and a CLI.
 
-Added after the original scope, this session: `iccce-measure` (CGATS/IT8.7
+Added after the original scope, this session: `icccer-measure` (CGATS/IT8.7
 reader, exercised on the real 1,617-patch FOGRA51 payload — zero issues);
 **candidate separation** as a first-class emitted quantity; a third Pass 5c
 fixture arm whose power was proven by injection; a **parser robustness

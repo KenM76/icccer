@@ -15,7 +15,7 @@ Suite `pass=353 fail=0 skip=9 error=0`; fmt/clippy/test all green.
 **The number NA-012 was owed:** `3.681203 ΔE2000` max, `1.580674` mean, at
 `K = 1.00`, over 101 qualifying points, `ISO Coated v2 300% (ECI) →
 PCS_GenericCMYK`, **media-relative**, `k-only-equal-lightness`. Class:
-**self-comparison** (iccce preserved vs iccce colorimetric), which is the
+**self-comparison** (icccer preserved vs icccer colorimetric), which is the
 ceiling — `ICC_Spec` A51 is a closed negative.
 
 **How to apply.**
@@ -62,7 +62,7 @@ ceiling — `ICC_Spec` A51 is a closed negative.
   preserved answer at `(0,0,0,K)` and the preserved-path answer one 8-bit code
   of cyan away. A consumer painting a K-only→rich ramp sees the **step**, not
   the cost.
-- ★ **Two rulers, and the gap is disclosed**: lcms2's `A2B1` vs `iccce_cmm`'s own
+- ★ **Two rulers, and the gap is disclosed**: lcms2's `A2B1` vs `icccer_cmm`'s own
   model of the same tag differ by up to `0.317063` per point — **above** NC-050's
   borrowed `0.25423` — but the *headline* moves only `6.643135e-3`, because the
   same map is applied to both legs and cancels. Grade the headline's movement,

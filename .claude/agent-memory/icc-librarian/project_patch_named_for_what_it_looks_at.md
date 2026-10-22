@@ -1,5 +1,5 @@
 ---
-name: iccce-patch-named-for-what-it-looks-at
+name: icccer-patch-named-for-what-it-looks-at
 description: DL-059 (CORROBORATED 2026-08-18 by the artwork itself — the panels are 25%/0/0/0/75, i.e. ISO 32000's formula evaluated) — a test patch is named for what it LOOKS at, not for the layer that PRODUCES it; PCS 23.0 "Four different Grays" was filed as ours and is pdfce's, and the over-claiming direction of a boundary error is caught by NOTHING
 metadata:
   type: project
@@ -76,7 +76,7 @@ appears nowhere in the repository.** What exists is a **column heading**,
 DL-048 arriving from the other end: there a *citation* pointed at a
 destination that did not hold the claim; here a *correction* was aimed at
 text that was never written. **Both are settled by reading the
-destination** — see [[iccce-stale-citation-worse-than-stale-number]].
+destination** — see [[icccer-stale-citation-worse-than-stale-number]].
 
 **★★★ What this does NOT touch, and the misreading to refuse:**
 **CMYK→CMYK black preservation remains genuinely this project's**,
@@ -116,13 +116,13 @@ as the deceptive lookalike.
 zero `8.6.4.4`; Pass K landed as `846952f`) — **and the discharge found
 two NEW defects, both in PROSE**: `g = 0.5` called *"the suite publisher's own patch
 value"* **and printed into the report**, and an **`ICCBased`** panel the
-readme does not list. See [[iccce-source-labelled-number]] (**DL-061**).
+readme does not list. See [[icccer-source-labelled-number]] (**DL-061**).
 
-Related: [[iccce-source-labelled-number]] (DL-061),
-[[iccce-compatibility-not-certification]] (DL-045/046/047, the
-suite posture), [[iccce-wrong-clause-refusal-and-discarded-halves]]
-(DL-057), [[iccce-stale-citation-worse-than-stale-number]] (DL-048),
-[[iccce-gate-must-not-reward-deletion]] (DL-055, a change with no number
-to record), [[iccce-count-from-a-sample-is-not-the-population]] (DL-053 —
+Related: [[icccer-source-labelled-number]] (DL-061),
+[[icccer-compatibility-not-certification]] (DL-045/046/047, the
+suite posture), [[icccer-wrong-clause-refusal-and-discarded-halves]]
+(DL-057), [[icccer-stale-citation-worse-than-stale-number]] (DL-048),
+[[icccer-gate-must-not-reward-deletion]] (DL-055, a change with no number
+to record), [[icccer-count-from-a-sample-is-not-the-population]] (DL-053 —
 *"sixteen of the ~48"* is an exact numerator over an estimated
-denominator), [[iccce-pass-status]].
+denominator), [[icccer-pass-status]].

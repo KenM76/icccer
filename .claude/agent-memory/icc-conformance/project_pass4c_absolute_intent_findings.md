@@ -28,7 +28,7 @@ and the pair was sitting in the committed fixture corpus the whole time:
 
 Each fails a *different* half, so the pair does not rest on one property.
 The other Pass 4 confound is zero too: lcms2 forces trilinear for a Lab-PCS
-output LUT (= iccce's n-linear, NA-006 = 0) and the source has no CLUT.
+output LUT (= icccer's n-linear, NA-006 = 0) and the source has no CLUT.
 
 **Generalise this.** When a divergence is gated by a compound predicate,
 look for a fixture that makes the predicate FALSE before building a model
@@ -94,7 +94,7 @@ over 729 points, **1 654×** its own media-relative floor (1,290×10⁻⁴).
   **neither** did — the clause does not bind readers at all. Third
   falsified-prediction instance (after DL-011/DL-012 and NA-006's
   "tetrahedral").
-- **`iccce-cli`'s help text was wrong twice**, in the *shipped, public*
+- **`icccer-cli`'s help text was wrong twice**, in the *shipped, public*
   binary: `8,700,267 px` (2481×3507 = **8,700,867**) and *"17-point grid"*
   (`recommended_grid_points` returns **33**, moved in `189e732`). Fixed.
 
@@ -116,11 +116,11 @@ is agreeing with lcms2.
 
 ## 7. Method lesson that cost me a wrong number
 
-A first gray probe fed iccce `0.5` and `transicc` `128` (= 0,501 96) and
+A first gray probe fed icccer `0.5` and `transicc` `128` (= 0,501 96) and
 produced a **1,9×10⁻³ "divergence" that was entirely the driver's**. Both
 sides must get the *same* input expressed in each side's own convention —
 integer codes, quotient at full `f64` precision. `transicc` takes RGB in
-0..255 and CMYK/gray in 0..100; `iccce transform` takes 0..1 throughout.
+0..255 and CMYK/gray in 0..100; `icccer transform` takes 0..1 throughout.
 
 Related: [[project-lcms2-findings-pass4-interpolation-and-v2-wtpt]],
 [[project-lcms2-findings-pass4b-direction-dependence]],

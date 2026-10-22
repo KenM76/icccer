@@ -1,6 +1,6 @@
 ---
 name: measurement-profiling-sourcing-state
-description: Pass 10 / iccce-measure sourcing — FOGRA51 is EMBEDDED in PSOcoated_v3.icc's targ tag (dataset + reference profile in ONE 1.8 MB free download); ECI permissive, Fogra robots-barred, Argyll AGPL-BARRED; CIE data tables held under CC BY-SA; and the industry's D50 Z is 0,82521 not ICC's 0,8249.
+description: Pass 10 / icccer-measure sourcing — FOGRA51 is EMBEDDED in PSOcoated_v3.icc's targ tag (dataset + reference profile in ONE 1.8 MB free download); ECI permissive, Fogra robots-barred, Argyll AGPL-BARRED; CIE data tables held under CC BY-SA; and the industry's D50 Z is 0,82521 not ICC's 0,8249.
 metadata:
   type: reference
 ---
@@ -39,7 +39,7 @@ test.**
 **Do not read, cite, paraphrase, or "just check how Argyll does it."** It is the
 most complete free CGATS/ISO-12642/profiling implementation in existence and
 therefore the most tempting reference in this whole subject area — which is why
-the bar was written *before* the area was worked. iccce is MIT; AGPL-3.0 is
+the bar was written *before* the area was worked. icccer is MIT; AGPL-3.0 is
 network copyleft and a derived parser or target layout cannot be cured later.
 Licence verified 2026-08-12 from `argyllcms.com` + `/doc/License.txt`,
 **no source read**. Permitted references: **lcms2** (MIT), **iccDEV** (BSD-3),
@@ -52,7 +52,7 @@ FOGRA51's XYZ and Lab columns are internally consistent with
 channels, max residual `0,0050` = exactly the 2-dp rounding half-ULP** — versus
 **651/1617** under ICC's `96,42/100/82,49`.
 
-- **Do NOT change iccce's D50.** `0,9642/1,0000/0,8249` is the PCS white by
+- **Do NOT change icccer's D50.** `0,9642/1,0000/0,8249` is the PCS white by
   definition; a CMM using another is broken.
 - **DO use a CGATS file's `LAB_*` columns and never recompute them from its
   `XYZ_*`.** Cost of getting this wrong: ≤`0,21 ΔE76` / `0,033` mean, systematic
@@ -74,7 +74,7 @@ D50 SPD, D65 SPD, daylight S₀/S₁/S₂, **plus CVRL's independent republicati
 CIE vs CVRL agree to `5×10⁻¹³` over 1 413 values.
 → `ICC_Spec\cie\cie__data__cmf_1931_2deg.md`.
 
-**★ CC BY-SA 4.0 vs iccce's MIT is a share-alike CONFLICT if a table is checked
+**★ CC BY-SA 4.0 vs icccer's MIT is a share-alike CONFLICT if a table is checked
 into the repo.** Reading here is fine. Embedding is an **operator decision**.
 **Never resolve it by retyping the numbers — that is laundering, not licensing.**
 

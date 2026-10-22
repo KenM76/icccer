@@ -1,6 +1,6 @@
 //! # `passk_probe` — print the RAMP, which a graded record cannot
 //!
-//! A [`iccce_difftest::Record`] carries **one number**. That is right for a
+//! A [`icccer_difftest::Record`] carries **one number**. That is right for a
 //! gate and wrong for this subject, because the whole finding in Pass K §A is
 //! that the contamination of a K-only build **is not uniform**: it peaks in
 //! chromatic ink at one end of the ramp and in *black loss* in the middle, and
@@ -20,9 +20,9 @@
 //!
 //! Requires:
 //!
-//! * the pinned `transicc` (`$ICCCE_TRANSICC` or the vendored build), and
-//! * the shipped `iccce` binary (`$ICCCE_BIN` or `target/release/iccce`), and
-//! * the **licensed** the print-conformance suite corpus via `$ICCCE_PRIVATE_FIXTURES`.
+//! * the pinned `transicc` (`$ICCCER_TRANSICC` or the vendored build), and
+//! * the shipped `icccer` binary (`$ICCCER_BIN` or `target/release/icccer`), and
+//! * the **licensed** the print-conformance suite corpus via `$ICCCER_PRIVATE_FIXTURES`.
 //!
 //! Absent any of them it says which one and exits `1`. It never falls back to
 //! a substitute fixture: a ramp printed from a different profile would look
@@ -48,12 +48,12 @@
 
 use std::process::ExitCode;
 
-use iccce_color::delta_e_2000;
-use iccce_difftest::passk::{
+use icccer_color::delta_e_2000;
+use icccer_difftest::passk::{
     self, CELL, KOnlyOracle, as_cmyk, cell_ramp, corpus_dir, gray_ramp, k_ramp, max_chromatic,
     max_dev, max_tac, to_lab,
 };
-use iccce_difftest::{Bpc, Iccce, Intent, Oracle, Precalc, Request, Space};
+use icccer_difftest::{Bpc, Icccer, Intent, Oracle, Precalc, Request, Space};
 
 fn main() -> ExitCode {
     match run() {
@@ -73,14 +73,14 @@ fn main() -> ExitCode {
 fn run() -> Result<(), String> {
     let oracle = Oracle::locate()
         .map_err(|e| e.to_string())?
-        .ok_or("the pinned transicc was not found — set $ICCCE_TRANSICC")?;
-    let iccce = Iccce::locate()
+        .ok_or("the pinned transicc was not found — set $ICCCER_TRANSICC")?;
+    let icccer = Icccer::locate()
         .map_err(|e| e.to_string())?
-        .ok_or("the shipped iccce binary was not found — `cargo build --release -p iccce-cli`")?;
+        .ok_or("the shipped icccer binary was not found — `cargo build --release -p icccer-cli`")?;
     let dir = corpus_dir();
     if !dir.is_dir() {
         return Err(format!(
-            "the print-conformance suite corpus is not at {} — set $ICCCE_PRIVATE_FIXTURES. It is licensed \
+            "the print-conformance suite corpus is not at {} — set $ICCCER_PRIVATE_FIXTURES. It is licensed \
              and cannot be committed, so absence is the normal case",
             dir.display()
         ));
@@ -93,9 +93,9 @@ fn run() -> Result<(), String> {
     println!("passk_probe — black preservation, measured on the shipped engine");
     println!("  oracle : {}", oracle.path().display());
     println!(
-        "  iccce  : {}{}",
-        iccce.path().display(),
-        if iccce.is_debug_build() {
+        "  icccer  : {}{}",
+        icccer.path().display(),
+        if icccer.is_debug_build() {
             "   ** DEBUG BUILD — numbers describe an artefact nobody ships **"
         } else {
             ""
@@ -110,7 +110,7 @@ fn run() -> Result<(), String> {
 
     // ---- block 1: the baseline ramp ------------------------------------
     let mine = as_cmyk(
-        iccce
+        icccer
             .transform_rows_shaped(&dst, &dst, Intent::RelativeColorimetric, &rows, 4)
             .map_err(|e| e.to_string())?,
     )
@@ -174,7 +174,7 @@ fn run() -> Result<(), String> {
         Intent::AbsoluteColorimetric,
     ] {
         let out = as_cmyk(
-            iccce
+            icccer
                 .transform_rows_shaped(&dst, &dst, intent, &rows, 4)
                 .map_err(|e| e.to_string())?,
         )
@@ -271,7 +271,7 @@ fn run() -> Result<(), String> {
         .convert_cmyk(&dst, &dst, KOnlyOracle::PRESERVE_K_ONLY_RELATIVE, &cell)
         .map_err(|e| e.to_string())?;
     let cell_mine = as_cmyk(
-        iccce
+        icccer
             .transform_rows_shaped(&dst, &dst, Intent::RelativeColorimetric, &cell_rows, 4)
             .map_err(|e| e.to_string())?,
     )
@@ -283,7 +283,7 @@ fn run() -> Result<(), String> {
     println!("    it decays LINEARLY to the colorimetric answer over exactly one cell.");
     println!();
     println!(
-        "       C           lcms2 t11 (K-only)                       iccce today \
+        "       C           lcms2 t11 (K-only)                       icccer today \
          (media-relative)"
     );
     for i in (0..cell.len()).step_by(4) {
@@ -295,7 +295,7 @@ fn run() -> Result<(), String> {
     }
     // The claim "at one cell the two answers coincide" is about the ORACLE's
     // two answers, so both sides of it are measured from the oracle. Putting
-    // iccce on one side would turn a statement about lcms2's grid into a
+    // icccer on one side would turn a statement about lcms2's grid into a
     // statement about the engine, which is a different claim entirely.
     let req = Request {
         input: Space::profile(&dst),
@@ -335,7 +335,7 @@ fn run() -> Result<(), String> {
         "    LEG P = ISO 32000-1 §10.3.3 device rule (c=m=y=0, k=1-gray) — the PDF \
          consumer's, not ours"
     );
-    println!("    LEG I = iccce's ICC leg: gray profile -> PCS -> ISO Coated v2 300% (ECI)");
+    println!("    LEG I = icccer's ICC leg: gray profile -> PCS -> ISO Coated v2 300% (ECI)");
     println!();
     let gs = gray_ramp();
     let leg_p: Vec<[f64; 4]> = gs.iter().map(|g| [0.0, 0.0, 0.0, 1.0 - g]).collect();
@@ -356,7 +356,7 @@ fn run() -> Result<(), String> {
         }
         let grows: Vec<Vec<f64>> = gs.iter().map(|g| vec![*g]).collect();
         let leg_i = as_cmyk(
-            iccce
+            icccer
                 .transform_rows_shaped(&src, &dst, Intent::RelativeColorimetric, &grows, 4)
                 .map_err(|e| e.to_string())?,
         )
@@ -420,7 +420,7 @@ fn run() -> Result<(), String> {
         .enumerate()
         {
             let out = as_cmyk(
-                iccce
+                icccer
                     .transform_rows_shaped(&p, &p, intent, &rows, 4)
                     .map_err(|e| e.to_string())?,
             )

@@ -1,5 +1,5 @@
 ---
-name: iccce-licensed-tool-split-outside-the-tree
+name: icccer-licensed-tool-split-outside-the-tree
 description: DL-071 — a tool that must quote licensed material is split into a generic engine (tracked) plus a case file that lives OUTSIDE the repo, not gitignored inside it. And the deleted predecessor took the only auditor of its own numbers with it.
 metadata:
   type: project
@@ -46,7 +46,7 @@ comment is one refactor from being lost.
   artifact the project does not version; and **the old tool was DELETED,
   not archived** — so the claim that the new one reproduces the old
   numbers exactly is `[REPORTED]` and **now unfalsifiable**
-  ([[iccce-negative-finding-removes-its-auditor]]'s shape: the act that
+  ([[icccer-negative-finding-removes-its-auditor]]'s shape: the act that
   settled the question removed the only thing that could re-open it).
   **If a re-run ever disagrees with `NC-301` … `NC-305`, that is not
   evidence about the transform.**
@@ -58,6 +58,6 @@ comment is one refactor from being lost.
 - **Never** accept *"we'll just gitignore it"* for the next such tool —
   that is a reversal of this decision and needs a new one.
 
-Related: [[iccce-gitignored-file-invisible-to-citation-sweep]],
-[[iccce-pass-status]], [[iccce-fitted-table-cannot-express-a-clamp]],
-[[iccce-free-to-disagree]], [[iccce-artifact-existence-is-not-obligation-status]].
+Related: [[icccer-gitignored-file-invisible-to-citation-sweep]],
+[[icccer-pass-status]], [[icccer-fitted-table-cannot-express-a-clamp]],
+[[icccer-free-to-disagree]], [[icccer-artifact-existence-is-not-obligation-status]].

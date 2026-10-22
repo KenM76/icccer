@@ -29,7 +29,7 @@ both point at it and it **wins** over them.
 
 ★★ **Weaker than `published_ground_truth`; NOT weaker than `impl_crosscheck`,
 and STRONGER in one respect — independent of any implementation, so it catches
-an error lcms2 and iccce make TOGETHER.** That is the whole return.
+an error lcms2 and icccer make TOGETHER.** That is the whole return.
 ★ **An implementation is never a countable source.** Several old sRGB "3 sources
 / 4 sources" counts were counting lcms2 and are one too high; corrected counts
 live in `iec\iec__ref__srgb_reconstruction.md` §2.2.

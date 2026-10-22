@@ -42,7 +42,7 @@ device values outside `[0,1]` is gated to float32 in `DToBx`/`BToDx`
 only**, because `mpet` is the sole model with unbounded element output.
 Do not read clause **6.4**'s "No clipping is performed" as a device-value
 permission — 6.4 is PCSXYZ↔PCSLAB and every quantity in it is a PCS
-value. (`iccce` `TOLERANCES.md` NA-003 makes exactly that
+value. (`icccer` `TOLERANCES.md` NA-003 makes exactly that
 mis-attribution.)
 
 Related: [[reading-source-is-not-observing-behaviour]],

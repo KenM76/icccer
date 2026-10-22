@@ -1,5 +1,5 @@
 ---
-name: iccce-release-range-is-not-the-dispatch-list
+name: icccer-release-range-is-not-the-dispatch-list
 description: A release note is a claim about a COMMIT RANGE — verify it against the reflog, not the dispatch. Pass G/H were listed as 0.2.0 content and had shipped in 0.1.0; and refs/tags/vX is an ANNOTATED TAG OBJECT, not the tagged commit.
 metadata:
   type: project
@@ -38,8 +38,8 @@ or Pass-completion claim — before writing a single content bullet, read
 `.git/logs/HEAD` and locate the previous release's commits in it. Any
 dispatch item whose commit is *older* than those is **previous-release
 work**: drop it and say so. This costs one read. See
-[[iccce-pass-status]] for the specific instance, and
-[[iccce-count-needs-its-apparatus]] for the same shape one level down —
+[[icccer-pass-status]] for the specific instance, and
+[[icccer-count-needs-its-apparatus]] for the same shape one level down —
 a number is scoped to the run that produced it exactly as a feature is
 scoped to the release that shipped it.
 
@@ -55,7 +55,7 @@ has no durable form here and must be written `[REPORTED]` every time —
 `NUMERIC_CLAIMS.md` §7.35 newly-owed 2. ★ And the dispatch's *"`v0.2.0` is
 the precedent"* turned out to be **false**: there was no `v0.2.0` release
 entry at all, for the reason in
-[[iccce-unowned-refusal-is-a-slow-deletion]].
+[[icccer-unowned-refusal-is-a-slow-deletion]].
 
 ★★ **The other half of the same filing, because it arrived together:**
 the dispatch also asked for the sentence *"NC-001 remains the only
@@ -65,4 +65,4 @@ holds a third population. **The live sentence is the narrower one: *no
 `published-ground-truth` row exists for any TRANSFORM*.** A retired
 sentence keeps circulating because it is short, quotable and flatters
 nobody, so **nothing in the suite ever goes red over it**. See
-[[iccce-ground-truth-cannot-exist]].
+[[icccer-ground-truth-cannot-exist]].

@@ -1,6 +1,6 @@
 ---
 name: project-throughput-is-not-a-claim-breakeven-is
-description: iccce's compiled-path speedup is withdrawn as a documented figure — 10 same-session runs span 12.44x-25.27x on one machine; the break-even pixel count IS quotable but only with its grid, because N = build/(1/ref - 1/comp) and the grid moves only `build`.
+description: icccer's compiled-path speedup is withdrawn as a documented figure — 10 same-session runs span 12.44x-25.27x on one machine; the break-even pixel count IS quotable but only with its grid, because N = build/(1/ref - 1/comp) and the grid moves only `build`.
 metadata:
   type: project
 ---
@@ -8,7 +8,7 @@ metadata:
 **Decision taken 2026-08-12 by this agent**, filed as `docs/TOLERANCES.md`
 **§3.6.3** and `tools/difftest/README.md` **§18.4.1**.
 
-**Ten `iccce bench` invocations, one session, one binary (`cc03f3d`), same
+**Ten `icccer bench` invocations, one session, one binary (`cc03f3d`), same
 pair and raster, five at each grid:**
 
 | grid | build (s) | compiled (Mpix/s) | reference (Mpix/s) | speedup | break-even (px) |
@@ -19,7 +19,7 @@ pair and raster, five at each grid:**
 **The speedup is not a claim this project carries.** 2.03x spread within one
 session at a fixed grid; 12.4x–32x across the day. The previously filed
 "28–32x, ~10 % run-to-run spread" was the top of a distribution and
-understated the variance by an order of magnitude. `iccce bench` still prints
+understated the variance by an order of magnitude. `icccer bench` still prints
 it — a diagnostic the user runs on *their* machine — and no document restates
 it as a property of the engine.
 
@@ -42,7 +42,7 @@ is the **tightest** quantity measured (±4 %, against ±35 % compiled). The old
 band was a four-sample range from one sitting quoted as a property of the
 machine — the same error as the speedup.
 
-**How to apply.** Any performance sentence about iccce must name the grid, the
+**How to apply.** Any performance sentence about icccer must name the grid, the
 machine, the pair and the number of invocations, and should be a break-even
 rather than a ratio. If a ratio is unavoidable, label it *observed on one
 Windows box under unknown load, 12.4–32x*.

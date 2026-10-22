@@ -8,13 +8,13 @@ metadata:
 Run the autonomous loop with SHORT wakeup delays (~300s, not 1800s) and
 dispatch agents IN PARALLEL whenever their file sets are disjoint.
 
-**Why:** Ken's instruction 2026-08-11 during the iccce kickstart loop:
+**Why:** Ken's instruction 2026-08-11 during the icccer kickstart loop:
 "loop faster and run agents in parallel without conflict where
 possible." The engineer had been serializing librarian dispatches to
 avoid edit conflicts and idling 1800s between ticks; Ken wants
 throughput.
 
-**How to apply:** The iccce agent territories are naturally disjoint —
+**How to apply:** The icccer agent territories are naturally disjoint —
 `icc-conformance` owns `tools/difftest/` + `docs/TOLERANCES.md`;
 `icc-spec-librarian` owns `D:\Dev\Rag-Specialized\ICC_Spec\` +
 `docs/LEGAL.md` §2; `icc-librarian` owns the other `docs/` records

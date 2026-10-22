@@ -57,7 +57,7 @@ pre-registered predictions at §21.7) and **`icc__s__bpc_algorithm.md` §9**
    use zero"* is descriptive and hedged. ⇒ **`(0,0,0)` at a v2 perceptual
    destination is defensible as an OUTCOME and NOT SOURCED as an ASSUMPTION.**
    Behavioural consequence (`D11b`): **on v4 BPC can never be a no-op; on v2 it
-   usually is.** lcms2 gates on perceptual **or saturation**, iccce on perceptual
+   usually is.** lcms2 gates on perceptual **or saturation**, icccer on perceptual
    **only** — unmeasured divergence at a v4 saturation destination.
 
 **Already held, do not re-measure:** `outRamp[0]` of the *perceptual* ramp on
@@ -67,14 +67,14 @@ does not fire in a correct implementation there.
 
 ## ★★★ 11th pass, 2026-08-12 (later) — the short-circuit return value
 
-**`icc-conformance` asked one clause question and it found a shipped iccce bug.**
+**`icc-conformance` asked one clause question and it found a shipped icccer bug.**
 At **4.2.5.4**'s mid-range straightness short-circuit (no curve fitted),
 **ISO/CD 18619 returns `InitialLab`, unchanged — stated TWICE in `shall`
 language (4.2.5.1 Overview and 4.2.5.4's last paragraph) and NEVER in terms of
 `inRamp`/`outRamp`.** `outRamp[first]` occurs in the whole of 4.2.5 only as
 `MinL` and as the left side of the 4.2.5.3 validity test — **it is not a
 candidate for `DestinationBlackPoint` in any branch.** **lcms2 returns
-`InitialLab` and CONFORMS; iccce returned `outRamp[first]`.** Measured on
+`InitialLab` and CONFORMS; icccer returned `outRamp[first]`.** Measured on
 `USWebCoatedSWOP` at rel.col.: **`8,166 8×10⁻² ΔE76`, 100 % `L*`** — small, and
 **100 % of the divergence on that fixture.** **Filed as a BUG, not an ambiguity
 row** (the two candidates are not two readings — one has no textual support).
@@ -117,7 +117,7 @@ cannot corroborate the prose; do not go looking again.
    calls BPC *"an optional feature that the user can enable or disable"*.
    **Exhaustive search of both documents: `ersion` 25 + 18 hits all read, zero
    `V4`/`force` — no version-keyed rule exists in either.**
-   **⟹ iccce's `DL-022` (never force) is CORROBORATED; nothing reverses.**
+   **⟹ icccer's `DL-022` (never force) is CORROBORATED; nothing reverses.**
    New register row **`A45`, RESOLVED-as-DELEGATED.** `M2` itself still stands
    — it was measured; only its **attribution** is retracted.
 2. **★ `A42` UNVERIFIED → PARTLY RESOLVED, and lcms2 is a HYBRID.** ISO/CD 18619
@@ -139,7 +139,7 @@ cannot corroborate the prose; do not go looking again.
    DERIVED two ways: **at input black the divergence equals exactly
    `√(a*² + b*²)` of the detected destination black — 2 to 6 ΔE76** for `b*`
    between −2 and −6 — decaying to zero at white. **Scope: relative
-   colorimetric, LUT destination, chromatic black.** If iccce implements ISO
+   colorimetric, LUT destination, chromatic black.** If icccer implements ISO
    faithfully this WILL show up in a difftest and it is **not** an error.
 4. **★ Vertex vs root, settled.** Adobe §7.2 Step 4 v takes the **VERTEX**
    (`−u/2t`) and openly calls it *"an approximation"*; ISO 4.2.5.5 takes the

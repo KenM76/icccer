@@ -1,4 +1,4 @@
-//! # `iccce-difftest` — the runner
+//! # `icccer-difftest` — the runner
 //!
 //! Runs the registered checks against the pinned lcms2 oracle and emits the
 //! TSV report described in `lib.rs`. Usage:
@@ -22,11 +22,11 @@
 //!   is [`Kind::OracleReproducibility`]: **both sides are lcms2**. It
 //!   establishes that the harness drives the oracle correctly and that the
 //!   pin and toolchain still produce the recorded answer. It says nothing
-//!   whatever about whether iccce is right; iccce is not in that loop.
+//!   whatever about whether icccer is right; icccer is not in that loop.
 //!
-//! ### 7 — Pass 3, which is the first time iccce is graded at all
+//! ### 7 — Pass 3, which is the first time icccer is graded at all
 //!
-//! Built by [`iccce_difftest::pass3`] over a 133-point deterministic grid,
+//! Built by [`icccer_difftest::pass3`] over a 133-point deterministic grid,
 //! sRGB → Adobe RGB (1998), media-relative colorimetric, `-c0`:
 //!
 //! | id | kind | what it can catch |
@@ -46,13 +46,13 @@
 //!
 //! ### 28 — Pass 4, the LUT differential (added later on 2026-08-11)
 //!
-//! Built by [`iccce_difftest::pass4`] over a 341-point CMYK grid,
+//! Built by [`icccer_difftest::pass4`] over a 341-point CMYK grid,
 //! `USWebCoatedSWOP.icc` → the system sRGB profile, at **all four intents**,
 //! `-c0`. Full record: README §14.
 //!
 //! | id (per intent unless noted) | kind | what it can catch |
 //! |---|---|---|
-//! | `pass4/apparatus/harness-nlinear-matches-iccce-cmm` *(once)* | self-consistency | **the apparatus**: the harness's own mft2 reimplementation drifting from `iccce-cmm`'s. Everything else in Pass 4 is void if this fails |
+//! | `pass4/apparatus/harness-nlinear-matches-icccer-cmm` *(once)* | self-consistency | **the apparatus**: the harness's own mft2 reimplementation drifting from `icccer-cmm`'s. Everything else in Pass 4 is void if this fails |
 //! | `pass4/swop/perceptual-equals-saturation` *(once)* | cross-check | an 8.10.2 tag-selection defect — graded at **exactly zero**, because `A2B0` and `A2B2` are one block of tag data |
 //! | `…/device-vs-lcms2`, `…/de2000-vs-lcms2` | cross-check | structural error, at a tolerance that is the **interpolation-method envelope** and therefore cannot claim agreement |
 //! | `…/device-mean`, `…/de2000-mean` | cross-check | **reported, not graded** (tolerance ∞) |
@@ -62,7 +62,7 @@
 //! | `icc-absolute/white-point-policy-emulated` | cross-check | the **mechanism** of the 11 ΔE00 absolute-intent divergence |
 //!
 //! **At `icc-absolute` the two raw comparisons are reported with an infinite
-//! tolerance**, because iccce and lcms2 read *different destination media
+//! tolerance**, because icccer and lcms2 read *different destination media
 //! whites* there and the specification question is unsourced (corpus A4b).
 //! The gate at that intent is the white-point-policy record. README §14.6 and
 //! `TOLERANCES.md` §3.4 state it in full; it is the one place in this suite
@@ -71,18 +71,18 @@
 //!
 //! ### 28 — Pass 4b, the directions Pass 4 left unmeasured (added later still)
 //!
-//! Built by [`iccce_difftest::pass4b`] in **three independent sections**, so a
+//! Built by [`icccer_difftest::pass4b`] in **three independent sections**, so a
 //! missing system profile in one does not silence the others. Full record:
 //! README §15.
 //!
 //! | id | kind | what it can catch |
 //! |---|---|---|
-//! | `pass4b/srgb-to-swop/<intent>/apparatus-lut8-matches-iccce-cmm` | self-consistency | **the apparatus** — as Pass 4's row 0, for the `lut8` pipeline |
+//! | `pass4b/srgb-to-swop/<intent>/apparatus-lut8-matches-icccer-cmm` | self-consistency | **the apparatus** — as Pass 4's row 0, for the `lut8` pipeline |
 //! | `…/device-vs-lcms2`, `…/roundtrip-lab-de2000` | cross-check | arithmetic disagreement in the **B2A** direction, at a tolerance that is a computed quantisation envelope |
 //! | **`…/device-lcms2-arithmetic-modelled`** | cross-check | **the row that claims agreement** — every lcms2 rounding modelled, gated 10× tighter |
 //! | `…/counterfactual-tetrahedral` | cross-check | **reported**: the sensitivity control. lcms2 forces *trilinear* for a Lab-PCS LUT, so the method envelope is zero; this says what it would have been |
-//! | `pass4b/fixture/{mab,mba}/{iccce,lcms2}-vs-derived-expectation` | **derived-expectation** | a wrong element order, a wrong PCSLAB encoding, dropped matrix offsets — against a **closed form**, not against an oracle |
-//! | `pass4b/fixture/mab/encoded-pcs-overflow-divergence` | cross-check | **reported, not graded**: iccce clamps the encoded PCS and lcms2 does not, worth 0.61 ΔE2000, and the clause question is unsettled |
+//! | `pass4b/fixture/{mab,mba}/{icccer,lcms2}-vs-derived-expectation` | **derived-expectation** | a wrong element order, a wrong PCSLAB encoding, dropped matrix offsets — against a **closed form**, not against an oracle |
+//! | `pass4b/fixture/mab/encoded-pcs-overflow-divergence` | cross-check | **reported, not graded**: icccer clamps the encoded PCS and lcms2 does not, worth 0.61 ΔE2000, and the clause question is unsettled |
 //! | `pass4b/fixture/forced-bpc-is-decided-by-the-DESTINATION-version` | oracle-reproducibility | **both sides are lcms2** — the size and the *direction-dependence* of the DL-013 confound |
 //! | `pass4b/gray-to-srgb/…` | cross-check | the **F.2 grayTRC** model; the attribution row reproduces lcms2's 4096-entry reverse tone curve and collapses the residual 457× |
 //!
@@ -93,21 +93,21 @@
 //! ## Everything here skips without the Windows colour directory
 //!
 //! Every check's input is a category (c) system profile (`LEGAL.md` §3), and
-//! Pass 3 additionally needs `target/release/iccce`. On a runner missing
+//! Pass 3 additionally needs `target/release/icccer`. On a runner missing
 //! either, this binary exits **3, not 0**. That is the intended behaviour: a
 //! suite that skipped everything has not passed.
 //!
 //! ## Why the smoke check's expectation is allowed to come from lcms2
 //!
 //! `CLAUDE.md` rule 3 forbids an expectation that came from the code under
-//! test. In the smoke check there is no code under test — nothing of iccce's
+//! test. In the smoke check there is no code under test — nothing of icccer's
 //! runs. The expectation came from lcms2 and is compared against lcms2, which
 //! is a *regression* claim about the toolchain, and the [`Kind`] on the record
 //! says exactly that. **These numbers must never be transplanted into an
-//! `iccce-color` or `iccce-cmm` unit test as expected values.** At that
+//! `icccer-color` or `icccer-cmm` unit test as expected values.** At that
 //! moment they would become an expectation derived from an implementation,
 //! and the claim would silently change from "the oracle still answers the
-//! same" to "iccce is correct", which it would not support.
+//! same" to "icccer is correct", which it would not support.
 //!
 //! The Pass 3 records have no recorded expectation at all: **both sides are
 //! computed in the run**, which is why they are cross-checks and not
@@ -115,7 +115,7 @@
 
 use std::io::Write;
 
-use iccce_difftest::{
+use icccer_difftest::{
     Bpc, Check, Intent, Kind, Metric, Oracle, Outcome, Precalc, Report, Request, Space, Tolerance,
     pass3, pass4, pass4b, pass4c, pass5, pass5b, pass5c, pass6, passg, passh, passi, passk, passl,
 };
@@ -191,7 +191,7 @@ fn main() {
             // is the exact shape of a test suite that has quietly stopped
             // testing anything.
             report.note(
-                "no transicc found: set ICCCE_TRANSICC, or run fetch-lcms2.sh + build-lcms2.{ps1,sh}",
+                "no transicc found: set ICCCER_TRANSICC, or run fetch-lcms2.sh + build-lcms2.{ps1,sh}",
             );
             for c in checks() {
                 report.push(
@@ -262,10 +262,10 @@ fn main() {
     let (analysis, records) = pass3::run(&oracle);
     if let Some(a) = &analysis {
         report.note(format!(
-            "pass3: iccce={} ({}) grid={} points clipped={} \
+            "pass3: icccer={} ({}) grid={} points clipped={} \
              (run `cargo run --bin pass3_report` for the per-point record)",
-            a.iccce_exe.display(),
-            if a.iccce_is_debug {
+            a.icccer_exe.display(),
+            if a.icccer_is_debug {
                 "DEBUG BUILD"
             } else {
                 "release"
@@ -288,12 +288,12 @@ fn main() {
     let (p4, p4_records) = pass4::run(&oracle);
     if let Some(a) = &p4 {
         report.note(format!(
-            "pass4: grid={} points x 4 intents, iccce={} ({}), {} \
+            "pass4: grid={} points x 4 intents, icccer={} ({}), {} \
              (run `cargo run --bin pass4_report` for the per-point record and the \
              interpolation experiment)",
             a.grid.len(),
-            a.iccce_exe.display(),
-            if a.iccce_is_debug {
+            a.icccer_exe.display(),
+            if a.icccer_is_debug {
                 "DEBUG BUILD"
             } else {
                 "release"
@@ -364,7 +364,7 @@ fn main() {
     // Pass 5b — the black-point ESTIMATORS, and the corpus's pre-registered
     // prediction about them. Needs the oracle (lcms2's estimator is one arm),
     // the two system profiles and the shipped binary; drives
-    // `iccce_cmm::bpc`'s ISO/CD 18619 function IN PROCESS, because
+    // `icccer_cmm::bpc`'s ISO/CD 18619 function IN PROCESS, because
     // `Chain::estimate_dst_black` has no call to it and the shipped binary
     // therefore refuses this case — which one of its records grades.
     let (p5b, p5b_records) = pass5b::run(&oracle);
@@ -397,9 +397,9 @@ fn main() {
         report.push_record(r);
     }
 
-    // Pass 6 — the compiled path, graded. **No oracle**: both arms are iccce,
+    // Pass 6 — the compiled path, graded. **No oracle**: both arms are icccer,
     // so this section runs on a machine with no lcms2 build. It still needs
-    // the two system profiles and the shipped binary (it drives `iccce bench`
+    // the two system profiles and the shipped binary (it drives `icccer bench`
     // as a subprocess so the numbers it grades are the numbers that command
     // prints) and skips with a reason when either is absent.
     let (p6, p6_records) = pass6::run();
@@ -424,7 +424,7 @@ fn main() {
     // ★ Its corpus is **licensed and cannot be committed** (the print-conformance suite's
     // own licence forbids redistribution; the profiles carry Adobe's, ECI's and
     // X-Rite's separate licences). It resolves the corpus through
-    // `$ICCCE_PRIVATE_FIXTURES` and **skips every row with a reason** when it is
+    // `$ICCCER_PRIVATE_FIXTURES` and **skips every row with a reason** when it is
     // absent, which is the permanent state in CI by design. A green CI line
     // says those rows did not run, not that they passed.
     let (pg, pg_records) = passg::run(&oracle);
@@ -437,7 +437,7 @@ fn main() {
     // set (50 files from color.org, 2026-08-17). Its subject is not a colour
     // value: that corpus publishes transforms, never expected outputs (DL-041),
     // so nothing in it could be ground truth about a ΔE. What it grades is
-    // **which files iccce accepts, which it refuses, and whether a refusal says
+    // **which files icccer accepts, which it refuses, and whether a refusal says
     // why** — rule 6 demonstrated on ten real ICC-published iccMAX files rather
     // than on a fixture this project wrote to be refused.
     //
@@ -449,7 +449,7 @@ fn main() {
     // statements turns out to be **false of the file the document names**.
     //
     // Same licensing posture as Pass G: uncommittable corpus, resolved through
-    // `$ICCCE_PRIVATE_FIXTURES`, every row SKIPs with a reason when absent.
+    // `$ICCCER_PRIVATE_FIXTURES`, every row SKIPs with a reason when absent.
     let (ph, ph_records) = passh::run(&oracle);
     report.note(format!("passh: {}", passh::note(&ph)));
     for r in ph_records {
@@ -457,7 +457,7 @@ fn main() {
     }
 
     // Pass I — ICC's **published** chromatic-adaptation matrix, graded cell by
-    // cell against `iccce_color::adaptation_matrix(&BRADFORD, D65, D50)`. The
+    // cell against `icccer_color::adaptation_matrix(&BRADFORD, D65, D50)`. The
     // third `published-ground-truth` subject in the repository and the first
     // for chromatic adaptation, which `RAG_PLAN.md` names as the canonical
     // from-memory error class.
@@ -474,9 +474,9 @@ fn main() {
     // pass was first run. The residual against ICC's published matrix is not
     // zero, and the module header derives why from two documented input
     // differences: ICC built its recommended matrix with a Bradford cone cell
-    // of 0.8950 while ICC.1:2022 Annex E.3 prints 0.8951 (which is what iccce
+    // of 0.8950 while ICC.1:2022 Annex E.3 prints 0.8951 (which is what icccer
     // uses, because it is what the specification prints), and ICC's matrix
-    // adapts a 4-dp-rounded white while iccce derives D65 from BT.709-6's
+    // adapts a 4-dp-rounded white while icccer derives D65 from BT.709-6's
     // chromaticities. The second term is 7.9x the first.
     let (pi, pi_records) = passi::run();
     report.note(format!("passi: {}", passi::note(&pi)));
@@ -507,7 +507,7 @@ fn main() {
     // ★ One row, `passk/E/k-only-in-implies-k-only-out`, is RED BY DESIGN until
     // black preservation exists, at a tolerance of exactly zero. The remedy is
     // the feature, not the number. Same licensing posture as Passes G and H:
-    // licensed corpus, `$ICCCE_PRIVATE_FIXTURES`, every row SKIPs with a reason
+    // licensed corpus, `$ICCCER_PRIVATE_FIXTURES`, every row SKIPs with a reason
     // when absent — which is permanent in CI, and which the pass reports as a
     // coverage gap rather than as a convenience.
     let (pk, pk_records) = passk::run(&oracle);
@@ -518,7 +518,7 @@ fn main() {
 
     // Pass L - WHICH READING OF sRGB DOES lcms2 IMPLEMENT? Two in-force
     // standards disagree about sRGB's transfer-function constants (ICC_Spec
-    // A57, OPEN), iccce ships both readings, and the two curves are 4.8e-6
+    // A57, OPEN), icccer ships both readings, and the two curves are 4.8e-6
     // apart at most and EXACTLY equal at every 8-bit code. §A settles what
     // lcms2 does - by measurement, at float precision, at an INTERIOR maximum
     // that is in a different place for each output space; §B states what the
@@ -529,7 +529,7 @@ fn main() {
     // standard, and every §A record's `source` string says so where a quoter
     // will trip over it.
     //
-    // ★ §C runs IN PROCESS and has to: the shipped iccce binary has no flag
+    // ★ §C runs IN PROCESS and has to: the shipped icccer binary has no flag
     // that selects SrgbTrc. Same precedent as Pass 5b.
     let (pl, pl_records) = passl::run(Some(&oracle));
     report.note(format!("passl: {}", passl::note(&pl)));

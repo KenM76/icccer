@@ -1,6 +1,6 @@
 ---
 name: project-doc-editing-conventions
-description: iccce project agents edit shared docs concurrently and are scoped to named sections; verification records are dated, append-only, and never edited in place.
+description: icccer project agents edit shared docs concurrently and are scoped to named sections; verification records are dated, append-only, and never edited in place.
 metadata:
   type: project
 ---

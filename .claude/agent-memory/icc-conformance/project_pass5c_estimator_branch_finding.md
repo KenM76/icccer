@@ -10,7 +10,7 @@ metadata:
 > finding rather than a fix. See
 > [[project-conformance-can-worsen-the-crosscheck]].**
 
-Measured **2026-08-12** at oracle pin `21c582a`, iccce commit `95c04c1`.
+Measured **2026-08-12** at oracle pin `21c582a`, icccer commit `95c04c1`.
 Apparatus `tools/difftest/src/pass5c.rs`; record `tools/difftest/README.md`
 **§19**; tolerances `docs/TOLERANCES.md` **§3.5.8**. Two arms:
 `USWebCoatedSWOP.icc` and the new
@@ -71,7 +71,7 @@ and 9,349×10⁻² against the unchanged 2,5×10⁻¹. Two things the transition
 `pass6.rs`'s `DEFAULT_GRID` must track `recommended_grid_points` (the apparatus
 row caught the drift by failing at 1,576×10⁻³), and at grid 33 the two probe
 populations **stop agreeing** (1,79× apart), so quoting either alone is now a
-population claim. Build cost ~14 s moves `iccce bench`'s break-even from
+population claim. Build cost ~14 s moves `icccer bench`'s break-even from
 ≈70 000 px to **≈1,19 M px**.
 
 Related: [[project-pass5b-estimator-findings]],

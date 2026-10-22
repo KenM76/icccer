@@ -1,5 +1,5 @@
 ---
-name: iccce-claim-in-a-unit-is-scoped-to-that-unit
+name: icccer-claim-in-a-unit-is-scoped-to-that-unit
 description: Pass L (2026-08-20) — "no image changes, ever" and "below one 16-bit PCS quantum" were both TRUE where measured and both FALSE one transform later, because a claim stated in a UNIT is silently scoped to the domain that unit lives in. Also: Pass L's §C is SELF-COMPARISON, not a cross-check, and that weaker class was FORCED by measuring that the oracle cannot see the effect
 metadata:
   type: project
@@ -45,7 +45,7 @@ a second transform.**
 **★★★ THE SECOND LESSON, and it corrected a dispatch: only Pass L's §A is
 a cross-check.** The dispatch said *"every Pass L row's oracle is
 cross-check against lcms2"*. **Every §C record is
-`Kind::SelfConsistency`** — iccce against iccce, in process, in `f64`.
+`Kind::SelfConsistency`** — icccer against icccer, in process, in `f64`.
 So **`14`/`11`/`2` of `5169` are one class WEAKER than a cross-check**,
 and writing them otherwise would attribute to the oracle a measurement it
 **provably cannot make**.
@@ -61,8 +61,8 @@ quantity.** ★ A section that merely announced *"measured in process"*
 would look like an unexplained weakening; **the row that proves the
 oracle cannot see it is what makes the self-comparison defensible.**
 
-★ **§A does not exercise iccce's transform code either.** The harness
-evaluates both curves and transcribes lcms2's own `f()`; iccce supplies
+★ **§A does not exercise icccer's transform code either.** The harness
+evaluates both curves and transcribes lcms2's own `f()`; icccer supplies
 only the **constants**. So §A cross-checks **constants and curve form**,
 never `MatrixTrc` or `Chain` — and it inherits `oracle-behaviour-at-pin`'s
 property that **the pin moving invalidates every row**.
@@ -89,10 +89,10 @@ in-force standards disagree (ICC/W3C/Khronos vs H.273 cl. 8.2 for
 `TransferCharacteristics = 13`), and **IEC 61966-2-1 is paywalled and
 unobtained**.
 
-Related: [[iccce-words-humans-count-code]] (DL-063 — this is its shape
+Related: [[icccer-words-humans-count-code]] (DL-063 — this is its shape
 applied to a unit instead of a count),
-[[iccce-bound-cannot-catch-its-own-magnitude]],
-[[iccce-agreement-can-be-the-symptom]],
-[[iccce-compatibility-not-certification]],
-[[iccce-fabricated-value-is-a-forged-credential]],
-[[iccce-pass-status]].
+[[icccer-bound-cannot-catch-its-own-magnitude]],
+[[icccer-agreement-can-be-the-symptom]],
+[[icccer-compatibility-not-certification]],
+[[icccer-fabricated-value-is-a-forged-credential]],
+[[icccer-pass-status]].

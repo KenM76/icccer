@@ -1,6 +1,6 @@
 ---
 name: malformation-modality-settled
-description: The nine iccce Malformation variants have a SETTLED per-edition modality (Violation / NotAViolation / Unsourced) at icc__s__tag_table.md §7 — do not re-derive; three split by edition (header reserved bytes, rendering-intent value, tag overrun), two are Unsourced (A61/A62), and ★ v2 requires with "must" (76×) not `shall` (27×, mostly elsewhere)
+description: The nine icccer Malformation variants have a SETTLED per-edition modality (Violation / NotAViolation / Unsourced) at icc__s__tag_table.md §7 — do not re-derive; three split by edition (header reserved bytes, rendering-intent value, tag overrun), two are Unsourced (A61/A62), and ★ v2 requires with "must" (76×) not `shall` (27×, mostly elsewhere)
 metadata:
   type: reference
 ---
@@ -23,7 +23,7 @@ re-derive. The table is `D:\Dev\Rag-Specialized\ICC_Spec\icc\icc__s__tag_table.m
    because the drafters used "must" in the adjacent sentence — that
    parallel-construction argument is what makes `HeaderReservedNonZero` a
    confident `NotAViolation` in v2 rather than an `Unsourced`.
-2. **Three variants SPLIT by edition** — and each split can make iccce accuse a
+2. **Three variants SPLIT by edition** — and each split can make icccer accuse a
    conforming file: `HeaderReservedNonZero` (v4 7.2.19 `shall be set to zero`;
    **v2 Table 9 states no requirement at all**, and its block is **84..127**,
    not 100–127); `UnknownRenderingIntent` (`A56`); `TagOverrun` (v4 7.2.2
@@ -42,7 +42,7 @@ re-derive. The table is `D:\Dev\Rag-Specialized\ICC_Spec\icc\icc__s__tag_table.m
 
 ## The trap that produced the defect, and it will recur
 
-**`icc__s__tag_table.md`'s "Validation checks iccce should perform and REPORT"
+**`icc__s__tag_table.md`'s "Validation checks icccer should perform and REPORT"
 table was a DERIVED CONVENIENCE — a list of checks worth *performing*, with no
 clause per row — and two consumers read it as a list of conformance rules.** It
 now carries a banner saying so. **A derived validation table is not a modality

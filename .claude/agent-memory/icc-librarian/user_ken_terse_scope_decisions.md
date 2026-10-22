@@ -28,4 +28,4 @@ reversal.
 - He is fine with the heavy documentation treatment of a one-line answer
   — the expansion is wanted, the mislabelling is not.
 
-Related: [[iccce-pass-status]].
+Related: [[icccer-pass-status]].

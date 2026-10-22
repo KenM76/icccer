@@ -6,7 +6,7 @@ metadata:
 ---
 
 Built `v2-rendering-intent-high-bits` (recipe + fixture + 
-`crates/iccce-profile/tests/rendering_intent_high_bits_not_version_gated.rs`)
+`crates/icccer-profile/tests/rendering_intent_high_bits_not_version_gated.rs`)
 to measure a latent parser defect: `Header::parse` checks
 `rendering_intent > 3` with **no version gate**, and ICC.1:2001-04 6.1.11
 imposes nothing on the high 16 bits that ICC.1:2022 7.2.15 requires to be zero.
@@ -27,14 +27,14 @@ unused enum variant costs one match arm. `cmd_manifest` now prints an explicit
 
 ★ **What does NOT belong in Disputed**, both of which I nearly got wrong:
 
-* *iccce's behaviour is believed wrong.* That is a **defect**: file the fixture
+* *icccer's behaviour is believed wrong.* That is a **defect**: file the fixture
   under what the **standard** says, and let the suite go red. A category is not
   a place to park a bug.
 * *the text has been read and licenses more than one consumer behaviour.* That
   is **settled**, not disputed — the answer is "ICC.1 does not determine this".
   File under what the file **is** and record the project's choice in the row
   **as a choice**. Worked example: `v2-rendering-intent-low-half`, which
-  violates nothing and which iccce reports anyway, deliberately.
+  violates nothing and which icccer reports anyway, deliberately.
 
 The one condition that DOES put a fixture here is about the *sourcing*: a
 dispatch is outstanding and its answer would change the category.

@@ -68,7 +68,7 @@ which ones would be convenient.
   the disclaimer is **data**, not discipline.
 - ★ **`E1` is RED by design at tolerance exactly `0`** (`0.705320` observed) and
   its separation is taken from **lcms2's colorimetric answer**, not from
-  iccce's, so it does not collapse the day the row goes green
+  icccer's, so it does not collapse the day the row goes green
   ([[project-prove-the-arm-by-injecting-the-defect]] §1).
 - **What is NOT done:** no injection proof (§22/§23/§24 all have one); one
   destination carries §A/§C/§D/§E; media-relative only outside §A; no `--bpc`

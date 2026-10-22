@@ -1,5 +1,5 @@
 ---
-name: iccce-disclosure-is-not-enforcement
+name: icccer-disclosure-is-not-enforcement
 description: DL-037 — candidate separation is an emitted field whose GUARD ORDER is the decision (UNGRADED before the comparison, ZERO-SEPARATION outranks all); BLIND deliberately does not gate, because a disclosure mechanism and an enforcement mechanism must not be the same mechanism
 metadata:
   type: project
@@ -10,7 +10,7 @@ stating a weakness can turn a green row red, the cheapest response to a
 weak row is **to stop stating weaknesses**.
 
 **Why:** on 2026-08-12 `icc-conformance` built the instrument
-[[iccce-agreement-can-be-the-symptom]] (DL-033) had asked for —
+[[icccer-agreement-can-be-the-symptom]] (DL-033) had asked for —
 `tools/difftest` now emits a **candidate separation** on every record:
 the named rival answer, the value the row would have observed under it,
 and the distance. Its automatic `BLIND` verdict (candidates closer
@@ -54,7 +54,7 @@ having no gate to make greener.
    indistinguishable in the record. The suite's real power lives in §B's
    **device** rows — **the row named `estimators` is the one that cannot
    grade estimators.**
-2. **A fourth stale literal** — see [[iccce-pass-status]] and DL-034.
+2. **A fourth stale literal** — see [[icccer-pass-status]] and DL-034.
    Found **by an apparatus rather than by a person**.
 
 **★★★ UPDATED 2026-08-12 (eighteenth filing) — the guards were right and
@@ -62,7 +62,7 @@ the ARITHMETIC UNDER THEM was wrong.** Guard 3 (`ZERO-SEPARATION`, the
 one that outranks everything) fired on a row that was **failing at
 `2,500 019×10¹` at that moment**, because the distance was *derived* as
 `|observed − alt_observed|`. **DL-038 —
-[[iccce-measurement-under-the-guards]].** Nothing in the guard order is
+[[icccer-measurement-under-the-guards]].** Nothing in the guard order is
 superseded; what changed is the number handed to it. **Note this is NOT
 the "wrong rival" case DL-037 deferred — the rival was right — and that
 case is still uncovered.**
@@ -84,13 +84,13 @@ than it did one filing ago.**
 - **A stated separation is not a TRUE one.** The rival candidate is
   named by a human from the two implementations' sources; a wrong or
   missing rival yields a confidently wrong separation and nothing
-  detects it. [[iccce-free-to-disagree]] (DL-023) guards the input and
+  detects it. [[icccer-free-to-disagree]] (DL-023) guards the input and
   is unaided by this.
 - **Do not sweep `unstated` → `no-named-alternative` in bulk.** Without
   a reason **per row** it destroys the field's meaning while making the
   aggregate look finished.
 
-Related: [[iccce-agreement-can-be-the-symptom]],
-[[iccce-count-needs-its-apparatus]], [[iccce-gate-must-not-reward-deletion]],
-[[iccce-tolerance-cannot-swallow-and-claim]],
-[[iccce-control-only-as-good-as-its-fixture]], [[iccce-pass-status]].
+Related: [[icccer-agreement-can-be-the-symptom]],
+[[icccer-count-needs-its-apparatus]], [[icccer-gate-must-not-reward-deletion]],
+[[icccer-tolerance-cannot-swallow-and-claim]],
+[[icccer-control-only-as-good-as-its-fixture]], [[icccer-pass-status]].

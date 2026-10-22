@@ -1,5 +1,5 @@
 ---
-name: iccce-gate-must-not-reward-deletion
+name: icccer-gate-must-not-reward-deletion
 description: DL-018 — an upper-bound gate on a DELIBERATE cost goes greener when the requirement is deleted; it must be paired with a prediction pin plus a sensitivity control (Pass 3's clamp, Pass 5's BPC)
 metadata:
   type: project
@@ -9,7 +9,7 @@ metadata:
 the right thing. Grading one with an upper bound builds a gate with a
 perverse gradient.** Filed as `ARCHITECTURE.md` **DL-018**, 2026-08-11.
 
-**Why:** iccce's range clamping (Annex F.8–F.16, normative) discards the
+**Why:** icccer's range clamping (Annex F.8–F.16, normative) discards the
 difference between two profiles' encoded media whites, and that discard
 **costs ΔE in a round trip**. The Pass 3 round-trip gate is 2.5e-2 and
 the observation is 1.8788e-2 — but **delete the clamping and the round
@@ -36,7 +36,7 @@ required cost, the upper-bound row is **not sufficient alone**. Add:
 
 **★ State the pin's scope, because the first draft of Pass 3's got it
 wrong.** The pin was claimed to make the F.8–F.16 clamp **ordering**
-falsifiable. It does not: iccce clamps at **three** independent sites
+falsifiable. It does not: icccer clamps at **three** independent sites
 (F.8–F.16, 10.18's domain, F.1(b)'s attainable range), so the other two
 make the first redundant **at the shipped surface**, and no test in the
 repo distinguishes clamp-before from clamp-after through the binary.
@@ -77,15 +77,15 @@ exit 1. **"Belt and braces" is the tell: two mechanisms are redundant only
 if EACH has a defect it alone can catch.**
 
 ★★ The same shape in the differential-test register is **DL-056** —
-[[iccce-agreement-can-be-the-symptom]]. Filed with **NC-234/NC-235**
-(`iccce bench` **aborted the process**, `0xC0000409`, on ICC's
+[[icccer-agreement-can-be-the-symptom]]. Filed with **NC-234/NC-235**
+(`icccer bench` **aborted the process**, `0xC0000409`, on ICC's
 seven-channel APTEC profile: a `_ => 33` catch-all giving `33⁷ × 3 × 8 ≈
 952.6 GiB`, and a guard using `checked_pow`, **which catches WRAP not
 SIZE**). ★ **An abort is the worst available library failure** — not
 catchable; the consumer's process goes with it. **Rule 6 at the
 allocation layer.**
 
-Related: [[iccce-bound-cannot-catch-its-own-magnitude]],
-[[iccce-pass-status]], [[iccce-verify-own-draft-too]],
-[[iccce-agreement-can-be-the-symptom]],
-[[iccce-absence-of-publication-is-not-evidence]].
+Related: [[icccer-bound-cannot-catch-its-own-magnitude]],
+[[icccer-pass-status]], [[icccer-verify-own-draft-too]],
+[[icccer-agreement-can-be-the-symptom]],
+[[icccer-absence-of-publication-is-not-evidence]].

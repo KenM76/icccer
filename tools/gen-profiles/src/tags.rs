@@ -243,7 +243,7 @@ pub fn text_raw(bytes: &[u8]) -> Vec<u8> {
 // Clause 10.15 verbatim on the record size: "Any code that needs to access the
 // nth record should determine the record's offset by multiplying n by the
 // contents of this size field and adding 16. This minor extra effort allows
-// for future expansion." That is why `iccce-profile` refuses a recordSize != 12
+// for future expansion." That is why `icccer-profile` refuses a recordSize != 12
 // instead of assuming 12 — and why `v4-mluc-record-size-16` exists.
 
 /// One `en-US` record. `length` is in **bytes**, not characters — halve it to
@@ -539,7 +539,7 @@ impl Mft2 {
 /// output tables are **always exactly 256 entries**.
 ///
 /// ★ Reading the `mft2` layout onto an `mft1` shifts everything by 4 bytes and
-/// yields garbage that still parses. `iccce-profile` makes that
+/// yields garbage that still parses. `icccer-profile` makes that
 /// unrepresentable by giving the two types separate structs; this crate makes
 /// it unrepresentable by giving them separate constructors with different
 /// field sets. Neither relies on discipline.

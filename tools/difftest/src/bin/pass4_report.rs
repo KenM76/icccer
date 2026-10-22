@@ -13,15 +13,15 @@
 //! | 2 | the five named CMYK points at all four intents | directly comparable with README §8.4's Pass 0 oracle numbers, by eye |
 //! | 3 | per-intent reductions | the graded numbers, with their means |
 //! | 4 | **the interpolation-method envelope** | computed from the CLUT and the two algorithms ALONE — no lcms2 output enters it. This is what `DE_PCS_CROSSCHECK` and `DE_CROSSCHECK` *are* |
-//! | 5 | **the attribution** | how much of the observed iccce-vs-lcms2 disagreement the method difference accounts for. The Pass 3 discipline: predict the confound quantitatively, then measure the residual |
+//! | 5 | **the attribution** | how much of the observed icccer-vs-lcms2 disagreement the method difference accounts for. The Pass 3 discipline: predict the confound quantitatively, then measure the residual |
 //! | 6 | the corner control | the sixteen CLUT-node points, where the method difference is identically zero |
 //! | 7 | worst offenders and out-of-range excursions | where to look first when a number moves |
 //!
 //! Nothing here is graded. Grading happens in `pass4::records`; this is the
 //! evidence a reader needs to decide whether to believe it.
 
-use iccce_difftest::pass4::{self, NAMED_POINTS, Scheme};
-use iccce_difftest::{Intent, Oracle};
+use icccer_difftest::pass4::{self, NAMED_POINTS, Scheme};
+use icccer_difftest::{Intent, Oracle};
 
 fn main() {
     let oracle = match Oracle::locate() {
@@ -60,10 +60,10 @@ fn main() {
     );
     println!("grid     : {} CMYK points, deterministic", a.grid.len());
     println!(
-        "iccce    : {} ({}) — the SHIPPED binary, N-channel transform (commit 490191b+); \
+        "icccer    : {} ({}) — the SHIPPED binary, N-channel transform (commit 490191b+); \
          only the PCS-side instrument is in-process",
-        a.iccce_exe.display(),
-        if a.iccce_is_debug { "DEBUG BUILD" } else { "release" }
+        a.icccer_exe.display(),
+        if a.icccer_is_debug { "DEBUG BUILD" } else { "release" }
     );
     println!(
         "apparatus: max |harness n-linear - Lut16Model| over all points/intents = {:.3e} \
@@ -71,21 +71,21 @@ fn main() {
         a.runs.iter().map(|r| r.self_check).fold(0.0f64, f64::max)
     );
     println!(
-        "shared-tag identity: perceptual vs saturation, iccce {:.3e}, lcms2 {:.3e} \
+        "shared-tag identity: perceptual vs saturation, icccer {:.3e}, lcms2 {:.3e} \
          (normalised device units; A2B0 and A2B2 are one block of tag data)",
-        a.per_vs_sat_iccce, a.per_vs_sat_lcms2
+        a.per_vs_sat_icccer, a.per_vs_sat_lcms2
     );
 
     println!();
     println!("=== 2. The five named points (README §8.4 carries Pass 0 oracle numbers) ===");
     println!(
         "{:<38} {:<14} {:>25} {:>25}",
-        "point", "intent", "iccce RGB (0..255)", "lcms2 RGB (0..255)"
+        "point", "intent", "icccer RGB (0..255)", "lcms2 RGB (0..255)"
     );
     for (p, name) in NAMED_POINTS {
         let idx = a.grid.iter().position(|q| *q == p).expect("named points are in the grid");
         for r in &a.runs {
-            let i = r.iccce_rgb[idx];
+            let i = r.icccer_rgb[idx];
             let l = r.lcms2_rgb_255[idx];
             println!(
                 "{:<38} {:<14} {:>8.4}{:>8.4}{:>9.4} {:>8.4}{:>8.4}{:>9.4}",
@@ -130,7 +130,7 @@ fn main() {
     println!();
     println!("=== 4. The interpolation-method envelope ========================");
     println!(
-        "iccce's n-linear (NA-006) against lcms2's Eval4Inputs geometry (linear in C x tetrahedral"
+        "icccer's n-linear (NA-006) against lcms2's Eval4Inputs geometry (linear in C x tetrahedral"
     );
     println!(
         "in M,Y,K), BOTH evaluated in this harness on the SAME table. No lcms2 output enters this."
@@ -197,7 +197,7 @@ fn main() {
         "lcms2 substitutes D50 for the wtpt of a v2 DISPLAY profile (cmsio1.c,"
     );
     println!(
-        "_cmsReadMediaWhitePoint); iccce uses wtpt AS STORED (NA-007), and this destination's"
+        "_cmsReadMediaWhitePoint); icccer uses wtpt AS STORED (NA-007), and this destination's"
     );
     println!(
         "wtpt tag holds D65. Re-predicting lcms2's absolute output with that ONE substitution"
@@ -208,7 +208,7 @@ fn main() {
         let (raw_max, raw_mean) = mm(&r.de_end_to_end);
         let (wp_max, wp_mean) = mm(&r.de_wp_policy);
         println!(
-            "  unmodelled : max {raw_max:.4e} mean {raw_mean:.4e} dE00   (iccce as shipped vs lcms2)"
+            "  unmodelled : max {raw_max:.4e} mean {raw_mean:.4e} dE00   (icccer as shipped vs lcms2)"
         );
         println!(
             "  re-predicted: max {wp_max:.4e} mean {wp_mean:.4e} dE00   (D50 destination white + \
@@ -263,7 +263,7 @@ fn main() {
         idx.sort_by(|&i, &j| r.de_end_to_end[j].total_cmp(&r.de_end_to_end[i]));
         println!(
             "{:>28} {:>11} {:>11} {:>28}",
-            "CMYK (0..1)", "dE00", "envelope", "iccce RGB / lcms2 RGB (0..255)"
+            "CMYK (0..1)", "dE00", "envelope", "icccer RGB / lcms2 RGB (0..255)"
         );
         for &i in idx.iter().take(6) {
             let q = a.grid[i];
@@ -275,9 +275,9 @@ fn main() {
                 q[3],
                 r.de_end_to_end[i],
                 r.de_method_end_to_end[i],
-                r.iccce_rgb[i][0] * 255.0,
-                r.iccce_rgb[i][1] * 255.0,
-                r.iccce_rgb[i][2] * 255.0,
+                r.icccer_rgb[i][0] * 255.0,
+                r.icccer_rgb[i][1] * 255.0,
+                r.icccer_rgb[i][2] * 255.0,
                 r.lcms2_rgb_255[i][0],
                 r.lcms2_rgb_255[i][1],
                 r.lcms2_rgb_255[i][2],
@@ -308,8 +308,8 @@ fn main() {
         let q = a.grid[i];
         println!("  CMYK          {:?}", q);
         println!(
-            "  iccce n-linear Lab  ({:.4}, {:.4}, {:.4})",
-            r.iccce_pcs[i].l, r.iccce_pcs[i].a, r.iccce_pcs[i].b
+            "  icccer n-linear Lab  ({:.4}, {:.4}, {:.4})",
+            r.icccer_pcs[i].l, r.icccer_pcs[i].a, r.icccer_pcs[i].b
         );
         println!(
             "  lcms2 geometry Lab  ({:.4}, {:.4}, {:.4})   [emulated in f64 by this harness]",

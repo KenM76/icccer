@@ -44,7 +44,7 @@ ICC.1's **only** occurrence of the words "default rendering intent" is
 default rendering intent…"* — **informative**, inside a gamut-signature tag
 definition, about which reference gamut to build against. **Cannot be cited as a
 requirement**, but it is the only textual support for any default and it favours
-**0 (perceptual)** = lcms2's default, **not** iccce's `Intent::MediaRelative`.
+**0 (perceptual)** = lcms2's default, **not** icccer's `Intent::MediaRelative`.
 Neither default is required or forbidden; **both must be disclosed**.
 
 ## v2 vs v4 — FOUR real differences (was "one"; amended 2026-08-18 by the `A56` dispatch)
@@ -97,8 +97,8 @@ implementation dependent"* in words; v4 replaced it with 8.10.2's `shall`
 
 ## Coverage gap this left open
 
-**No `link`-class fixture exists** — not in this corpus, not in iccce. The
+**No `link`-class fixture exists** — not in this corpus, not in icccer. The
 DeviceLink verdict is **entirely from the text** and does not need one, but
-*iccce's handling of a DeviceLink is untested*. That is an untested class, not a
+*icccer's handling of a DeviceLink is untested*. That is an untested class, not a
 wrong default. Related: [[icc-conformance-clause-binds-only-reading]] — the
 right verdict word is "diverges", never "non-conforming".

@@ -2,7 +2,7 @@
 //!
 //! ★★★ **The question this binary exists to answer, and why a green suite
 //! could not answer it.** Pass K's black-preservation leak guards `E7` and
-//! `F8` compare the same probe set through `iccce transform` twice, differing
+//! `F8` compare the same probe set through `icccer transform` twice, differing
 //! in nothing but `--preserve-black`, and require `max |on − off| = 0`
 //! exactly. They were **proven to fire** by injection (`NC-267`) — but an
 //! injection turns a test red at **the magnitude injected and at no other**
@@ -16,7 +16,7 @@
 //! probes, and the smallest chromatic ink `E7` and `F8` carried was
 //! `1.106777e-1` and `5.000000e-2` — while the rival their own justification
 //! named, in `TOLERANCES.md` §3.10.12.2 and in the module doc of
-//! `crates/iccce-cmm`, was **`10⁻⁹` of cyan**. Seven-plus orders of magnitude,
+//! `crates/icccer-cmm`, was **`10⁻⁹` of cyan**. Seven-plus orders of magnitude,
 //! with both numbers on the page and nobody subtracting them.
 //!
 //! ## What this binary prints, in four blocks
@@ -75,9 +75,9 @@
 //! cargo run --release --bin passk_leak_floor
 //! ```
 //!
-//! Requires the shipped `iccce` binary (`$ICCCE_BIN` or
-//! `target/release/iccce`) and **nothing else** — the two fixtures it needs
-//! are committed. The licensed suite corpus (`$ICCCE_PRIVATE_FIXTURES`) adds
+//! Requires the shipped `icccer` binary (`$ICCCER_BIN` or
+//! `target/release/icccer`) and **nothing else** — the two fixtures it needs
+//! are committed. The licensed suite corpus (`$ICCCER_PRIVATE_FIXTURES`) adds
 //! one more pair, `ISO Coated v2 300% (ECI)`, which is `E7`'s own destination;
 //! absent it, that block says so and the rest still runs.
 //!
@@ -97,13 +97,13 @@
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
-use iccce_difftest::passk::{
+use icccer_difftest::passk::{
     LOW_INK_DECADES, corpus_dir, low_ink_decade_probes, max_dev, probe_floor, synthetic_dir,
 };
-use iccce_difftest::passk::{
+use icccer_difftest::passk::{
     arbitrary_off_neutral, chromatic_gray_probes, node_aligned_off_neutral,
 };
-use iccce_difftest::{DiffError, Iccce, Intent};
+use icccer_difftest::{DiffError, Icccer, Intent};
 
 /// The policy name `E7`/`F8` drive, mirrored here so the two arms of every
 /// measurement in this file are the two arms those rows compare.
@@ -159,8 +159,8 @@ fn as4(v: Vec<Vec<f64>>) -> Vec<[f64; 4]> {
     v.into_iter().map(|r| [r[0], r[1], r[2], r[3]]).collect()
 }
 
-fn plain(iccce: &Iccce, f: &Path, p: &[[f64; 4]]) -> Result<Vec<[f64; 4]>, DiffError> {
-    Ok(as4(iccce.transform_rows_shaped(
+fn plain(icccer: &Icccer, f: &Path, p: &[[f64; 4]]) -> Result<Vec<[f64; 4]>, DiffError> {
+    Ok(as4(icccer.transform_rows_shaped(
         f,
         f,
         Intent::RelativeColorimetric,
@@ -169,8 +169,8 @@ fn plain(iccce: &Iccce, f: &Path, p: &[[f64; 4]]) -> Result<Vec<[f64; 4]>, DiffE
     )?))
 }
 
-fn preserved(iccce: &Iccce, f: &Path, p: &[[f64; 4]]) -> Result<Vec<[f64; 4]>, DiffError> {
-    Ok(as4(iccce.transform_rows_shaped_preserve_black(
+fn preserved(icccer: &Icccer, f: &Path, p: &[[f64; 4]]) -> Result<Vec<[f64; 4]>, DiffError> {
+    Ok(as4(icccer.transform_rows_shaped_preserve_black(
         f,
         f,
         Intent::RelativeColorimetric,
@@ -186,9 +186,9 @@ fn preserved(iccce: &Iccce, f: &Path, p: &[[f64; 4]]) -> Result<Vec<[f64; 4]>, D
               functions and make the four blocks harder to keep aligned with each other"
 )]
 fn run() -> Result<(), String> {
-    let iccce = Iccce::locate()
+    let icccer = Icccer::locate()
         .map_err(|e| e.to_string())?
-        .ok_or("the shipped iccce binary was not found — `cargo build --release -p iccce-cli`")?;
+        .ok_or("the shipped icccer binary was not found — `cargo build --release -p icccer-cli`")?;
 
     // ---------------------------------------------------------------- FLOORS
     println!(
@@ -287,7 +287,7 @@ fn run() -> Result<(), String> {
         });
     } else {
         println!(
-            "  (ISO Coated v2 300% (ECI) not present — set $ICCCE_PRIVATE_FIXTURES to include E7's own pair)"
+            "  (ISO Coated v2 300% (ECI) not present — set $ICCCER_PRIVATE_FIXTURES to include E7's own pair)"
         );
         println!();
     }
@@ -333,12 +333,12 @@ fn run() -> Result<(), String> {
     println!();
     let mut zero_ref: Vec<Vec<[f64; 4]>> = Vec::new();
     for p in &pairs {
-        zero_ref.push(preserved(&iccce, &p.path, &k_only_probes()).map_err(|e| e.to_string())?);
+        zero_ref.push(preserved(&icccer, &p.path, &k_only_probes()).map_err(|e| e.to_string())?);
     }
     for &c in &LOW_INK_DECADES {
         print!("  {c:>14.6e}");
         for (i, p) in pairs.iter().enumerate() {
-            let pl = plain(&iccce, &p.path, &probes_at(c)).map_err(|e| e.to_string())?;
+            let pl = plain(&icccer, &p.path, &probes_at(c)).map_err(|e| e.to_string())?;
             print!("  {:>26.6e}", max_dev(&zero_ref[i], &pl));
         }
         println!();
@@ -375,8 +375,8 @@ fn run() -> Result<(), String> {
         print!("  {c:>14.6e}");
         for p in &pairs {
             let pr = probes_at(c);
-            let on = preserved(&iccce, &p.path, &pr).map_err(|e| e.to_string())?;
-            let off = plain(&iccce, &p.path, &pr).map_err(|e| e.to_string())?;
+            let on = preserved(&icccer, &p.path, &pr).map_err(|e| e.to_string())?;
+            let off = plain(&icccer, &p.path, &pr).map_err(|e| e.to_string())?;
             let d = max_dev(&on, &off);
             worst = worst.max(d);
             print!("  {d:>26.6e}");
@@ -427,8 +427,8 @@ fn run() -> Result<(), String> {
         print!("  {label:>34}");
         for p in &pairs {
             let pr = probes_at(c);
-            let on = preserved(&iccce, &p.path, &pr).map_err(|e| e.to_string())?;
-            let off = plain(&iccce, &p.path, &pr).map_err(|e| e.to_string())?;
+            let on = preserved(&icccer, &p.path, &pr).map_err(|e| e.to_string())?;
+            let off = plain(&icccer, &p.path, &pr).map_err(|e| e.to_string())?;
             print!("  {:>26.6e}", max_dev(&on, &off));
         }
         println!();

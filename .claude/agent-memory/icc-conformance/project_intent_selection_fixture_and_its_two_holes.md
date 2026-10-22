@@ -9,7 +9,7 @@ metadata:
 `request_srgb_to_cmyk_with_an_intent_and_why_saturation_is_load_bearing.md`
 ask 4. Recipe `v2-cmyk-intent-separated-b2a` in
 `tools/gen-profiles/src/recipes.rs` §(c4); test
-`crates/iccce-cmm/tests/b2a_intent_selection_is_separated.rs` (6 tests, in
+`crates/icccer-cmm/tests/b2a_intent_selection_is_separated.rs` (6 tests, in
 `cargo test --workspace`, which CI runs); rows/scope/injections
 `docs/TOLERANCES.md` **§3.12**; narrative `tools/gen-profiles/README.md`
 **§4.3**; `fixtures/synthetic/README.md` "third instrument".
@@ -86,7 +86,7 @@ Measured: **`K(sat) − K(rel) = 0,200 000 000 000 000`**, worst deviation
   are the control, not superseded — and the machine-local SWOP test stays too:
   it is the **aliased** arm where this is the **separated** arm.
 - ★ **I typed "12 tags" in the recipe's `expect` and it is 9.** Caught by
-  running `iccce inspect`, not by review. Same failure as
+  running `icccer inspect`, not by review. Same failure as
   [[project-stale-claim-strings-in-emitted-records]]; the generated
   `MANIFEST.md` would have published it.
 - ★ Class is **`derived-expectation`** and the fixture is **structural**: a

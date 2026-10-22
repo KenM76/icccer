@@ -1,6 +1,6 @@
 ---
-name: iccce-agreement-can-be-the-symptom
-description: DL-033 — a cross-check's power is bounded by the SEPARATION of the two candidate answers, not the tightness of the residual; iccce's 4.2.5.4 defect agreed with lcms2 to 0.08 dE76 while being 4.72 L* wrong, and fixing it made the cross-check 58.8x WORSE
+name: icccer-agreement-can-be-the-symptom
+description: DL-033 — a cross-check's power is bounded by the SEPARATION of the two candidate answers, not the tightness of the residual; icccer's 4.2.5.4 defect agreed with lcms2 to 0.08 dE76 while being 4.72 L* wrong, and fixing it made the cross-check 58.8x WORSE
 metadata:
   type: project
 ---
@@ -9,16 +9,16 @@ metadata:
 2026-08-12 as `ARCHITECTURE.md` **DL-033**, `NUMERIC_CLAIMS.md` §3.25,
 **NC-165 … NC-167**.
 
-**Why:** iccce's ISO/CD 18619 4.2.5.4 short-circuit returned
+**Why:** icccer's ISO/CD 18619 4.2.5.4 short-circuit returned
 `outRamp[first]` where the clause says `InitialLab` (that defect is
-DL-030 — see [[iccce-rule7-can-run-against-us]]). The cross-check built
+DL-030 — see [[icccer-rule7-can-run-against-us]]). The cross-check built
 to catch exactly this reported a divergence of **`8,166 8×10⁻² ΔE76`**
 against lcms2 — small, clean, honestly bounded, and **read as
 agreement**. The defect's own magnitude was **`4,717 441 L*`, i.e.
 57,8× larger than the residual it was blamed for**. The reason is
 exact, not lucky: the non-conformant return was
 `outRamp[first] = MinL`, and **`MinL(lcms2) = MinL(ISO) = 16,489 806`
-exactly** — iccce was returning a quantity the oracle *also* computes,
+exactly** — icccer was returning a quantity the oracle *also* computes,
 so it landed near lcms2's answer **for a reason unrelated to being
 right**.
 
@@ -40,13 +40,13 @@ with chroma zeroed. **Two documents, one name, neither side wrong.**
 - **The predicted collapse was PRE-COMMITTED AND LEFT UNASSERTED**, so
   this was an observation rather than a retraction — the same move that
   made DL-030 cheap. See
-  [[iccce-predicted-divergence-must-be-measured]].
+  [[icccer-predicted-divergence-must-be-measured]].
 - **DL-036 — the authored fixture had ZERO power.**
   `v4-rgb-mab-chromatic-black.icc`'s `InitialLab` and `outRamp[first]`
   are **both `L* 20`**, so the defect swapped two equal numbers and its
   `5,000 000 ΔE76` is *identically* unmoved. The **vendor** profile was
   the only arm that could see, **because nobody designed it.** The
-  stated converse of DL-020 ([[iccce-refusal-discharged-by-fixture]]):
+  stated converse of DL-020 ([[icccer-refusal-discharged-by-fixture]]):
   an authored fixture discharges *the doubt it was authored for* **and
   nothing adjacent to it.**
 
@@ -59,7 +59,7 @@ correctness. Where the two implementations share an intermediate
 **★★ UPDATED 2026-08-12 (seventeenth filing) — the "none of them has
 one" clause is now WRONG, and the correction has a fraction attached.**
 `tools/difftest` emits a candidate separation on every record
-(**DL-037**, [[iccce-disclosure-is-not-enforcement]]). ★ **The gap is
+(**DL-037**, [[icccer-disclosure-is-not-enforcement]]). ★ **The gap is
 closed for Pass 5c and open everywhere else: 16 of 145 rows, all Pass
 5c's; 129 print `UNSTATED`.** DL-033's *"Revisit if"* asked for a worked
 positive example and now has one. ★★★ **And the instrument's first act
@@ -71,7 +71,7 @@ blind, now merely uninformative"; the emitted field says something
 stricter — on that row it was never a check at all.**
 
 DL-033 is the **mirror of DL-028**
-([[iccce-apparatus-fault-under-every-hypothesis]]) and the more
+([[icccer-apparatus-fault-under-every-hypothesis]]) and the more
 dangerous half: DL-028's failure announces itself, this one is silent.
 
 **★★★ UPDATED 2026-08-17 — DL-056 is the DESIGN RULE that follows from
@@ -100,7 +100,7 @@ earlier, which argued the observed-≡-derived coincidence made the row *"a
 tighter white-point gate than any flat constant."* **True downward, false
 upward.** A careful argument from re-reading was corrected **by an
 injection** — §5.2 applied to the agent whose job is reading
-([[iccce-verify-own-draft-too]]).
+([[icccer-verify-own-draft-too]]).
 
 > **The rule: every differential gate NAMES the ABSOLUTE assertion that
 > covers its blind direction, or declares that none exists.** Absolute =
@@ -113,15 +113,15 @@ injection** — §5.2 applied to the agent whose job is reading
 > **containing the injection table** — the table is the argument.
 
 ★★ **DL-056 is DL-055's mechanism in the differential-test register**
-([[iccce-gate-must-not-reward-deletion]]). Shared sentence: **a redundancy
+([[icccer-gate-must-not-reward-deletion]]). Shared sentence: **a redundancy
 is only a redundancy if each member has a defect it alone can catch;
 otherwise it is a single mechanism with a decoy beside it.** ★ Revisit if
 a reference artifact is replaced by one sitting *below* D50 — the blind
 direction flips and any prose about it goes wrong while every test stays
 green.
 
-Related: [[iccce-pass-status]], [[iccce-rule7-can-run-against-us]],
-[[iccce-control-only-as-good-as-its-fixture]],
-[[iccce-bound-cannot-catch-its-own-magnitude]],
-[[iccce-gate-must-not-reward-deletion]],
-[[iccce-absence-of-publication-is-not-evidence]].
+Related: [[icccer-pass-status]], [[icccer-rule7-can-run-against-us]],
+[[icccer-control-only-as-good-as-its-fixture]],
+[[icccer-bound-cannot-catch-its-own-magnitude]],
+[[icccer-gate-must-not-reward-deletion]],
+[[icccer-absence-of-publication-is-not-evidence]].

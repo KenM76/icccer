@@ -20,7 +20,7 @@ cp <my changed files> <scratch>/wt/...
 python  # patch crates/ to the pre-fix behaviour; repoint category (c) consts
         # at Z:\no-such-machine to simulate a clean machine
 cd <scratch>/wt/tools/difftest
-ICCCE_TRANSICC=D:/Dev/iccce/tools/difftest/vendor/build-msvc/transicc.exe cargo run --release
+ICCCER_TRANSICC=D:/Dev/icccer/tools/difftest/vendor/build-msvc/transicc.exe cargo run --release
 git worktree remove --force <path>
 ```
 
@@ -32,7 +32,7 @@ git worktree remove --force <path>
   numbers moved; none of its graded rows crossed a bound, because the row that
   carries the finding is `REPORTED`. Always ask *does a row FAIL*, not *does a
   number MOVE*.
-- ★ **The clause was not undefended.** `cargo test -p iccce-cmm` fails on that
+- ★ **The clause was not undefended.** `cargo test -p icccer-cmm` fails on that
   reversion (two `bpc.rs` tests). The real gap was narrower and more precise:
   the clause **exercised through a parsed profile**, where a wiring defect
   between `Chain` and a library function lives and a unit test on a closure
