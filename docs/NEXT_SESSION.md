@@ -2,6 +2,24 @@
 
 ---
 
+# HANDOFF — 2026-10-22. `v0.3.1` tagged: crates.io-READY, still NOT PUBLISHED
+
+`pdfcer` (the PDF engine, now spelled with an `r`) asked for publish-readiness
+of color/profile/cmm, explicitly not publication. Done and recorded in
+`ARCHITECTURE.md` `DL-083`: all five crates pass `cargo package`, all five
+names were free on 2026-10-22, tarballs no longer ship fixture-dependent
+tests. `v0.3.1` = `a4d9003b`'s source and API plus that packaging fix.
+
+**The crates.io question to Ken is still OPEN** (`DL-079`). This block
+supersedes the 2026-09-01 one only on tip, version and the channel state; the
+rest below still stands.
+
+Channel: reply filed as `open/reply_crates_io_ready_and_the_version_to_pin.md`
+to `open/request_get_iccce_crates_io_ready.md`; left open until `pdfcer`
+acknowledges.
+
+---
+
 # ★★★ HANDOFF — 2026-09-01. **`v0.3.0` IS TAGGED AND PUSHED, the tree is clean, and NOTHING IS PUBLISHED TO crates.io.** One question is open with the operator, one build cost is waiting for you, and the previous block is false in five enumerated places
 
 **Read this block first. It supersedes the 2026-08-29 block below and

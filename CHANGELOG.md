@@ -15,6 +15,17 @@ Versioning is [SemVer](https://semver.org/); while the major version is
 
 ---
 
+## [0.3.1] — 2026-10-22
+
+**Packaging only — no source, API or converted value changed.**
+`iccce-profile`, `iccce-cmm` and `iccce-cli` no longer put `tests/` in
+their `.crate` files: those tests read fixtures from the repository root,
+which a `.crate` cannot carry, so they would have failed for anyone running
+them from a download. Found while checking crates.io readiness at a
+consumer's request (`ARCHITECTURE.md` `DL-083`). Nothing is published.
+
+---
+
 ## [0.3.0] — 2026-09-01
 
 **A one-day release, and the whole of it came from a consumer asking a

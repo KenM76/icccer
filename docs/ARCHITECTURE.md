@@ -10392,3 +10392,37 @@ disagree and the **read** turns out to have been right — which would not
 overturn this entry (the ordering is a rule about what to write under
 uncertainty, not a prediction) but **would** be worth an entry of its
 own.
+
+### DL-083 — crates.io publish-readiness, measured on request from `pdfcer`; publication itself still unauthorised
+
+`pdfcer-render` pins `iccce-color`/`-profile`/`-cmm` by git rev and cannot
+reach crates.io until iccce does. It asked for readiness, explicitly **not**
+publication. State on 2026-10-22, every item run rather than read:
+
+- **`cargo package --workspace` passes for all five crates**, including the
+  verify build that resolves sibling crates through a temporary registry —
+  so the `version`-on-`path` requirement is met in practice, not just in
+  the manifests. Publish order: color, profile → cmm → cli; measure is
+  independent.
+- **All five names are free** on crates.io (API returned "does not exist"
+  for each). crates.io has no reservation mechanism, so this is a dated
+  observation.
+- **One defect fixed:** profile, cmm and cli shipped `tests/` whose fixtures
+  live at the repository root and are not in the `.crate`, so a downstream
+  `cargo test` on the tarball would fail. Those three now carry
+  `exclude = ["tests/"]`. In-repo tests are unaffected.
+- **Tarball contents:** `src/`, manifests, `README.md`, `LICENSE` — no
+  fixture, no licensed material. The suite-name gate's needles, run over the
+  extracted tarballs, match nothing.
+- **Version line:** `v0.3.0` is commit `a4d9003b` exactly, and no file under
+  `crates/` changed after it except the three `exclude` lines above.
+  Those shipped as **`v0.3.1`**, cut so that a tag exists matching what
+  would be packaged: its source and API are `a4d9003b`'s exactly, and
+  `0.3.1` is the version a consumer would pin if it is published.
+
+Not blockers, but they ride along to crates.io: `README.md`'s Status
+section says "nothing published" and carries internal process history; both
+should be revisited in the commit that publishes.
+
+**Publication stays the operator's act (rule 9, `DL-079`).** Readiness is
+not permission.

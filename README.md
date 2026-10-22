@@ -124,8 +124,8 @@ found something.
 
 ## Status
 
-**Early, and in active development.** Version `0.3.0` — read from
-`Cargo.toml`'s `[workspace.package]` on 2026-09-01, which is the
+**Early, and in active development.** Version `0.3.1` — read from
+`Cargo.toml`'s `[workspace.package]` on 2026-10-22, which is the
 authoritative source.
 
 ★ **This line has now been stale twice** (`0.0.1` when the manifest said
