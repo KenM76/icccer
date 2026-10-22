@@ -44,6 +44,9 @@ categories = [
     "encoding",
 ]
 keywords = ["icc", "color-profile", "parser", "color", "colour"]
+# Integration tests read fixtures from the repository root, which a
+# .crate cannot carry; shipping them would publish tests that fail.
+exclude = ["tests/"]
 
 [dependencies]
 # Intentionally empty for Pass 0–2. Any addition is classified

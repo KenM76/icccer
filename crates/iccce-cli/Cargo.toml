@@ -38,6 +38,9 @@ documentation = "https://docs.rs/iccce-cli"
 # 2026-08-12.
 categories = ["command-line-utilities", "graphics", "multimedia::images"]
 keywords = ["icc", "color", "colour", "profile", "cli"]
+# Integration tests read fixtures from the repository root, which a
+# .crate cannot carry; shipping them would publish tests that fail.
+exclude = ["tests/"]
 
 [[bin]]
 name = "iccce"

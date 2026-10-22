@@ -39,6 +39,9 @@ documentation = "https://docs.rs/iccce-cmm"
 # 2026-08-12.
 categories = ["graphics", "multimedia::images", "rendering"]
 keywords = ["icc", "cmm", "color-management", "color", "colour"]
+# Integration tests read fixtures from the repository root, which a
+# .crate cannot carry; shipping them would publish tests that fail.
+exclude = ["tests/"]
 
 [dependencies]
 # ★ The `version` on each path dependency is REQUIRED to publish, and is
