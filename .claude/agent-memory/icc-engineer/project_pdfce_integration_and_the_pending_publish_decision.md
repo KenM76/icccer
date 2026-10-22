@@ -35,3 +35,8 @@ first real consumer arriving at the seam rather than a hypothetical one.
 Related: [[run-the-conformance-demonstration-not-just-the-diagnosis]] — the
 2026-09-01 exchange is the pattern working: every one of pdfce's four asks
 was answered with a measurement rather than a code reading.
+
+**Update 2026-10-22:** the consumer now signs itself **`pdfcer`** and pins
+`a4d9003b`. It asked for crates.io *readiness*, not publication, because
+`pdfcer-render` can't publish while it has git deps. Readiness is done
+(`DL-083`, `v0.3.1`). **The publish question is still Ken's and still open.**
