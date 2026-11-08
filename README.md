@@ -124,19 +124,14 @@ found something.
 
 ## Status
 
-**Early, and in active development.** Version `0.4.1` — read from
-`Cargo.toml`'s `[workspace.package]` on 2026-10-22, which is the
-authoritative source.
+**Early, and in active development.** The version is whatever
+`Cargo.toml`'s `[workspace.package]` says; this file does not restate it,
+because every prose copy of it here went stale.
 
-★ **This line has now been stale twice** (`0.0.1` when the manifest said
-`0.1.0`; `0.1.0` when it said `0.2.0`), and the second time it was stale
-*despite* naming its own verification method and date — because a version
-bump lands in a commit that has no reason to touch this file. **A prose
-copy of a machine-readable fact decays silently.** If it goes stale a
-third time, the fix is not a better sentence: it is to stop restating the
-number here and point at the manifest.
-**Nothing has been published to crates.io**, the API is not stable, and no
-compatibility is promised between commits.
+Whether a version is on crates.io is the registry's fact, not this
+file's: see <https://crates.io/crates/icccer-cmm>. Publishing is the
+operator's act (`ARCHITECTURE.md` `DL-079`). The API is not stable; while
+the major version is `0`, any minor release may break it.
 
 Work is organised as numbered Passes. `docs/ROADMAP.md` is the record and
 states each Pass's verdict in its own words; the table below summarises

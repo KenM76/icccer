@@ -10460,3 +10460,37 @@ permanent and this rename would then have left five orphans behind.
   pdfcer's `tools/check-requests-scoped.py` reads it by name; it goes when
   pdfcer has moved (asked in the channel). Nothing in pdfcer reads the old
   checkout at build time.
+
+### DL-085 — `0.4.2` is the version to publish; publication still the operator's act
+
+`pdfcer` asked (2026-11-07) for color, profile and cmm on crates.io at any
+0.4.x with `0.4.1`'s API, so `pdfcer-render` can drop its git dependency.
+Measured, not read:
+
+- **`cargo publish --dry-run -p icccer-color -p icccer-profile -p
+  icccer-cmm` passes** (cargo 1.97.1). The multi-package form packages all
+  three, verifies cmm against color and profile through cargo's temporary
+  registry, and stops at upload. Names still free on 2026-11-07.
+- **Tarballs carry only `src/`, the manifests, `README.md`, `LICENSE` and
+  `.cargo_vcs_info.json`** (13, 14 and 20 files). `tests/` stays excluded
+  (`DL-083`), so `annex_d_ground_truth.rs` and every fixture-reading test is
+  out. The suite-name needles and a copyright/ICC-notice pattern, run over
+  the extracted tarballs, match nothing except our own `LICENSE` line.
+- **Why `0.4.2` and not `0.4.1`.** The README is each crate's crates.io page,
+  and its Status section said nothing had been published — false on that
+  page the moment it appears. `DL-083` said to revisit it at publish; doing
+  it in the publish commit would make crates.io `0.4.1` differ from tag
+  `v0.4.1`. So the README now points at the registry and the manifest
+  instead of restating either, and the version moved. No file under
+  `crates/*/src` changed; the API is `0.4.1`'s. `pdfcer`'s `version = "0.4"`
+  resolves to it.
+- **Not decided here:** `NUMERIC_CLAIMS.md` §7.15 newly-owed 6 (published
+  numbers from licensed sources in this repo). The Bradford matrix in
+  `builtin.rs` cites ICC.1 Annex E; it is also the published Lam/Bradford
+  constant and has been public on GitHub since `v0.1.0`, so publication
+  widens distribution but adds nothing new. Recorded as a reading, not a
+  ruling. The README still carries internal process history onto crates.io;
+  cosmetic, not a blocker.
+
+**Publication, the `v0.4.2` tag and the push remain the operator's act
+(rule 9, `DL-079`).**

@@ -2,6 +2,17 @@
 
 ---
 
+# HANDOFF — 2026-11-07. `0.4.2` is dry-run green for crates.io; NOT published, NOT tagged, NOT pushed
+
+`pdfcer` asked to publish color/profile/cmm so `pdfcer-render` can leave its
+git dependency (`ARCHITECTURE.md` `DL-085`). `0.4.2` = `0.4.1`'s source and
+API plus a README Status fix. Waiting on Ken for: push, tag `v0.4.2`,
+`cargo publish -p icccer-color -p icccer-profile -p icccer-cmm`. After a
+publish, reply to `pdfcer` with the version and close
+`request_publish_icccer_0_4_for_pdfcer_crates.md` plus our reply.
+
+---
+
 # HANDOFF — 2026-10-22 (later). Renamed to `icccer`; work from `D:\Dev\icccer`
 
 See `ARCHITECTURE.md` `DL-084`. Everything is `icccer` now: crates, binary,

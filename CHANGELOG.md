@@ -15,6 +15,18 @@ Versioning is [SemVer](https://semver.org/); while the major version is
 
 ---
 
+## [0.4.2] — 2026-11-07
+
+**Packaging only; no code or API changed.** Cut as the version to publish to
+crates.io, which `pdfcer` asked for so it can drop its git dependency.
+`README.md` ships inside every `.crate` as its crates.io page, and its Status
+section said nothing had been published, which would be false on the page
+the moment it went up. It now points at the registry and the manifest
+instead of restating either. `cargo publish --dry-run` passes for color,
+profile and cmm. Nothing is published yet. `ARCHITECTURE.md` `DL-085`.
+
+---
+
 ## [0.4.1] — 2026-10-22
 
 **Metadata only.** The GitHub repository is now `KenM76/icccer`, and every

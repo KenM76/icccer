@@ -9002,3 +9002,16 @@ supportable sentence is ***run `32863604742` concluded `failure`***.
   time not to arm a monitor and not to poll: **no file under
   `D:\Dev\FeatureRequests\` was listed, opened or written.** Everything
   above about the reply file is **`[REPORTED]`**.
+
+## 2026-11-07 — `0.4.2` cut for crates.io, on request from `pdfcer`; nothing published
+
+`pdfcer` asked for color/profile/cmm on crates.io (`open/request_publish_icccer_0_4_for_pdfcer_crates.md`).
+Bumped to `0.4.2` with one README change (the Status section no longer
+claims nothing is published; it points at the registry). `cargo publish
+--dry-run` for the three crates is green; fmt, clippy `-D warnings`,
+rustdoc, 213 tests, the wasm32 build, the dependency-tree check and the
+suite-name gate are green. Tarball contents checked for licensed material:
+none. Recorded as `ARCHITECTURE.md` `DL-085`. Reply filed as
+`open/reply_0_4_2_is_publish_ready_and_waits_on_the_operator.md`. Not
+pushed, not tagged, not published.
+
