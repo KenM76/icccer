@@ -9015,3 +9015,29 @@ none. Recorded as `ARCHITECTURE.md` `DL-085`. Reply filed as
 `open/reply_0_4_2_is_publish_ready_and_waits_on_the_operator.md`. Not
 pushed, not tagged, not published.
 
+## 2026-11-13 — Pass 5d: BPC estimates a LUT source's black; `0.4.3` cut locally, nothing published
+
+`pdfcer`'s soft proof (`open/request_bpc_for_lut_cmyk_sources_soft_proof.md`)
+got `BpcEstimationUnsupported` from `with_bpc()` for every LUT CMYK source.
+`5c66587` wires ISO/CD 18619 4.2.3 for Gray/RGB/CMYK LUT sources; v4
+perceptual keeps the A41 black; other source spaces, CIELAB among them,
+still refuse. `a6d0c0d` adds difftest Pass 5d (README §29, TOLERANCES
+§3.5.10, ledger §3.43 `NC-320`…`NC-329`, all filed by `icc-conformance`):
+SWOP relative agrees with lcms2 to ΔE76 0.017 (interpolation only); three
+divergent arms settled for icccer on the 4.2.3 text (0.804, 3.137, 2.356);
+SWOP → sRGB media-relative with BPC max 4.87×10⁻³, gated 2×10⁻².
+Decision `DL-086`. Release commit `fb1ecc0` (`0.4.3`) is in the local
+reflog; `origin/master` reads `45efa42` and no `v0.4.3` tag ref exists
+(dated local reading).
+
+Filed by `icc-librarian`: ROADMAP Pass 5d block; `DL-086`; current-state
+notes at ROADMAP Pass 5 annotation 2 (two places) and owed item 5, under
+`DL-022`, and under `NA-009`. Commit bodies were not readable (no shell);
+behaviour verified in `transform.rs`/`bpc.rs`, numbers verified against the
+three records above. Gates and the lcms2 run are `[REPORTED]`.
+
+Open: A64's v4 perceptual/saturation asymmetry (operator); untested —
+perceptual/saturation end to end, RGB/Gray LUT sources, any non-sRGB or LUT
+destination. crates.io publish of `0.4.3` awaits Ken. Next free:
+`NC-330`, `NA-013`, `DL-087`.
+

@@ -3401,7 +3401,8 @@ per-side black estimation keyed on the major versions, and **`icccer
 transform` accepts `--bpc`**, refusing by name (exit 1) at the absolute
 intent and outside the estimation subset *(verified —
 `transform.rs:154–388` and `icccer-cli/src/main.rs:31–39, 195, 223–226,
-259–268` read)*. **A first draft of this block said the opposite**, from
+259–268` read)*. *(Current state, 2026-11-13: the subset now includes
+Gray/RGB/CMYK LUT sources — Pass 5d, `DL-086`.)* **A first draft of this block said the opposite**, from
 a **head-limited grep** that returned the first N matches and not the
 file's whole story; the correction is recorded in `NUMERIC_CLAIMS.md`
 §7.7 rather than made silently, because **a truncated search is not an
@@ -3809,6 +3810,11 @@ match lcms2's BPC within tolerance.
 > **The unsourced case refuses; it does not estimate something
 > plausible.**
 >
+> *Current state, 2026-11-13: no longer true for v2 LUT sources. Since
+> `5c66587` a Gray/RGB/CMYK LUT source is estimated by ISO/CD 18619 4.2.3;
+> only other source spaces (CIELAB among them) still refuse. See Pass 5d
+> below and `DL-086`.*
+>
 > **2a. ★★ icccer NEVER forces BPC, and that is a recorded policy
 > difference from the oracle**, stated at the site: lcms2 forces it for
 > v4 perceptual/saturation *"on the authority of an unpublished reading
@@ -4037,6 +4043,9 @@ with each other's status.
 5. **The saturation intent**, if icccer's estimation subset is ever
    widened to admit it — at which point S3 acquires a second arm and
    lcms2's forcing can be measured in a second place.
+   *(Current state, 2026-11-13: the subset now admits saturation on a LUT
+   source too (Pass 5d). Source blacks at saturation are measured —
+   `NC-321`, `NC-324` — but **no saturation BPC end-to-end row exists**.)*
 6. **The DL-014 tier question, now load-bearing on a ledger CLASS**:
    `bpc.rs` heads 6.3.4.3 **"PRIMARY-SOURCED"** while
    `icc__ref__bpc.md`'s `evidence:` line grades §2/§3
@@ -4364,6 +4373,71 @@ is not refused does something. **Owed to `icc-engineer`.**
 ★★ **`docs/SUITE_COMPATIBILITY.md` was searched by name**, because it is
 gitignored and a gitignore-respecting search under-counts toward a false
 all-clear.
+
+### Pass 5d — BPC estimates a LUT SOURCE's black (ISO/CD 18619 4.2.3). Filed 2026-11-13 by `icc-librarian`
+
+**Why.** `pdfcer`'s soft proof (channel request
+`request_bpc_for_lut_cmyk_sources_soft_proof.md`, 2026-11-13) builds
+`Chain::with_destination(&cmyk, Destination::None, MediaRelative)?.with_bpc()`.
+Until this Pass that returned `BpcEstimationUnsupported` for **every LUT
+source** except v4 at perceptual. Decision: `ARCHITECTURE.md` **DL-086**.
+
+**What landed** — `5c66587` (code), `a6d0c0d` (difftest), `fb1ecc0`
+(release commit `0.4.3`). Hashes from `.git/logs/HEAD`; the commit bodies
+were not readable here (no shell), so the behaviour below was verified in
+`crates/icccer-cmm/src/transform.rs` and `bpc.rs`, not taken from the
+messages.
+
+- A LUT source's black is estimated by **4.2.3**: `LocalBlack` by colour
+  space, then `Li` = `L*` of the source's own A2B at the **chain's intent**,
+  then neutral `(Li, 0, 0)` and `Li > 50 → 50`.
+  - **CMYK** with a usable perceptual B2A: `LocalBlack` = **B2A0(Lab 0)**.
+  - **Gray, RGB**, or CMYK without a usable B2A0: `LocalBlack` = **D()**,
+    the darkest device vertex.
+- **v4 at perceptual** keeps the fixed A41 black (`PERCEPTUAL_BLACK`), as
+  before.
+- **Still refused** (`BpcEstimationUnsupported`): every LUT source whose
+  header space is not `GRAY`, `RGB ` or `CMYK`. That includes CIELAB, which
+  the code names, and also every other space (`XYZ `, `CMY `, n-colour …),
+  which it does not.
+- Unit test `lut_cmyk_source_at_media_relative_estimates_its_black` asserts
+  structure only (estimable, neutral, `0 < L* ≤ 50`, map not the identity)
+  on the committed `v4-cmyk-mab-lab.icc` and, where present, the Windows
+  SWOP profile. It skips SWOP silently where SWOP is absent.
+
+**Measured** (lcms2 pin `21c582a`; ledger `NUMERIC_CLAIMS.md` §3.43
+`NC-320`…`NC-329`; derivations `TOLERANCES.md` §3.5.10; method
+`tools/difftest/README.md` §29). No row is ground truth; no document
+publishes these black points (A27/A42).
+
+| Arm | Result | Class |
+|---|---|---|
+| SWOP, relative | ΔE76 **0.017**; both engines run 4.2.3, the residual is Pass 4's M4 interpolation (`NC-320`, `NC-322`) | cross-check, REPORTED |
+| SWOP, perceptual / saturation | icccer L* **0.804**, lcms2 0 — lcms2 feeds 400 % ink; **icccer follows 4.2.3** (`NC-321`) | cross-check, REPORTED |
+| v4 fixture, relative | ΔE76 **3.137** — lcms2's forced BPC inside its own round trip; **icccer follows 4.2.3** (`NC-323`) | cross-check, REPORTED |
+| v4 fixture, saturation | ΔE76 **2.356** — lcms2 uses the v4 constant; icccer runs 4.2.3 (A64) (`NC-324`) | cross-check, REPORTED |
+| v4 fixture, perceptual | both the A.2 constant, 3.3×10⁻¹⁰ (`NC-325`) | cross-check, gated 1×10⁻⁸ |
+| SWOP → sRGB, media-relative, BPC on, 1296 pts | max **4.866×10⁻³** built-in / 4.812×10⁻³ system file (`NC-326`) | cross-check, gated **2×10⁻²** |
+| Model residual of the BPC increment | 5.10×10⁻⁴ / 7.03×10⁻⁴ (`NC-329`) | cross-check, gated 1×10⁻³ |
+
+**Coverage, stated as part of the claim:** two source profiles (SWOP v2,
+one synthetic v4 `mAB`); black points at three intents; end to end **only**
+SWOP → sRGB at **media-relative**, one 6⁴ grid, one machine.
+
+**Not covered:** perceptual and saturation end to end; a v4 CMYK source end
+to end; **any RGB or Gray LUT source** (the `D()` path has no differential
+row); any non-sRGB destination; a denser deep-shadow grid. And `DL-078`'s
+revisit trigger — a LUT source **into a LUT destination** — has still not
+been run; Pass 5d's destination is sRGB.
+
+**Open, for the operator:** the v4 asymmetry — fixed black at perceptual,
+4.2.3 at saturation (A64, carried over from the destination side). Not a
+defect against 4.2.3; a policy nobody has chosen.
+
+**Release.** `0.4.3` is a local commit (`fb1ecc0`). At this filing
+`.git/refs/remotes/origin/master` reads `45efa42` and no `v0.4.3` tag ref
+exists — a dated local reading, not a statement about the remote. Tag,
+push and crates.io publish are the operator's act (rule 9, `DL-079`).
 
 ## Pass 6 — performance
 

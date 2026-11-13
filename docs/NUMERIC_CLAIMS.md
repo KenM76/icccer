@@ -10388,6 +10388,16 @@ moment it exists, not the moment a Pass measures it.)*
 > (**NC-165**, **NC-166**), the definitional-divergence reading, and the
 > three caveats. **Nothing above is edited.**
 
+> **Dated note, 2026-11-13 (Pass 5d, `DL-086`).** The refusals row above —
+> *"`BpcEstimationUnsupported` outside the named subset, notably v2 LUT
+> sources"* — no longer describes the code. Since `5c66587` a Gray, RGB or
+> CMYK LUT source is estimated by ISO/CD 18619 4.2.3; only other source
+> spaces (CIELAB among them) refuse. The source-side estimator's first
+> measured cost is in §3.43: ≤4.5×10⁻⁴ device units end to end, **one v2
+> CMYK source, media-relative, sRGB destination** — one pairing, not a
+> general cost. `TOLERANCES.md` §5's NA-009 row is `icc-conformance`'s and
+> was not edited; whether it needs the same note is theirs to say.
+
 ### NA-010 — the fixed v4 perceptual black follows **the implementations' triple**, not ICC.1 Table 16's printed decimals. A deviation from printed spec text whose cost is **corpus-derived, not measured here**
 
 *(Filed 2026-08-11 at the Pass 4b filing by `icc-librarian`, from the

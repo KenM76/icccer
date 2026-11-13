@@ -2,6 +2,24 @@
 
 ---
 
+# HANDOFF — 2026-11-13. `0.4.3`: BPC for LUT sources (pdfcer soft-proof). crates.io publish awaits Ken
+
+pdfcer asked (`open/request_bpc_for_lut_cmyk_sources_soft_proof.md`) for
+`with_bpc()` to work on a LUT CMYK source at media-relative. Done by ISO/CD
+18619 4.2.3 (`5c66587`), cross-checked against lcms2 (`a6d0c0d`, TOLERANCES
+§3.5.10), released as `0.4.3`. Reply filed as
+`open/reply_lut_cmyk_source_bpc_lands_in_0_4_3.md`. pdfcer pins `"=0.4.2"`
+from crates.io, so it gets nothing until Ken publishes `0.4.3`; after that,
+add a "Published" line to the reply and close the pair.
+
+Open: the v4 perceptual-fixed vs saturation-4.2.3 asymmetry (A64) is an
+operator question. Untested: perceptual/saturation end to end, RGB/Gray LUT
+sources. This repo still has no code-structure gate (global rule); copy
+`D:\Dev\pdfcer	ools\check-code-structure.py` in and baseline it
+(`transform.rs` is ~1,900 lines with tests).
+
+---
+
 # HANDOFF — 2026-11-07. `0.4.2` is dry-run green for crates.io; NOT published, NOT tagged, NOT pushed
 
 `pdfcer` asked to publish color/profile/cmm so `pdfcer-render` can leave its

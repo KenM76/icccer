@@ -2486,6 +2486,12 @@ icccer's estimation subset widens to admit saturation (a second place to
 measure the same policy); or lcms2's pin moves, since the forcing is a
 behaviour at a pin (**re-run, not re-read**).
 
+*Current state, 2026-11-13: the saturation trigger has fired. A LUT
+destination at saturation runs 4.2.5 (since 2026-08-12) and a LUT source at
+saturation runs 4.2.3 (since `5c66587`), so the "only perceptual on a LUT
+side" bullet above no longer describes the code. The policy itself is
+unchanged — icccer still never forces BPC. See `DL-086`.*
+
 ### DL-023 — **before a cross-check is graded, state what the two implementations were FREE to disagree about — derived from their sources, before the run.** A pre-registered negative result is a finding; a small residual discovered afterwards is not
 
 **Date:** 2026-08-11 (Pass 5 completion) · **Method by:**
@@ -10494,3 +10500,63 @@ Measured, not read:
 
 **Publication, the `v0.4.2` tag and the push remain the operator's act
 (rule 9, `DL-079`).**
+
+### DL-086 — BPC estimates a LUT source's black by ISO/CD 18619 4.2.3; CIELAB and other unnamed spaces stay refused
+
+**Date:** 2026-11-13 · **Code:** `5c66587` · **Measured:** `a6d0c0d`
+(`icc-conformance`) · **Asked for by:** `pdfcer`, whose soft proof calls
+`with_destination(&cmyk, Destination::None, MediaRelative)?.with_bpc()` and
+got `BpcEstimationUnsupported` for every LUT source.
+
+**The decision.** For a LUT source that is not v4-at-perceptual,
+`estimate_src_black` follows 4.2.3 literally:
+
+- `LocalBlack`: **CMYK** with a usable perceptual B2A → B2A0(Lab 0);
+  **Gray/RGB**, or CMYK without one → `D()`, the darkest device vertex.
+- `Li` = `L*` of the source's A2B at the **chain's** intent; the result is
+  neutral `(Li, 0, 0)` with `Li > 50 → 50`.
+- **v4 perceptual keeps the A41 fixed black** (`NA-010`), unchanged.
+- **Every other source space refuses** by name. The code's stated reason is
+  CIELAB's: its `LocalBlack = (0,0,0)` is a Lab value, not a device vector.
+  The refusal also covers `XYZ `, `CMY ` and n-colour LUT sources, for
+  which no reason is recorded. *(Read in `transform.rs`,
+  `SourceBlackInputs::capture`.)*
+
+**Why the text and not lcms2.** Where the two differ, the corpus
+(`icc__s__bpc_algorithm.md` §3.1, `[REPORTED]` via `TOLERANCES.md` §3.5.10 —
+this role did not open it) supports icccer in all three divergent arms:
+
+| Arm | lcms2 does | Size |
+|---|---|---|
+| SWOP perceptual/saturation | 400 %-ink `DarkerColorant`; 4.2.3 says B2A0(Lab 0) at every intent | L* 0.804 vs 0 |
+| v4 fixture relative | forces its own BPC inside the estimator's round trip — `NC-078`'s mechanism, unauthorised | ΔE76 3.137 |
+| v4 fixture saturation | the v4 constant, chroma kept; no document authorises it at saturation (A64) | ΔE76 2.356 |
+
+Where both run 4.2.3 (SWOP relative) they agree to ΔE76 0.017, all of it
+A2B1 interpolation. Rows `NC-320`…`NC-329`; all cross-checks, none ground
+truth, the black arms REPORTED and not gated (`DL-019`, A27/A42).
+
+**What it supersedes.** The "refuse outside the named subset, notably v2
+LUT sources" policy recorded at Pass 5 (ROADMAP Pass 5 annotation 2,
+`NA-009`'s refusals row). That refusal was right while no estimation clause
+was sourced. ISO/CD 18619 has been sourced since the 2026-08-12 A42 upgrade
+(ROADMAP Pass 5 addendum), and the destination side was wired to 4.2.5 that
+day; the source side was not wired until now, and this filing found no
+record of why (ROADMAP and this log searched, not the whole tree).
+A consumer's call found the gap, as in `DL-078`.
+
+**Not decided here.**
+
+1. **The v4 asymmetry** (A64): fixed black at perceptual, 4.2.3 at
+   saturation. Not a defect against 4.2.3; an operator question.
+2. Whether CIELAB (or any other space) should be estimated.
+3. Anything about RGB/Gray LUT sources' accuracy: the `D()` path has a
+   unit test of `darkest_vertex` and **no differential row**.
+4. Perceptual and saturation **end to end** — only SWOP → sRGB at
+   media-relative is measured (`NC-326`, gated 2×10⁻²).
+
+**Revisit if:** an RGB or Gray LUT source is measured end to end; a LUT
+source is run into a LUT destination with BPC (`DL-078`'s trigger, still
+not fired — Pass 5d's destination is sRGB); the operator answers A64; or
+ISO 18619 is published as a standard, since 4.2.3 is read from a committee
+draft.
