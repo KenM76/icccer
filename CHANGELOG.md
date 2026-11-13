@@ -15,6 +15,32 @@ Versioning is [SemVer](https://semver.org/); while the major version is
 
 ---
 
+## [0.4.3] — 2026-11-13
+
+**Black point compensation now works when the source is a LUT profile**,
+which covers every real CMYK press profile. `Chain::with_bpc()` used to
+return `BpcEstimationUnsupported` for any LUT source outside v4
+perceptual, so `pdfcer`'s soft-proof (press CMYK → screen, media-relative,
+BPC) always fell back to no compensation. The source black is now
+estimated by ISO/CD 18619 4.2.3: an output-capable CMYK profile takes its
+own perceptual `B2A` of the Lab black, read back at the chain's intent;
+Gray, RGB and CMYK profiles without a `B2A` take the darkest device
+vertex. The result is neutral and clipped at L* 50. No API changed.
+
+**Evidence: a cross-check against lcms2, not ground truth** — no
+published value exists. U.S. Web Coated (SWOP) at relative: L* 16.5715
+vs lcms2's 16.5885, ΔE76 0.017; SWOP → sRGB with BPC differs from lcms2
+by at most 4.87×10⁻³ device units over 1,296 operands (gated at 0.02).
+Three arms differ from lcms2 by 0.8–3.1 ΔE76 and were settled for icccer
+on the standard's text (`docs/TOLERANCES.md` §3.5.10).
+
+**Does not claim:** perceptual or saturation end to end, or RGB/Gray LUT
+sources, against lcms2 — not yet measured. A CIELAB-space LUT source is
+still refused. At v4, perceptual keeps the fixed black while saturation
+now runs 4.2.3; that asymmetry is open (`ICC_Spec` A64).
+
+---
+
 ## [0.4.2] — 2026-11-07
 
 **Packaging only; no code or API changed.** Cut as the version to publish to
