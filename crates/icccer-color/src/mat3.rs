@@ -112,14 +112,10 @@ mod tests {
         };
         let inv = m.inverse().unwrap();
         let prod = m.mul(&inv);
-        for r in 0..3 {
-            for c in 0..3 {
+        for (r, row) in prod.rows.iter().enumerate() {
+            for (c, &v) in row.iter().enumerate() {
                 let expected = if r == c { 1.0 } else { 0.0 };
-                assert!(
-                    (prod.rows[r][c] - expected).abs() < 1e-14,
-                    "prod[{r}][{c}] = {}",
-                    prod.rows[r][c]
-                );
+                assert!((v - expected).abs() < 1e-14, "prod[{r}][{c}] = {}", v);
             }
         }
     }

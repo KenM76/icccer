@@ -122,14 +122,10 @@ mod tests {
     #[test]
     fn same_white_gives_identity() {
         let m = adaptation_matrix(&BRADFORD, D50, D50).unwrap();
-        for r in 0..3 {
-            for c in 0..3 {
+        for (r, row) in m.rows.iter().enumerate() {
+            for (c, &v) in row.iter().enumerate() {
                 let expected = if r == c { 1.0 } else { 0.0 };
-                assert!(
-                    (m.rows[r][c] - expected).abs() < 1e-14,
-                    "m[{r}][{c}] = {}",
-                    m.rows[r][c]
-                );
+                assert!((v - expected).abs() < 1e-14, "m[{r}][{c}] = {}", v);
             }
         }
     }

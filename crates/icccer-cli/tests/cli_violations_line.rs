@@ -65,13 +65,10 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 fn exe() -> PathBuf {
-    // The integration-test binary sits beside the CLI it tests.
-    let mut p = std::env::current_exe().expect("test exe path");
-    p.pop();
-    if p.ends_with("deps") {
-        p.pop();
-    }
-    p.join(format!("icccer{}", std::env::consts::EXE_SUFFIX))
+    // Cargo's own path to the binary under test. Guessing it from the
+    // test executable's location broke when Cargo moved the layout, and
+    // the guess failing made the binary look absent, which skips.
+    PathBuf::from(env!("CARGO_BIN_EXE_icccer"))
 }
 
 fn fixture(name: &str) -> PathBuf {
