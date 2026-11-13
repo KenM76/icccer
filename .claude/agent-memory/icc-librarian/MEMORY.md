@@ -31,7 +31,7 @@
 - [A count from a sample is not the population](project_count_from_a_sample_is_not_the_population.md) — DL-053: "two iccMAX" was TEN; [VERIFIED] certifies the measurement happened, never what it ranged over.
 
 - [ICC.1 PDF blocker — cleared](project_icc1_pdf_operator_blocker.md) — resolved 2026-08-11; the lasting lesson is that "free download" never implies "automated retrieval permitted" (ITU-R is next).
-- [icccer Pass status](project_icccer_pass_status.md) — to §7.37 (2026-09-01, 8th PARTIAL): NC-319 pinned, correction refused, tip run id in; next free NC-320/NA-013/DL-083.
+- [icccer Pass status](project_icccer_pass_status.md) — to Pass 5d (2026-11-13, DL-086, 0.4.3 local/unpublished); next free NC-330/NA-013/DL-087. A dispatch's "X stays refused" may undercount the refused set.
 - [A release range is not the dispatch's list](project_release_range_is_not_the_dispatch_list.md) — Pass G/H were named as 0.2.0 content and shipped in 0.1.0; and a tag ref is an ANNOTATED TAG OBJECT, not the commit.
 - [An unowned refusal is a slow deletion](project_unowned_refusal_is_a_slow_deletion.md) — DL-079: v0.2.0 got NO release record because two correct refusals were never re-asked. Name the owner in the same paragraph.
 - [A tool that quotes licensed material gets SPLIT](project_licensed_tool_split_outside_the_tree.md) — DL-071: the case file lives OUTSIDE the repo, not gitignored inside it; and the deleted predecessor took the only auditor of its own numbers.
