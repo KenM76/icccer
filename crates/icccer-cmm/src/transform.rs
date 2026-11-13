@@ -624,6 +624,10 @@ pub struct Chain {
     /// build solely so BPC's ISO/CD 18619 4.2.5.2.3 round trip has
     /// its outward leg. Unused by any conversion.
     dst_a2b: Option<SourceModel>,
+    /// ISO/CD 18619 4.2.3's inputs for a LUT SOURCE, captured at build
+    /// because `with_bpc` no longer has the profile. See
+    /// [`SourceBlackInputs`].
+    src_black_inputs: SourceBlackInputs,
     /// Whether the destination was caller-supplied or constructed.
     /// Read via [`Chain::destination_provenance`]; see
     /// [`DestinationProvenance`] for why disclosing this is mandatory
@@ -671,6 +675,55 @@ pub(crate) fn a2b_to_lab(m: &SourceModel, device: &[f64]) -> Option<icccer_color
         }
     };
     Some(icccer_color::Lab::from_xyz(xyz, D50))
+}
+
+/// What ISO/CD 18619 4.2.3 needs to know about a LUT source, beyond
+/// its device→PCS model: its colour space, and — for an
+/// output-capable CMYK profile (3.5) — the device value its PERCEPTUAL
+/// B2A gives the Lab black, `T((0,0,0), Lab, SourceProfile, Perceptual)`.
+#[derive(Debug, Clone, PartialEq)]
+pub(crate) enum SourceBlackInputs {
+    /// Not a LUT source, or a space 4.2.3 does not name for `D()`
+    /// (CIELAB device space is left refused: its `LocalBlack = (0,0,0)`
+    /// is a Lab value, not a device vector this code can encode).
+    NotApplicable,
+    /// Gray/RGB, or CMYK without a usable B2A0: `LocalBlack = D(Source, Intent)`.
+    DarkestVertex,
+    /// Output-capable CMYK: `LocalBlack` is this device vector.
+    PerceptualBlack(Vec<f64>),
+}
+
+impl SourceBlackInputs {
+    fn capture(src: &Profile, source: &SourceModel) -> SourceBlackInputs {
+        if !matches!(source, SourceModel::Lut16(_) | SourceModel::LutAb(_)) {
+            return SourceBlackInputs::NotApplicable;
+        }
+        match &src.header.color_space.0.to_be_bytes() {
+            b"GRAY" | b"RGB " => SourceBlackInputs::DarkestVertex,
+            b"CMYK" => {
+                // The source's own B2A0, built by the destination-side
+                // fallback; `false` stops it capturing anything further.
+                let black = Chain::new_inner(src, src, Intent::Perceptual, false)
+                    .ok()
+                    .and_then(|c| match c.dst {
+                        DestModel::Lut16B2a(_) | DestModel::LutAb(_) => c
+                            .pcs_to_destination(Xyz {
+                                x: 0.0,
+                                y: 0.0,
+                                z: 0.0,
+                            })
+                            .ok(),
+                        _ => None,
+                    })
+                    .filter(|v| v.len() == 4);
+                black.map_or(
+                    SourceBlackInputs::DarkestVertex,
+                    SourceBlackInputs::PerceptualBlack,
+                )
+            }
+            _ => SourceBlackInputs::NotApplicable,
+        }
+    }
 }
 
 impl Chain {
@@ -870,6 +923,7 @@ impl Chain {
         // profile with no B2A, no colorant matrix and no grayTRC — is
         // still a perfectly good SOURCE here.
         let source = Chain::derive_source_model(src, intent)?;
+        let src_black_inputs = SourceBlackInputs::capture(src, &source);
 
         let srgb = crate::builtin::srgb_with(variant);
         // The destination's own device→PCS direction, needed only by
@@ -899,6 +953,7 @@ impl Chain {
             // unconsidered 0.
             dst_major: 4,
             dst_a2b,
+            src_black_inputs,
             dst_provenance: DestinationProvenance::BuiltInSrgb,
             // Source side only: the destination is constructed, has no
             // tags, and therefore cannot carry an mpet pipeline to
@@ -1012,6 +1067,11 @@ impl Chain {
         };
 
         let source = Self::derive_source_model(src, intent)?;
+        let src_black_inputs = if capture_dst_a2b {
+            SourceBlackInputs::capture(src, &source)
+        } else {
+            SourceBlackInputs::NotApplicable
+        };
 
         let src_white = read_wtpt(src);
         let dst_white = read_wtpt(dst);
@@ -1043,6 +1103,7 @@ impl Chain {
             src_major: src.header.version.major(),
             dst_major: dst.header.version.major(),
             dst_a2b,
+            src_black_inputs,
             dst_provenance: DestinationProvenance::CallerSupplied,
             deviations: [
                 mpet_deviation_for(src, Side::Source),
@@ -1060,12 +1121,14 @@ impl Chain {
     /// - **Absolute intent excluded** — BPC presupposes both whites
     ///   already at D50 (Maria 2013's sourced exclusion, corpus
     ///   `icc__ref__bpc.md`).
-    /// - **Estimation subset** (a labelled re-implementation subset of
-    ///   lcms2's, A42): a v4 side at perceptual uses the fixed
+    /// - **Estimation**: a v4 side at perceptual uses the fixed
     ///   perceptual black (A41 triple); a matrix/TRC or gray side uses
-    ///   its media-relative device-black; anything else —
-    ///   notably v2 LUT sources, where lcms2 runs an unattributed Lab
-    ///   ridge search — is [`ChainError::BpcEstimationUnsupported`].
+    ///   its device black; any other LUT **source** follows ISO/CD
+    ///   18619 4.2.3 (output-capable CMYK: its perceptual B2A's black,
+    ///   read back at the chain's intent; Gray/RGB/other CMYK: the
+    ///   darkest vertex `D()`); any other LUT **destination** follows
+    ///   4.2.5. A CIELAB-space LUT source is
+    ///   [`ChainError::BpcEstimationUnsupported`].
     ///
     /// # ★ Success does not mean the output will change
     ///
@@ -1237,10 +1300,29 @@ impl Chain {
             SourceModel::Gray(g) => Ok(g.device_to_pcs(0.0)),
             SourceModel::Lut16(_) | SourceModel::LutAb(_) => {
                 if self.src_major >= 4 && self.intent == Intent::Perceptual {
-                    Ok(crate::bpc::PERCEPTUAL_BLACK)
-                } else {
-                    Err(ChainError::BpcEstimationUnsupported)
+                    return Ok(crate::bpc::PERCEPTUAL_BLACK);
                 }
+                // ISO/CD 18619 4.2.3: LocalBlack by space, then
+                // Li = L* of T(LocalBlack, Source, Lab, RenderingIntent)
+                // — `self.source` IS that transform — then neutral, Li ≤ 50.
+                let local = match &self.src_black_inputs {
+                    SourceBlackInputs::NotApplicable => {
+                        return Err(ChainError::BpcEstimationUnsupported);
+                    }
+                    SourceBlackInputs::PerceptualBlack(v) => v.clone(),
+                    SourceBlackInputs::DarkestVertex => {
+                        crate::bpc::darkest_vertex(a2b_channels(&self.source), |v| {
+                            a2b_to_lab(&self.source, v).unwrap_or(icccer_color::Lab {
+                                l: 100.0,
+                                a: 0.0,
+                                b: 0.0,
+                            })
+                        })
+                    }
+                };
+                let lab =
+                    a2b_to_lab(&self.source, &local).ok_or(ChainError::BpcEstimationUnsupported)?;
+                Ok(crate::bpc::neutralise_and_clip(lab.l).to_xyz(D50))
             }
         }
     }
@@ -1777,5 +1859,43 @@ mod tests {
         let sat = Chain::new(&src, &dst, Intent::Saturation).unwrap();
         let probe = [0.3, 0.5, 0.2, 0.1];
         assert_eq!(per.convert(&probe).unwrap(), sat.convert(&probe).unwrap());
+    }
+
+    /// pdfcer's soft-proof chain: a LUT CMYK source at media-relative
+    /// into the built-in sRGB, with BPC. Before ISO/CD 18619 4.2.3 was
+    /// wired this was `BpcEstimationUnsupported`. Asserted here: the
+    /// clause's structural outputs (estimable, neutral, `0 < L* <= 50`,
+    /// so the map is not the identity). The VALUE is a cross-check
+    /// against lcms2, owned by `tools/difftest`, not ground truth.
+    #[test]
+    fn lut_cmyk_source_at_media_relative_estimates_its_black() {
+        let fixture = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../fixtures/synthetic/v4-cmyk-mab-lab.icc"
+        );
+        let swop = r"C:\Windows\System32\spool\drivers\color\USWebCoatedSWOP.icc";
+        for path in [fixture, swop] {
+            let Ok(bytes) = std::fs::read(path) else {
+                eprintln!("skipped: {path} absent");
+                continue;
+            };
+            let src = Profile::parse(&bytes).unwrap();
+            let chain =
+                Chain::with_destination(&src, Destination::None, Intent::MediaRelative).unwrap();
+            eprintln!("{path}: {:?}", chain.src_black_inputs);
+            let bpc = chain
+                .with_bpc()
+                .expect("ISO/CD 18619 4.2.3 estimates a LUT CMYK source black")
+                .bpc_disclosure()
+                .unwrap();
+            let lab = icccer_color::Lab::from_xyz(bpc.source_black(), D50);
+            eprintln!("{path}: source black {lab:?}");
+            assert!(lab.l > 0.0 && lab.l <= 50.0, "{path}: L* {}", lab.l);
+            assert!(
+                lab.a.abs() < 1e-9 && lab.b.abs() < 1e-9,
+                "{path}: not neutral {lab:?}"
+            );
+            assert!(!bpc.is_identity(), "{path}: map is the identity");
+        }
     }
 }
