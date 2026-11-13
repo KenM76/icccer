@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "icccer-cmm"
-version = "0.4.0"
+version = "0.4.2"
 dependencies = [
  "icccer-color",
  "icccer-profile",
@@ -12,7 +12,7 @@ dependencies = [
 
 [[package]]
 name = "icccer-color"
-version = "0.4.0"
+version = "0.4.2"
 
 [[package]]
 name = "icccer-difftest"
@@ -25,4 +25,4 @@ dependencies = [
 
 [[package]]
 name = "icccer-profile"
-version = "0.4.0"
+version = "0.4.2"

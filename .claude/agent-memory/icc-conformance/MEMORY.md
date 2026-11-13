@@ -29,6 +29,7 @@
 - [A fixed defect can BLIND its own row](project_a_fixed_defect_can_blind_its_own_row.md) — the fix made the red row unable to see the defect return; no number moved, nobody edited it; ask "which layer is in the loop" of the FIX.
 
 - [Pass 4c absolute-intent findings](project_pass4c_absolute_intent_findings.md) — lcms2's wtpt gate is a CONJUNCTION, so a fixture can defeat it instead of a model subtracting it; 8.90e-5 over 729 pts, sensitivity 2310x; the policy is direction-symmetric; NA-008's second arm has no fixture.
+- [Pass 5d — source black vs cmsDetectBlackPoint](project_pass5d_source_black_vs_cmsdetectblackpoint.md) — lcms2 forces BPC INSIDE its estimator; 400% ink at v2 perceptual; a growing differential can be the OTHER disagreement, transported.
 - [Pass 5c estimator-BRANCH finding](project_pass5c_estimator_branch_finding.md) — lcms2 has TWO estimators and the destination's HEADER picks; this overturned Pass 5b's claim 1; transicc prints RGB 0..255.
 - [Pass 6 compiled-path findings](project_pass6_compiled_path_findings.md) - the gate FAILED at grid 17 (0.297 vs 0.253) and PASSES at the new default 33; order is 1.32 not 2; max-of-max is the wrong estimator.
 - [Pass 5b estimator findings](project_pass5b_estimator_findings.md) - the ISO estimator has NO CALLER; the pre-registered prediction split 2/1/1; the gamut absorbs 90%.

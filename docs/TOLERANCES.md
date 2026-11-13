@@ -1485,6 +1485,81 @@ real tolerance? **No.**
 what clause the number would be graded against; if the answer is *"none, but it
 would have caught the bug"*, the bound is fitted to the bug.
 
+### 3.5.10 Pass 5d — the SOURCE-side black (ISO/CD 18619 4.2.3) against lcms2, and SWOP → sRGB with BPC
+
+**Added 2026-11-13 by `icc-conformance`** against icccer `5c66587` and lcms2 pin
+`21c582a`. Apparatus: `tools/difftest/src/pass5d.rs`, `pass5d_records.rs`, and
+`probes/lcms2_black_point.c`, which calls `cmsDetectBlackPoint` **directly**, so
+no round trip stands between the oracle and its number. Record:
+`tools/difftest/README.md` §29. **No row is ground truth.** No document publishes
+a source black for these profiles (A27/A42), so every row is either a
+**cross-check** or **self-consistency**.
+
+**Coverage:** two profiles, one real and one synthetic. SWOP is v2.1 `prtr` CMYK
+with a Lab PCS. The synthetic one is `fixtures/synthetic/v4-cmyk-mab-lab.icc`, v4
+`mAB`. Black points are taken at perceptual, relative and saturation. End to end
+is SWOP → sRGB at **media-relative only**, on a 6⁴ grid of 1296 points, run two
+ways: icccer `Destination::None` against lcms2 `*sRGB`, and the system sRGB
+profile on both sides. This is one machine and one grid.
+
+| Row | Tolerance | Derived from | Observed |
+|---|---|---|---|
+| `pass5d/black/mab/perceptual` | 1×10⁻⁸ L* | Both sides return the same A.2 constant. The probe prints to 9 decimals. | 3.3×10⁻¹⁰ |
+| `pass5d/black/{swop rel, swop perc, swop sat, mab rel, mab sat}` | **∞, REPORTED** | On SWOP relative, both engines run the same estimator, so the residue is one A2B1 interpolation and is gated by the mechanism rows. On the other four, the engines run *different* estimators (see below), and a policy difference has no arithmetic bound. | 0.017 / 0.804 / 0.804 / 3.137 / 2.356 L* (ΔE76 0.017 / 0.804 / 0.804 / 3.137 / 2.356) |
+| `pass5d/black/icccer-4.2.3-structure` | 0 (count) | 4.2.3 neutralises the black and clips it at L* 50 unconditionally. | 0 of 5 |
+| `pass5d/mechanism/*/localblack…`, `…leg-is-b2a0…` | 2/65535 device units | Both engines evaluate one B2A0 table at one PCS point. lcms2's quantisation is u16 in and u16 table values. A different LocalBlack would move K by ≥3×10⁻². | ≤8×10⁻⁶ |
+| `pass5d/mechanism/*/…is-all-a2b1`, `…400pct-ink`, `…forced-bpc` | 1×10⁻⁶ L* | lcms2 reproduces its own number from the input the decomposition says it used. | 0 |
+| `pass5d/e2e/*/bpc-on` | **2×10⁻² device units** | Pass 4 `DEVICE_CROSSCHECK` (the same SWOP 9⁴ tables) carried through BPC. The map scales PCS by 1/(1−Ybs) = 1.023. At the darker operating point the sRGB encode slope is at most 12.92, against at least 4.07 at the unscaled black, so the BPC-off disagreement grows by **≤3.25×**. Add 12.92 × dY′ ≤ 3.5×10⁻⁵ = 4.5×10⁻⁴ from the black difference. 3.25 × 4.70×10⁻³ + 4.5×10⁻⁴ = 1.57×10⁻² ≤ 2×10⁻². **Grid-dependent; arithmetic, not perceptual.** | 4.866×10⁻³ (built-in), 4.812×10⁻³ (system) |
+| `pass5d/e2e/*/increment-model-residual` | 1×10⁻³ device units | The estimator's share is ≤4.5×10⁻⁴. The first-order model's linearisation error is about 1.7×10⁻⁴ per side, for 7.9×10⁻⁴ in total, and 1×10⁻³ also admits a tabulated sRGB TRC. **Derived after the measurement, in closed form; the residual enters nowhere.** | 5.10×10⁻⁴ / 7.03×10⁻⁴ |
+| `pass5d/e2e/*/bpc-effect` | **∞, REPORTED** | How far BPC moves the output is policy (A27/A42). | icccer 0.160613 against lcms2 0.160633 (built-in) |
+
+**Why five black arms are REPORTED, and which engine the text supports.** These
+were settled from corpus `icc__s__bpc_algorithm.md` §3.1, not from the oracle:
+
+- **SWOP, relative.** lcms2 follows 4.2.3 here (`BlackPointUsingPerceptualBlack`),
+  and the two LocalBlacks agree to 8×10⁻⁶. lcms2's own A2B1 of *icccer's*
+  LocalBlack reproduces lcms2's L* 16.588541865 exactly. So the whole
+  0.017 L* is the A2B1 interpolation difference, Pass 4 M4. The estimator
+  contributes nothing.
+- **SWOP, perceptual and saturation.** lcms2 runs `BlackPointAsDarkerColorant`
+  on 400% ink, which gives L* 0. ISO 4.2.3 takes LocalBlack = B2A0(Lab 0) at
+  every intent for a CMYK output profile, so icccer's 0.804 is what the text
+  asks for. **Here icccer is right and lcms2 departs.**
+- **mAB, relative.** lcms2's round trip passes through its own *forced* BPC
+  (`cmscnvrt.c` L1132), so Lab 0 → PERCEPTUAL_BLACK → B2A0, giving K 0.964721
+  against 0.996094 for B2A0(Lab 0). lcms2's A2B1 of that value reproduces its
+  L* 3.918511. The whole 3.137 ΔE76 comes from this forcing, which corpus §5.2
+  finds unauthorised. **icccer follows the literal text.** This is the same
+  mechanism NC-078 prices on the destination side.
+- **mAB, saturation.** lcms2 returns the v4 constant, chromatic, at saturation.
+  icccer runs 4.2.3. No document authorises the constant at saturation (A64).
+  Note that icccer *also* uses the constant at v4 perceptual and not at
+  saturation, which is the A64 asymmetry carried over unchanged from the
+  destination side. That is not a defect against 4.2.3, whose saturation path is
+  the sourced one.
+
+**What the end-to-end increment is.** The BPC-induced disagreement on the
+unclamped points peaks at 3.40×10⁻³. That is about 7× what the 0.017 L* black
+difference alone can produce (≤4.5×10⁻⁴). A first-order model accounts for it.
+The model takes the BPC-off disagreement (Pass 4's interpolation difference),
+scales it by 1/(1−Ybs), and evaluates it through the sRGB encode slope at the
+BPC-on operating point. That predicts 2.89×10⁻³, and the residual is
+5.1×10⁻⁴ (built-in) or 7.0×10⁻⁴ (system), which is the size of the estimator
+term plus second order. **The disagreement BPC adds is mostly interpolation, seen
+at a steeper part of the TRC, and not a disagreement about the black.** The
+full-grid increment (4.70×10⁻³) is bounded by clamping, so it is not reported as
+the BPC increment.
+
+**Separations.** `bpc-on` sits against the rival *icccer drops BPC* (icccer off
+against lcms2 on), which would observe ≈0.16 device units, so the row is not
+blind. The mAB leg row sits against the literal-4.2.3 LocalBlack, at
+3.14×10⁻², against a tolerance of 3.05×10⁻⁵.
+
+**BPC stays REPORTED, not gated.** That covers `bpc-effect` and the five policy
+arms, under A27/A42. What *is* gated is arithmetic agreement *given* each
+engine's own black (`bpc-on`, the residual) and 4.2.3's structural
+requirements on icccer's estimate.
+
 ### 3.6 Pass 6 — performance, and the price of speed
 
 **Filled 2026-08-12 by `icc-conformance`** from comparisons actually run.
@@ -4588,6 +4663,7 @@ drifting one justification at a time.
 | 2026-08-18 (later the same day, Pass K currency check) | **§3.10.12.7 (rewritten in place, heading and status); §3.10.12.6's last bullet** | §3.10.12.7 as filed: *"**Not fixed here, deliberately** … ★ **What this role owes when it is fixed:** a row"*, with `0.617121` / `0.617148` tabled as a current measurement. §3.10.12.6: *"the COMPILED path is unmeasured by any row **and is measurably wrong**"* | the same section, restated as **a FIXED defect** — fixing commit **`a05476c`** named, `0.617121` / `0.617148` retained as **dated pre-fix history**, current values `6.234231×10⁻⁷ → 3.330669×10⁻¹⁶` (near axis) and `3.710322×10⁻⁴ → 6.289234×10⁻⁸` (control) tabled separately, and the outstanding difftest row restated as **still owed** | `icc-conformance` | **★★★ NO TOLERANCE MOVED; NO NUMBER WAS DELETED. THIS IS A FALSE STATUS CLAIM RETRACTED, AND IT IS FALSE IN THE UNUSUAL DIRECTION — THE DOCUMENT UNDERSTATED THE CODE.** §3.10.12.7 was written while the compiled-path defect was live, and committed in `a1bd818` at 02:40:33 -0400 — **twenty-eight seconds after `a05476c` (02:40:05) fixed it**. For the whole of the interval since, this document has asserted a defect that does not exist, in a section explicitly headed as the grading's most consequential finding, and has done so in a form built to be quoted onward. **Re-verified before correcting, per §0**: `git show a05476c -- crates/icccer-cmm/src/compiled.rs` carries `k_preserve: Option<KPreserve>` outside the grid with a per-pixel branch in `convert` — the **second** of the two remedies §3.10.12.7 itself named — and `cargo test -p icccer-cmm --test compiled_black_preservation_convergence -- --nocapture` emits `grid 17: near-axis 6.234231e-7 control 3.710322e-4` / `grid 33: near-axis 3.330669e-16 control 6.289234e-8`, converging in both arms. **Three things about how the correction was bounded.** **(1) THE OLD NUMBERS STAY.** `0.617121` / `0.617148` are the measured signature of a real defect and are the evidence for why the *structural* remedy was the right one of two candidates; deleting them would erase the reason the decision went that way. They are re-presented as dated history with the fixing commit attached, never as a current measurement — the same posture §4's earlier rows take toward superseded envelopes, which are preserved so a reader who suspects tuning can audit the change. **(2) THE TWO ORDERS ARE SPLIT.** The retracted reading was *"`O(1)` beside `O(h^1.32)`"*. The `O(1)` half is the **defect's** signature and is gone; **`O(h^1.32)` is Pass 6's still-live measured order (`DL-025`, `NC-149`, §3.6) and is untouched**. Quoting the pair without the split would read as though both were retracted or both still live, and neither is true. **(3) ★★★ THE DEBT IS NOT DISCHARGED AND THE CORRECTION MUST NOT READ AS "CLOSED".** There is **still no difftest row for the compiled path**; every current number above comes from a `crates/` test, which is not in this budget, is not separation-graded, and does not appear in the suite summary this document gates on. What changed is the row's **purpose**: before `a05476c` it would have been a **disclosure**, now it would be a **regression guard** — a weaker reason to build it and a permanent one. **★ The generalisable mechanism, which is NOT §3.5.8.6's.** A stale numeral decays when someone re-measures. **A document that records *"X is broken and someone else owns the fix"* goes stale the moment that someone else commits — and nothing in the fixing commit's own review touches the document that made the claim.** It decays faster than a numeral and it decays silently, because the fixing commit is, from the document's point of view, an unrelated change in another directory. Drafted for the decision log and handed to `icc-librarian` rather than filed here. |
 | 2026-08-18 (later still) | **§3.11, rows I1–I4 (new section; first filling, not a change)** | did not exist | as recorded in §3.11 | `icc-conformance` | **★ A DISCLOSURE ROW — it records a BEHAVIOUR and deliberately establishes no conformance claim.** icccer parses and validates the header `renderingIntent` field and the CMM never consumes it; whether ICC.1 requires, permits or forbids consuming it when no intent is otherwise specified is **UNSOURCED as of 2026-08-18** and an `icc-spec-librarian` dispatch is outstanding. **Three of the four rows carry no tolerance at all** — I1 is bit-identity, because the claim is that one byte reached nothing and any difference at all falsifies it. **The only number is I4’s 0,02 device-unit floor, and it is a fixture-power bound, not an agreement tolerance**: it exists because I1 is vacuous on a pair whose `A2B0` and `A2B1` coincide. Set an order of magnitude below the **observed** 0,203 330, and **proved capable of failing by two injections** — with a zero-separation fixture I1 still passed while I4 failed at 0,000 000, which is §1.1’s lesson reproduced. No tolerance was widened; there was nothing to widen. |
 | 2026-08-21 (Pass K, the leak guards' detection floor) | **§3.10.12.8 (new); §3.10.12.2's closing clause (one clause RETRACTED); §3.10.1's table, rows E7 and F8 (floor added to the "derived where" cell); §3.10.12.6's "no injection proof" bullet (stale, corrected)** | §3.10.12.2 as filed: *"★ The named rival for both is … `10⁻⁹` of cyan … **these rows are what would catch it.**"* — a rival named WITH a magnitude and a guard claimed WITHOUT one. Probe floors `1.106777e-1` (E7) and `5.000000e-2` (F8) | the same clause, restated with the magnitude the rows actually reach, and **both floors moved to `1.000000e-12`** by adding `passk::low_ink_decade_probes` (70 probes, 14 decades) to E7's and F8's `leak` numbers | `icc-conformance` | **★★★ NO TOLERANCE MOVED, IN EITHER DIRECTION. BOTH ROWS ARE STILL GRADED AT EXACTLY `0` ON THE UNCHANGED DERIVATION OF §3.10.12.2, AND BOTH STILL OBSERVE `0.000000e0` — OVER 262 AND 120 PROBES INSTEAD OF 192 AND 50.** What changed is what the rows can SEE. **Six things about how this was arrived at.** **(1) ★★★ THE FLOOR IS NOT A PROPERTY OF THE MACHINE, AND THAT IS THE MEASUREMENT.** `NC-268` left an interval — caught at `≥ 1.106777e-1`, blind at `0.04` — and the open question was whether some quantisation, encoding or numerical effect made small chromatic ink undetectable *in principle*. It does not. The guard's response `max \|preserve(0,0,0,K) − plain(c,…,K)\|` **rises to a constant as `c → 0`** and is flat from about `1e-6` down: `3.589900e-1` on `v2-cmyk-chromatic-neutral`, `3.170750e-1` on `v2-cmyk-warm-black`, `3.668930e-1` on `ISO Coated v2 300% (ECI)` — five orders above `icccer transform`'s `1e-6` print resolution. The floor was a **free parameter of the probe set**, left at an accident. **(2) ★★ THE MEASUREMENT IS DERIVED, SO IT WAS CHECKED AGAINST A REAL INJECTION.** `KPreserve::apply`'s `Some` branch discards the chromatic input, so the leak under a widening `t ≥ c` equals the difference between the *shipped* binary's preserved answer at the exact-zero input and its plain answer at ink `c` — no recompile needed. That identity was verified by injecting `device[i] > INJECT_T` in a detached worktree and rebuilding at **ten magnitudes** from `5e-2` to `4.940656e-324`: **the model and the injected guard agreed `==` on `f64`, not within a tolerance, at all ten, on both committed fixtures.** The injection is not committed; the identity is what makes the number re-derivable. **(3) ★★ THERE IS EXACTLY ONE HARD FLOOR AND IT IS THE OPPOSITE OF THE ONE EXPECTED.** A probe whose ink **underflows to `0.0`** arrives at the qualifying test as a *genuine* K-only input; preservation fires **correctly** and the guard goes **RED against an engine that did nothing wrong**. Measured on the shipped predicate: baseline leak `0.000000e0` at `c = 4.940656e-324` and `3.589900e-1` at the next step down. `LOW_INK_DECADES` stops at `1e-12` — three decades below the named rival, below the level at which the response stops changing, and 312 decades clear of that boundary. **(4) ★★ E7's FLOOR IS NOW RE-DERIVABLE, WHICH WAS A SEPARATE DEBT.** `arbitrary_off_neutral`'s floor was an accident of an LCG seed, bounded by construction only at `0.8/2²¹ ≈ 3.8e-7`; `passk::probe_floor` now computes it and **E7's emitted detail prints all three component floors every run**, each labelled `STRUCTURAL` or `SEED-DEPENDENT`, so a re-seed shows as a changed number rather than as silent drift. ★ **A transcription error surfaced doing it**: the floor recorded here and in `NUMERIC_CLAIMS.md` as `1.106780e-1` is `0.11067771911621094` — the six-DECIMAL rounding re-expressed in scientific notation, which promotes a rounded decimal into a wrong sixth significant figure. §3.5.8.6's rule in a third form: **re-based**, not stale and not mistyped. **(5) ★★★ THE NEW ARM IS PROVEN LOAD-BEARING, AND THE FLOOR IS BRACKETED RATHER THAN ASSERTED.** Four injections in a detached worktree, of which the first pair is the finding: at `t = 1e-9` — **the rival's own named magnitude** — the harness with the probe sets **as at `0a88ad6`** reports `pass=371 fail=1`, the single failure being `passh/B`, which was already red at `HEAD`; the harness **with `low_ink_decade_probes`** reports `pass=369 fail=3`, `E7` at `3.668930e-1` and `F8` at `3.589900e-1`. **The two runs differ in nothing but the probe set** — no tolerance, no fixture, no engine code. Both rows are red at `1e-12` and green at `9e-13`, so the claimed floor is measured from both sides. ★★ The two observed values are the ones the derived model named in advance. ★ No other row moved: `E1`/`F5` stay green under every injection, correctly, since a widened test still admits every genuinely K-only input. **(6) ★ THE SCOPE, BECAUSE "VERIFIED" WITHOUT IT IS THE CLAIM THIS ROLE EXISTS TO PREVENT.** Three profile pairs, one intent, one policy, one direction, `--bpc` off; the injection arm covers the two **committed** fixtures only. Every number is in **device units** — the metamer trap (`DL-065`) does not bite a device-unit leak, and `v2-cmyk-warm-black` is measured beside `v2-cmyk-chromatic-neutral` throughout so a reader can see it does not. **No ΔE figure for this subject exists and none may be inferred from these.** The compiled path is still unmeasured by any difftest row (§3.10.12.7). |
+| 2026-11-13 (Pass 5d) | **§3.5.10 (new)** | did not exist | as recorded in §3.5.10 | `icc-conformance` | The source-side 4.2.3 estimator landed in `5c66587`. The black rows are graded where both engines run the same algorithm and REPORTED where they run different ones; which one the text supports is settled in §3.5.10, not tuned. The end-to-end bound inherits Pass 4 `DEVICE_CROSSCHECK` with a derived BPC transport factor. The residual bound was derived after the measurement, in closed form, and that is stated at the row. **No tolerance was widened.** |
 
 ---
 

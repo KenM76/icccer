@@ -117,7 +117,7 @@ use std::io::Write;
 
 use icccer_difftest::{
     Bpc, Check, Intent, Kind, Metric, Oracle, Outcome, Precalc, Report, Request, Space, Tolerance,
-    pass3, pass4, pass4b, pass4c, pass5, pass5b, pass5c, pass6, passg, passh, passi, passk, passl,
+    pass3, pass4, pass4b, pass4c, pass5, pass5b, pass5c, pass5d, pass6, passg, passh, passi, passk, passl,
 };
 
 /// The system sRGB profile used by `README.md` §8.2.
@@ -394,6 +394,24 @@ fn main() {
         ));
     }
     for r in p5c_records {
+        report.push_record(r);
+    }
+
+    // Pass 5d — the SOURCE-side black (ISO/CD 18619 4.2.3) against lcms2's
+    // cmsDetectBlackPoint called directly (probes/), then SWOP -> sRGB with BPC.
+    let (p5d, p5d_records) = pass5d::run(&oracle);
+    if let Some(a) = &p5d {
+        for e in &a.e2e {
+            report.note(format!(
+                "pass5d: {} BPC-on max {:.4e} (off {:.4e}), increment residual {:.4e}",
+                e.side.tag(),
+                e.on_max,
+                e.off_max,
+                e.model_residual_max
+            ));
+        }
+    }
+    for r in p5d_records {
         report.push_record(r);
     }
 

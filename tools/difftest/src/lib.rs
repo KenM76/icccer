@@ -187,6 +187,8 @@ pub mod pass4c;
 pub mod pass5;
 pub mod pass5b;
 pub mod pass5c;
+pub mod pass5d;
+mod pass5d_records;
 pub mod pass6;
 // ★ Pass G — the print-conformance suite population sample. The first differential grading
 // this project has done against profiles a *real document producer* embeds,

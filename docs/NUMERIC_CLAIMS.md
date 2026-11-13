@@ -9638,6 +9638,39 @@ conclude they came from a routine sweep. **They did not. They came from
 somebody else's question**, and the channel that carried it is in **no git
 repository**.
 
+### 3.43 `NC-320` … `NC-329` — Pass 5d: the SOURCE-side black (ISO/CD 18619 4.2.3) against `cmsDetectBlackPoint`, and SWOP → sRGB with BPC
+
+**Filed 2026-11-13 by `icc-conformance`**, which measured everything in this
+section. icccer is at `5c66587` and lcms2 at pin `21c582a`. Records:
+`tools/difftest/src/pass5d_records.rs`; method `tools/difftest/README.md` §29;
+tolerances `TOLERANCES.md` §3.5.10. **Ten rows, and the next free ID is
+`NC-330`.** Nothing in this section comes from the suite. Both profiles are
+either Windows system profiles (category (c)) or a committed synthetic fixture.
+
+> **Coverage.** Two source profiles: SWOP (v2.1 `prtr` CMYK) and
+> `v4-cmyk-mab-lab.icc`. Black points are taken at three intents. End to end
+> is SWOP → sRGB at **media-relative only**, over 1296 CMYK points, on one
+> machine. **No row is ground truth.** No document publishes these black
+> points (A27/A42).
+
+| ID | What | Class | Tolerance | Observed |
+|---|---|---|---|---|
+| **NC-320** | SWOP relative source black, icccer vs lcms2 | cross-check | ∞ REPORTED | L* 16.571474 vs 16.588542 (ΔE76 0.0171), all A2B1 interpolation (NC-322) |
+| **NC-321** | SWOP perceptual/saturation source black | cross-check | ∞ REPORTED | L* 0.804240 vs 0.000000. lcms2 runs 400%-ink `DarkerColorant`; **icccer follows 4.2.3** |
+| **NC-322** | SWOP LocalBlack = B2A0(Lab 0), icccer vs lcms2 | cross-check | 2/65535 | ≤8×10⁻⁶; lcms2's A2B1 of icccer's LocalBlack reproduces 16.588541865 exactly |
+| **NC-323** | mAB relative source black | cross-check | ∞ REPORTED | L* 0.781244 vs 3.918511 (ΔE76 3.137). The whole difference is lcms2's forced BPC inside its own round trip (K 0.964721 vs 0.996094). **icccer follows the literal 4.2.3**; NC-078's mechanism |
+| **NC-324** | mAB saturation source black | cross-check | ∞ REPORTED | L* 0.781244 vs the chromatic v4 constant (ΔE76 2.356); A64 policy |
+| **NC-325** | mAB perceptual: both return the A.2 constant | cross-check | 1×10⁻⁸ L* | 3.3×10⁻¹⁰ |
+| **NC-326** | SWOP → sRGB, BPC on, icccer vs lcms2, max (p95) | cross-check | 2×10⁻² device | built-in 4.866×10⁻³ (2.317×10⁻³); system 4.812×10⁻³ (2.308×10⁻³). BPC off: 4.704×10⁻³ / 4.697×10⁻³ |
+| **NC-327** | BPC effect, icccer vs lcms2 | self-consistency per engine; compared as cross-check | ∞ REPORTED | 0.160613 vs 0.160633 (built-in) |
+| **NC-328** | BPC increment disagreement, unclamped points | cross-check | — | max 3.396×10⁻³ (built-in) / 3.337×10⁻³ (system). About 85% is the Pass 4 interpolation difference re-seen at the steeper TRC; ≤4.5×10⁻⁴ is attributable to the black |
+| **NC-329** | Residual of the first-order model of NC-328 | cross-check | 1×10⁻³ device | 5.10×10⁻⁴ / 7.03×10⁻⁴ |
+
+**Bearing on NA-009.** Its cost of estimation was *"UNMEASURED"*. It is now
+measured for one v2 LUT CMYK source at media-relative: the estimator's
+end-to-end share is ≤4.5×10⁻⁴ device units on the sRGB built-in. That is one
+pairing, not a general cost.
+
 ---
 
 `ARCHITECTURE.md` invariant 3 and project rule 4: *every approximation is

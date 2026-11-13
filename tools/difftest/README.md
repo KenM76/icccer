@@ -6062,3 +6062,108 @@ it.
   (§3.10.12.7): `E7` and `F8` drive `icccer transform`, and the grid-compiled
   surface is reachable only through `icccer bench`, which cannot take
   `--preserve-black`.
+
+## 29. Pass 5d — the source-side black point against `cmsDetectBlackPoint` (2026-11-13)
+
+Against icccer `5c66587` (`Chain::with_bpc` estimates a LUT source's black by
+ISO/CD 18619 4.2.3) and lcms2 pin `21c582a`. Module `src/pass5d.rs`; records
+and tolerances `src/pass5d_records.rs`; tolerance derivations in
+`docs/TOLERANCES.md` §3.5.10. **Every row is a cross-check or a
+self-consistency check. None is ground truth (A27/A42).**
+
+### 29.1 The probe
+
+`transicc` cannot print a black point, so Pass 5c had to *recover* one by a
+round trip. `probes/lcms2_black_point.c` calls `cmsDetectBlackPoint` itself,
+against the same static `lcms2.lib`:
+
+```powershell
+pwsh tools/difftest/probes/build-probe.ps1   # -> vendor/build-msvc/lcms2_black_point.exe
+```
+
+The probe has three modes:
+
+- **`<profile> <intent>`** prints the black's XYZ and Lab, plus the probe's own
+  *reading* of which `cmssamp.c` branch runs. lcms2 does not report that.
+- **`--lab`** runs device → Lab2 with `NOOPTIMIZE`, the leg `BlackPointAsDarkerColorant` builds.
+- **`--b2a`** runs Lab4 → device, the leg `CreateRoundtripXForm` builds. On a v4
+  profile at perceptual it therefore includes lcms2's forced BPC.
+
+If the probe or SWOP is absent, the whole pass is a `pass5d/all` skip row. The
+env var `ICCCER_LCMS2_BP` overrides the probe path.
+
+### 29.2 Source black, both engines
+
+The icccer side uses the consumer's call shape,
+`with_destination(src, Destination::None, intent).with_bpc().bpc_disclosure()`.
+
+| Arm | icccer L* | lcms2 L* | lcms2 branch | ΔE76 |
+|---|---|---|---|---|
+| SWOP relative | 16.571474, neutral | 16.588542, neutral | UsingPerceptualBlack | 0.0171 |
+| SWOP perceptual | 0.804240, neutral | 0.000000 | DarkerColorant(intent) | 0.804 |
+| SWOP saturation | 0.804240, neutral | 0.000000 | DarkerColorant(intent) | 0.804 |
+| mAB relative | 0.781244, neutral | 3.918511, neutral | UsingPerceptualBlack | 3.137 |
+| mAB saturation | 0.781244, neutral | Lab(3.137238, 0.045376, −0.009515) | FixedPerceptualBlack | 2.356 |
+| mAB perceptual | Lab(3.137238, 0.045376, −0.009515) | identical | FixedPerceptualBlack | 3.3×10⁻¹⁰ |
+
+### 29.3 Why each arm differs, settled from the text
+
+Each finding was decomposed with the probe's legs. Each is graded as a
+`pass5d/mechanism/*` row.
+
+1. **SWOP relative: interpolation only.** LocalBlack = B2A0(Lab 0) agrees to
+   8×10⁻⁶: icccer (0.740623, 0.682860, 0.665652, 0.898270), lcms2 (0.740627,
+   0.682857, 0.665660, 0.898268). lcms2's A2B1 of icccer's LocalBlack gives
+   exactly lcms2's 16.588541865. **The estimator agrees. The 0.017 L* is Pass 4's
+   M4**, lcms2's hybrid against icccer's quadrilinear CLUT evaluation.
+2. **SWOP perceptual and saturation: lcms2 departs from 4.2.3.** It feeds 400%
+   ink through A2B0 and A2B2, which gives L* 0. 4.2.3 (and Adobe 7.1 for CMYK
+   output) takes LocalBlack = B2A0(Lab 0) at every intent. **icccer follows the
+   text.**
+3. **mAB relative: lcms2 forces BPC inside its own estimator.** The v4 round
+   trip at perceptual applies lcms2's forced BPC (`cmscnvrt.c` L1132), so lcms2's
+   B2A0 leg is B2A0(PERCEPTUAL_BLACK) = K 0.964721. icccer's B2A0(Lab 0) is K
+   0.996094. lcms2's A2B1 of K 0.964721 is L* 3.918511, which is lcms2's answer.
+   No BPC document authorises the forcing (corpus §5.2). **icccer follows the
+   literal 4.2.3.** This is NC-078's mechanism, met again inside the estimator.
+4. **mAB saturation: policy.** lcms2 uses the v4 constant, with its chroma kept.
+   icccer runs 4.2.3, because no document authorises the constant at saturation
+   (A64). Note that icccer's perceptual and saturation policies are asymmetric
+   at v4: the constant at perceptual, 4.2.3 at saturation. This is A64 carried
+   over from the destination side unchanged, and it is not a defect against
+   4.2.3.
+
+**No defect was found in the new estimator.** Its structure row is 0 of 5 arms:
+each is neutral with 0 ≤ L* ≤ 50.
+
+### 29.4 End to end: SWOP → sRGB, media-relative, BPC
+
+The grid is 6⁴ = 1296 points on {0, .2, …, 1}. Values are normalised device
+units. lcms2's `*sRGB` is unbounded (M3), so its 845 excursions are clamped.
+
+| | Built-in sRGB | System sRGB file |
+|---|---|---|
+| BPC on, icccer vs lcms2: max / p95 | 4.866×10⁻³ / 2.317×10⁻³ | 4.812×10⁻³ / 2.308×10⁻³ |
+| BPC off, icccer vs lcms2: max / p95 | 4.704×10⁻³ / 1.834×10⁻³ | 4.697×10⁻³ / 1.828×10⁻³ |
+| BPC effect, icccer / lcms2 | 0.160613 / 0.160633 | 0.160581 / 0.160632 |
+| Increment disagreement, unclamped (791 / 792 pts): max / p95 | 3.396×10⁻³ / 9.06×10⁻⁴ | 3.337×10⁻³ / 9.18×10⁻⁴ |
+| First-order model predicts / residual | 2.886×10⁻³ / 5.10×10⁻⁴ | 2.914×10⁻³ / 7.03×10⁻⁴ |
+
+**The black difference alone can contribute at most 4.5×10⁻⁴**: 12.92 ×
+ΔYbs(3.4×10⁻⁵)/(1−Ybs). The rest of the increment is the BPC-off interpolation
+disagreement, scaled by 1/(1−Ybs) and re-seen at the steeper part of the TRC
+that BPC moves dark colours onto. The model captures 85% of it.
+
+The full-grid increment, max 4.70×10⁻³ at (0.8, 0.2, 0, 0.2), is a clamp
+artefact. It equals the BPC-off maximum there, because one arm clips and the
+other does not.
+
+**Gates:** `bpc-on` ≤ 2×10⁻², and the model residual ≤ 1×10⁻³ (TOLERANCES
+§3.5.10). **Reported:** `bpc-effect` and the five policy black arms (A27/A42).
+
+**Not covered:**
+- perceptual and saturation end to end;
+- a v4 CMYK source end to end;
+- any RGB or Gray LUT source (D() darkest-vertex path);
+- any non-sRGB destination;
+- a grid with more deep-shadow density.
