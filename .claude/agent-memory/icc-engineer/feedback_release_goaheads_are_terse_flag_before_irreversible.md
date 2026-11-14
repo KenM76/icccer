@@ -37,3 +37,5 @@ parts already authorised.
 
 Related: [[project_no_paid_standards_use_reconstruction]],
 [[feedback_compatibility_not_compliance]].
+
+**Update 2026-11-13:** Ken said *"Always publish."* — crates.io is no longer a flagged irreversible step; see [[always-release-and-clean-build-artifacts-when-done]].

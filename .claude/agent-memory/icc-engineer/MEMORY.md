@@ -11,6 +11,6 @@
 - [Source disagreements become selectable options](feedback_source_disagreements_become_selectable_options.md) — ship both readings, reasoned default, and MEASURE the ΔE between them
 - [Terse release go-aheads](feedback_release_goaheads_are_terse_flag_before_irreversible.md) — execute the whole sequence, but interrupt once before the first irreversible act
 - [Run the conformance demonstration, not just the diagnosis](feedback_run_the_conformance_demonstration_not_just_the_diagnosis.md) — Ken wants the measured proof icccer does or does not fix it
-- [pdfce integration and the pending publish decision](project_pdfce_integration_and_the_pending_publish_decision.md) — pdfce wants a pinned git rev; a crates.io release is an OPEN operator decision, not permission
-- [Always release, then clean build artifacts](feedback_always_release_and_clean_build_artifacts_when_done.md) — finish work by cutting the full release; cargo clean afterwards; flag only crates.io as irreversible
+- [pdfce integration and publishing](project_pdfce_integration_and_the_pending_publish_decision.md) — pdfcer pins crates.io versions; publishing is standing-authorised since 2026-11-13
+- [Always release AND publish, then clean](feedback_always_release_and_clean_build_artifacts_when_done.md) — full release incl. crates.io publish without asking ("Always publish"); cargo clean after
 - [Rename to icccer](project_rename_to_icccer.md) — work from D:\Dev\icccer; old channel path is a temporary junction; fixture bytes keep "iccce"

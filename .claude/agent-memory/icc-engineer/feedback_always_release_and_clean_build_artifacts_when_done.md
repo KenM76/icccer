@@ -1,6 +1,6 @@
 ---
 name: always-release-and-clean-build-artifacts-when-done
-description: Ken's standing instruction (2026-09-01) — finish every work session by cutting a release, and delete Rust build artifacts from the project folder afterwards
+description: Ken's standing instruction — finish work by cutting a release INCLUDING the crates.io publish ("Always publish", 2026-11-13), then delete Rust build artifacts
 metadata:
   type: feedback
 ---
@@ -27,10 +27,14 @@ it.
 sequence, per [[release-goaheads-are-terse-flag-before-irreversible]].
 ★ That memory still governs the exception: interrupt **once**, immediately
 before the first genuinely irreversible act, and only if something
-material changed since the go-ahead. A **crates.io publish is
-irreversible** in a way a git tag is not — a published version can be
-yanked but never removed, and the crate name is claimed permanently. Flag
-that one; do not flag the tag or the push.
+material changed since the go-ahead. **SUPERSEDED 2026-11-13: Ken said *"Always publish."*** after
+0.4.3 sat tagged but unpublished across a dozen loop ticks waiting for him.
+The crates.io publish is now part of the standard release sequence — do it
+without asking. **Why:** pdfcer pins crates.io versions, so an unpublished
+release is invisible to the consumer that asked for it, and asking each time
+left a finished fix stranded for hours. Still publish from the tag (not a
+later HEAD), and still interrupt if something material changed since the
+work was done.
 
 **The cleanup half.** After the release, remove Rust build artifacts from
 the project folder — `cargo clean` for `target/`, plus any scratch scripts

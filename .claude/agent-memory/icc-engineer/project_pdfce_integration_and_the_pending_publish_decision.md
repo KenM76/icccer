@@ -1,6 +1,6 @@
 ---
 name: pdfce-integration-and-the-pending-publish-decision
-description: pdfce is actively integrating icccer as of 2026-09-01; it wants a pinned git rev, and a crates.io release is an open operator decision Ken has not ruled on
+description: pdfce/pdfcer integrates icccer from crates.io pins; publishing is standing-authorised by Ken since 2026-11-13
 metadata:
   type: project
 ---
@@ -23,7 +23,10 @@ first real consumer arriving at the seam rather than a hypothetical one.
   worth keeping: consumer questions keep changing this library's API surface
   (`Chain::bpc_disclosure` exists *because* pdfce asked a question on
   2026-09-01), and a `rev` makes the next change cheap.
-- ★ **A crates.io release is an OPEN operator decision.** It was put in
+- **RESOLVED 2026-11-13: Ken — "Always publish."** crates.io publishing is
+  standing-authorised (0.4.2 published 2026-11-07, 0.4.3 on 2026-11-13; pdfcer
+  pins `"=0.4.x"`). The bullet below is history.
+- (historical) **A crates.io release is an OPEN operator decision.** It was put in
   front of Ken on 2026-09-01 and he has not ruled. The manifests are
   release-shaped (`0.2.0`, `version` on path deps) so it is a decision, not
   a work item. **Do not treat readiness as permission** — rule 9 stands, and
